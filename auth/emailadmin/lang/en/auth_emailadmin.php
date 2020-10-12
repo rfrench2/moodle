@@ -173,7 +173,7 @@ $string['auth_emailadminnotif_strategy_allupdate'] = 'All admins and users with 
 
 $string['pluginname'] = 'Email-based self-registration with admin confirmation';
 
-// Lenovo
+// SWTC
 $string['ebglms_update_user_profile'] = 'Update user\'s profile?';
 $string['ebglms_run_nonconfirmed_report'] = 'Run NON-Confirmed user\'s report';
 

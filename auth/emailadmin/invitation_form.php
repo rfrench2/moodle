@@ -19,10 +19,10 @@
  *
  * @package    local
  * @subpackage ebglms
- * @copyright  2018 Lenovo EBG Services Education
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *	
- * Lenovo history:
+ *
+ * SWTC history:
  *
  *	08/02/18 - Initial writing.
  * 01/08/19 - Switching references from "signup" to "invitation" (this is still part 2 of 2).
@@ -42,13 +42,13 @@ class invitation_form extends moodleform {
         global $USER, $CFG;
 
         $mform = $this->_form;
-        
-        // Lenovo *******************************************************************************
+
+        // SWTC *******************************************************************************
         // Add hidden element to hold the users token (passed by a set_data call in signup.php).
-        // Lenovo *******************************************************************************
+        // SWTC *******************************************************************************
         $mform->addElement('hidden', 'token', '');
         $mform->setType('token', PARAM_RAW);
-        
+
         $mform->addElement('header', 'createuserandpass', get_string('createuserandpass'), '');
 
         $mform->addElement('text', 'username', get_string('username'), 'maxlength="100" size="12" autocapitalize="none"');
@@ -64,21 +64,21 @@ class invitation_form extends moodleform {
 
         $mform->addElement('header', 'supplyinfo', get_string('supplyinfo'),'');
 
-        // Lenovo - Set email field to read-only.
+        // SWTC - Set email field to read-only.
         $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25" readonly="readonly"');
         $mform->setDefault('email', $this->_customdata['email']);
         $mform->setType('email', core_user::get_property_type('email'));
 
-        // Lenovo - Set email2 field to read-only.
+        // SWTC - Set email2 field to read-only.
         $mform->addElement('text', 'email2', get_string('emailagain'), 'maxlength="100" size="25" readonly="readonly"');
         $mform->setDefault('email2', $this->_customdata['email2']);
         $mform->setType('email2', core_user::get_property_type('email'));
-        
+
         // @01 - Add check for '@lenovo' in email address. If not true, hide PremierSupport checkbox.
         $mform->addElement('advcheckbox', 'premiersupportuser', get_string('premiersupportuser', 'auth_emailadmin'));
         $mform->setDefault('premiersupportuser', 0);
         $mform->addHelpButton('premiersupportuser', 'premiersupportuser', 'auth_emailadmin');
-        
+
         $namefields = useredit_get_required_name_fields();
         foreach ($namefields as $field) {
             $mform->addElement('text', $field, get_string($field), 'maxlength="100" size="30"');
@@ -108,7 +108,7 @@ class invitation_form extends moodleform {
         }
 
         profile_signup_fields($mform);
-        
+
         if (signup_captcha_enabled()) {
             $mform->addElement('recaptcha', 'recaptcha_element', get_string('security_question', 'auth'));
             $mform->addHelpButton('recaptcha_element', 'recaptcha', 'auth');
@@ -121,28 +121,28 @@ class invitation_form extends moodleform {
         $manager->signup_form($mform);
 
         // buttons
-        $this->add_action_buttons(true, get_string('createaccount'));        // Lenovo
+        $this->add_action_buttons(true, get_string('createaccount'));        // SWTC
 
     }
 
     /** tweak the form - depending on existing data
-     *	
-     * Lenovo history:
+     *
+     * SWTC history:
      *
      * @01 - 03/26/20 - Added this header; add check for '@lenovo' in email address. If not true, hide PremierSupport checkbox.
      *
-     */ 
+     */
     function definition_after_data() {
         parent::definition_after_data();
-        
+
         $mform = $this->_form;
-        $mform->applyFilter('username', 'trim');         // Lenovo
+        $mform->applyFilter('username', 'trim');         // SWTC
 
         // Trim required name fields.
         foreach (useredit_get_required_name_fields() as $field) {
             $mform->applyFilter($field, 'trim');
         }
-        
+
         // @01 - Add check for '@lenovo' in email address. If not true, hide PremierSupport checkbox.
         if (stripos($mform->getElementValue('email'), '@lenovo') === false) {
             $mform->removeElement('premiersupportuser');
@@ -158,7 +158,7 @@ class invitation_form extends moodleform {
      *         or an empty array if everything is OK (true allowed for backwards compatibility too).
      */
     public function validation($data, $files) {
-        global $CFG, $DB;             // Lenovo
+        global $CFG, $DB;             // SWTC
         $errors = parent::validation($data, $files);
 
         if (signup_captcha_enabled()) {
@@ -172,7 +172,7 @@ class invitation_form extends moodleform {
                 $errors['recaptcha_element'] = get_string('missingrecaptchachallengefield');
             }
         }
-        
+
         $errors += signup_validate_data($data, $files);
 
         return $errors;
@@ -196,5 +196,5 @@ class invitation_form extends moodleform {
         ];
         return $context;
     }
-    
+
 }

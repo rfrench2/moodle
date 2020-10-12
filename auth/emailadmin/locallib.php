@@ -1,4 +1,4 @@
-<?php
+SWTC history<?php
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -16,10 +16,10 @@
  * Local library file to include classes and functions used.
  *
  * @package    emailadmin invitation
- * @copyright  2018 Lenovo DCG Education Services
+ * @copyright  2018 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * Lenovo history:
+ * SWTC history:
  *
  * 08/03/18 - Initial writing (copied from /enrol/invitation/locallib.php and modified).
  * 08/07/18 - Added checking of email during sending of invitation so that multiple invitations are not active for the same "user".
@@ -31,16 +31,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// Lenovo ********************************************************************************.
-// Include Lenovo EBGLMS user and debug functions.
-// Lenovo ********************************************************************************.
-require_once($CFG->dirroot.'/local/ebglms/lib/ebglms_userlib.php');
-require_once($CFG->dirroot.'/local/ebglms/lib/locallib.php');                     // Some needed functions.
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/ebglms_userlib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
 
 /**
  * Invitation manager that handles the handling of invitation information.
  *
- * @copyright  2018 Lenovo DCG Education Services
+ * @copyright  2018 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class invitation_manager {
@@ -48,12 +48,12 @@ class invitation_manager {
      * Constant for revoking an active invitation.
      */
     const INVITE_EXPIRE = 1;
-    
+
     /**
      * Constant for extending the expiration time of an active invitation.
      */
     const INVITE_EXTEND = 2;
-	
+
 	/**
      * Constant for reseting the expiration time of an expired invitation.
      */
@@ -72,36 +72,36 @@ class invitation_manager {
      *
      * @param array $data       data processed from the invite form, or an invite
 	 *
-	 * Lenovo history:
+	 * SWTC history:
 	 *
 	 * 01/08/19 - Switching references from "invitation" to "signup".
 	 *
      */
     public function send_invitation($data) {
-        global $DB, $CFG, $SITE, $USER, $PAGE, $OUTPUT, $SESSION;       // Lenovo
-        
+        global $DB, $CFG, $SITE, $USER, $PAGE, $OUTPUT, $SESSION;       // SWTC
+
         //****************************************************************************************.
-        // Lenovo EBGLMS ebglms_user and debug variables.
+        // SWTC LMS ebglms_user and debug variables.
         $ebglms_user = ebglms_get_user($USER);
         $debug = ebglms_get_debug();
         //****************************************************************************************.
-        
+
         if (isset($debug)) {
-            // Lenovo ********************************************************************************
+            // SWTC ********************************************************************************
             // Always output standard header information.
-            // Lenovo ********************************************************************************
-            $messages[] = "Lenovo ********************************************************************************.";
+            // SWTC ********************************************************************************
+            $messages[] = "SWTC ********************************************************************************.";
             $messages[] = "Entering /auth/emailadmin/locallib.php===send_invitation.enter.";
             $messages[] = "About to print SESSION.";
             $messages[] = print_r($SESSION, true);
             $messages[] = "Finished printing SESSION. About to print debug.";
             $messages[] = print_r($debug, true);
             $messages[] = "Finished printing debug.";
-            $messages[] = "Lenovo ********************************************************************************.";
+            $messages[] = "SWTC ********************************************************************************.";
             debug_logmessage($messages, 'both');
             unset($messages);
         }
-        
+
 		// Create unique token for invitation.
         do {
             $token = uniqid();
@@ -119,7 +119,7 @@ class invitation_manager {
         $timesent = time();
         $invitation->timesent = $timesent;
         $invitation->timeexpiration = $timesent + get_config('local_ebglms', 'inviteexpiration');
-	
+
         $invitation->subject = get_string('default_subject', 'local_ebglms', sprintf('%s', $data->email));
 
         // Construct message: custom (if any) + template.
@@ -139,22 +139,22 @@ class invitation_manager {
         $message_params->inviteurl = $inviteurl;
         $message_params->supportemail = $CFG->supportemail;
         $message .= get_string('emailmsgtxt', 'local_ebglms', $message_params);
-        
-        // Lenovo ********************************************************************************
+
+        // SWTC ********************************************************************************
         if (isset($debug)) {
             $messages[] = "About to print message_params.";
             $messages[] = print_r($message_params, true);
             $messages[] = "Finished printing message_params. About to print invitation.";
             $messages[] = print_r($invitation, true);
             $messages[] = "Finished printing invitation.";
-            $messages[] = "Lenovo ********************************************************************************.";
+            $messages[] = "SWTC ********************************************************************************.";
             debug_logmessage($messages, 'detailed');
             unset($messages);
         }
-        
-        // Lenovo ********************************************************************************
+
+        // SWTC ********************************************************************************
         // Here is where all the magic happens.
-        // Lenovo ********************************************************************************
+        // SWTC ********************************************************************************
         $DB->insert_record('local_ebglms_userinvitation', $invitation);
 
         // Set FROM to be $CFG->supportemail.
@@ -166,17 +166,17 @@ class invitation_manager {
         $fromuser->lastnamephonetic = '';
         $fromuser->middlename = '';
         $fromuser->alternatename = '';
-        
+
         $fromuser->email = $CFG->supportemail;
         $fromuser->firstname = '';
         $fromuser->lastname = $SITE->fullname;
         // $fromuser->maildisplay = true;
-        
+
         // Send invitation to the user.
-        // Lenovo ********************************************************************************
+        // SWTC ********************************************************************************
         // Since the user does not have an account on the site yet, we have to "fudge" some parameters to get email_to_user
         //      to work.
-        // Lenovo ********************************************************************************
+        // SWTC ********************************************************************************
         $contactuser = new stdClass();
         $contactuser->id = -1;
         $contactuser->deleted = '';
@@ -185,13 +185,13 @@ class invitation_manager {
         $contactuser->lastnamephonetic = '';
         $contactuser->middlename = '';
         $contactuser->alternatename = '';
-        
+
         $contactuser->email = $invitation->email;
         $contactuser->firstname = '';
         $contactuser->lastname = '';
         // $contactuser->maildisplay = true;
-        
-        // Lenovo ********************************************************************************
+
+        // SWTC ********************************************************************************
         if (isset($debug)) {
             $messages[] = "About to print fromuser.";
             $messages[] = print_r($fromuser, true);
@@ -201,22 +201,22 @@ class invitation_manager {
             $messages[] = "subject is :$invitation->subject.";
             $messages[] = "About to print message.";
             $messages[] = print_r($message, true);
-            $messages[] = "Lenovo ********************************************************************************.";
+            $messages[] = "SWTC ********************************************************************************.";
             debug_logmessage($messages, 'detailed');
             unset($messages);
         }
-        
+
         email_to_user($contactuser, $fromuser, $invitation->subject, $message);
-        
-        // Lenovo ********************************************************************************
+
+        // SWTC ********************************************************************************
         // Copied parts of /auth/emailadmin/user_signup to here.
-        // Lenovo ********************************************************************************
+        // SWTC ********************************************************************************
         $invitationsent = get_string('invitationsent', 'local_ebglms');
         $PAGE->navbar->add($invitationsent);
         $PAGE->set_title($invitationsent);
         $PAGE->set_heading($PAGE->course->fullname);
         echo $OUTPUT->header();
-        
+
         notice(get_string('invitationsent_desc1', 'local_ebglms', $contactuser->email), "$CFG->wwwroot/index.php");
 
     }
@@ -226,7 +226,7 @@ class invitation_manager {
      *
      * @param string $email    Email of user
      *
-     * @return array           Returns status string and invite array (if the user has already been sent an invitation AND it has not expired yet) or 
+     * @return array           Returns status string and invite array (if the user has already been sent an invitation AND it has not expired yet) or
      *                                          null (the email was not found OR the email was found but the invitation has expired).
      */
     public function search_invites_for_email($email) {
@@ -234,7 +234,7 @@ class invitation_manager {
 
         // Get all invites for the email (if any).
         $invites = $DB->get_records('local_ebglms_userinvitation', array('email'=>$email));
-        
+
         // No invitation found for the email entered.
         if (empty($invites)) {
             return array(null, null);
@@ -242,23 +242,23 @@ class invitation_manager {
             $status_active = get_string('status_invite_active', 'local_ebglms');
             $status_used = get_string('status_invite_used', 'local_ebglms');
             $status_expired = get_string('status_invite_expired', 'local_ebglms');
-            
+
             // There should only be one (unless an existing invite has expired or there is testing going on).
             foreach ($invites as $invite) {
                 // An invitation was found for the user. See if it has expired or not OR been used already.
                 $status = $this->get_invite_status($invite);
-                
+
                 switch ($status) {
                     // User has a currently active invitation.
                     case $status_active:
                         return array($status_active, $invite);
                         break;
-                    
+
                     // User has used an invitation.
                     case $status_used:
                         return array($status_used, $invite);
                         break;
-                    
+
                     // User had an invitation, but it has expired.
                     case $status_expired:
                         // However, they may have already created a new invitation. If they have, count($invites) would be > 1.
@@ -282,13 +282,13 @@ class invitation_manager {
      *
      * @return string  $status       Returns invite status string.
      *
-     * Lenovo history:
+     * SWTC history:
      *
      * 08/08/18 - Added check for empty $invite (i.e. no need to check before calling this function anymore).
      *
      */
     public function get_invite_status($invite) {
-        
+
         if (empty($invite)) {
             // Invite invalid.
             $status = get_string('status_invite_invalid', 'local_ebglms');
@@ -325,7 +325,7 @@ class invitation_manager {
      * @param string $status
      * @param object $invitation
 	 *
-	 * Lenovo history:
+	 * SWTC history:
 	 *
 	 * 01/08/19 - Switching references from "invitation" to "signup".
 	 *
@@ -335,15 +335,15 @@ class invitation_manager {
 
         $message_params = new stdClass();
         $message = '';
-        
+
         $status_active = get_string('status_invite_active', 'local_ebglms');
         $status_used = get_string('status_invite_used', 'local_ebglms');
-        
+
         // An active invitation was found for the user. Remind them of this fact.
         if ($status == $status_active) {
             $navbar = get_string('status_invite_still_active', 'local_ebglms');
             $title = get_string('invitationactive', 'local_ebglms');
-            
+
             $message_params->email = $invitation->email;
             $message_params->timesent = date('M j, Y g:ia', $invitation->timesent);
             $message_params->expiration = date('M j, Y g:ia', $invitation->timeexpiration);
@@ -359,7 +359,7 @@ class invitation_manager {
             // A used invitation was found for the user. Remind them of this fact.
             $navbar = get_string('status_invite_already_used', 'local_ebglms');
             $title = get_string('invitationused', 'local_ebglms');
-            
+
             $message_params->email = $invitation->email;
             $message_params->timeused = date('M j, Y g:ia', $invitation->timeused);
             $message_params->supportemail = $CFG->supportemail;
@@ -367,14 +367,14 @@ class invitation_manager {
             $message .= get_string('status_invite_used_message', 'local_ebglms', $message_params);
             unset($message_params);
         }
-                
+
         $PAGE->navbar->add($navbar);
         $PAGE->set_title($title);
         $PAGE->set_heading($PAGE->course->fullname);
         echo $OUTPUT->header();
         // notice(get_string('invitationsent_desc1', 'local_ebglms', $contactuser->email), "$CFG->wwwroot/index.php");
         notice($message, "$CFG->wwwroot/index.php");
-        
+
     }
 
     /**
@@ -403,7 +403,7 @@ class invitation_manager {
         if (empty($user)) {
             return false;
         }
-        
+
         $ret_val->username = sprintf('%s %s', $user->firstname, $user->lastname);
         $ret_val->useremail = $user->email;
 
@@ -412,9 +412,9 @@ class invitation_manager {
 
         return $ret_val;
     }
-    
+
     /**
-     * A user clicked on the invitation hyperlink, but a non-active status has been encountered for the token. Format message to 
+     * A user clicked on the invitation hyperlink, but a non-active status has been encountered for the token. Format message to
      *              display to user and exit.
      *
      * @param string $status    Status of invite (possibilities are : 'Expired', 'Used', or 'Invalid')
@@ -427,17 +427,17 @@ class invitation_manager {
 
         $message_params = new stdClass();
         $message = '';
-        
+
         $status_invalid = get_string('status_invite_invalid', 'local_ebglms');
         $status_used = get_string('status_invite_used', 'local_ebglms');
         $status_expired = get_string('status_invite_expired', 'local_ebglms');
-        
+
         switch ($status) {
             /// A used invitation was found for the user. Remind them of this fact.
             case $status_used:
                 $navbar = get_string('status_invite_already_used', 'local_ebglms');
                 $title = get_string('invitationused', 'local_ebglms');
-                
+
                 $message_params->email = $invite->email;
                 $message_params->timeused = date('M j, Y g:ia', $invite->timeused);
                 $message_params->supportemail = $CFG->supportemail;
@@ -445,12 +445,12 @@ class invitation_manager {
                 $message .= get_string('status_invite_used_message', 'local_ebglms', $message_params);
                 unset($message_params);
                 break;
-            
+
             // User had an invitation, but it has expired.
             case $status_expired:
                 $navbar = get_string('status_invite_expired', 'local_ebglms');
                 $title = get_string('invitationexpired', 'local_ebglms');
-                
+
                 $message_params->email = $invite->email;
                 $message_params->timesent = date('M j, Y g:ia', $invite->timesent);
                 $message_params->expiration = date('M j, Y g:ia', $invite->timeexpiration);
@@ -459,19 +459,19 @@ class invitation_manager {
                 $message .= get_string('status_invite_expired_message', 'local_ebglms', $message_params);
                 unset($message_params);
                 break;
-                
+
             // Invalid invitation (token).
             case $status_invalid:
                 $navbar = get_string('status_invite_invalid', 'local_ebglms');
                 $title = get_string('invitationinvalid', 'local_ebglms');
-                
+
                 $message_params->supportemail = $CFG->supportemail;
 
                 $message .= get_string('status_invite_invalid_message', 'local_ebglms', $message_params);
                 unset($message_params);
                 break;
         }
-        
+
         $PAGE->set_url('/auth/emailadmin/signup.php');
         $PAGE->set_context(context_system::instance());
         $PAGE->navbar->add($navbar);
@@ -480,7 +480,7 @@ class invitation_manager {
         echo $OUTPUT->header();
         notice($message, "$CFG->wwwroot/index.php");
     }
-    
+
     /**
      * Extend the invitation by adding the global setting to the current $invite->timeexpiration. Used in invitehistory.php.
      *
@@ -493,14 +493,14 @@ class invitation_manager {
 
         // Get the global invitation expiration time.
         $global_expirationtime = get_config('local_ebglms', 'inviteexpiration');
-        
+
         $newtimeexpiration = $invite->timeexpiration + $global_expirationtime;
-        
+
         $DB->set_field('local_ebglms_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
-        
+
         return;
     }
-    
+
     /**
      * Immediately expire the invitation by setting the expiration time to yesterday. Used in invitehistory.php.
      *
@@ -512,12 +512,12 @@ class invitation_manager {
         global $DB;
 
         $newtimeexpiration = time()-1;
-        
+
         $DB->set_field('local_ebglms_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
-        
+
         return;
     }
-    
+
     /**
      * Set the invitation as used by setting tokenused to true and setting timeused to the current time. Used in /emailadmin/confirm.php.
      *
@@ -528,7 +528,7 @@ class invitation_manager {
      */
     public function set_invite_used($invite, $userid) {
         global $DB;
-        
+
         $invite->userid = $userid;
         $invite->tokenused = true;
         $invite->timeused = time();
@@ -536,15 +536,15 @@ class invitation_manager {
 
         return;
     }
-	
+
 	/**
-     * Set all the values required to reset an invite. Used in /local/ebglms/lib/invitehistory.php.
+     * Set all the values required to reset an invite. Used in /local/swtc/lib/invitehistory.php.
      *
      * @param object $invite    Invitation record
      *
      * @return object           Returns the existing record with new fields set.
 	 *
-	 * Lenovo history:
+	 * SWTC history:
 	 *
 	 * 01/03/19 - New function.
 	 *
@@ -557,7 +557,7 @@ class invitation_manager {
         $invite->timesent = $timesent;
         $invite->timeexpiration = $timesent + get_config('local_ebglms', 'inviteexpiration');
 		$DB->update_record('local_ebglms_userinvitation', $invite);
-		
+
         return;
     }
 
@@ -566,7 +566,7 @@ class invitation_manager {
 /**
  * Reports the approximate distance in time between two times given in seconds
  * or in a valid ISO string like.
- * 
+ *
  * For example, if the distance is 47 minutes, it'll return
  * "about 1 hour". See the source for the complete wording list.
  *
@@ -579,7 +579,7 @@ class invitation_manager {
  * http://www.8tiny.com/source/akelos/lib/AkActionView/helpers/date_helper.php.source.txt
  *
  * Which was in term inspired by Ruby on Rails' similarly called function.
- * 
+ *
  * @param int $from_time
  * @param int $to_time
  * @param boolean $include_seconds
@@ -646,13 +646,13 @@ function prepare_notice_object($invitation) {
 
 /**
  * Prints out tabs and highlights the appropiate current tab.
- * 
+ *
  * @param string $active_tab  Either 'invite' or 'history'
  */
 function print_page_tabs($active_tab) {
     global $CFG, $COURSE;
 
-    $tabs[] = new tabobject('history', new moodle_url('/local/ebglms/lib/invitehistory.php', array('courseid' => $COURSE->id)), 
+    $tabs[] = new tabobject('history', new moodle_url('/local/swtc/lib/invitehistory.php', array('courseid' => $COURSE->id)),
                             get_string('invitehistory', 'local_ebglms'));
     // $tabs[] = new tabobject('invite',
     //                 new moodle_url('/enrol/invitation/invitation.php',

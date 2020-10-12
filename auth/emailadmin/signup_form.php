@@ -1,4 +1,4 @@
-<?php
+// SWTC<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -19,10 +19,10 @@
  *
  * @package    local
  * @subpackage ebglms
- * @copyright  2018 Lenovo EBG Services Education
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *	
- * Lenovo history:
+ *
+ * SWTC history:
  *
  *	08/02/18 - Initial writing.
  * 01/08/19 - Changing from invitation to signup (this is still part 1 of 2) and replaced the standard one in /login.
@@ -38,7 +38,7 @@ require_once($CFG->dirroot . '/user/editlib.php');
 
 // class auth_emailadmin_invitation_form extends moodleform {       // Not named correctly to override the main login_signup_form.
 // 08/08/18 - RF - trying to change name again...
-// class login_signup_form extends moodleform {     // Lenovo - works!
+// class login_signup_form extends moodleform {     // SWTC - works!
 // 01/08/19 - Changed from invitation_form to signup_form.
 class signup_form extends moodleform {
     function definition() {
@@ -46,17 +46,17 @@ class signup_form extends moodleform {
 
         $mform = $this->_form;
 
-        // Lenovo ********************************************************************************
+        // SWTC ********************************************************************************
         // Change section header (since password is no longer required).
         // Remove all fields except email and email2 since the user account will not be created at this time.
-        // $mform->addElement('header', 'createuserandpass', get_string('createuserandpass'), '');          // Lenovo
-        // Lenovo ********************************************************************************
-         $mform->addElement('header', 'createuser', get_string('newuserinvitation', 'local_ebglms'), '');       // Lenovo
-         
-        $mform->addElement('static', 'newuserinvitation1', '', get_string('newuserinvitation_desc1a', 'local_ebglms'));     // Lenovo
-        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc2a', 'local_ebglms'));     // Lenovo
-        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc3a', 'local_ebglms'));     // Lenovo
-        
+        // $mform->addElement('header', 'createuserandpass', get_string('createuserandpass'), '');          // SWTC
+        // SWTC ********************************************************************************
+         $mform->addElement('header', 'createuser', get_string('newuserinvitation', 'local_ebglms'), '');       // SWTC
+
+        $mform->addElement('static', 'newuserinvitation1', '', get_string('newuserinvitation_desc1a', 'local_ebglms'));     // SWTC
+        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc2a', 'local_ebglms'));     // SWTC
+        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc3a', 'local_ebglms'));     // SWTC
+
         $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25"');
         $mform->setType('email', core_user::get_property_type('email'));
         $mform->addRule('email', get_string('missingemail'), 'required', null, 'client');
@@ -79,14 +79,14 @@ class signup_form extends moodleform {
         $manager->signup_form($mform);
 
         // buttons
-        // $this->add_action_buttons(true, get_string('createaccount'));        // Lenovo
-        $this->add_action_buttons(true, get_string('requestnewuserinvitation', 'local_ebglms'));           // Lenovo
+        // $this->add_action_buttons(true, get_string('createaccount'));        // SWTC
+        $this->add_action_buttons(true, get_string('requestnewuserinvitation', 'local_ebglms'));           // SWTC
 
     }
 
     function definition_after_data(){
         $mform = $this->_form;
-        // $mform->applyFilter('username', 'trim');         // Lenovo
+        // $mform->applyFilter('username', 'trim');         // SWTC
 
         // Trim required name fields.
         foreach (useredit_get_required_name_fields() as $field) {
@@ -101,15 +101,15 @@ class signup_form extends moodleform {
      * @param array $files array of uploaded files "element_name"=>tmp_file_path
      * @return array of "element_name"=>"error_description" if there are errors,
      *         or an empty array if everything is OK (true allowed for backwards compatibility too).
-     *	
-     * Lenovo history:
      *
-     * 04/02/19 - Added this header; before validation, lower case the email address (Moodle requires it and the email 
+     * SWTC history:
+     *
+     * 04/02/19 - Added this header; before validation, lower case the email address (Moodle requires it and the email
      *                      domain checks will not work).
      *
      */
     public function validation($data, $files) {
-        global $CFG, $DB;             // Lenovo
+        global $CFG, $DB;             // SWTC
         $errors = parent::validation($data, $files);
 
         if (signup_captcha_enabled()) {
@@ -124,8 +124,8 @@ class signup_form extends moodleform {
             }
         }
 
-        // $errors += signup_validate_data($data, $files);              // Lenovo
-        
+        // $errors += signup_validate_data($data, $files);              // SWTC
+
         $data['email'] = \core_text::strtolower($data['email']);        // 04/02/19
         $data['email2'] = \core_text::strtolower($data['email2']);        // 04/02/19
 
@@ -170,5 +170,5 @@ class signup_form extends moodleform {
         ];
         return $context;
     }
-    
+
 }

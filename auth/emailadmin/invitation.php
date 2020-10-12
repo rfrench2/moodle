@@ -20,7 +20,7 @@
  *
  * @package    local
  * @subpackage ebglms
- * @copyright  2018 Lenovo DCG Education Services
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -34,31 +34,31 @@
 require('../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 require_once($CFG->libdir . '/authlib.php');
-// require_once('lib.php');                                             // Lenovo
-require_once($CFG->dirroot . '/login/lib.php');         // Lenovo
-require_once('locallib.php');      // Lenovo
+// require_once('lib.php');                                             // SWTC
+require_once($CFG->dirroot . '/login/lib.php');         // SWTC
+require_once('locallib.php');      // SWTC
 
 // Check if user is passing a token they were sent.
 $signupinvitationtoken = required_param('token', PARAM_ALPHANUM);
 
-// Lenovo ********************************************************************************.
-// Include Lenovo EBGLMS user and debug functions.
-// Lenovo ********************************************************************************.
-require($CFG->dirroot.'/local/ebglms/lib/ebglms.php');                     // All EBGLMS global information.
-require_once($CFG->dirroot.'/local/ebglms/lib/ebglms_userlib.php');
-// Lenovo ********************************************************************************.
-// Include Lenovo EBGLMS functions.
-// Lenovo ********************************************************************************.
-require_once($CFG->dirroot.'/local/ebglms/lib/locallib.php');                     // Some needed functions.
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+require($CFG->dirroot.'/local/swtc/lib/ebglms.php');                     // All SWTC LMS global information.
+require_once($CFG->dirroot.'/local/swtc/lib/ebglms_userlib.php');
+// SWTC ********************************************************************************.
+// Include SWTC LMS functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
 
-global $SESSION, $USER;        // Lenovo
+global $SESSION, $USER;        // SWTC
 
 //****************************************************************************************.
-// Lenovo EBGLMS ebglms_user and debug variables.
+// SWTC LMS ebglms_user and debug variables.
 // $ebglms_user = ebglms_get_user($USER);       // @01
 // $debug = ebglms_get_debug();     // @01
 
-// Other Lenovo variables.
+// Other SWTC variables.
 // Invitation status strings.
 $status_active = get_string('status_invite_active', 'local_ebglms');
 $status_used = get_string('status_invite_used', 'local_ebglms');
@@ -69,13 +69,13 @@ $status_invalid = get_string('status_invite_invalid', 'local_ebglms');
 // If the user passes a token, attempt to retrieve it.
 if (isset($signupinvitationtoken)) {
     $invitation = $DB->get_record('local_ebglms_userinvitation', array('token' => $signupinvitationtoken));
-    
+
     // print_object($invitation);
     $invitationmanager = new invitation_manager();
-    
+
      // Get the status of the invitation (possibilities are : 'Active', 'Expired', 'Used', or 'Invalid').
     $status = $invitationmanager->get_invite_status($invitation);
-    
+
     // If token used is NOT valid (active), error message and exit.
     if ($status != $status_active) {
         $invitationmanager->decline_invitation_from_user($status, $invitation);
@@ -87,8 +87,8 @@ if (!$authplugin = signup_is_enabled()) {
     print_error('notlocalisederrormessage', 'error', '', 'Sorry, you may not use this page.');
 }
 
-// $PAGE->set_url('/login/signup.php');                             // Lenovo
-// $PAGE->set_url('/auth/emailadmin/signup.php');          // Lenovo - works first time through, but not second.
+// $PAGE->set_url('/login/signup.php');                             // SWTC
+// $PAGE->set_url('/auth/emailadmin/signup.php');          // SWTC - works first time through, but not second.
 // $PAGE->set_url('/auth/emailadmin/signup.php', array('token' => $signupinvitationtoken));          // 01/08/19
 $PAGE->set_url('/auth/emailadmin/invitation.php', array('token' => $signupinvitationtoken));        // 01/08/19
 $PAGE->set_context(context_system::instance());
@@ -134,10 +134,10 @@ if (\core_auth\digital_consent::is_age_digital_consent_verification_enabled()) {
 // Can be used to force additional actions before sign up such as acceptance of policies, validations, etc.
 core_login_pre_signup_requests();
 
-// Lenovo *******************************************************************************
+// SWTC *******************************************************************************
 // The following signup_form call loads /auth/emailadmin/signup_form (if all goes well).
 // 01/08/19 - Changed to invitation_form.
-// Lenovo *******************************************************************************
+// SWTC *******************************************************************************
 // $mform_signup = $authplugin->signup_form();		// 01/08/19
 $mform_invitation = $authplugin->invitation_form();	// 01/08/19
 $mform_invitation->set_data(array('token' => $invitation->token, 'email' => $invitation->email, 'email2' => $invitation->email));
@@ -148,15 +148,15 @@ if ($mform_invitation->is_cancelled()) {
 } else if ($user = $mform_invitation->get_data()) {
     // Add missing required fields.
     $user = signup_setup_new_user($user);
-    
+
     $authplugin->user_signup($user, true); // prints notice and link to login/index.php
-    
+
     exit; //never reached
 }
 
-// Lenovo ********************************************************************************
+// SWTC ********************************************************************************
 // Change section header.
-// Lenovo ********************************************************************************
+// SWTC ********************************************************************************
 $newaccount = get_string('newaccount');
 $login      = get_string('login');
 
