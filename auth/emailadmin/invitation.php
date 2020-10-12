@@ -20,39 +20,45 @@
  *
  * @package    local
  * @subpackage ebglms
- * @copyright  2018 SWTC DCG Education Services
+ * @copyright  2018 Lenovo DCG Education Services
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
  *
  *	08/06/18 - Initial writing.
  * 01/08/19 - Switching references from "signup" to "invitation" (this is still part 2 of 2).
+ * PTR2019Q403 - @01 - 03/26/20 - Since user has not logged on yet, neither ebglms_get_user nor ebglms_get_debug will be available yet.
  *
  */
 
 require('../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 require_once($CFG->libdir . '/authlib.php');
-// require_once('lib.php');                                             // SWTC
-require_once($CFG->dirroot . '/login/lib.php');         // SWTC
-require_once('locallib.php');      // SWTC
+// require_once('lib.php');                                             // Lenovo
+require_once($CFG->dirroot . '/login/lib.php');         // Lenovo
+require_once('locallib.php');      // Lenovo
 
 // Check if user is passing a token they were sent.
 $signupinvitationtoken = required_param('token', PARAM_ALPHANUM);
 
-// SWTC ********************************************************************************.
-// Include SWTC LMS user and debug functions.
-// SWTC ********************************************************************************.
+// Lenovo ********************************************************************************.
+// Include Lenovo EBGLMS user and debug functions.
+// Lenovo ********************************************************************************.
+require($CFG->dirroot.'/local/ebglms/lib/ebglms.php');                     // All EBGLMS global information.
 require_once($CFG->dirroot.'/local/ebglms/lib/ebglms_userlib.php');
+// Lenovo ********************************************************************************.
+// Include Lenovo EBGLMS functions.
+// Lenovo ********************************************************************************.
 require_once($CFG->dirroot.'/local/ebglms/lib/locallib.php');                     // Some needed functions.
-global $SESSION;        // SWTC
+
+global $SESSION, $USER;        // Lenovo
 
 //****************************************************************************************.
-// SWTC LMS ebglms_user and debug variables.
-$ebglms_user = ebglms_get_user($USER);
-$debug = ebglms_get_debug();
+// Lenovo EBGLMS ebglms_user and debug variables.
+// $ebglms_user = ebglms_get_user($USER);       // @01
+// $debug = ebglms_get_debug();     // @01
 
-// Other SWTC variables.
+// Other Lenovo variables.
 // Invitation status strings.
 $status_active = get_string('status_invite_active', 'local_ebglms');
 $status_used = get_string('status_invite_used', 'local_ebglms');
@@ -63,13 +69,13 @@ $status_invalid = get_string('status_invite_invalid', 'local_ebglms');
 // If the user passes a token, attempt to retrieve it.
 if (isset($signupinvitationtoken)) {
     $invitation = $DB->get_record('local_ebglms_userinvitation', array('token' => $signupinvitationtoken));
-
+    
     // print_object($invitation);
     $invitationmanager = new invitation_manager();
-
+    
      // Get the status of the invitation (possibilities are : 'Active', 'Expired', 'Used', or 'Invalid').
     $status = $invitationmanager->get_invite_status($invitation);
-
+    
     // If token used is NOT valid (active), error message and exit.
     if ($status != $status_active) {
         $invitationmanager->decline_invitation_from_user($status, $invitation);
@@ -81,8 +87,8 @@ if (!$authplugin = signup_is_enabled()) {
     print_error('notlocalisederrormessage', 'error', '', 'Sorry, you may not use this page.');
 }
 
-// $PAGE->set_url('/login/signup.php');                             // SWTC
-// $PAGE->set_url('/auth/emailadmin/signup.php');          // SWTC - works first time through, but not second.
+// $PAGE->set_url('/login/signup.php');                             // Lenovo
+// $PAGE->set_url('/auth/emailadmin/signup.php');          // Lenovo - works first time through, but not second.
 // $PAGE->set_url('/auth/emailadmin/signup.php', array('token' => $signupinvitationtoken));          // 01/08/19
 $PAGE->set_url('/auth/emailadmin/invitation.php', array('token' => $signupinvitationtoken));        // 01/08/19
 $PAGE->set_context(context_system::instance());
@@ -128,27 +134,13 @@ if (\core_auth\digital_consent::is_age_digital_consent_verification_enabled()) {
 // Can be used to force additional actions before sign up such as acceptance of policies, validations, etc.
 core_login_pre_signup_requests();
 
-// SWTC *******************************************************************************
+// Lenovo *******************************************************************************
 // The following signup_form call loads /auth/emailadmin/signup_form (if all goes well).
 // 01/08/19 - Changed to invitation_form.
-// SWTC *******************************************************************************
+// Lenovo *******************************************************************************
 // $mform_signup = $authplugin->signup_form();		// 01/08/19
 $mform_invitation = $authplugin->invitation_form();	// 01/08/19
 $mform_invitation->set_data(array('token' => $invitation->token, 'email' => $invitation->email, 'email2' => $invitation->email));
-
-if (isset($debug)) {
-    // SWTC ********************************************************************************
-    // Always output standard header information.
-    // SWTC ********************************************************************************
-    $messages[] = "SWTC ********************************************************************************.";
-    $messages[] = "Entering /auth/emailadmin/invitation.php. ===auth_emailadmin_invitation.enter.";
-    $messages[] = "About to print mform_invitation.";
-    $messages[] = print_r($mform_invitation, true);
-    $messages[] = "Finished printing mform_invitation.";
-    $messages[] = "SWTC ********************************************************************************.";
-    debug_logmessage($messages, 'both');
-    unset($messages);
-}
 
 if ($mform_invitation->is_cancelled()) {
     redirect(get_login_url());
@@ -156,15 +148,15 @@ if ($mform_invitation->is_cancelled()) {
 } else if ($user = $mform_invitation->get_data()) {
     // Add missing required fields.
     $user = signup_setup_new_user($user);
-
+    
     $authplugin->user_signup($user, true); // prints notice and link to login/index.php
-
+    
     exit; //never reached
 }
 
-// SWTC ********************************************************************************
+// Lenovo ********************************************************************************
 // Change section header.
-// SWTC ********************************************************************************
+// Lenovo ********************************************************************************
 $newaccount = get_string('newaccount');
 $login      = get_string('login');
 

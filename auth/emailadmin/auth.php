@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * SWTC LMS for Moodle 3.7+. All SWTC customized functions associated with SWTC LMS
+ * SWTC LMS for Moodle 3.7+. All Lenovo customized functions associated with SWTC LMS
  *                      Authentication Plugin: Email Authentication with admin confirmation
  *
  * @author Felipe Carasso
@@ -30,13 +30,14 @@
  *						This is the function that processes the user clicking the "Create new account" registration button for access to the
  *                      SWTC LMS site (i.e. BEFORE the user receives their confirmation email). The main purpose
  *                      of this function is a) pre-set the user's customized user profile value (Accesstype) based on their email domain (either
- *                      "SWTC-stud" or "IBM-stud") and b) compose an email with the user's properties and send the email to the SWTC
- *                      "ebglms@SWTC.com" email account for processing.
- * 07/05/18 - Added hyperlink to SWTC Central to verify the email address of the SWTC user.
- * 07/31/18 - Added new $SESSION->LMS global variables and all its required changes; added check for new ebglmsdebug setting;
+ *                      "Lenovo-stud" or "IBM-stud") and b) compose an email with the user's properties and send the email to the Lenovo
+ *                      SWTC "ebglms@lenovo.com" email account for processing.
+ * 07/05/18 - Added hyperlink to Lenovo Central to verify the email address of the Lenovo user.
+ * 07/31/18 - Added new $SESSION->SWTC global variables and all its required changes; added check for new ebglmsdebug setting;
  *                  added method "signup_form" that calls ebglms invitation_form; changed user_signup to just a verification that
  *                  verification email has been sent.
  * 11/06/19 - SWTC LMS for Moodle 3.7+; to solve missing definitions elsewhere, changing require_once to require for ebglms.php.
+ * PTR2019Q403 - @01 - 03/27/20 - Add check for PremierSupport checkbox.
  *
  */
 
@@ -49,12 +50,15 @@ require_once($CFG->libdir.'/accesslib.php');
 require_once($CFG->dirroot.'/user/profile/lib.php');
 require_once('classes/message.class.php');
 
-// SWTC ********************************************************************************.
+// Lenovo ********************************************************************************.
 // Include SWTC LMS user and debug functions.
-// SWTC ********************************************************************************.
-require($CFG->dirroot.'/local/ebglms/lib/ebglms.php');                              // All LMS global information.
-require_once($CFG->dirroot.'/local/ebglms/lib/ebglms_userlib.php');
-require_once($CFG->dirroot.'/local/ebglms/lib/locallib.php');                     // Some needed functions.
+// Lenovo ********************************************************************************.
+// require($CFG->dirroot.'/local/ebglms/lib/ebglms.php');                              // All SWTC LMS global information.
+// require_once($CFG->dirroot.'/local/ebglms/lib/ebglms_userlib.php');
+// Lenovo ********************************************************************************.
+// Include Lenovo SWTC LMS functions.
+// Lenovo ********************************************************************************.
+// require_once($CFG->dirroot.'/local/ebglms/lib/locallib.php');                     // Some needed functions.
 
 /**
  * Email authentication plugin.
@@ -120,76 +124,67 @@ class auth_plugin_emailadmin extends auth_plugin_base {
      * SWTC history:
      *
      *	08/29/16 - Initial changes.
-     * 08/06/18 - Added new $SESSION->LMS global variables and all its required changes; added check for new ebglmsdebug setting;
+     * 08/06/18 - Added new $SESSION->SWTC global variables and all its required changes; added check for new ebglmsdebug setting;
 	 *                  added method "signup_form" that calls ebglms invitation_form; changed user_signup to just a verification that
 	 *                  verification email has been sent.
+     * @01 - 03/27/20 - Add check for PremierSupport checkbox.
 	 *
      */
     public function user_signup($user, $notify=true) {
-        global $CFG, $DB, $USER, $SESSION;         // SWTC
+        global $CFG, $DB;
+        global $USER, $SESSION;         // Lenovo
         require_once($CFG->dirroot.'/user/profile/lib.php');
 
         //****************************************************************************************.
-        // SWTC LMS ebglms_user and debug variables.
-        $ebglms_user = ebglms_get_user($USER);
+        // Lenovo SWTC LMS ebglms_user and debug variables.
+        // $ebglms_user = ebglms_get_user($USER);   // 10/02/20
         $debug = ebglms_get_debug();
 
-        // Other SWTC variables.
-        $access_ibm_email_domain = 'ibm.com';							// SWTC - IBM email domain.
-        $access_SWTC_email_domain = 'SWTC.com';					// SWTC - SWTC email domain.
+        // Other Lenovo variables.
+        $access_ibm_email_domain = 'ibm.com';							// Lenovo - IBM email domain.
+        $access_lenovo_email_domain = 'lenovo.com';					// Lenovo - Lenovo email domain.
+        $premiersupportuser = empty($user->premiersupportuser) ? null : 1;      // @01
 
-        // SWTC - Checking for the 'Access type' of 'IBM-stud'.
-        $access_ibm_student = $SESSION->LMS->STRINGS->ibm->access_ibm_stud;
-        // SWTC - Checking for the 'Access type' of 'SWTC-stud'.
-        $access_SWTC_student = $SESSION->LMS->STRINGS->SWTC->access_SWTC_stud;
+        // Lenovo - Checking for the 'Access type' of 'IBM-stud'.
+        $access_ibm_student = $SESSION->SWTC->STRINGS->ibm->access_ibm_stud;
+        // Lenovo - Checking for the 'Access type' of 'Lenovo-stud'.
+        $access_lenovo_student = $SESSION->SWTC->STRINGS->lenovo->access_lenovo_stud;
         //****************************************************************************************.
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 		if (isset($debug)) {
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = "Lenovo ********************************************************************************.";
             $messages[] = "Entering /auth/emailadmin/auth.php===user_signup.enter===";
-            $messages[] = "access_SWTC_student is :<strong>$access_SWTC_student</strong>.";
-            $messages[] = "access_SWTC_email_domain is :<strong>$access_SWTC_email_domain</strong>.";
-            $messages[] = "access_ibm_student is :<strong>$access_ibm_student</strong>.";
-            $messages[] = "access_ibm_email_domain is :<strong>$access_ibm_email_domain</strong>.";
+            $messages[] = "About to print user:";
+            $messages[] = print_r($user, true);
+            // print_object($user);
+            $messages[] = "Finished printing user.";
             debug_logmessage($messages, 'both');
             unset($messages);
 		}
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 
-		// SWTC ********************************************************************************
+		// Lenovo ********************************************************************************
         // 07/31/18 - Previously, a user would type their initial password for their new account in the /login/signup_form.php.
         //                  Due to security concerns, we now remove the password field from the form and generate a password for the
         //                  new account. This new password is sent in the new account email this plugin sends.
-        //
-        // For reference, the following is copied from moodlelib/setnew_password_and_mail.
-        //          $newpassword = generate_password();
-        //          update_internal_user_password($user, $newpassword, $fasthash);
-        //          if ($createpassword) {
-        //              setnew_password_and_mail($usernew);
-        //              unset_user_preference('create_password', $usernew);
-        //              set_user_preference('auth_forcepasswordchange', 1, $usernew);
-        //          }
-        // SWTC ********************************************************************************
-        // 07/31/18 - RF - Testing - What if I didn't put a password in the database yet?
-        // $newpassword = generate_password();                                                         // SWTC (new code)
-        $user->password = hash_internal_user_password($user->password);      // SWTC  (existing code)
-        // $user->password = hash_internal_user_password($newpassword);            // SWTC (new parameter)
+        // Lenovo ********************************************************************************
+        $user->password = hash_internal_user_password($user->password);      // Lenovo
 
         $user->id = $DB->insert_record('user', $user);
 
-        // SWTC
+        // Lenovo
 		// Load and then set the customized user profile field "Accesstype" to a default value based on email domain.
 		//
-		if ( stripos($user->email, $access_SWTC_email_domain) !== false) {
-			$access_type = $access_SWTC_student;
+		if ( stripos($user->email, $access_lenovo_email_domain) !== false) {
+			$access_type = $access_lenovo_student;
 		} else {
 			$access_type = $access_ibm_student;
 		}
 
 		$user->profile_field_Accesstype = $access_type;
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 		if (isset($debug)) {
             $messages[] = "In /auth/emailadmin/auth.php===user_signup.1.0===";
             $messages[] = "access_type is :<strong>$access_type</strong>.";
@@ -197,7 +192,7 @@ class auth_plugin_emailadmin extends auth_plugin_base {
             debug_logmessage($messages, 'both');
             unset($messages);
 		}
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 
         // Save any custom profile field information.
         profile_save_data($user);
@@ -214,21 +209,23 @@ class auth_plugin_emailadmin extends auth_plugin_base {
             );
         $event->trigger();
 
-        // SWTC ********************************************************************************
-        // Remember that the email is sent to the SWTC LMS email account (ebglms@SWTC.com), NOT the user.
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************.
+        // Remember that the email is sent to the Lenovo LMS email account (ebglms@lenovo.com), NOT the user.
+        // @01 - Add check for PremierSupport checkbox.
+        // Lenovo ********************************************************************************.
+        $user->premiersupportuser = $premiersupportuser;      // @01
         if (! $this->send_confirmation_email_support($user)) {
             print_error('auth_emailadminnoemail', 'auth_emailadmin');
         }
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
         if (isset($debug)) {
             $messages[] = "Leaving /auth/emailadmin/auth.php===user_signup.exit===";
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = "Lenovo ********************************************************************************.";
             debug_logmessage($messages, 'both');
             unset($messages);
 		}
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 
         if ($notify) {
             global $CFG, $PAGE, $OUTPUT;
@@ -357,18 +354,19 @@ class auth_plugin_emailadmin extends auth_plugin_base {
      *
      *	08/29/16 - Initial changes.
      * 07/31/18 - User password changes (see module header above).
+     * @01 - 03/27/20 - Add check for PremierSupport checkbox.
 	 *
      */
     public function send_confirmation_email_support($user) {
-        global $CFG, $USER, $SESSION;          // SWTC
+        global $CFG;
+        global $USER, $SESSION;          // Lenovo
         $config = $this->config;
 
         //****************************************************************************************.
-        // SWTC LMS ebglms_user and debug variables.
-        $ebglms_user = ebglms_get_user($USER);
+        // Lenovo SWTC LMS ebglms_user and debug variables.
+        // $ebglms_user = ebglms_get_user($USER);   // 10/02/20
         $debug = ebglms_get_debug();
         //****************************************************************************************.
-
         $site = get_site();
         $supportuser = core_user::get_support_user();
 
@@ -377,9 +375,9 @@ class auth_plugin_emailadmin extends auth_plugin_base {
         // Text compilation of all user fields except the password.
         $data["userdata"] = '';
 
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************.
         // At this point, no password exists for the user.
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************.
         $skip = array("userdata", "password", "secret");
         foreach (((array) $user) as $dataname => $datavalue) {
             if ( in_array($dataname, $skip) ) {
@@ -399,29 +397,27 @@ class auth_plugin_emailadmin extends auth_plugin_base {
         $username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots.
         $data["link"] = $CFG->wwwroot .'/auth/emailadmin/confirm.php?data='. $user->secret .'/'. $username;
 
-        // SWTC ********************************************************************************
-        // 07/05/18 - Added hyperlink to SWTC Central to verify the email address of the SWTC user. Remember to
+        // Lenovo ********************************************************************************
+        // 07/05/18 - Added hyperlink to Lenovo Central to verify the email address of the Lenovo user. Remember to
         //                  add field to string in auth/emailadmin/lang/en/auth_emailadmin.php.
-        // SWTC ********************************************************************************
-        $data["verify_link"] = 'http://SWTCcentral.SWTC.com/employees/search.action?search_key='. $user->email;
+        // Lenovo ********************************************************************************
+        $data["verify_link"] = 'http://lenovocentral.lenovo.com/employees/search.action?search_key='. $user->email;
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 		if (isset($debug)) {
-            $messages[] = "In /auth/emailadmin/auth.php===send_confirmation_email_support.1.0===";
+            $messages[] = "In /auth/emailadmin/auth.php===send_confirmation_email_support.enter===";
             $messages[] = "data follows :";
-            $messages[] = print_r($data, true); // SWTC - 08/09/18
+            $messages[] = print_r($data, true); // Lenovo - 08/09/18
             $messages[] = "Finished printing data.";
             debug_logmessage($messages, 'detailed');
             unset($messages);
 		}
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 
         $user->mailformat = 1;  // Always send HTML version as well.
 
         // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
         $admins = get_admins();
-        $return = false;
-        $admin_found = false;
 
         if (!isset($config->notif_strategy)) {
             $config->notif_strategy = -1;
@@ -431,6 +427,9 @@ class auth_plugin_emailadmin extends auth_plugin_base {
         if ($config->notif_strategy == -3 || $config->notif_strategy >= 0) {
             $admins = array_merge($admins, get_users_by_capability(context_system::instance(), 'moodle/user:update'));
         }
+
+        $return = false;
+        $admin_found = false;
 
         // Send message to fist admin (main) only. Remove "break" for all admins.
         $send_list = array();
@@ -456,7 +455,13 @@ class auth_plugin_emailadmin extends auth_plugin_base {
                                                         format_string($site->fullname),
                                                         $use_lang);
 
-            $message     = get_string_manager()->get_string('auth_emailadminconfirmation', 'auth_emailadmin', $data, $use_lang);
+            // @01 - Add check for PremierSupport checkbox.
+            if (empty($user->premiersupportuser)) {     // @01
+                $message     = get_string_manager()->get_string('auth_emailadminconfirmation', 'auth_emailadmin', $data, $use_lang);
+            } else {        // @01
+                $message     = get_string_manager()->get_string('auth_emailadminconfirmation_premier', 'auth_emailadmin', $data, $use_lang);        // @01
+            }       // @01
+
             $messagehtml = text_to_html($message, false, false, true);
 
             $result = email_to_user($admin, $supportuser, $subject, $message, $messagehtml);
@@ -489,7 +494,13 @@ class auth_plugin_emailadmin extends auth_plugin_base {
                                                                 format_string($site->fullname),
                                                                 $use_lang);
 
-                    $message     = get_string_manager()->get_string('auth_emailadminconfirmation', 'auth_emailadmin', $data, $use_lang);
+                    // @01 - Add check for PremierSupport checkbox.
+                    if (empty($user->premiersupportuser)) {     // @01
+                        $message     = get_string_manager()->get_string('auth_emailadminconfirmation', 'auth_emailadmin', $data, $use_lang);
+                    } else {        // @01
+                        $message     = get_string_manager()->get_string('auth_emailadminconfirmation_premier', 'auth_emailadmin', $data, $use_lang);// @01
+                    }       // @01
+
                     $messagehtml = text_to_html($message, false, false, true);
 
                     $result = email_to_user($admin, $supportuser, $subject, $message, $messagehtml);
@@ -531,15 +542,15 @@ class auth_plugin_emailadmin extends auth_plugin_base {
 	 *
      */
     function signup_form() {
-        global $CFG, $PAGE;         // SWTC
+        global $CFG, $PAGE;         // Lenovo
 
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************
         $newaccount = get_string('newaccount');
         $PAGE->navbar->add($newaccount);
         $PAGE->set_title($newaccount);
 
-        require_once($CFG->dirroot.'/auth/emailadmin/signup_form.php');      // SWTC - works!
-        return new signup_form(null, null, 'post', '', array('autocomplete'=>'on'));        // SWTC - works!
+        require_once($CFG->dirroot.'/auth/emailadmin/signup_form.php');      // Lenovo - works!
+        return new signup_form(null, null, 'post', '', array('autocomplete'=>'on'));        // Lenovo - works!
     }
 
     /**
@@ -554,16 +565,15 @@ class auth_plugin_emailadmin extends auth_plugin_base {
 	 *
      */
     function invitation_form() {
-        global $CFG, $PAGE;         // SWTC
+        global $CFG, $PAGE;         // Lenovo
 
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************
         // Change the page title from "New account" to "Request invitation".
         $requestaccount = get_string('requestinvitation', 'local_ebglms');
         $PAGE->navbar->add($requestaccount);
         $PAGE->set_title($requestaccount);
 
-        require_once($CFG->dirroot.'/auth/emailadmin/invitation_form.php');      // SWTC
-        return new invitation_form(null, null, 'post', '', array('autocomplete'=>'on'));        // SWTC
+        require_once($CFG->dirroot.'/auth/emailadmin/invitation_form.php');      // Lenovo
+        return new invitation_form(null, null, 'post', '', array('autocomplete'=>'on'));        // Lenovo
     }
-
 }

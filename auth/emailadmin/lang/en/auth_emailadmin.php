@@ -28,15 +28,17 @@
  *					This is the function that processes the user clicking the "Create a new account" registration button for access to the
  *                  SWTC LMS site (i.e. BEFORE the user receives their confirmation email). The main purpose of this
  *                  function is a) pre-set the user's customized user profile value (Accesstype) based on their email domain
- *                  (either "SWTC-stud" or "IBM-stud") and b) compose an email with the user's properties and send the email to the
- *                  SWTC "ebglms@SWTC.com" email account for processing.
+ *                  (either "Lenovo-stud" or "IBM-stud") and b) compose an email with the user's properties and send the email to the
+ *                  SWTC "ebglms@lenovo.com" email account for processing.
  * 01/25/17 - LMS v2.0 - moved url link earlier in the email so the SWTC administrator will not have to scroll every email to find the
  *                  hyperlink to click.
- * 07/05/18 - Added hyperlink to SWTC Central to verify the email address of the SWTC user.
- * 07/27/18 - Added hyperlink to mailing list.
+ * 07/05/18 - Added hyperlink to Lenovo Central to verify the email address of the Lenovo user.
+ * 07/27/18 - Added hyperlink to SWTC mailing list.
  * 07/31/18 - Changed sending of new account password from being set by user to automatically generated when sending the new account
  *                  email (after confirmation).
  * 01/01/19 - Automatic generation of user user password is not implemented yet; setting message back to original.
+ * PTR2019Q403 - @01 - 03/26/20 - Added strings for displaying PremierSupport checkbox; added a separate confirmation email body
+ *                  if the user is requesting a PremierSupport access type.
  *
  */
 
@@ -48,22 +50,22 @@ $string['auth_emailadminsettings'] = 'Settings';
 $string['auth_emailadminuserconfirmation'] = '
 Hello {$a->firstname},
 
-Welcome to the SWTC LMS! Your account has been approved and you can now access our education courses. We are glad you have joined us and look forward to providing you with courses to better assist you to learn about and service SWTC DCG products.
+Welcome to the SWTC LMS! Your account has been approved and you can now access our education courses. We are glad you have joined us and look forward to providing you with courses to better assist you to learn about and service Lenovo DCG products.
 
-Please visit the <a href=https://SWTCedu.SWTC.com/login/index.php>site</a> and login with the username (email address) and password that you created at registration. When accessing the site, you may need to accept a security certificate.
+Please visit the <a href=https://lenovoedu.lenovo.com/login/index.php>site</a> and login with the username (email address) and password that you created at registration. When accessing the site, you may need to accept a security certificate.
 
 <a href="http://collabserv.us14.list-manage.com/track/click?u=871c753ad518bb7c904eb3460&amp;id=d73dc4fdf4&amp;e=e0570caad6">Sign me up</a> to receive SWTC announcements.
 
-For any questions, please send an email to <a href=mailto:servicesedu@SWTC.com>servicesedu@SWTC.com</a>.
+For any questions, please send an email to <a href=mailto:servicesedu@lenovo.com>servicesedu@lenovo.com</a>.
 
 Thank you,
 
-SWTC DCG Services Education
+SWTC
 
 --
 SWTC
-<a href=https://SWTCedu.SWTC.com/login/index.php>SWTC LMS</a>
-<a href=mailto:servicesedu@SWTC.com>servicesedu@SWTC.com</a>
+<a href=https://lenovoedu.lenovo.com/login/index.php>SWTC LMS</a>
+<a href=mailto:servicesedu@lenovo.com>servicesedu@lenovo.com</a>
 
 ';
 $string['auth_emailadminconfirmation'] = '
@@ -71,7 +73,7 @@ $string['auth_emailadminconfirmation'] = '
 
 For the SWTC LMS administrator viewing this request, a new account on the SWTC LMS has been requested.
 
-If the user has a SWTC email address, click the following link to verify the email address of the user (opens SWTC Central):
+If the user has a Lenovo email address, click the following link to verify the email address of the user (opens Lenovo Central):
 
         {$a->verify_link}
 
@@ -88,7 +90,52 @@ user->firstname: {$a->firstname}
 user->email: {$a->email}
 user->username: {$a->username}
 
-Based on the email domain of the user, the initial value of "Access type" is shown immediately below (either "SWTC-stud" or "IBM-stud"):
+Based on the email domain of the user, the initial value of "Access type" is shown immediately below (either "Lenovo-stud" or "IBM-stud"):
+
+	 {$a->customfields}
+
+ <strong>***************************************************************************</strong>
+ <strong>Additional technical information follows:</strong>
+
+ <strong>If this value is correct for the user,</strong>
+	Nothing else needs to be done for the user. Click the link below to confirm the user\'s access to the system and send a confirmation email to the user.
+
+<strong>If this value is NOT correct for the user,</strong>
+	Click the link below to confirm the user\'s access to the system and send a confirmation email to the user. Then, you must change the user\'s "Access type" by doing the following:
+		- Login to the SWTC LMS
+		- Navigate to Site Administration -> Users -> Accounts -> Browse list of users
+		- From the user list, locate the user listed above and left-click on their "First name / Last name"
+		- From the user profile, click "Edit profile"
+		- Scroll down to the "EBG Server Education" section
+		- Using the "Access type" pull-down menu, select new access type for the user from the choices provided
+		- Click "Update profile"
+
+';
+// @01 - Added strings for displaying PremierSupport checkbox; added a separate confirmation email body if the user is requesting
+//              a PremierSupport access type.
+$string['auth_emailadminconfirmation_premier'] = '
+03/27/20 - Version 3.0
+
+For the SWTC LMS administrator viewing this request, a new account on the SWTC LMS has been requested. <strong>In addition</strong>, the user is requesting a <strong>Premier Support</strong> access type. Refer to the procedure (included below) for directions on how to change the user\'s access type.
+
+If the user has a Lenovo email address, click the following link to verify the email address of the user (opens Lenovo Central):
+
+        {$a->verify_link}
+
+To confirm the user\'s access to the SWTC LMS and send a confirmation email to the user, click the link immediately below:
+
+		{$a->link}
+
+Note: In most mail programs, the URL above should appear as a blue link which you can just click on. If that doesn\'t work, then cut and paste the address into the address line at the top of your web browser window.
+
+Some important data from the user request follows:
+
+user->lastname: {$a->lastname}
+user->firstname: {$a->firstname}
+user->email: {$a->email}
+user->username: {$a->username}
+
+Based on the email domain of the user, the initial value of "Access type" is shown immediately below (either "Lenovo-stud" or "IBM-stud"):
 
 	 {$a->customfields}
 
@@ -114,7 +161,7 @@ $string['auth_emailadminconfirmationsubject'] = '{$a}: account confirmation';
 // Your account has been registered and is pending confirmation by the administrator. You should expect to either receive a confirmation or to be contacted for further clarification.</p>
 // ';
 $string['auth_emailadminconfirmsent'] = '<p>
-Your account has been registered and is pending confirmation by SWTC Services Education. You should expect to either receive a confirmation or to be contacted for further clarification within two business days.</p>
+Your account has been registered and is pending confirmation by SWTC. You should expect to either receive a confirmation or to be contacted for further clarification within two business days.</p>
 ';
 $string['auth_emailadminnotif_failed'] = 'Could not send registration notification to: ';
 $string['auth_emailadminnoadmin'] = 'No admin found based on notification strategy. Please check auth_emailadmin configuration.';
@@ -126,6 +173,10 @@ $string['auth_emailadminnotif_strategy_allupdate'] = 'All admins and users with 
 
 $string['pluginname'] = 'Email-based self-registration with admin confirmation';
 
-// SWTC
+// Lenovo
 $string['ebglms_update_user_profile'] = 'Update user\'s profile?';
 $string['ebglms_run_nonconfirmed_report'] = 'Run NON-Confirmed user\'s report';
+
+// @01 - Added strings for displaying PremierSupport checkbox.
+$string['premiersupportuser'] = 'Update my access to a Premier Support user.';
+$string['premiersupportuser_help'] = 'Select this checkbox if your access should be updated to a Premier Support user. Once verified, you will be enrolled in all the Premier Support courses and curriculums.';
