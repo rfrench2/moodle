@@ -25,7 +25,7 @@
  *
  * History:
  *
- *	07/19/19 - Initial writing; migrating events to use this file.
+ * 10/14/20 - Initial writing; migrating events to use this file.
  * 07/22/19 - In course_updated and course_created, dynamically add course_slider block (if not already there).
  * 07/23/19 - Adding \core\event\course_created event.
  * 11/01/19 - Changed functions that are called (sunsetting /lib/notifications.php).

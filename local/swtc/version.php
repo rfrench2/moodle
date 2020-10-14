@@ -52,7 +52,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2020101205;
+$plugin->version   = 2020101206;
 $plugin->requires  = 2019111805;    // Plugin requires Moodle 3.8.5+ (20200918)
 $plugin->component = 'local_swtc';
 $plugin->release = 'Version 1.0-Release 01';
