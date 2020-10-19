@@ -89,6 +89,7 @@ class category implements \renderable {
      * @throws \coding_exception
      */
     public function add_node(node $node) {
+        // print_object($node);        // 10/18/20 - SWTC
         $name = $node->name;
         if (isset($this->nodes[$name])) {
             throw new \coding_exception("Node with name $name already exists");

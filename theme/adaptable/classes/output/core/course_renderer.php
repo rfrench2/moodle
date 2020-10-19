@@ -54,6 +54,8 @@ use stdClass;
 use renderable;
 use action_link;
 
+// use local_swtc;		// 10/18/20 - SWTC
+
 /**
  * Course renderer implementation.
  *
@@ -62,14 +64,14 @@ use action_link;
  * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
-$reflector = new \ReflectionClass('core_course_renderer');
-echo $reflector->getFileName() . "\n";
 
-print_object($reflector ->getConstants());
-
-
-print_object(get_class_methods('core_course_renderer'));
+// $reflector = new \ReflectionClass('core_course_renderer');
+// echo $reflector->getFileName() . "\n";
+// global $USER;
+// $swtc_user = new local_swtc\swtc_user($USER);			// 10/16/20 - SWTC
+// print_object($swtc_user);		// 10/16/20 - SWTC
+// print_object($reflector ->getConstants());      // SWTC-debug
+// print_object(get_class_methods('core_course_renderer'));        // SWTC-debug
 
 class course_renderer extends \core_course_renderer {
 
