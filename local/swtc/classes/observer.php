@@ -29,16 +29,17 @@
  *
  **/
 
-namespace local_swtc;      // 10/18/20 - SWTC
+namespace local_swtc;
 
 defined('MOODLE_INTERNAL') || die();
 
-use \local_swtc\swtc_user;      // 10/18/20 - SWTC
-
-// use \local_swtc\swtc_user;       // 10/16/20 - SWTC
+// use \local_swtc\swtc_user as SwtcUser;       // 10/20/20 - SWTC
+// use \local_swtc\swtc_debug;      // 10/20/20 - SWTC
 
 // require($CFG->dirroot.'/local/swtc/lib/swtc.php');   // 10/18/20
 // require_once($CFG->dirroot . '/local/swtc/lib/locallib.php');    // 10/14/20
+// require_once($CFG->dirroot . '/local/swtc/classes/swtc_user.php');    // 10/20/20
+require_once($CFG->dirroot . '/local/swtc/lib/swtc_userlib.php');
 
 
 class observer {
@@ -55,18 +56,114 @@ class observer {
      *
      */
     public static function user_loggedin(\core\event\user_loggedin $event) {
-        global $CFG, $USER;
+        global $SESSION, $USER;
 
-        print_object("in observer user_loggedin");        // SWTC-debug
+        // print_object("in observer user_loggedin; about to print __namespace__");        // SWTC-debug
+        // print_object(__NAMESPACE__);        // SWTC-debug
         // print_object("in observer user_loggedin; about to print backtrace");        // SWTC-debug
         // print_object(format_backtrace(debug_backtrace(), true));        // SWTC-debug
         // print_object("in observer user_loggedin; about to print CFG");     // SWTC-debug
         // print_object($CFG);		// 10/16/20 - SWTC
-        $swtc_user = new swtc_user($USER);			// 10/18/20 - SWTC
-        print_object("in observer user_loggedin; about to print swtc_user");        // SWTC-debug
-    	print_object($swtc_user);		// 10/16/20 - SWTC
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\local_swtc\swtc_user\swtc_user()
+        // $swtc_user = local_swtc\swtc_user\swtc_user($USER);
+
+        // The following yeilds:
+        // Exception - Exception - Class 'local_swtc\swtc_user\swtc_user' not found
+        // $swtc_user = new \local_swtc\swtc_user\swtc_user($USER);
+
+        // The following yeilds:
+        // WORKS! WORKS! WORKS! WORKS! WORKS! WORKS!
+        // $swtc_user = new swtc_user($USER);
+
+        // The following yeilds:
+        //  Exception - Call to undefined function local_swtc\local_swtc\swtc_user\get_user()
+        // $swtc_user = \local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\swtc_user\get_user' not found
+        // $swtc_user = new \local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\swtc_user\swtc_user\get_user' not found
+        // $swtc_user = new \local_swtc\swtc_user\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\local_swtc\swtc_user\get_user()
+        // $swtc_user = local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Can not execute event observer '\local_swtc\observer::user_loggedin'
+        // $swtc_user = new \local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\get_user()
+        // $swtc_user = get_user($USER);			// 10/18/20 - SWTC
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\get_user' not found
+        // $swtc_user = new get_user($USER);			// 10/18/20 - SWTC
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\local_swtc\swtc_user' not found
+        // $swtc_user = local_swtc\swtc_user::get_user($USER);
+
+        // After changing get_user to static...
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\get_user()
+        // $swtc_user = get_user($USER);
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\local_swtc\swtc_user' not found
+        // $swtc_user = local_swtc\swtc_user::get_user($USER);
+
+        // The following yeilds:
+        // Seems to work!
+        // $swtc_user = SwtcUser::get_user($USER);
+
+        // The following yeilds:
+        // Exception - syntax error, unexpected '-&gt;' (T_OBJECT_OPERATOR)
+        // $swtc_user = new \local_swtc\swtc_user->get_user($USER);
+
+        // After adding require_once($CFG->dirroot . '/local/swtc/lib/swtc_user.php');
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\get_user()
+        // $swtc_user = get_user($USER);
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\get_user()
+        // $swtc_user = \local_swtc\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Call to undefined function local_swtc\swtc_user\get_user()
+        // $swtc_user = \local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - Class 'local_swtc\swtc_user\get_user' not found
+        // $swtc_user = new \local_swtc\swtc_user\get_user($USER);
+
+        // The following yeilds:
+        // Exception - syntax error, unexpected '-&gt;' (T_OBJECT_OPERATOR)
+        // $swtc_user = new \local_swtc\swtc_user->get_user($USER);
+
+        // After including swtc_userlib.
+        // The following yeilds:
+        //
+        $swtc_user = swtc_get_user($USER);
+
+        // print_object("in observer user_loggedin; about to print swtc_user");        // SWTC-debug
+    	// print_object($swtc_user);		// 10/16/20 - SWTC
+        //  WORKS! WORKS! WORKS! WORKS! WORKS! WORKS!
+        // $debug = new swtc_debug();        // 10/19/20 - SWTC
+        $swtc_debug = swtc_set_debug();
+        // print_object("in observer user_loggedin; about to print swtc_debug");        // SWTC-debug
+    	// print_object($swtc_debug);
     	// die;		// 10/16/20 - SWTC
 
+        // print_object("in observer user_loggedin; about to print SESSION");        // SWTC-debug
         // print_object($SESSION);      // SWTC-debug
         // die;     // SWTC-debug
         // require_once($CFG->dirroot . '/local/swtc/lib/locallib.php');        // 10/17/20

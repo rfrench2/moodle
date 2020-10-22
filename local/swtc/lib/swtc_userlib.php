@@ -15,10 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*****************************************************************************
- *
- * All functions associcated with $SESSION->SWTC->USER (otherwise known as $swtc_user).
- *
+/**
  * Version details
  *
  * @package    local
@@ -29,19 +26,85 @@
  *
  * History:
  *
- * 10/14/20 - Initial writing.
+ * 10/21/20 - Initial writing.
  *
  *****************************************************************************/
 
+// namespace local_swtc;        // 10/21/20
+
 defined('MOODLE_INTERNAL') || die();
 
-use \stdClass;
+use local_swtc\swtc_user;
+use local_swtc\swtc_debug;
 
-// SWTC ********************************************************************************
-// Include SWTC LMS user and debug functions.
-// SWTC ********************************************************************************
-// 10/16/20 - SWTC
-// require($CFG->dirroot.'/local/swtc/lib/swtc.php');
+// use \stdClass;  // 10/21/20
+
+// require_once($CFG->dirroot.'/local/swtc/lib/swtclib.php');
+
+/**
+ * Get a reference to SESSION->SWTC->USER.
+ *
+ * @param $user
+ *
+ * @return None
+ *
+ *
+ * History:
+ *
+ * 10/21/20 - Initial writing.
+ *
+ **/
+function swtc_get_user($user, $relateduserid = null) {
+
+    $swtc_user = new swtc_user($user);
+    // print_object("In swtc_get_user; about to print backtrace");
+    // print_object(format_backtrace(debug_backtrace(), true));
+    // print_object("In swtc_get_user; about to print swtc_user");		// 10/16/20 - SWTC
+    // print_object($swtc_user);		// 10/16/20 - SWTC
+
+    return $swtc_user;
+
+}
+
+/**
+ * SWTC LMS for Moodle 3.7+.  Set debug instance (returns $debug) if set. If not set, call swtc_debug.
+ *
+ * History:
+ *
+ * 10/21/20 - Initial writing.
+ *
+ */
+function swtc_set_debug() {
+    global $SESSION;
+
+    $debug = null;
+
+    // SWTC ********************************************************************************
+    // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
+    //      (set in local/swtc/settings.php) to enable debugging from this point forward.
+    //
+    // Setup the second-level $DEBUG global variable only if $debug is available.
+    //      To use: $debug = $SESSION->SWTC->DEBUG;
+    // SWTC ********************************************************************************
+    if (get_config('local_swtc', 'swtcdebug')) {
+        // SWTC ********************************************************************************
+        // Get a reference to SESSION->SWTC->DEBUG.
+        // SWTC ********************************************************************************
+        $debug = new swtc_debug();
+        // print_object("In swtc_set_debug; about to print debug");		// 10/16/20 - SWTC
+        // print_object($debug);		// 10/16/20 - SWTC
+
+        // SWTC ********************************************************************************
+        // Always output standard header information.
+        // SWTC ********************************************************************************
+        $debug->logmessage_header('begin');
+
+    } else {
+        $debug = null;
+    }
+
+    return $debug;
+}
 
 /**
  * Setup most, but not all, the characteristics of  SESSION->SWTC->USER->relateduser.
@@ -98,7 +161,7 @@ function swtc_user_get_relateduser($userid) {
 	$relateduser->portfolio = $swtc_user->portfolio;      // 11/30/18
 
     // @01 - 03/01/20 - Added user timezone to improve performance.
-    list($relateduser->timestamp, $relateduser->timezone) = swtc_set_user_timestamp();
+    list($relateduser->timestamp, $relateduser->timezone) = swtc_timestamp();
 
 	// Important! roleshortname and roleid are what the roles SHOULD be, not necessarily what the roles are.
 	$relateduser->roleshortname = null;
@@ -121,79 +184,25 @@ function swtc_user_get_relateduser($userid) {
 }
 
 /**
- * SWTC LMS for Moodle 3.7+.  Get debug instance (returns $debug) if set. If not set, call debug_start.
+ * Get current date and time for timestamp. Returns value to set $SESSION->SWTC->USER->timestamp.
  *
  * History:
  *
- * 07/17/18 - Check for server name. If running on production, disable debugging.
- * 11/02/19 - In preparation for Moodle 3.7+, in swtc_get_debug, added code to check for Lenovo debug setting so that everyone can
- *                      call swtc_get_debug directly.
- * 11/15/19 - In swtc_get_debug and debug_setup, changing if (isset($SESSION->SWTC)) to
- *                          if (isset($SESSION->SWTC->USER)) to hopefully handle PHP errors when debugging if the
- *                          user's session has expired.
- * @01 - 03/01/20 - Moving swtc_get_debug function from debuglib.php to swtc_userlib.php to improve performance; added call to include
- *                   debuglib.php (so that all other modules do not have to).
+ * 10/21/20 - Initial writing.
  *
  */
-function swtc_get_debug() {
-    global $CFG, $SESSION;
+function swtc_timestamp() {
+    global $USER;
 
-    //****************************************************************************************
-	// Local variables begin...
-    $debug = null;
-    $swtc_user = new stdClass();
+    $swtc_user = swtc_get_user($USER);
 
     // SWTC ********************************************************************************
-    // Access to the top-level $EBGLMS global variables (it should ALWAYS be available; set in /lib/swtc.php).
-    //      To use: if (isset($SESSION->SWTC))
-    // 11/15/19 - In swtc_get_debug and debug_setup, changing if (isset($SESSION->SWTC)) to
-    //                      if (isset($SESSION->SWTC->USER)) to hopefully handle PHP errors when debugging if the
-    //                      user's session has expired.
+    // Make all the times these variables were set the same.
+    // Make all the functions these variables were set the same.
     // SWTC ********************************************************************************
-    if (isset($SESSION->SWTC->USER)) {
-        require_once($CFG->dirroot.'/local/swtc/lib/swtclib.php');
-        // Set all the EBGLMS variables that will be used.
-        $swtc_user = $SESSION->SWTC->USER;
-    } else {
-        // TODO: Catastrophic error; what to do with $swtc_user?
-    }
-    // Local variables end...
-	//****************************************************************************************
+    $today = new DateTime("now", $swtc_user->get_timezone());
+    $time = $today->format('H:i:s.u');
 
-    // SWTC ********************************************************************************
-    // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
-    //      (set in local/swtc/settings.php) to enable debugging from this point forward.
-    //
-    // Setup the second-level $DEBUG global variable only if $debug is available.
-    //      To use: $debug = $SESSION->SWTC->DEBUG;
-    // SWTC ********************************************************************************
-    if (get_config('local_swtc', 'swtcdebug')) {
-        // SWTC ********************************************************************************
-        // @01 - 03/01/20 - Added call to include debuglib.php (so that all other modules do not have to).
-        // SWTC ********************************************************************************
-        require_once($CFG->dirroot.'/local/swtc/lib/debuglib.php');
+    return $time;
 
-        // SWTC ********************************************************************************
-        // Setup the second-level $DEBUG global variable.
-        //      To use: $debug = $SESSION->SWTC->DEBUG;
-        // SWTC ********************************************************************************
-        if (!isset($SESSION->SWTC->DEBUG)) {
-            // $backtrace = format_backtrace(debug_backtrace(), true);
-            // print_r("swtc_get_debug: SESSION->SWTC->DEBUG ->NOT<- set. Called from ".debug_backtrace()[1]['function'].".<br />");
-            // var_dump($backtrace);
-            // die;
-            $debug = debug_start();       // EBGLMS->DEBUG is not set yet.
-        } else {
-            // EBGLMS->DEBUG is set. Check if running on production.
-            // $SESSION->SWTC->DEBUG->PHPLOG->backtrace = format_backtrace(debug_backtrace(), true);
-            // print_r("swtc_get_debug: SESSION->SWTC->DEBUG =IS= set. Called from ".debug_backtrace()[1]['function'].".<br />");
-            // var_dump($SESSION->SWTC->DEBUG);
-            // die;
-            $debug = $SESSION->SWTC->DEBUG;
-        }
-    } else {
-        $debug = null;
-    }
-
-    return $debug;
 }

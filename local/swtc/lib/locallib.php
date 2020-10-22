@@ -32,7 +32,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use stdClass;
+use \stdClass;
 
 // SWTC ********************************************************************************
 // Include SWTC LMS classes.

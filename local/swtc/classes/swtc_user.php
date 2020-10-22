@@ -39,16 +39,12 @@ use \stdClass;
 /**
  * Initializes all customized SWTC user information and loads it into $SESSION->SWTC->USER.
  *
- *      IMPORTANT! $SESSION->SWTC MUST be set before calling (i.e. no check for SWTC).
- *
- * To call: $renderable = new \block_myoverview\output\main($group, $sort, $view, $paging, $customfieldvalue);
+ *      IMPORTANT!
+ *          DO NOT call this class directly. Use $swtc_get_user from /lib/swtc_userlib.php.
  *
  * @param N/A
  *
- * @return N/A
- */
- /**
- * Version details
+ * @return $SESSION->SWTC->USER.
  *
  * History:
  *
@@ -68,55 +64,127 @@ class swtc_user {
     /**
      * Store the user's id.
      *
-     * @private integer
+     * @private  integer
      */
-    private $userid;
+    private  $userid;
 
      /**
       * Store the user's username.
       *
-      * @private string
+      * @private  string
       */
-    private $username;
+    private  $username;
 
      /**
       * Store the user's accesstype.
       *
-      * @private string
+      * @private  string
       */
-    private $user_access_type;
-
-
-    private $portfolio;
-    private $roleshortname;
-    private $roleid;
-    private $categoryids;
-    private $capabilities;
-    private $timestamp;
-    private $relateduser;
-    private $cohortnames;
-    private $groupname;
-    private $geoname;
-    private $groupnames;
-    private $timezone;
-    private $user_access_type2;
+    private  $user_access_type;
 
     /**
-     * main constructor.
-    * Initialize the SWTC swtc_user privateiable and loads into SWTC->USER.
-    *
-    * @param string $grouping Grouping user preference
-    * @param string $sort Sort user preference
-    * @param string $view Display user preference
-    * @param int $paging
-    * @param string $customfieldvalue
-    *
-    * @throws \dml_exception
+     * The user's main portfolio they have access to.
+     *
+     * @private  integer
+     */
+    private  $portfolio;
+
+    /**
+     * The user's role shortname.
+     *
+     * @private  integer
+     */
+    private  $roleshortname;
+
+    /**
+     * The user's role id.
+     *
+     * @private  integer
+     */
+    private  $roleid;
+
+    /**
+     * The categories the user has access to.
+     *
+     * @private  integer
+     */
+    private  $categoryids;
+
+    /**
+     * The user's capabilities.
+     *
+     * @private  integer
+     */
+    private  $capabilities;
+
+    /**
+     * The time of this action.
+     *
+     * @private  integer
+     */
+    private  $timestamp;
+
+    /**
+     * If an admin is performing an action on behalf of another user, this is the related user's id.
+     *
+     * @private  integer
+     */
+    private  $relateduser;
+
+    /**
+     * The cohort names the user is a member of (if any).
+     *
+     * @private  integer
+     */
+    private  $cohortnames;
+
+    /**
+     * The preg_match string that should be used to find all the groups the user is a member of.
+     *
+     * @private  integer
+     */
+    private  $groupname;
+
+    /**
+     * The user's GEO.
+     *
+     * @private  integer
+     */
+    private  $geoname;
+
+    /**
+     * The groups the user is a member of (if any).
+     *
+     * @private  integer
+     */
+    private  $groupnames;
+
+    /**
+     * The timezone of the user.
+     *
+     * @private  integer
+     */
+    private  $timezone;
+
+    /**
+     * The user's accesstype 2.
+     *
+     * @private  integer
+     */
+    private  $user_access_type2;
+
+    /**
+     * Constructor
+     *
+     * Constructor is private, use local_stwc->get_user() to retrieve SWTC user information.
+     *
+     * @param class $USER or $user
+     *
     */
     public function __construct($user) {
         global $SESSION;
 
-        print_object("In swtc_user __construct");		// 10/18/20 - SWTC
+        // print_object("In swtc_user __construct");		// 10/18/20 - SWTC
         // print_object("In swtc_user __construct; about to print backtrace");		// 10/16/20 - SWTC
         // print_object(format_backtrace(debug_backtrace(), true));        // SWTC-debug
         // print_object($user);		// 10/16/20 - SWTC
@@ -125,18 +193,18 @@ class swtc_user {
         // If $SWTC->USER is not set, continue.
         // SWTC ********************************************************************************
         if (is_object($SESSION)) {
-            print_object("In swtc_user __construct; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
-            print_object($SESSION);		// 10/16/20 - SWTC
+            // print_object("In swtc_user->get_user; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
+            // print_object($SESSION);		// 10/16/20 - SWTC
             if (!isset($SESSION->SWTC)) {
-                print_object("In swtc_user __construct; did I get here 2");		// 10/16/20 - SWTC
+                // print_object("In swtc_user __construct; did I get here 2");		// 10/16/20 - SWTC
                 // SWTC *****************************************************************************
-                // Setup the SWTC privateiable.
+                // Setup the SWTC variable.
                 //      Example: /lib/classes/session/manager.php starting around line 86.
                 // SWTC *****************************************************************************
                 $SESSION->SWTC = new stdClass();
 
                 // SWTC *****************************************************************************
-                // Setup the SWTC->USER privateiable.
+                // Setup the SWTC->USER variable.
                 // SWTC *****************************************************************************
                 $SESSION->SWTC->USER = new stdClass();
 
@@ -155,7 +223,7 @@ class swtc_user {
                 // $this->user_access_type = $temp->get_string('profile_field_accesstype', 'local_swtc');
                 $this->user_access_type = (isset($temp->profile_field_accesstype)) ? $temp->profile_field_accesstype : null;
                 // $this->user_access_type2 = (null !== $temp->get_string('profile_field_accesstype2', 'local_swtc')) ? $temp->get_string('profile_field_accesstype2', 'local_swtc') : null;
-                $this->user_access_type2 = (isset($temp->profile_field_accesstype2)) ? $temp->profile_field_accesstype2 : null;;
+                $this->user_access_type2 = (isset($temp->profile_field_accesstype2)) ? $temp->profile_field_accesstype2 : null;
 
                 // The following we'll set in ***.
                 $this->portfolio = 'PORTFOLIO_NONE';
@@ -177,14 +245,15 @@ class swtc_user {
                 // SWTC ********************************************************************************
                 // Copy this object to $SESSION->SWTC->USER.
                 // SWTC ********************************************************************************
-                $SESSION->SWTC->USER = clone($this);
-                print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-                print_object($this);		// 10/16/20 - SWTC
+                // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
+                $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
+                // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
+                // print_object($this);		// 10/16/20 - SWTC
             } else {
                 // SWTC ********************************************************************************
                 // Copy $SESSION->SWTC->USER to this object.
                 // SWTC ********************************************************************************
-                print_object("In swtc_user __construct; did I get here 4");		// 10/16/20 - SWTC
+                // print_object("In swtc_user __construct; did I get here 4");		// 10/16/20 - SWTC
                 $tmp = $SESSION->SWTC->USER;
                 $this->userid = $tmp->userid;
                 $this->username = $tmp->username;
@@ -206,12 +275,52 @@ class swtc_user {
                 // SWTC ********************************************************************************
                 list($this->timestamp, $this->timezone) = $this->set_timestamp();
 
-                print_object("In IS set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-                print_object($this);		// 10/16/20 - SWTC
+                // print_object("In IS set SWTC->USER; about to print this");		// 10/16/20 - SWTC
+                // print_object($this);		// 10/16/20 - SWTC
             }
         }
+
+        // print_object("About to leave swtc_user __construct; about to print SESSION->SWTC");		// 10/20/20 - SWTC
+        // print_object($SESSION->SWTC);      // 10/20/20 - SWTC
     }
 
+    /**
+     * All Setter and Getter methods for all properties.
+     *
+     * Setter methods:
+     *      @param $value
+     *      @return N/A
+     *
+     * Getter methods:
+     *      @param N/A
+     *      @return value
+     *
+     * History:
+     *
+     * 10/14/20 - Initial writing.
+     *
+     **/
+    public function get_user() {
+        $swtc_user = new swtc_user;
+        return $swtc_user;
+    }
+
+    public function get_userid() {
+        return $this->userid;
+    }
+
+    public function get_timezone() {
+        return $this->timezone;
+    }
+
+    /**
+     * Set current date and time for timestamp. Returns value to set $SESSION->SWTC->USER->timestamp.
+     *
+     * History:
+     *
+     * 10/19/20 - Initial writing.
+     *
+     **/
     public function set_timestamp() {
         $timezone = \core_date::get_user_timezone_object();
         $today = new \DateTime("now", $timezone);
