@@ -55,14 +55,45 @@ use local_swtc\swtc_debug;
  *
  **/
 function swtc_get_user($user, $relateduserid = null) {
+    global $SESSION;
 
-    $swtc_user = new swtc_user($user);
+    // SWTC ********************************************************************************
+    // If $SWTC->USER is not set, continue.
+    // SWTC ********************************************************************************
+    if (is_object($SESSION)) {
+        // print_object("In swtc_user->get_user; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
+        // print_object($SESSION);		// 10/16/20 - SWTC
+        if (!isset($SESSION->SWTC)) {
+            // print_object("In swtc_user __construct; did I get here 2");		// 10/16/20 - SWTC
+            // SWTC *****************************************************************************
+            // Setup the SWTC variable.
+            //      Example: /lib/classes/session/manager.php starting around line 86.
+            // SWTC *****************************************************************************
+            $SESSION->SWTC = new stdClass();
+
+            // SWTC *****************************************************************************
+            // Setup the SWTC->USER variable.
+            // SWTC *****************************************************************************
+            $SESSION->SWTC->USER = new swtc_user($user);
+
+            // SWTC ********************************************************************************
+            // Copy this object to $SESSION->SWTC->USER.
+            // SWTC ********************************************************************************
+            // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
+            // $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
+            // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
+            // print_object($this);		// 10/16/20 - SWTC
+        }
+    }
+
+    // $swtc_user = new swtc_user($user);       // 10/24/20
+    // $swtc_user = swtc_user($user);      // 10/24/20
     // print_object("In swtc_get_user; about to print backtrace");
     // print_object(format_backtrace(debug_backtrace(), true));
     // print_object("In swtc_get_user; about to print swtc_user");		// 10/16/20 - SWTC
     // print_object($swtc_user);		// 10/16/20 - SWTC
 
-    return $swtc_user;
+    return $SESSION->SWTC->USER;
 
 }
 
@@ -112,19 +143,10 @@ function swtc_set_debug() {
  * @param N/A
  *
  * @return None
- */
- /**
- * Version details
  *
  * History:
  *
- * 07/12/18 - Initial writing.
- * 11/30/18 - Changed swtc_get_relateduser to load the portfolio of the user instead of "PORTFOLIO_NONE".
- * 01/09/19 - Added correct return from swtc_get_relateduser.
- * 01/10/19 - Changed swtc_get_relateduser to NOT set $SESSION->SWTC->USER->relateduser; the calling function must do this.
- * 01/11/19 - Added additional comments, and some code formating, to swtc_get_relateduser.
- *	10/16/19 - Changed to new SWTC LMS classes and methods to load swtc_user and debug.
- * @01 - 03/01/20 - Added user timezone to improve performance.
+ * 10/24/20 - Initial writing.
  *
  **/
 function swtc_user_get_relateduser($userid) {
@@ -132,7 +154,7 @@ function swtc_user_get_relateduser($userid) {
 
     // SWTC ********************************************************************************
     // SWTC EBGLMS swtc_user and debug variables.
-    // $swtc_user = swtc_get_user($USER);       // 10/17/20
+    $swtc_user = swtc_get_user($USER);
     // $debug = swtc_get_debug();       // 10/17/20
 
     $relateduser = new stdClass();     // Local temporary relateduserid variables.
@@ -155,10 +177,10 @@ function swtc_user_get_relateduser($userid) {
 	// The following fields MUST be added to $relateduser (as they normally do not exist).
 	// SWTC ********************************************************************************
 	$relateduser->userid = $userid;
-	$relateduser->user_access_type = $relateduser->profile_field_accesstype;
+	$relateduser->user_access_type = $relateduser->profile_field_Accesstype;
 	// $relateduser->portfolio = 'PORTFOLIO_NONE';      // 11/30/18 - RF - not sure if this is correct.
 	// 01/17/19 - Since we are working with a related user, assigning the portfolio as the same as the administrator is not a good idea.
-	$relateduser->portfolio = $swtc_user->portfolio;      // 11/30/18
+	$relateduser->portfolio = $swtc_user->get_portfolio();
 
     // @01 - 03/01/20 - Added user timezone to improve performance.
     list($relateduser->timestamp, $relateduser->timezone) = swtc_timestamp();

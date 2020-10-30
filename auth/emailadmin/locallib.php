@@ -16,16 +16,12 @@ SWTC history<?php
  * Local library file to include classes and functions used.
  *
  * @package    emailadmin invitation
- * @copyright  2018 SWTC
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * SWTC history:
  *
- * 08/03/18 - Initial writing (copied from /enrol/invitation/locallib.php and modified).
- * 08/07/18 - Added checking of email during sending of invitation so that multiple invitations are not active for the same "user".
- * 01/03/19 - Added INVITE_RESET (to use if an invitation was expired by mistake); will update the timesent to the current time and
- *						sets the timeexpiration to 3 days from now (i.e. just as if it was a new request); added set_invite_reset.
- * 01/08/19 - Switching references from "invitation" to "signup".
+ * 10/30/20 - Initial writing (copied from /enrol/invitation/locallib.php and modified).
  *
  */
 
@@ -34,13 +30,13 @@ defined('MOODLE_INTERNAL') || die();
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
-require_once($CFG->dirroot.'/local/swtc/lib/ebglms_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+// require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
 
 /**
  * Invitation manager that handles the handling of invitation information.
  *
- * @copyright  2018 SWTC
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class invitation_manager {
@@ -74,17 +70,16 @@ class invitation_manager {
 	 *
 	 * SWTC history:
 	 *
-	 * 01/08/19 - Switching references from "invitation" to "signup".
+	 * 10/30/20 - Initial writing.
 	 *
      */
     public function send_invitation($data) {
-        global $DB, $CFG, $SITE, $USER, $PAGE, $OUTPUT, $SESSION;       // SWTC
+        global $DB, $CFG, $SITE, $USER, $PAGE, $OUTPUT, $SESSION;
 
         //****************************************************************************************.
-        // SWTC LMS ebglms_user and debug variables.
-        $ebglms_user = ebglms_get_user($USER);
-        $debug = ebglms_get_debug();
-        //****************************************************************************************.
+        // SWTC LMS swtc_user and debug variables.
+        $swtc_user = swtc_get_user($USER);
+    	$debug = swtc_set_debug();
 
         if (isset($debug)) {
             // SWTC ********************************************************************************
@@ -98,14 +93,14 @@ class invitation_manager {
             $messages[] = print_r($debug, true);
             $messages[] = "Finished printing debug.";
             $messages[] = "SWTC ********************************************************************************.";
-            debug_logmessage($messages, 'both');
+            $debug->logmessage($messages, 'both');
             unset($messages);
         }
 
 		// Create unique token for invitation.
         do {
             $token = uniqid();
-            $existingtoken = $DB->get_record('local_ebglms_userinvitation', array('token' => $token));
+            $existingtoken = $DB->get_record('local_swtc_userinvitation', array('token' => $token));
         } while (!empty($existingtoken));
 
         // Save token information in config (token value).
@@ -118,14 +113,14 @@ class invitation_manager {
         // Set time.
         $timesent = time();
         $invitation->timesent = $timesent;
-        $invitation->timeexpiration = $timesent + get_config('local_ebglms', 'inviteexpiration');
+        $invitation->timeexpiration = $timesent + get_config('local_swtc', 'inviteexpiration');
 
-        $invitation->subject = get_string('default_subject', 'local_ebglms', sprintf('%s', $data->email));
+        $invitation->subject = get_string('default_subject', 'local_swtc', sprintf('%s', $data->email));
 
         // Construct message: custom (if any) + template.
         $message = '';
         if (!empty($data->message)) {
-            $message .= get_string('instructormsg', 'local_ebglms', $data->message);
+            $message .= get_string('instructormsg', 'local_swtc', $data->message);
             $invitation->message = $data->message;
         }
 
@@ -138,7 +133,7 @@ class invitation_manager {
 
         $message_params->inviteurl = $inviteurl;
         $message_params->supportemail = $CFG->supportemail;
-        $message .= get_string('emailmsgtxt', 'local_ebglms', $message_params);
+        $message .= get_string('emailmsgtxt', 'local_swtc', $message_params);
 
         // SWTC ********************************************************************************
         if (isset($debug)) {
@@ -148,14 +143,14 @@ class invitation_manager {
             $messages[] = print_r($invitation, true);
             $messages[] = "Finished printing invitation.";
             $messages[] = "SWTC ********************************************************************************.";
-            debug_logmessage($messages, 'detailed');
+            $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
 
         // SWTC ********************************************************************************
         // Here is where all the magic happens.
         // SWTC ********************************************************************************
-        $DB->insert_record('local_ebglms_userinvitation', $invitation);
+        $DB->insert_record('local_swtc_userinvitation', $invitation);
 
         // Set FROM to be $CFG->supportemail.
         $fromuser = new stdClass();
@@ -202,7 +197,7 @@ class invitation_manager {
             $messages[] = "About to print message.";
             $messages[] = print_r($message, true);
             $messages[] = "SWTC ********************************************************************************.";
-            debug_logmessage($messages, 'detailed');
+            $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
 
@@ -211,13 +206,13 @@ class invitation_manager {
         // SWTC ********************************************************************************
         // Copied parts of /auth/emailadmin/user_signup to here.
         // SWTC ********************************************************************************
-        $invitationsent = get_string('invitationsent', 'local_ebglms');
+        $invitationsent = get_string('invitationsent', 'local_swtc');
         $PAGE->navbar->add($invitationsent);
         $PAGE->set_title($invitationsent);
         $PAGE->set_heading($PAGE->course->fullname);
         echo $OUTPUT->header();
 
-        notice(get_string('invitationsent_desc1', 'local_ebglms', $contactuser->email), "$CFG->wwwroot/index.php");
+        notice(get_string('invitationsent_desc1', 'local_swtc', $contactuser->email), "$CFG->wwwroot/index.php");
 
     }
 
@@ -226,22 +221,23 @@ class invitation_manager {
      *
      * @param string $email    Email of user
      *
-     * @return array           Returns status string and invite array (if the user has already been sent an invitation AND it has not expired yet) or
-     *                                          null (the email was not found OR the email was found but the invitation has expired).
+     * @return array           Returns status string and invite array (if the user has
+     *                  already been sent an invitation AND it has not expired yet) or
+     *                  null (the email was not found OR the email was found but the invitation has expired).
      */
     public function search_invites_for_email($email) {
         global $DB;
 
         // Get all invites for the email (if any).
-        $invites = $DB->get_records('local_ebglms_userinvitation', array('email'=>$email));
+        $invites = $DB->get_records('local_swtc_userinvitation', array('email'=>$email));
 
         // No invitation found for the email entered.
         if (empty($invites)) {
             return array(null, null);
         } else {
-            $status_active = get_string('status_invite_active', 'local_ebglms');
-            $status_used = get_string('status_invite_used', 'local_ebglms');
-            $status_expired = get_string('status_invite_expired', 'local_ebglms');
+            $status_active = get_string('status_invite_active', 'local_swtc');
+            $status_used = get_string('status_invite_used', 'local_swtc');
+            $status_expired = get_string('status_invite_expired', 'local_swtc');
 
             // There should only be one (unless an existing invite has expired or there is testing going on).
             foreach ($invites as $invite) {
@@ -261,9 +257,10 @@ class invitation_manager {
 
                     // User had an invitation, but it has expired.
                     case $status_expired:
-                        // However, they may have already created a new invitation. If they have, count($invites) would be > 1.
-                        //      So, if count($invites) == 1, return null, null. If count($invites) > 1, continue (to see what the other
-                        //          invites status are).
+                        // However, they may have already created a new invitation. If they have,
+                        //      count($invites) would be > 1.
+                        //      So, if count($invites) == 1, return null, null. If count($invites) > 1,
+                        //          continue (to see what the other invites status are).
                         if (count($invites) == 1) {
                             return array(null, null);
                         } else {
@@ -284,23 +281,23 @@ class invitation_manager {
      *
      * SWTC history:
      *
-     * 08/08/18 - Added check for empty $invite (i.e. no need to check before calling this function anymore).
+     * 10/30/20 - Initial writing.
      *
      */
     public function get_invite_status($invite) {
 
         if (empty($invite)) {
             // Invite invalid.
-            $status = get_string('status_invite_invalid', 'local_ebglms');
+            $status = get_string('status_invite_invalid', 'local_swtc');
         }
         elseif ($invite->tokenused) {
             // Invite was used already.
-            $status = get_string('status_invite_used', 'local_ebglms');
+            $status = get_string('status_invite_used', 'local_swtc');
         } elseif ($invite->timeexpiration < time()) {
             // Invite is expired.
-            $status = get_string('status_invite_expired', 'local_ebglms');
+            $status = get_string('status_invite_expired', 'local_swtc');
         } else {
-            $status = get_string('status_invite_active', 'local_ebglms');
+            $status = get_string('status_invite_active', 'local_swtc');
         }
         // TO DO: add status_invite_revoked and status_invite_resent status.
         return $status;
@@ -315,7 +312,7 @@ class invitation_manager {
     public function get_invites() {
         global $DB;
 
-        $invites = $DB->get_records('local_ebglms_userinvitation', null, 'id DESC');
+        $invites = $DB->get_records('local_swtc_userinvitation', null, 'id DESC');
 
         return $invites;
     }
@@ -327,7 +324,7 @@ class invitation_manager {
 	 *
 	 * SWTC history:
 	 *
-	 * 01/08/19 - Switching references from "invitation" to "signup".
+	 * 10/30/20 - Initial writing.
 	 *
      */
     public function remind_invitee($status, $invitation) {
@@ -336,13 +333,13 @@ class invitation_manager {
         $message_params = new stdClass();
         $message = '';
 
-        $status_active = get_string('status_invite_active', 'local_ebglms');
-        $status_used = get_string('status_invite_used', 'local_ebglms');
+        $status_active = get_string('status_invite_active', 'local_swtc');
+        $status_used = get_string('status_invite_used', 'local_swtc');
 
         // An active invitation was found for the user. Remind them of this fact.
         if ($status == $status_active) {
-            $navbar = get_string('status_invite_still_active', 'local_ebglms');
-            $title = get_string('invitationactive', 'local_ebglms');
+            $navbar = get_string('status_invite_still_active', 'local_swtc');
+            $title = get_string('invitationactive', 'local_swtc');
 
             $message_params->email = $invitation->email;
             $message_params->timesent = date('M j, Y g:ia', $invitation->timesent);
@@ -353,18 +350,18 @@ class invitation_manager {
             $inviteurl = "<a target=_blank href=". $url . "> " . $url . ".</a>";
             $message_params->inviteurl = $inviteurl;
 
-            $message .= get_string('status_invite_active_message', 'local_ebglms', $message_params);
+            $message .= get_string('status_invite_active_message', 'local_swtc', $message_params);
             unset($message_params);
         } else {
             // A used invitation was found for the user. Remind them of this fact.
-            $navbar = get_string('status_invite_already_used', 'local_ebglms');
-            $title = get_string('invitationused', 'local_ebglms');
+            $navbar = get_string('status_invite_already_used', 'local_swtc');
+            $title = get_string('invitationused', 'local_swtc');
 
             $message_params->email = $invitation->email;
             $message_params->timeused = date('M j, Y g:ia', $invitation->timeused);
             $message_params->supportemail = $CFG->supportemail;
 
-            $message .= get_string('status_invite_used_message', 'local_ebglms', $message_params);
+            $message .= get_string('status_invite_used_message', 'local_swtc', $message_params);
             unset($message_params);
         }
 
@@ -372,7 +369,7 @@ class invitation_manager {
         $PAGE->set_title($title);
         $PAGE->set_heading($PAGE->course->fullname);
         echo $OUTPUT->header();
-        // notice(get_string('invitationsent_desc1', 'local_ebglms', $contactuser->email), "$CFG->wwwroot/index.php");
+        // notice(get_string('invitationsent_desc1', 'local_swtc', $contactuser->email), "$CFG->wwwroot/index.php");
         notice($message, "$CFG->wwwroot/index.php");
 
     }
@@ -414,8 +411,8 @@ class invitation_manager {
     }
 
     /**
-     * A user clicked on the invitation hyperlink, but a non-active status has been encountered for the token. Format message to
-     *              display to user and exit.
+     * A user clicked on the invitation hyperlink, but a non-active status has been encountered for the token.
+     *      Format message to display to user and exit.
      *
      * @param string $status    Status of invite (possibilities are : 'Expired', 'Used', or 'Invalid')
      * @param object $invite    Database record
@@ -428,46 +425,46 @@ class invitation_manager {
         $message_params = new stdClass();
         $message = '';
 
-        $status_invalid = get_string('status_invite_invalid', 'local_ebglms');
-        $status_used = get_string('status_invite_used', 'local_ebglms');
-        $status_expired = get_string('status_invite_expired', 'local_ebglms');
+        $status_invalid = get_string('status_invite_invalid', 'local_swtc');
+        $status_used = get_string('status_invite_used', 'local_swtc');
+        $status_expired = get_string('status_invite_expired', 'local_swtc');
 
         switch ($status) {
             /// A used invitation was found for the user. Remind them of this fact.
             case $status_used:
-                $navbar = get_string('status_invite_already_used', 'local_ebglms');
-                $title = get_string('invitationused', 'local_ebglms');
+                $navbar = get_string('status_invite_already_used', 'local_swtc');
+                $title = get_string('invitationused', 'local_swtc');
 
                 $message_params->email = $invite->email;
                 $message_params->timeused = date('M j, Y g:ia', $invite->timeused);
                 $message_params->supportemail = $CFG->supportemail;
 
-                $message .= get_string('status_invite_used_message', 'local_ebglms', $message_params);
+                $message .= get_string('status_invite_used_message', 'local_swtc', $message_params);
                 unset($message_params);
                 break;
 
             // User had an invitation, but it has expired.
             case $status_expired:
-                $navbar = get_string('status_invite_expired', 'local_ebglms');
-                $title = get_string('invitationexpired', 'local_ebglms');
+                $navbar = get_string('status_invite_expired', 'local_swtc');
+                $title = get_string('invitationexpired', 'local_swtc');
 
                 $message_params->email = $invite->email;
                 $message_params->timesent = date('M j, Y g:ia', $invite->timesent);
                 $message_params->expiration = date('M j, Y g:ia', $invite->timeexpiration);
                 $message_params->supportemail = $CFG->supportemail;
 
-                $message .= get_string('status_invite_expired_message', 'local_ebglms', $message_params);
+                $message .= get_string('status_invite_expired_message', 'local_swtc', $message_params);
                 unset($message_params);
                 break;
 
             // Invalid invitation (token).
             case $status_invalid:
-                $navbar = get_string('status_invite_invalid', 'local_ebglms');
-                $title = get_string('invitationinvalid', 'local_ebglms');
+                $navbar = get_string('status_invite_invalid', 'local_swtc');
+                $title = get_string('invitationinvalid', 'local_swtc');
 
                 $message_params->supportemail = $CFG->supportemail;
 
-                $message .= get_string('status_invite_invalid_message', 'local_ebglms', $message_params);
+                $message .= get_string('status_invite_invalid_message', 'local_swtc', $message_params);
                 unset($message_params);
                 break;
         }
@@ -492,11 +489,11 @@ class invitation_manager {
         global $DB;
 
         // Get the global invitation expiration time.
-        $global_expirationtime = get_config('local_ebglms', 'inviteexpiration');
+        $global_expirationtime = get_config('local_swtc', 'inviteexpiration');
 
         $newtimeexpiration = $invite->timeexpiration + $global_expirationtime;
 
-        $DB->set_field('local_ebglms_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
+        $DB->set_field('local_swtc_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
 
         return;
     }
@@ -513,13 +510,14 @@ class invitation_manager {
 
         $newtimeexpiration = time()-1;
 
-        $DB->set_field('local_ebglms_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
+        $DB->set_field('local_swtc_userinvitation', 'timeexpiration', $newtimeexpiration, array('id' => $invite->id) );
 
         return;
     }
 
     /**
-     * Set the invitation as used by setting tokenused to true and setting timeused to the current time. Used in /emailadmin/confirm.php.
+     * Set the invitation as used by setting tokenused to true and setting timeused to the current time.
+     *      Used in /emailadmin/confirm.php.
      *
      * @param object $invite    Invitation record
      * @param int $userid    Userid of user
@@ -532,7 +530,7 @@ class invitation_manager {
         $invite->userid = $userid;
         $invite->tokenused = true;
         $invite->timeused = time();
-        $DB->update_record('local_ebglms_userinvitation', $invite);
+        $DB->update_record('local_swtc_userinvitation', $invite);
 
         return;
     }
@@ -555,8 +553,8 @@ class invitation_manager {
         // Set time.
         $timesent = time();
         $invite->timesent = $timesent;
-        $invite->timeexpiration = $timesent + get_config('local_ebglms', 'inviteexpiration');
-		$DB->update_record('local_ebglms_userinvitation', $invite);
+        $invite->timeexpiration = $timesent + get_config('local_swtc', 'inviteexpiration');
+		$DB->update_record('local_swtc_userinvitation', $invite);
 
         return;
     }
@@ -594,30 +592,30 @@ function distance_of_time_in_words($from_time, $to_time = 0, $include_seconds = 
     if ($distance_in_minutes <= 1) {
         if ($include_seconds) {
             if ($distance_in_seconds < 5) {
-                return get_string('less_than_x_seconds', 'local_ebglms', 5);
+                return get_string('less_than_x_seconds', 'local_swtc', 5);
             } else if ($distance_in_seconds < 10) {
-                return get_string('less_than_x_seconds', 'local_ebglms', 10);
+                return get_string('less_than_x_seconds', 'local_swtc', 10);
             } else if ($distance_in_seconds < 20) {
-                return get_string('less_than_x_seconds', 'local_ebglms', 20);
+                return get_string('less_than_x_seconds', 'local_swtc', 20);
             } else if ($distance_in_seconds < 40) {
-                return get_string('half_minute', 'local_ebglms');
+                return get_string('half_minute', 'local_swtc');
             } else if ($distance_in_seconds < 60) {
-                return get_string('less_minute', 'local_ebglms');
+                return get_string('less_minute', 'local_swtc');
             } else {
-                return get_string('a_minute', 'local_ebglms');
+                return get_string('a_minute', 'local_swtc');
             }
         }
-        return ($distance_in_minutes == 0) ? get_string('less_minute', 'local_ebglms') : get_string('a_minute', 'local_ebglms');
+        return ($distance_in_minutes == 0) ? get_string('less_minute', 'local_swtc') : get_string('a_minute', 'local_swtc');
     } else if ($distance_in_minutes <= 45) {
-        return get_string('x_minutes', 'local_ebglms', $distance_in_minutes);
+        return get_string('x_minutes', 'local_swtc', $distance_in_minutes);
     } else if ($distance_in_minutes < 90) {
-        return get_string('about_hour', 'local_ebglms');
+        return get_string('about_hour', 'local_swtc');
     } else if ($distance_in_minutes < 1440) {
-        return get_string('about_x_hours', 'local_ebglms', round($distance_in_minutes / 60));
+        return get_string('about_x_hours', 'local_swtc', round($distance_in_minutes / 60));
     } else if ($distance_in_minutes < 2880) {
-        return get_string('a_day', 'local_ebglms');
+        return get_string('a_day', 'local_swtc');
     } else {
-        return get_string('x_days', 'local_ebglms', round($distance_in_minutes / 1440));
+        return get_string('x_days', 'local_swtc', round($distance_in_minutes / 1440));
     }
 }
 
@@ -653,11 +651,11 @@ function print_page_tabs($active_tab) {
     global $CFG, $COURSE;
 
     $tabs[] = new tabobject('history', new moodle_url('/local/swtc/lib/invitehistory.php', array('courseid' => $COURSE->id)),
-                            get_string('invitehistory', 'local_ebglms'));
+                            get_string('invitehistory', 'local_swtc'));
     // $tabs[] = new tabobject('invite',
     //                 new moodle_url('/enrol/invitation/invitation.php',
     //                         array('courseid' => $COURSE->id)),
-    //                get_string('inviteusers', 'local_ebglms'));
+    //                get_string('inviteusers', 'local_swtc'));
 
     // Display tabs here.
     print_tabs(array($tabs), $active_tab);

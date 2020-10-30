@@ -25,15 +25,7 @@
  *
  * SWTC history:
  *
- *	08/30/16 - Initial writing. This is the function that sends the email to the user AFTER they have registered for access to the
- *                  SWTC LMS site (i.e. AFTER a member of the SWTC area has processed
- *                  their registration (by clicking on the URL link in the email)).
- * 09/18/17 - Adding some notes (for example, the data that is required is the user's "secret" - mdl_user.secret for each user id).
- * 10/05/17 - Added button to display report 32 if user already has been confirmed ($url_nonconfirmed_user_report).
- * 07/31/18 - Added new $SESSION->EBGLMS global variables and all its required changes; added check for new ebglmsdebug setting;
- *                  changed sending of new account password from being set by user to automatically generated when sending the new account
- *                  email (after confirmation).
- * 08/09/18 - Now requiring login to confirm accounts.
+ * 10/30/20 - Initial writing.
  *
  */
 
@@ -51,14 +43,13 @@ require_login();
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
-require($CFG->dirroot.'/local/swtc/lib/ebglms.php');                              // All EBGLMS global information.
-require_once($CFG->dirroot.'/local/swtc/lib/ebglms_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+// require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
 
 // SWTC ********************************************************************************.
-// SWTC LMS ebglms_user and debug variables.
-$ebglms_user = ebglms_get_user($USER);
-$debug = ebglms_get_debug();
+// SWTC LMS swtc_user and debug variables.
+$swtc_user = swtc_get_user($USER);
+$debug = swtc_set_debug();
 
 // Other SWTC variables.
 $access_ibm_email_domain = 'ibm.com';							// SWTC - IBM email domain.
@@ -83,7 +74,7 @@ if (isset($debug)) {
 	$messages[] = "access_lenovo_email_domain is :<strong>$access_lenovo_email_domain</strong>.";
 	$messages[] = "access_ibm_student is :<strong>$access_ibm_student</strong>.";
 	$messages[] = "access_ibm_email_domain is :<strong>$access_ibm_email_domain</strong>.";
-    debug_logmessage($messages, 'both');
+    $debug->logmessage($messages, 'both');
     unset($messages);
 }
 
@@ -111,7 +102,8 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
     if (!empty($data)) {
         // SWTC ********************************************************************************
         // Sample URL string is similar to the following:
-        //      https://lenovoedu.lenovo.com/auth/emailadmin/confirm.php?data=zFfFfUaDUpwGrS2/jgalindo if the user selected a typical username.
+        //      https://lenovoedu.lenovo.com/auth/emailadmin/confirm.php?data=zFfFfUaDUpwGrS2/jgalindo
+        //      if the user selected a typical username.
         //      If the user used their email address as their username, the URL will look like the following:
         //      https://lenovoedu.lenovo.com/auth/emailadmin/confirm.php?data=SeECjsmmMxG72ZT/caomin1%40lenovo%2Ecom.
         // SWTC ********************************************************************************
@@ -171,7 +163,7 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
 			$messages[] = "inital access type for user is :<strong>$access_type</strong>.";
 			$messages[] = "user->profile_field_Accesstype is :<strong>$user->profile_field_Accesstype</strong>.";
 		//	print_r($PAGE);
-            debug_logmessage($messages, 'both');
+            $debug->logmessage($messages, 'both');
             unset($messages);
 		}
 
@@ -188,7 +180,7 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
 			$messages[] = "user->email is :<strong>$user->email</strong>.";
 			$messages[] = "user follows:";
 			$messages[] = print_r($user, true);
-            debug_logmessage($messages, 'both');
+            $debug->logmessage($messages, 'both');
             unset($messages);
 		}
 
@@ -211,7 +203,7 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
             // $invite->userid = $user->id;
             // $invite->tokenused = true;
             // $invite->timeused = time();
-            // $DB->update_record('local_ebglms_userinvitation', $invite);
+            // $DB->update_record('local_swtc_userinvitation', $invite);
         } else {
             // TODO: Did NOT find invitation; some type of catastrophic error happened.
         }
@@ -227,15 +219,15 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
 		echo "<h3>The registration for user </h3>\n";       // SWTC
 		echo "<h3>". fullname($user) . "</h3>\n";       // SWTC
 		echo "<h3>was sucessful.</h3>\n";       // SWTC
-        echo $OUTPUT->single_button($url_update_user_profile, get_string('ebglms_update_user_profile', 'auth_emailadmin'));     // SWTC
-		echo $OUTPUT->single_button($url_nonconfirmed_user_report, get_string('ebglms_run_nonconfirmed_report', 'auth_emailadmin'));    // SWTC
+        echo $OUTPUT->single_button($url_update_user_profile, get_string('swtc_update_user_profile', 'auth_emailadmin'));     // SWTC
+		echo $OUTPUT->single_button($url_nonconfirmed_user_report, get_string('swtc_run_nonconfirmed_report', 'auth_emailadmin'));    // SWTC
         echo $OUTPUT->box_end();
         echo $OUTPUT->footer();
 
         // SWTC
 		if (isset($debug)) {
 			$messages[] = "In auth/emailadmin/auth/confirm.php ===1.leave===";
-            debug_logmessage($messages, 'both');
+            $debug->logmessage($messages, 'both');
             unset($messages);
 		}
 
@@ -251,7 +243,7 @@ if (!empty($data) || (!empty($p) && !empty($s))) {
 // SWTC
 if (isset($debug)) {
 	$messages[] = "In auth/emailadmin/auth/confirm.php ===1.leave===";
-    debug_logmessage($messages, 'both');
+    $debug->logmessage($messages, 'both');
     unset($messages);
 }
 

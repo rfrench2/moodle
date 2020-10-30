@@ -31,7 +31,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use stdClass;
+// use stdClass;
 
 // SWTC ********************************************************************************.
 // SWTC customized code for Moodle core completion.

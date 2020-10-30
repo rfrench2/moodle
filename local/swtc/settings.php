@@ -37,10 +37,10 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     //        new moodle_url("$CFG->wwwroot/local/swtc/form/production_form.php")));
     //
     // The following three lines work (don't touch).
-    //      $ADMIN->add('root', new admin_category('ebgadmin', get_string('swtc', 'local_swtc')));
-    //      $ADMIN->add('ebgadmin', new admin_externalpage('swtc_prod', 'Calling production.php',
+    //      $ADMIN->add('root', new admin_category('swtcadmin', get_string('swtc', 'local_swtc')));
+    //      $ADMIN->add('swtcadmin', new admin_externalpage('swtc_prod', 'Calling production.php',
     //        new moodle_url("$CFG->wwwroot/local/swtc/form/production.php")));
-    //      $ADMIN->add('ebgadmin', new admin_externalpage('swtc_edit', 'Edit course 159 (sample)',
+    //      $ADMIN->add('swtcadmin', new admin_externalpage('swtc_edit', 'Edit course 159 (sample)',
     //        new moodle_url("/course/edit.php?id=159")));
     //
     //
@@ -53,13 +53,13 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     // SWTC *******************************************************************************
     // Setup main page.
     // SWTC *******************************************************************************
-    $ADMIN->add('root', new admin_category('ebgadmin', get_string('swtc', 'local_swtc')));
+    $ADMIN->add('root', new admin_category('swtcadmin', get_string('swtc', 'local_swtc')));
 
     // SWTC *******************************************************************************
     //
     // SWTC *******************************************************************************
     $settings = new admin_settingpage('local_swtc_settings', new lang_string('settings', 'local_swtc'));
-    $ADMIN->add('ebgadmin', $settings);
+    $ADMIN->add('swtcadmin', $settings);
 
     // SWTC *******************************************************************************.
     //
@@ -77,9 +77,9 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     //
     // SWTC *******************************************************************************
     // $suggestedcourses = new admin_settingpage('local_swtc_sc', new lang_string('suggestedcourses', 'local_swtc'));
-    // $ADMIN->add('ebgadmin', $suggestedcourses);
-    $ADMIN->add('ebgadmin', new admin_externalpage('suggestedcourses', 'Suggested courses',
-            new moodle_url("$CFG->wwwroot/local/swtc/lib/suggestedcourses.php")));
+    // $ADMIN->add('swtcadmin', $suggestedcourses);
+    $ADMIN->add('swtcadmin', new admin_externalpage('swtcsuggestedcourses', 'Suggested courses',
+            new moodle_url("$CFG->wwwroot/local/swtc/lib/swtcsuggestedcourses.php")));
 
     // SWTC *******************************************************************************
     //
@@ -98,7 +98,7 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     // SWTC *******************************************************************************
     //
     // SWTC *******************************************************************************
-    $ADMIN->add('ebgadmin', new  admin_externalpage('invitehistory', new lang_string('invitehistory', 'local_swtc'),
+    $ADMIN->add('swtcadmin', new  admin_externalpage('swtcinvitehistory', new lang_string('swtcinvitehistory', 'local_swtc'),
                     new moodle_url("$CFG->wwwroot/local/swtc/lib/invitehistory.php")));
 
     // print("Did I get here...xxx.</br>");

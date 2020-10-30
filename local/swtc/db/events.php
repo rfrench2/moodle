@@ -25,32 +25,32 @@
  * History:
  * 10/17/20 - Initial writing.
  *
- */
-/**
  * Notes about using this file
  *
  *	The messages that are captured here are routed to the method (callback) in the php file listed (includefile).
- *	Important! The event that is being captured has already happened. For example, for user_loggedin, the user has already been
- *		logged into the Lenovo EBG LMS site.
-*			user_created event happens when a new userid is created.
-*			user_updated event happens when an existing user's profile is updated.
-*			user_loggedin event happens when an existing user logs into the site.
-*			course_viewed event happens when a user views a course.
-*			user_enrolment_created event happens when a user is enrolled in a course.
-*          course_updated  event happens when a course is updated for any reason.
-*
-* The following is copied from https://docs.moodle.org/dev/Event_2#Event_observers
-*      Event observers
-*          Observers are described in db/events.php in the array $observers, the array is not indexed and contains a list of
-*               observers defined as an array with the following properties:
-*          eventname – fully qualified event class name or "*" indicating all events, ex.:
-*               \plugintype_pluginname\event\something_happened.
-*          callback - PHP callable type.
-*          includefile - optional. File to be included before calling the observer. Path relative to dirroot.
-*          priority - optional. Defaults to 0. Observers with higher priority are notified first.
-*          internal - optional. Defaults to true. Non-internal observers are not called during database transactions,
-*                          but instead after a successful commit of the transaction.
-*
+ *	Important! The event that is being captured has already happened. For example, for user_loggedin,
+ *	the user has already been logged into the Lenovo EBG LMS site.
+ *			user_created event happens when a new userid is created.
+ *			user_updated event happens when an existing user's profile is updated.
+ *			user_loggedin event happens when an existing user logs into the site.
+ *			course_viewed event happens when a user views a course.
+ *			user_enrolment_created event happens when a user is enrolled in a course.
+ *          course_updated  event happens when a course is updated for any reason.
+ *
+ * The following is copied from https://docs.moodle.org/dev/Event_2#Event_observers
+ *      Event observers
+ *          Observers are described in db/events.php in the array $observers, the array is not
+ *               indexed and contains a list of observers defined as an array with the following
+ *               properties:
+ *                   eventname – fully qualified event class name or "*" indicating all events, ex.:
+ *                       \plugintype_pluginname\event\something_happened.
+ *                   callback - PHP callable type.
+ *                   includefile - optional. File to be included before calling the observer. Path relative
+ *                      to dirroot.
+ *                   priority - optional. Defaults to 0. Observers with higher priority are notified first.
+ *                   internal - optional. Defaults to true. Non-internal observers are not called during
+ *                          database transactions, but instead after a successful commit of the transaction.
+ *
  *
  */
 

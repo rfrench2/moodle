@@ -17,16 +17,14 @@
 /**
  * New user account invitation form.
  *
- * @package    local
- * @subpackage ebglms
+ * @package    auth
+ * @subpackage emailadmin
  * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * SWTC history:
  *
- *	08/02/18 - Initial writing.
- * 01/08/19 - Switching references from "signup" to "invitation" (this is still part 2 of 2).
- * PTR2019Q403 - @01 - 03/26/20 - Add check for '@lenovo' in email address. If not true, hide PremierSupport checkbox.
+ * 10/30/20 - Initial writing.
  *
  */
 

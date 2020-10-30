@@ -26,8 +26,6 @@
  *
  *  10/14/20 - Initial writing.
  *
- */
- /**
  * Notes about using this file
  *
  *	The fields used are:
@@ -36,8 +34,8 @@
  *		component - the name of the plugin (since it is a local plugin, preface the name with 'local_').
  *		release - some string that defines some values that mean something to us.
  *		maturity - change to MATURITY_*** when GA level.
- *		dependencies - Important! Since this plugin may (at some point) modify the BCU theme code, list 'theme_bcu' (since BCU has a
- *			dependency on 'block_course_overview', list it also).
+ *		dependencies - Important! Since this plugin may (at some point) modify the BCU theme code, list
+ *		        'theme_bcu' (since BCU has a dependency on 'block_course_overview', list it also).
  *
  *
  *
@@ -45,7 +43,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2020101231;
+$plugin->version   = 2020101244;
 $plugin->requires  = 2019111805;    // Plugin requires Moodle 3.8.5+ (20200918)
 $plugin->component = 'local_swtc';
 $plugin->release = 'Version 1.0-Release 01';

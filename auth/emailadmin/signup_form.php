@@ -17,16 +17,14 @@
 /**
  * New user account invitation form.
  *
- * @package    local
- * @subpackage ebglms
+ * @package    auth
+ * @subpackage emailadmin
  * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * SWTC history:
  *
- *	08/02/18 - Initial writing.
- * 01/08/19 - Changing from invitation to signup (this is still part 1 of 2) and replaced the standard one in /login.
- * 04/02/19 - Before validation, lower case the email address (Moodle requires it and the email domain checks will not work).
+ * 10/30/20 - Initial writing.
  *
  */
 
@@ -51,11 +49,11 @@ class signup_form extends moodleform {
         // Remove all fields except email and email2 since the user account will not be created at this time.
         // $mform->addElement('header', 'createuserandpass', get_string('createuserandpass'), '');          // SWTC
         // SWTC ********************************************************************************
-         $mform->addElement('header', 'createuser', get_string('newuserinvitation', 'local_ebglms'), '');       // SWTC
+         $mform->addElement('header', 'createuser', get_string('newuserinvitation', 'local_swtc'), '');       // SWTC
 
-        $mform->addElement('static', 'newuserinvitation1', '', get_string('newuserinvitation_desc1a', 'local_ebglms'));     // SWTC
-        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc2a', 'local_ebglms'));     // SWTC
-        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc3a', 'local_ebglms'));     // SWTC
+        $mform->addElement('static', 'newuserinvitation1', '', get_string('newuserinvitation_desc1a', 'local_swtc'));     // SWTC
+        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc2a', 'local_swtc'));     // SWTC
+        $mform->addElement('static', 'newuserinvitation2', '', get_string('newuserinvitation_desc3a', 'local_swtc'));     // SWTC
 
         $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25"');
         $mform->setType('email', core_user::get_property_type('email'));
@@ -80,7 +78,7 @@ class signup_form extends moodleform {
 
         // buttons
         // $this->add_action_buttons(true, get_string('createaccount'));        // SWTC
-        $this->add_action_buttons(true, get_string('requestnewuserinvitation', 'local_ebglms'));           // SWTC
+        $this->add_action_buttons(true, get_string('requestnewuserinvitation', 'local_swtc'));           // SWTC
 
     }
 

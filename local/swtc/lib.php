@@ -28,11 +28,10 @@
  *
  **/
 
-
-
 defined('MOODLE_INTERNAL') || die();
 
-// use \local_swtc;		// 10/18/20 - SWTC
+use local_swtc\swtc_user;
+use local_swtc\swtc_debug;
 // use \stdClass;
 
 require_once($CFG->dirroot. '/config.php');
@@ -47,34 +46,32 @@ require_once($CFG->libdir . '/grouplib.php');
 // SWTC ********************************************************************************
 // 10/16/20 - SWTC
 // require($CFG->dirroot.'/local/swtc/lib/swtc.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 // require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
 // require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 
-/* Navigation is available through the page object $PAGE, against which you set the heading for the page, the title, any JavaScript
- * requirements, etc. The navigation structure uses the information $PAGE contains to generate a navigation structure for the site. The
- * navigation or settings blocks are interpretations of the navigation structure Moodle creates.
+/* Navigation is available through the page object $PAGE, against which you set the heading for the page,
+ *	the title, any JavaScript requirements, etc. The navigation structure uses the information $PAGE contains
+ *	to generate a navigation structure for the site. The navigation or settings blocks are interpretations
+ *	of the navigation structure Moodle creates.
  *
  * This navigation structure is available through three variables:
- * $PAGE->navigation: This is the main navigation structure, it will contain items that will allow the user to browse to the other
- *          available pages. See local_swtc_extend_navigation.
- * $PAGE->settingsnav: This is the settings navigation structure contains items that will allow the user to edit settings.
- * 		See local_swtc_extend_settings_navigation.
- * $PAGE->navbar: The navbar is a special structure for page breadcrumbs.
- *			Not implemented in this file.
+ * 		$PAGE->navigation: This is the main navigation structure, it will contain items that will allow the user
+ * 			to browse to the other available pages. See local_swtc_extend_navigation.
+ * 		$PAGE->settingsnav: This is the settings navigation structure contains items that will allow the user to
+ * 			edit settings. See local_swtc_extend_settings_navigation.
+ * 		$PAGE->navbar: The navbar is a special structure for page breadcrumbs. Not implemented in this file.
  *
- * The navigation is NOT the navigation block or the settings block! These two blocks were created to display the navigation structure.
- * The navigation block looks at $PAGE->navigation, and the settings block looks at $PAGE->settingsnav. Both blocks interpret their
- * data into an HTML structure and render it.
+ * The navigation is NOT the navigation block or the settings block! These two blocks were created to display the
+ * 	navigation structure. The navigation block looks at $PAGE->navigation, and the settings block looks at
+ * 	$PAGE->settingsnav. Both blocks interpret their data into an HTML structure and render it.
  *
- * Any plugin implementing the following callback in lib.php can extend the course settings navigation. Prior to 3.0 only reports and
- * admin tools could extend the course settings navigation. See local_swtc_extend_navigation_course.
+ * Any plugin implementing the following callback in lib.php can extend the course settings navigation. Prior to
+ * 	3.0 only reports and admin tools could extend the course settings navigation. See
+ * 	local_swtc_extend_navigation_course.
  *
- * Any plugin implementing the following callback in lib.php can extend the user settings navigation. Prior to 3.0 only admin tools
- * could extend the user settings navigation.
- * 		See local_swtc_extend_navigation_user_settings.
-*/
-/**
+ * Any plugin implementing the following callback in lib.php can extend the user settings navigation. Prior to
+ * 	3.0 only admin tools could extend the user settings navigation. See local_swtc_extend_navigation_user_settings.
  *
  * History:
  *
@@ -91,30 +88,20 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 		return;
 	}
 
-	return;		// 10/17/20 - SWTC
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
-    // $swtc_user = swtc_get_user($USER);		// 10/16/20 - SWTC
-	// $swtc_user = new local_swtc\swtc_user($USER);			// 10/16/20 - SWTC
-	// print_object($swtc_user);		// 10/16/20 - SWTC
-	// print_object("did I get here...");		// 10/16/20 - SWTC
-	// die;		// 10/16/20 - SWTC
-
-	$debug = swtc_get_debug();
+    $swtc_user = swtc_get_user($USER);
+	$debug = swtc_set_debug();
 
     // Other SWTC variables.
-    $user_access_type = $swtc_user->user_access_type;
+    $user_access_type = $swtc_user->get_user_access_type();
     $mycourses = 'mycourses';		// The key for 'My courses'.
+	$mycurriculums = get_string('mycurriculums', 'local_swtc');       // The title for 'My Curriculums'.
     $site = 'site';		// The key for 'Site' (i.e. Navigation > Home > swtc).
     $participants = 'participants';		// The key for 'Participants' (i.e. Navigation > Home > swtc > Participants).
 
-    $access_swtcadmin = get_string('access_swtc_pregmatch_admin', 'local_swtc');
-    $access_swtcsiteadmin = get_string('access_swtc_pregmatch_siteadmin', 'local_swtc');
-
-	print_object("local_swtc_extend_navigation");       // SWTC-debug
-	print_object($swtc_user);		// SWTC-debug
-
-    $capability = $swtc_user->capabilities[0];
+    $capability = $swtc_user->get_capabilities()[0];
+	$access_selfsupport_stud = get_string('access_selfsupport_stud', 'local_swtc');
 	//****************************************************************************************
 
     if (isset($debug)) {
@@ -122,6 +109,8 @@ function local_swtc_extend_navigation(global_navigation $nav) {
         $messages[] = "Entering /local/swtc/lib.php.===local_swtc_extend_navigation.enter.";
         $messages[] = "About to print swtc_user.";
         $messages[] = print_r($swtc_user, true);
+		// print_object("Entering /local/swtc/lib.php.===local_swtc_extend_navigation.enter; about to print swtc_user");
+		// print_object($swtc_user);
         $messages[] = "Finished printing swtc_user.";
         // $messages[] = "About to print courses.";
         // $tmp = $nav->find('courses', null);
@@ -131,7 +120,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
         // $messages[] = print_r($nav, true);
         // $messages[] = "Finished printing nav.";
         $messages[] = "SWTC ********************************************************************************";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
 	}
 
@@ -140,7 +129,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 	// SWTC ********************************************************************************
 	if ( empty($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("User has not logged on yet; leaving local_swtc_extend_navigation ===1.exit===.", 'both');
+			$debug->logmessage("User has not logged on yet; leaving local_swtc_extend_navigation ===1.exit===.", 'both');
 		}
 		return;
 	}
@@ -150,7 +139,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 	// SWTC ********************************************************************************
 	if (is_siteadmin($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("Leaving local_swtc_extend_navigation ===1.exit===.", 'both');
+			$debug->logmessage("Leaving local_swtc_extend_navigation ===1.exit===.", 'both');
 		}
 		return;
 	}
@@ -179,7 +168,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 		} else {
 			$messages[] = "I did NOT find any children. ===1.1===.";
 		}
-        debug_logmessage($messages, 'detailed');
+        $debug->logmessage($messages, 'detailed');
         unset($messages);
     }
 
@@ -188,16 +177,16 @@ function local_swtc_extend_navigation(global_navigation $nav) {
     //                  leave the course in the list. If the user doesn't, remove it from the list.
     // SWTC ********************************************************************************
     foreach ($children as $key => $catid) {
-        if ((in_array($catid, array_keys($categories)))) {
+        if ((in_array($catid, array_keys($categories))) || (stripos($swtc_user->user_access_type, $access_selfsupport_stud) !== false)) {
             if (isset($debug)) {
                 $messages[] = "Child category $catid found in SESSION->SWTC->USER->categoryids. Keeping category in list. ===1.1===.";
-                debug_logmessage($messages, 'detailed');
+                $debug->logmessage($messages, 'detailed');
                 unset($messages);
             }
         } else {
             if (isset($debug)) {
                 $messages[] = "Child category catid NOT found in SESSION->SWTC->USER->categoryids. Removing category from list. ===1.1===.";
-                debug_logmessage($messages, 'detailed');
+                $debug->logmessage($messages, 'detailed');
                 unset($messages);
             }
             $courses->children->remove($children[$key]);
@@ -209,7 +198,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
     //                      or SWTC-siteadmin.
     // SWTC ********************************************************************************
     // SWTC ********************************************************************************
-    if ((!preg_match($access_swtcadmin, $user_access_type)) && (!preg_match($access_swtcsiteadmin, $user_access_type))) {
+    if ((!preg_match(get_string('access_swtc_pregmatch_admin', 'local_swtc'), $user_access_type)) && (!preg_match(get_string('access_swtc_pregmatch_siteadmin', 'local_swtc'), $user_access_type))) {
         $node = $nav->find($site, null);
         // $allnodes = $node->children->get_key_list();
         // print_object($allnodes);
@@ -219,21 +208,21 @@ function local_swtc_extend_navigation(global_navigation $nav) {
         if ( !empty($participantnode)) {
             if (isset($debug)) {
                 $messages[] = "I found the Site > Participants node ===1.1.5===.";
-                debug_logmessage($messages, 'logfile');
+                $debug->logmessage($messages, 'logfile');
                 unset($messages);
             }
             if ( !$participantnode->remove()) {
                 if (isset($debug)) {
-                    debug_logmessage("Error removing Site > Participants node ===1.1.5===.", 'logfile');
+                    $debug->logmessage("Error removing Site > Participants node ===1.1.5===.", 'logfile');
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("Successfully removed Site > Participants node ===1.1.5===.", 'logfile');
+                    $debug->logmessage("Successfully removed Site > Participants node ===1.1.5===.", 'logfile');
                 }
             }
         }else {
             if (isset($debug)) {
-                debug_logmessage("I DIDN'T find Site > Participants node ===1.1.5===.", 'logfile');
+                $debug->logmessage("I DIDN'T find Site > Participants node ===1.1.5===.", 'logfile');
             }
         }
     }
@@ -247,7 +236,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 		} else {
 			$messages[] = "I did NOT find $mycourses ===1.1.5===.";
 		}
-        debug_logmessage($messages, 'logfile');
+        $debug->logmessage($messages, 'logfile');
         unset($messages);
         // print_object($node);
     }
@@ -264,7 +253,7 @@ function local_swtc_extend_navigation(global_navigation $nav) {
     // SWTC ********************************************************************************
 
 	if (isset($debug)) {
-		debug_logmessage("Leaving local_swtc_extend_navigation ===1.exit===.", 'both');
+		$debug->logmessage("Leaving local_swtc_extend_navigation ===1.exit===.", 'both');
 	}
 }
 
@@ -311,13 +300,10 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
     $swtc_user = swtc_get_user($USER);
-    $debug = swtc_get_debug();
+    $debug = swtc_set_debug();
 
     // Other SWTC variables.
-    $user_access_type = $swtc_user->user_access_type;
-
-    $access_swtcadmin = get_string('access_swtc_pregmatch_admin', 'local_swtc');
-    $access_swtcsiteadmin = get_string('access_swtc_pregmatch_siteadmin', 'local_swtc');
+    $user_access_type = $swtc_user->get_user_access_type();
 
     //****************************************************************************************
     // Array of top-level settingsnav menu 'Front page settings' (frontpage) nodes (keys) to remove. Main front page
@@ -485,7 +471,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         // $messages[] = "Finished printing SESSION->SWTC->USER.";
         // $messages[] = "SWTC ********************************************************************************";
         //
-        // debug_logmessage($messages, 'display');
+        // $debug->logmessage($messages, 'display');
         // unset($messages);
 
         // SWTC ********************************************************************************
@@ -494,7 +480,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         $messages[] = "SWTC ********************************************************************************";
         $messages[] = "Entering /local/swtc/lib.php===local_swtc_extend_settings_navigation.enter===.";
         $messages[] = "SWTC ********************************************************************************";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
 
         // SWTC ********************************************************************************
@@ -522,7 +508,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         $messages[] = print_r($allnodes, true);
         $messages[] = "Finished printing children get_key_list.";
         $messages[] = "SWTC ********************************************************************************";
-        debug_logmessage($messages, 'detailed');
+        $debug->logmessage($messages, 'detailed');
         unset($messages);
 	}
 
@@ -531,7 +517,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 	//
 	if ( empty($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("User has not logged on yet; local_swtc_extend_settings_navigation ===2.exit===.", 'both');
+			$debug->logmessage("User has not logged on yet; local_swtc_extend_settings_navigation ===2.exit===.", 'both');
 		}
 		return;
 	}
@@ -541,7 +527,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 	//
 	if ( is_siteadmin($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("Leaving local_swtc_extend_settings_navigation ===2.exit===.", 'both');
+			$debug->logmessage("Leaving local_swtc_extend_settings_navigation ===2.exit===.", 'both');
 		}
 		return;
 	}
@@ -577,7 +563,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
             $messages[] = "As an additional reminder, navigation_node namedtypes are as follows :";
             $messages[] =  "[0] => system [10] => category [20] => course [30] => structure [40] => activity [50] => resource [60] => custom [70] => setting [71] => siteadmin [80] => user [90] => container";
             $messages[] = "SWTC ********************************************************************************";
-            debug_logmessage($messages, 'detailed');
+            $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
 
@@ -589,21 +575,21 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         // SWTC ********************************************************************************
         if (!empty($frontpageroot)) {
             if (isset($debug)) {
-                debug_logmessage("I found the frontpage node ===2.0.5===.", 'both');
+                $debug->logmessage("I found the frontpage node ===2.0.5===.", 'both');
             //	print_r($frontpageroot);
             }
             if ( !$frontpageroot->remove()) {
                 if (isset($debug)) {
-                    debug_logmessage("Error removing the frontpage node ===2.0.5===.", 'both');
+                    $debug->logmessage("Error removing the frontpage node ===2.0.5===.", 'both');
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("Successfully removed the frontpage node ===2.0.5===.", 'both');
+                    $debug->logmessage("Successfully removed the frontpage node ===2.0.5===.", 'both');
                 }
             }
         }else {
             if (isset($debug)) {
-                debug_logmessage("I DIDN'T find the frontpage node. Continuing ===2.0.5===...", 'both');
+                $debug->logmessage("I DIDN'T find the frontpage node. Continuing ===2.0.5===...", 'both');
             }
         }
     } else if ($context->contextlevel == CONTEXT_SYSTEM) {
@@ -663,26 +649,26 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 
         if (!empty($modulesettings)) {
             if (isset($debug)) {
-                debug_logmessage("I found a Module settings node. ===2.6===.", 'both');
+                $debug->logmessage("I found a Module settings node. ===2.6===.", 'both');
             }
             if (stripos($modulesettings->text, 'Quiz') === false) {
                 if ( !$modulesettings->remove()) {
                     if (isset($debug)) {
-                        debug_logmessage("Error removing the Module settings node. ===2.6===.", 'both');
+                        $debug->logmessage("Error removing the Module settings node. ===2.6===.", 'both');
                     }
                 } else {
                     if (isset($debug)) {
-                        debug_logmessage("Successfully removed the Module settings node. ===2.6===.", 'both');
+                        $debug->logmessage("Successfully removed the Module settings node. ===2.6===.", 'both');
                     }
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("Found a Quiz module. Keeping. Continuing. ===2.6===.", 'both');
+                    $debug->logmessage("Found a Quiz module. Keeping. Continuing. ===2.6===.", 'both');
                 }
             }
         } else {
             if (isset($debug)) {
-                debug_logmessage("I DIDN'T find a Module settings node. Continuing ===2.6===.", 'both');
+                $debug->logmessage("I DIDN'T find a Module settings node. Continuing ===2.6===.", 'both');
             }
         }
     } else if ($context->contextlevel == CONTEXT_COURSECAT) {
@@ -695,21 +681,21 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 
         if (!empty($categorysettings)) {
             if (isset($debug)) {
-                debug_logmessage("I found a Category settings node. ===2.6===.", 'both');
+                $debug->logmessage("I found a Category settings node. ===2.6===.", 'both');
             //	print_r($permissionsnode);
             }
             if ( !$categorysettings->remove()) {
                 if (isset($debug)) {
-                    debug_logmessage("Error removing the Category settings node. ===2.6===.", 'both');
+                    $debug->logmessage("Error removing the Category settings node. ===2.6===.", 'both');
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("Successfully removed the Category settings node. ===2.6===.", 'both');
+                    $debug->logmessage("Successfully removed the Category settings node. ===2.6===.", 'both');
                 }
             }
         } else {
             if (isset($debug)) {
-                debug_logmessage("I DIDN'T find a Category settings node. Continuing ===2.6===.", 'both');
+                $debug->logmessage("I DIDN'T find a Category settings node. Continuing ===2.6===.", 'both');
             }
         }
     }
@@ -744,23 +730,23 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
                 // $messages[] = print_r($children, true);
                 // $messages[] = "Finished printing all the adminroot children keys.";
                 $messages[] = "SWTC ********************************************************************************";
-                debug_logmessage($messages, 'detailed');
+                $debug->logmessage($messages, 'detailed');
                 unset($messages);
             }
 
             // SWTC ********************************************************************************
-            if ((!preg_match($access_swtcadmin, $user_access_type)) && (!preg_match($access_swtcsiteadmin, $user_access_type))) {
+            if ((!preg_match(get_string('access_swtc_pregmatch_admin', 'local_swtc'), $user_access_type)) && (!preg_match(get_string('access_swtc_pregmatch_siteadmin', 'local_swtc'), $user_access_type))) {
                 if (isset($debug)) {
-                    debug_logmessage("Attempting to remove the Site administration menu ===2.1===.", 'both');
+                    $debug->logmessage("Attempting to remove the Site administration menu ===2.1===.", 'both');
                 }
 
                 if (!$adminroot->remove()) {     // 02/20/19 - TODO - won't work...
                     if (isset($debug)) {
-                        debug_logmessage("Error removing the Site administration menu ===2.1===.", 'both');
+                        $debug->logmessage("Error removing the Site administration menu ===2.1===.", 'both');
                     }
                 } else {
                     if (isset($debug)) {
-                        debug_logmessage("Successfully removed the Site administration menu ===2.1===.", 'both');
+                        $debug->logmessage("Successfully removed the Site administration menu ===2.1===.", 'both');
                     }
                     // 06/02/18 - RF - It worked! With role assigned to System. Will attempt to add with role NOT assigned to System.
                     // 02/15/19 - Does NOT work with role NOT assigned to System.
@@ -768,8 +754,8 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("User type is either PremierSupport-admin, PremierSupport-mgr, ServiceDelivery-admin, ServiceDelivery-mgr,  Lenovo-admin, or Lenovo-siteadmin - keeping the Site administration menu ===2.2===.", 'both');
-                    debug_logmessage("Most sub-menu items should be handled using role definitions. The rest will be handled here.===2.2===.", 'both');
+                    $debug->logmessage("User type is either PremierSupport-admin, PremierSupport-mgr, ServiceDelivery-admin, ServiceDelivery-mgr,  Lenovo-admin, or Lenovo-siteadmin - keeping the Site administration menu ===2.2===.", 'both');
+                    $debug->logmessage("Most sub-menu items should be handled using role definitions. The rest will be handled here.===2.2===.", 'both');
                 }
 
                 // SWTC ********************************************************************************
@@ -777,7 +763,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
                 // SWTC ********************************************************************************
                 foreach($admin_top_remove as $node) {
                     if (isset($debug)) {
-                        debug_logmessage("Searching for the <strong>Site administration >$node</strong> node. ===2.2.5===.", 'both');
+                        $debug->logmessage("Searching for the <strong>Site administration >$node</strong> node. ===2.2.5===.", 'both');
                     }
 
                     // Can we find it?
@@ -785,19 +771,19 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 
                     if ( !empty($found)) {
                         if (isset($debug)) {
-                            debug_logmessage("I found the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                            $debug->logmessage("I found the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                         }
 
                         // Remove it.
                         $adminroot->children->remove($node, $found->type);
 
                         if (isset($debug)) {
-                            debug_logmessage("Removed the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                            $debug->logmessage("Removed the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                         }
 
                     } else {
                         if (isset($debug)) {
-                            debug_logmessage("I DIDN'T find the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                            $debug->logmessage("I DIDN'T find the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                         }
                     }
                 }
@@ -807,7 +793,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
                 // SWTC ********************************************************************************
                 foreach($admin_second_remove as $node) {
                     if (isset($debug)) {
-                        debug_logmessage("Searching for the <strong>Site administration >$node</strong> node. ===2.2.5===.", 'both');
+                        $debug->logmessage("Searching for the <strong>Site administration >$node</strong> node. ===2.2.5===.", 'both');
                     }
 
                     // Can we find it?
@@ -817,23 +803,23 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 
                     if ( !empty($found)) {
                         if (isset($debug)) {
-                            debug_logmessage("I found the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                            $debug->logmessage("I found the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                         }
 
                         // Remove it.
                         // $adminroot->children->remove($node, $found->type);
                         if ( !$found->remove()) {
                             if (isset($debug)) {
-                                debug_logmessage("Error removing the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                                $debug->logmessage("Error removing the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                             }
                         } else {
                             if (isset($debug)) {
-                                debug_logmessage("Successfully removed the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                                $debug->logmessage("Successfully removed the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                             }
                         }
                     } else {
                         if (isset($debug)) {
-                            debug_logmessage("I DIDN'T find the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
+                            $debug->logmessage("I DIDN'T find the <strong>Site administration >$node</strong> node ===2.2.5===.", 'both');
                         }
                     }
                 }
@@ -841,12 +827,12 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         // }
     } else {
         if (isset($debug)) {
-            debug_logmessage("Did NOT find Site administration menu. Continuing ===2.1===.", 'both');
+            $debug->logmessage("Did NOT find Site administration menu. Continuing ===2.1===.", 'both');
         }
     }
 
 	if (isset($debug)) {
-		debug_logmessage("Leaving local_swtc_extend_settings_navigation ===2.exit===.", 'both');
+		$debug->logmessage("Leaving local_swtc_extend_settings_navigation ===2.exit===.", 'both');
 	}
 }
 
@@ -893,13 +879,10 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
     $swtc_user = swtc_get_user($USER);
-    $debug = swtc_get_debug();
+    $debug = swtc_set_debug();
 
     // Other SWTC variables.
-    $user_access_type = $swtc_user->user_access_type;
-
-    $access_swtcadmin = get_string('access_swtc_pregmatch_admin', 'local_swtc');
-    $access_swtcsiteadmin = get_string('access_swtc_pregmatch_siteadmin', 'local_swtc');
+    $user_access_type = $swtc_user->get_user_access_type();
 
     // Array of 'Course administration nodes (keys) to remove. Main course administration key is :courseadmin. Most of these will be removed
     //          by the definition of the role. Note that when this function is called, $parentnode IS $courseadmin.
@@ -992,7 +975,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
         $messages[] = "As an additional reminder, navigation_node namedtypes are as follows :";
         $messages[] =  "[0] => system [10] => category [20] => course [30] => structure [40] => activity [50] => resource [60] => custom [70] => setting [71] => siteadmin [80] => user [90] => container";
         $messages[] = "SWTC ********************************************************************************";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
         // debug_navigation($parentnode);
     }
@@ -1002,7 +985,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 	// SWTC ********************************************************************************
 	if ( empty($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("User has not logged on yet; local_swtc_extend_navigation_course ===4.exit===.", 'both');
+			$debug->logmessage("User has not logged on yet; local_swtc_extend_navigation_course ===4.exit===.", 'both');
 		}
 		return;
 	}
@@ -1012,7 +995,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 	// SWTC ********************************************************************************
 	if ( is_siteadmin($USER->id)) {
 		if (isset($debug)) {
-			debug_logmessage("Leaving local_swtc_extend_navigation_course ===4.exit===.", 'both');
+			$debug->logmessage("Leaving local_swtc_extend_navigation_course ===4.exit===.", 'both');
 		}
 		return;
 	}
@@ -1064,27 +1047,27 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
     // SWTC ********************************************************************************
     if ( !empty($usersnode)) {
         if (isset($debug)) {
-            debug_logmessage("I found the <strong>Course administration > Users</strong> node ===4.1===.", 'both');
+            $debug->logmessage("I found the <strong>Course administration > Users</strong> node ===4.1===.", 'both');
         //	print_r($usersnode);
         }
 
 		// SWTC ********************************************************************************
-        if ((!preg_match($access_swtcadmin, $user_access_type)) && (!preg_match($access_swtcsiteadmin, $user_access_type))) {
+        if ((!preg_match(get_string('access_swtc_pregmatch_admin', 'local_swtc'), $user_access_type)) && (!preg_match(get_string('access_swtc_pregmatch_siteadmin', 'local_swtc'), $user_access_type))) {
 			if (isset($debug)) {
-				debug_logmessage("About to remove the <strong>Course administration > Users</strong> node ===4.2===.", 'both');
+				$debug->logmessage("About to remove the <strong>Course administration > Users</strong> node ===4.2===.", 'both');
 			}
             if ( !$usersnode->remove()) {
                 if (isset($debug)) {
-                    debug_logmessage("Error removing the <strong>Course administration > Users</strong> node ===4.2.1===.", 'both');
+                    $debug->logmessage("Error removing the <strong>Course administration > Users</strong> node ===4.2.1===.", 'both');
                 }
             } else {
                 if (isset($debug)) {
-                    debug_logmessage("Successfully removed the <strong>Course administration > Users</strong> node ===4.2.2===.", 'both');
+                    $debug->logmessage("Successfully removed the <strong>Course administration > Users</strong> node ===4.2.2===.", 'both');
                 }
             }
         } else {
             if (isset($debug)) {
-                debug_logmessage("Most sub-menu items should be handled using role definitions. The rest will be handled here.===4.2.3===.", 'both');
+                $debug->logmessage("Most sub-menu items should be handled using role definitions. The rest will be handled here.===4.2.3===.", 'both');
             }
             // SWTC ********************************************************************************
             // Determine if we need to remove all the nodes in the $admin_remove array (see above).
@@ -1119,7 +1102,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 				$messages[] = "course_partof_curriculum follows :";
 				$messages[] = print_r($crs_partof_curric, true);
 				$messages[] = "user_is_enrolled_in_curriculum_course is :$user_is_enrolled_in_curriculum_course.===4.2.4===.";
-				debug_logmessage($messages, 'detailed');
+				$debug->logmessage($messages, 'detailed');
 				unset($messages);
 			}
 
@@ -1137,21 +1120,21 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 				// Remove the entire Course Administration > Users node.
                 // 10/22/19 - Skip this for Lenovo-admins and Lenovo-siteadmins.
 				// SWTC ********************************************************************************
-                if ((!preg_match($access_swtcadmin, $user_access_type)) && (!preg_match($access_swtcsiteadmin, $user_access_type))) {
+                if ((!preg_match(get_string('access_swtc_pregmatch_admin', 'local_swtc'), $user_access_type)) && (!preg_match(get_string('access_swtc_pregmatch_siteadmin', 'local_swtc'), $user_access_type))) {
                     // SWTC ********************************************************************************
                     // Remove the entire Course Administration > Users node.
                     // SWTC ********************************************************************************
                     if (isset($debug)) {
-                        debug_logmessage("About to remove the <strong>Course administration > Users </strong> node ===4.3===.", 'both');
+                        $debug->logmessage("About to remove the <strong>Course administration > Users </strong> node ===4.3===.", 'both');
                     }
 
                     if ( !$usersnode->remove()) {
                         if (isset($debug)) {
-                            debug_logmessage("Error removing the <strong>Course administration > Users </strong> node ===4.3.1===.", 'both');
+                            $debug->logmessage("Error removing the <strong>Course administration > Users </strong> node ===4.3.1===.", 'both');
                         }
                     } else {
                         if (isset($debug)) {
-                            debug_logmessage("Successfully removed the <strong>Course administration > Users </strong> node ===4.3.2===.", 'both');
+                            $debug->logmessage("Successfully removed the <strong>Course administration > Users </strong> node ===4.3.2===.", 'both');
                         }
                     }
                 }
@@ -1162,26 +1145,26 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 				// $admin_remove = array($reports);
 				foreach($admin_remove as $node) {
 					if (isset($debug)) {
-						debug_logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.4===.", 'both');
+						$debug->logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.4===.", 'both');
 					}
 					$found = $parentnode->find($node, null);
 
 					if ( !empty($found)) {
 						if (isset($debug)) {
-							debug_logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.4.1===.", 'both');
+							$debug->logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.4.1===.", 'both');
 						}
 						if ( !$found->remove()) {
 							if (isset($debug)) {
-								debug_logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.4.2===.", 'both');
+								$debug->logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.4.2===.", 'both');
 							}
 						} else {
 							if (isset($debug)) {
-								debug_logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.4.3===.", 'both');
+								$debug->logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.4.3===.", 'both');
 							}
 						}
 					} else {
 						if (isset($debug)) {
-							debug_logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.4.4===.", 'both');
+							$debug->logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.4.4===.", 'both');
 						}
 					}
 				}
@@ -1216,23 +1199,23 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 						case $review:
 							// Searching for and removing.
 							if (isset($debug)) {
-								debug_logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.5===.", 'both');
+								$debug->logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.5===.", 'both');
 							}
 							// $found = $parentnode->find($node, null);		// 12/15/18 - Shouldn't this be usersnode?
 							$found = $usersnode->find($node, null);
 
 							if ( !empty($found)) {
 								if (isset($debug)) {
-									debug_logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.5.1===.", 'both');
+									$debug->logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.5.1===.", 'both');
 								}
 								if ( !$found->remove()) {
 									if (isset($debug)) {
-										debug_logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.5.2===.", 'both');
+										$debug->logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.5.2===.", 'both');
 									}
 								} else {
 									if (isset($debug)) {
-										debug_logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.5.3===.", 'both');
-										debug_logmessage("About to add modified <strong>Course administration > Users > $node</strong> node ===4.5.5===.", 'both');
+										$debug->logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.5.3===.", 'both');
+										$debug->logmessage("About to add modified <strong>Course administration > Users > $node</strong> node ===4.5.5===.", 'both');
 									}
 									// Add the new one (no error checking if it didn't work).
 									$url = new moodle_url('/local/swtc/lib/curriculums.php', array('curriculumid'=>$curriculumid));
@@ -1240,7 +1223,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 								}
 							} else {
 								if (isset($debug)) {
-									debug_logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.5.3===.", 'both');
+									$debug->logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.5.3===.", 'both');
 								}
 							}
 							break;
@@ -1248,7 +1231,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 						case $coursecompletionnode:
 							// Searching for and removing.
 							if (isset($debug)) {
-								debug_logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.6===.", 'both');
+								$debug->logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.6===.", 'both');
 							}
 
                             // SWTC ********************************************************************************
@@ -1274,7 +1257,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 										$messages[] = "About to change value of <strong> node->action</strong> setting.";
 										$messages[] = "Original value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 
@@ -1284,7 +1267,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 									if (isset($debug)) {
 										$messages[] = "NEW value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 									$found = $child;
@@ -1293,7 +1276,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 
 							if ( empty($found)) {
 								if (isset($debug)) {
-									debug_logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.6.2===.", 'both');
+									$debug->logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.6.2===.", 'both');
 								}
 							}
 							break;
@@ -1301,7 +1284,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 						case $coursepartnode:
 							// Searching for and removing.
 							if (isset($debug)) {
-								debug_logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.7===.", 'both');
+								$debug->logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.7===.", 'both');
 							}
 
 							// SWTC ********************************************************************************
@@ -1328,7 +1311,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 										$messages[] = "About to change value of <strong> node->action</strong> setting.";
 										$messages[] = "Original value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 
@@ -1338,7 +1321,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 									if (isset($debug)) {
 										$messages[] = "NEW value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 									$found = $child;
@@ -1347,7 +1330,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 
 							if ( empty($found)) {
 								if (isset($debug)) {
-									debug_logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.7.2===.", 'both');
+									$debug->logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.7.2===.", 'both');
 								}
 							}
 							break;
@@ -1355,7 +1338,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 						case $activitycompnode:
 							// Searching for and removing.
 							if (isset($debug)) {
-								debug_logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.8===.", 'both');
+								$debug->logmessage("Searching for the <strong>Course administration > Reports > $node</strong> node ===4.8===.", 'both');
 							}
 
 							// SWTC ********************************************************************************
@@ -1381,7 +1364,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 										$messages[] = "About to change value of <strong> node->action</strong> setting.";
 										$messages[] = "Original value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 
@@ -1391,7 +1374,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 									if (isset($debug)) {
 										$messages[] = "NEW value of action follows :";
 										$messages[] = print_r($child->action, true);
-										debug_logmessage($messages, 'both');
+										$debug->logmessage($messages, 'both');
 										unset($messages);
 									}
 									$found = $child;
@@ -1400,7 +1383,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 
 							if ( empty($found)) {
 								if (isset($debug)) {
-									debug_logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.8.2===.", 'both');
+									$debug->logmessage("I DIDN'T find the <strong>Course administration > Reports > $node</strong> node ===4.8.2===.", 'both');
 								}
 							}
 							break;
@@ -1421,29 +1404,29 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
             // SWTC ********************************************************************************
             // 10/22/19 - Skip this for Lenovo-admins and Lenovo-siteadmins.
             // SWTC ********************************************************************************
-            if ((!preg_match($access_swtcadmin, $user_access_type)) && (!preg_match($access_swtcsiteadmin, $user_access_type))) {
+            if ((!preg_match(get_string('access_swtc_pregmatch_admin', 'local_swtc'), $user_access_type)) && (!preg_match(get_string('access_swtc_pregmatch_siteadmin', 'local_swtc'), $user_access_type))) {
                 foreach($users_remove as $node) {
                     if (isset($debug)) {
-                        debug_logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.6===.", 'both');
+                        $debug->logmessage("Searching for the <strong>Course administration > Users > $node</strong> node ===4.6===.", 'both');
                     }
                     $found = $parentnode->find($node, null);
 
                     if ( !empty($found)) {
                         if (isset($debug)) {
-                            debug_logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.6.1===.", 'both');
+                            $debug->logmessage("I found the <strong>Course administration > Users > $node</strong> node ===4.6.1===.", 'both');
                         }
                         if ( !$found->remove()) {
                             if (isset($debug)) {
-                                debug_logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.6.2===.", 'both');
+                                $debug->logmessage("Error removing the <strong>Course administration > Users > $node</strong> node ===4.6.2===.", 'both');
                             }
                         } else {
                             if (isset($debug)) {
-                                debug_logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.6.3===.", 'both');
+                                $debug->logmessage("Successfully removed the <strong>Course administration > Users > $node</strong> node ===4.6.3===.", 'both');
                             }
                         }
                     } else {
                         if (isset($debug)) {
-                            debug_logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.6.4===.", 'both');
+                            $debug->logmessage("I DIDN'T find the <strong>Course administration > Users > $node</strong> node ===4.6.4===.", 'both');
                         }
                     }
                 }
@@ -1451,7 +1434,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
         }
     } else {
         if (isset($debug)) {
-            debug_logmessage("I DIDN'T find the <strong>Course administration > Users</strong> node. Continuing ===4.9.9===...", 'both');
+            $debug->logmessage("I DIDN'T find the <strong>Course administration > Users</strong> node. Continuing ===4.9.9===...", 'both');
         }
     }
 
@@ -1471,7 +1454,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
     // }
 
 	if (isset($debug)) {
-		debug_logmessage("Leaving local_swtc_extend_navigation_course ===4.exit===.", 'both');
+		$debug->logmessage("Leaving local_swtc_extend_navigation_course ===4.exit===.", 'both');
 	}
 }
 
@@ -1524,7 +1507,7 @@ function local_swtc_extend_navigation_category_settings(navigation_node $parentn
         // If the local debug flag is set, check to see if the global DEBUG flag has already been set.
         //  If the global DEBUG is set, set a local reference to it.
         if (debug_authorized_user($swtc_user->username)) {
-            $debug = swtc_get_debug();
+            $debug = swtc_set_debug();
         } else {
             // TODO: Local debug is set (so we want to debug), but GLOBAL debug is not for some reason. Not sure what to do here.
             $debug = null;
@@ -1546,7 +1529,7 @@ function local_swtc_extend_navigation_category_settings(navigation_node $parentn
         // $messages[] = print_r($parentnode->courses, true);
         $messages[] = "Finished printing navigation_node (parentnode) node";
         $messages[] = "SWTC ********************************************************************************";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 

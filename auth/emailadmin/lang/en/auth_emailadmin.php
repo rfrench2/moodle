@@ -24,21 +24,7 @@
  *
  * SWTC history:
  *
- * 08/29/16 - Changed defaults for SWTC LMS site (see send_confirmation_email_support below also).
- *					This is the function that processes the user clicking the "Create a new account" registration button for access to the
- *                  SWTC LMS site (i.e. BEFORE the user receives their confirmation email). The main purpose of this
- *                  function is a) pre-set the user's customized user profile value (Accesstype) based on their email domain
- *                  (either "Lenovo-stud" or "IBM-stud") and b) compose an email with the user's properties and send the email to the
- *                  SWTC "ebglms@lenovo.com" email account for processing.
- * 01/25/17 - LMS v2.0 - moved url link earlier in the email so the SWTC administrator will not have to scroll every email to find the
- *                  hyperlink to click.
- * 07/05/18 - Added hyperlink to Lenovo Central to verify the email address of the Lenovo user.
- * 07/27/18 - Added hyperlink to SWTC mailing list.
- * 07/31/18 - Changed sending of new account password from being set by user to automatically generated when sending the new account
- *                  email (after confirmation).
- * 01/01/19 - Automatic generation of user user password is not implemented yet; setting message back to original.
- * PTR2019Q403 - @01 - 03/26/20 - Added strings for displaying PremierSupport checkbox; added a separate confirmation email body
- *                  if the user is requesting a PremierSupport access type.
+ * 10/30/20 - Initial writing.
  *
  */
 
@@ -174,8 +160,8 @@ $string['auth_emailadminnotif_strategy_allupdate'] = 'All admins and users with 
 $string['pluginname'] = 'Email-based self-registration with admin confirmation';
 
 // SWTC
-$string['ebglms_update_user_profile'] = 'Update user\'s profile?';
-$string['ebglms_run_nonconfirmed_report'] = 'Run NON-Confirmed user\'s report';
+$string['swtc_update_user_profile'] = 'Update user\'s profile?';
+$string['swtc_run_nonconfirmed_report'] = 'Run NON-Confirmed user\'s report';
 
 // @01 - Added strings for displaying PremierSupport checkbox.
 $string['premiersupportuser'] = 'Update my access to a Premier Support user.';

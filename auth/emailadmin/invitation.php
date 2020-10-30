@@ -18,25 +18,23 @@
 /**
  * User invitation page. Added as part of the /auth/emailadmin plugin. This is part 2 of 2 (part 1 is signup.php).
  *
- * @package    local
- * @subpackage ebglms
+ * @package    auth
+ * @subpackage emailadmin
  * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
  *
- *	08/06/18 - Initial writing.
- * 01/08/19 - Switching references from "signup" to "invitation" (this is still part 2 of 2).
- * PTR2019Q403 - @01 - 03/26/20 - Since user has not logged on yet, neither ebglms_get_user nor ebglms_get_debug will be available yet.
+ * 10/30/20 - Initial writing.
  *
  */
 
 require('../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 require_once($CFG->libdir . '/authlib.php');
-// require_once('lib.php');                                             // SWTC
-require_once($CFG->dirroot . '/login/lib.php');         // SWTC
-require_once('locallib.php');      // SWTC
+// require_once('lib.php');
+require_once($CFG->dirroot . '/login/lib.php');
+require_once('locallib.php');
 
 // Check if user is passing a token they were sent.
 $signupinvitationtoken = required_param('token', PARAM_ALPHANUM);
@@ -44,31 +42,26 @@ $signupinvitationtoken = required_param('token', PARAM_ALPHANUM);
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
-require($CFG->dirroot.'/local/swtc/lib/ebglms.php');                     // All SWTC LMS global information.
-require_once($CFG->dirroot.'/local/swtc/lib/ebglms_userlib.php');
-// SWTC ********************************************************************************.
-// Include SWTC LMS functions.
-// SWTC ********************************************************************************.
-require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 
-global $SESSION, $USER;        // SWTC
+global $SESSION, $USER;
 
 //****************************************************************************************.
-// SWTC LMS ebglms_user and debug variables.
-// $ebglms_user = ebglms_get_user($USER);       // @01
-// $debug = ebglms_get_debug();     // @01
+// SWTC LMS swtc_user and debug variables.
+// $swtc_user = swtc_get_user($USER);
+// $debug = swtc_set_debug();
 
 // Other SWTC variables.
 // Invitation status strings.
-$status_active = get_string('status_invite_active', 'local_ebglms');
-$status_used = get_string('status_invite_used', 'local_ebglms');
-$status_expired = get_string('status_invite_expired', 'local_ebglms');
-$status_invalid = get_string('status_invite_invalid', 'local_ebglms');
+$status_active = get_string('status_invite_active', 'local_swtc');
+$status_used = get_string('status_invite_used', 'local_swtc');
+$status_expired = get_string('status_invite_expired', 'local_swtc');
+$status_invalid = get_string('status_invite_invalid', 'local_swtc');
 //****************************************************************************************.
 
 // If the user passes a token, attempt to retrieve it.
 if (isset($signupinvitationtoken)) {
-    $invitation = $DB->get_record('local_ebglms_userinvitation', array('token' => $signupinvitationtoken));
+    $invitation = $DB->get_record('local_swtc_userinvitation', array('token' => $signupinvitationtoken));
 
     // print_object($invitation);
     $invitationmanager = new invitation_manager();

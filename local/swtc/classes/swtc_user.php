@@ -195,97 +195,47 @@ class swtc_user {
         // print_object(format_backtrace(debug_backtrace(), true));        // SWTC-debug
         // print_object($user);		// 10/16/20 - SWTC
 
+        // The following should be set in $USER.
+        $this->userid = (isset($user->id)) ? $user->id : null;
+        $this->username = (isset($user->username)) ? $user->username : null;
+
         // SWTC ********************************************************************************
-        // If $SWTC->USER is not set, continue.
+        // Load the user's profile data.
         // SWTC ********************************************************************************
-        if (is_object($SESSION)) {
-            // print_object("In swtc_user->get_user; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
-            // print_object($SESSION);		// 10/16/20 - SWTC
-            if (!isset($SESSION->SWTC)) {
-                // print_object("In swtc_user __construct; did I get here 2");		// 10/16/20 - SWTC
-                // SWTC *****************************************************************************
-                // Setup the SWTC variable.
-                //      Example: /lib/classes/session/manager.php starting around line 86.
-                // SWTC *****************************************************************************
-                $SESSION->SWTC = new stdClass();
+        $temp = new stdClass();
+        $temp->id = $this->userid;
+        profile_load_data($temp);
+        // print_object("In swtc_user __construct; about to print profile data");		// 10/16/20 - SWTC
+        // print_object($temp);		// 10/16/20 - SWTC
+        // $this->user_access_type = $temp->get_string('profile_field_accesstype', 'local_swtc');
+        $this->user_access_type = (isset($temp->profile_field_Accesstype)) ? $temp->profile_field_Accesstype : null;
+        // $this->user_access_type2 = (null !== $temp->get_string('profile_field_accesstype2', 'local_swtc')) ? $temp->get_string('profile_field_accesstype2', 'local_swtc') : null;
+        $this->user_access_type2 = (isset($temp->profile_field_accesstype2)) ? $temp->profile_field_accesstype2 : null;
 
-                // SWTC *****************************************************************************
-                // Setup the SWTC->USER variable.
-                // SWTC *****************************************************************************
-                $SESSION->SWTC->USER = new stdClass();
+        // The following we'll set in ***.
+        $this->portfolio = 'PORTFOLIO_NONE';
+        $this->roleshortname = null;
+        $this->roleid = null;
+        $this->categoryids = null;
+        $this->capabilities = null;
+        $this->relateduser = null;
+        $this->cohortnames = null;
+        $this->groupname = null;
+        $this->geoname = null;
+        $this->groupnames = null;
 
-                // The following should be set in $USER.
-                $this->userid = (isset($user->id)) ? $user->id : null;
-                $this->username = (isset($user->username)) ? $user->username : null;
+        // SWTC ********************************************************************************
+        // Get the additional swtc_user properties; user's timestamp and timezone.
+        // SWTC ********************************************************************************
+        list($this->timestamp, $this->timezone) = $this->set_timestamp();
 
-                // SWTC ********************************************************************************
-                // Load the user's profile data.
-                // SWTC ********************************************************************************
-                $temp = new stdClass();
-                $temp->id = $this->userid;
-                profile_load_data($temp);
-                // print_object("In swtc_user __construct; about to print profile data");		// 10/16/20 - SWTC
-                // print_object($temp);		// 10/16/20 - SWTC
-                // $this->user_access_type = $temp->get_string('profile_field_accesstype', 'local_swtc');
-                $this->user_access_type = (isset($temp->profile_field_accesstype)) ? $temp->profile_field_accesstype : null;
-                // $this->user_access_type2 = (null !== $temp->get_string('profile_field_accesstype2', 'local_swtc')) ? $temp->get_string('profile_field_accesstype2', 'local_swtc') : null;
-                $this->user_access_type2 = (isset($temp->profile_field_accesstype2)) ? $temp->profile_field_accesstype2 : null;
-
-                // The following we'll set in ***.
-                $this->portfolio = 'PORTFOLIO_NONE';
-                $this->roleshortname = null;
-                $this->roleid = null;
-                $this->categoryids = null;
-                $this->capabilities = null;
-                $this->relateduser = null;
-                $this->cohortnames = null;
-                $this->groupname = null;
-                $this->geoname = null;
-                $this->groupnames = null;
-
-                // SWTC ********************************************************************************
-                // Get the additional swtc_user properties; user's timestamp and timezone.
-                // SWTC ********************************************************************************
-                list($this->timestamp, $this->timezone) = $this->set_timestamp();
-
-                // SWTC ********************************************************************************
-                // Copy this object to $SESSION->SWTC->USER.
-                // SWTC ********************************************************************************
-                // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
-                $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
-                // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-                // print_object($this);		// 10/16/20 - SWTC
-            } else {
-                // SWTC ********************************************************************************
-                // Copy $SESSION->SWTC->USER to this object.
-                // SWTC ********************************************************************************
-                // print_object("In swtc_user __construct; did I get here 4");		// 10/16/20 - SWTC
-                $tmp = $SESSION->SWTC->USER;
-                $this->userid = $tmp->userid;
-                $this->username = $tmp->username;
-                $this->user_access_type = $tmp->user_access_type;
-                $this->portfolio = $tmp->portfolio;
-                $this->roleshortname = $tmp->roleshortname;
-                $this->roleid = $tmp->roleid;
-                $this->categoryids = $tmp->categoryids;
-                $this->capabilities = $tmp->capabilities;
-                $this->relateduser = $tmp->relateduser;
-                $this->cohortnames = $tmp->cohortnames;
-                $this->groupname = $tmp->groupname;
-                $this->geoname = $tmp->geoname;
-                $this->groupnames = $tmp->groupnames;
-                $this->user_access_type2 = $tmp->user_access_type2;
-
-                // SWTC ********************************************************************************
-                // User always gets a new timestamp and timezone.
-                // SWTC ********************************************************************************
-                list($this->timestamp, $this->timezone) = $this->set_timestamp();
-
-                // print_object("In IS set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-                // print_object($this);		// 10/16/20 - SWTC
-            }
-        }
-
+        // SWTC ********************************************************************************
+        // Copy this object to $SESSION->SWTC->USER.
+        // SWTC ********************************************************************************
+        // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
+        // $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
+        // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
+        // print_object($this);		// 10/16/20 - SWTC
         // print_object("About to leave swtc_user __construct; about to print SESSION->SWTC");		// 10/20/20 - SWTC
         // print_object($SESSION->SWTC);      // 10/20/20 - SWTC
     }
@@ -306,8 +256,11 @@ class swtc_user {
      * 10/14/20 - Initial writing.
      *
      **/
-    public function get_user() {
-        $swtc_user = new swtc_user;
+    public function get_user($user) {
+        // $swtc_user = new swtc_user;      // 10/24/20
+        $swtc_user = new swtc_user($user);
+        // print_object("In swtc_user.get_user; about to print swtc_user");
+        // print_object($swtc_user);
         return $swtc_user;
     }
 
@@ -325,6 +278,10 @@ class swtc_user {
 
     public function get_capabilities() {
         return $this->capabilities;
+    }
+
+    public function get_portfolio() {
+        return $this->portfolio;
     }
 
     /**
@@ -1248,7 +1205,7 @@ class swtc_user {
      * @param N/A
      *
      * @return $array   The catlist array.
-     * @return $array   An array of values used to set $SESSION->EBGLMS->USER.
+     * @return $array   An array of values used to set $SESSION->SWTC->USER.
      *
      *
      * History:
@@ -1279,9 +1236,9 @@ class swtc_user {
         // 07/12/18 - Added check if swtc_user->relateduser is set. If so, use that user information to determine access.
         //                  Note that no switching of users below should be necessary.
         // SWTC ********************************************************************************
-        if (isset($SESSION->EBGLMS->USER->relateduser)) {
-            $swtc_user = $SESSION->EBGLMS->USER->relateduser;
-            $user_access_type = $SESSION->EBGLMS->USER->relateduser->user_access_type;
+        if (isset($SESSION->SWTC->USER->relateduser)) {
+            $swtc_user = $SESSION->SWTC->USER->relateduser;
+            $user_access_type = $SESSION->SWTC->USER->relateduser->user_access_type;
             $messages[] = "Lenovo ********************************************************************************.";
             $messages[] = "Entering swtc_lib_locallib.php. ===3.get_user_access.enter.";
             $messages[] = "swtc_user->relateduser is set; the userid that will be used throughout get_user_access is :<strong>$swtc_user->userid</strong>.";
@@ -1293,8 +1250,8 @@ class swtc_user {
             $messages[] = "swtc_user->relateduser is NOT set; the userid that will be used throughout get_user_access is :<strong>$swtc_user->userid</strong>.";
             $messages[] = "swtc_user->relateduser is NOT set; the username that will be used throughout get_user_access is :<strong>$swtc_user->username</strong>.";
     		$messages[] = "swtc_user->relateduser is NOT set; the user_access_type is :<strong>$swtc_user->user_access_type</strong>.";
-            $swtc_user = $SESSION->EBGLMS->USER;
-            $user_access_type = $SESSION->EBGLMS->USER->user_access_type;
+            $swtc_user = $SESSION->SWTC->USER;
+            $user_access_type = $SESSION->SWTC->USER->user_access_type;
         }
         // SWTC ********************************************************************************.
 
@@ -1387,10 +1344,10 @@ class swtc_user {
         // Switch on the users access type.
         //
         // Sets variables:
-    	//			$swtc_user->roleshortname								The actual name of the role the user has.
-        //			$swtc_user->portfolio								        The name of the portfolio the user has access to.
-        //			$swtc_user->categoryids								    An array of category ids the user has access to.
-        //			$swtc_user->capabilities								    An array of capabilities the user has.
+    	//			$swtc_user->roleshortname     The actual name of the role the user has.
+        //			$swtc_user->portfolio      The name of the portfolio the user has access to.
+        //			$swtc_user->categoryids    An array of category ids the user has access to.
+        //			$swtc_user->capabilities   An array of capabilities the user has.
         //
         // SWTC ********************************************************************************
 
@@ -1401,7 +1358,7 @@ class swtc_user {
 
     		if (stripos($user_access_type, get_string('role_lenovo_admin', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_lenovo_administrator', 'local_swtc');
-    			$portfolio = get_string('portfolio_lenovo', 'local_swtc');
+    			$portfolio = get_string('lenovo_portfolio', 'local_swtc');
 
     			list($categoryids[], $capabilities[]) = $this->get_portfolio_name(get_string('lenovointernal_portfolio', 'local_swtc'), $cats);
 
@@ -1413,10 +1370,10 @@ class swtc_user {
 
     		} else if (stripos($user_access_type, get_string('role_lenovo_inst', 'local_swtc')) !== false) {
     				$roleshortname = get_string('role_lenovo_instructor', 'local_swtc');
-    				$portfolio = get_string('portfolio_lenovo', 'local_swtc');
+    				$portfolio = get_string('lenovo_portfolio', 'local_swtc');
     		} else if (stripos($user_access_type, get_string('role_lenovo_stud', 'local_swtc')) !== false) {
     				$roleshortname = get_string('role_lenovo_student', 'local_swtc');
-    				$portfolio = get_string('portfolio_lenovo', 'local_swtc');
+    				$portfolio = get_string('lenovo_portfolio', 'local_swtc');
     		}
 
     		// Search for category name in cats array. When found, load the category id values.
@@ -1444,7 +1401,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_av_gtp', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_gtp', 'local_swtc');
+    		$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
     		if (stripos($user_access_type, get_string('role_gtp_siteadmin', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_gtp_siteadministrator', 'local_swtc');
@@ -1466,7 +1423,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_im_gtp', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_gtp', 'local_swtc');
+    		$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
     		if (stripos($user_access_type, get_string('role_gtp_siteadmin', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_gtp_siteadministrator', 'local_swtc');
@@ -1488,7 +1445,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_lq_gtp', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_gtp', 'local_swtc');
+    		$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
     		if (stripos($user_access_type, get_string('role_gtp_siteadmin', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_gtp_siteadministrator', 'local_swtc');
@@ -1510,7 +1467,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_ibm_stud', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_ibm', 'local_swtc');
+    		$portfolio = get_string('ibm_portfolio', 'local_swtc');
     		$roleshortname = get_string('role_ibm_student', 'local_swtc');
 
     		// Search for category name in cats array. When found, load the category id value.
@@ -1525,7 +1482,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_serviceprovider_stud', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_serviceprovider', 'local_swtc');
+    		$portfolio = get_string('serviceprovider_portfolio', 'local_swtc');
     		$roleshortname = get_string('role_serviceprovider_student', 'local_swtc');
 
     		// Search for category name in cats array. When found, load the category id values.
@@ -1669,7 +1626,7 @@ class swtc_user {
     	// SWTC ********************************************************************************
     	} elseif (stripos($user_access_type, get_string('access_selfsupport_stud', 'local_swtc')) !== false) {
 
-    		$portfolio = get_string('portfolio_none', 'local_swtc');
+    		$portfolio = get_string('none_portfolio', 'local_swtc');
     		$roleshortname = get_string('role_selfsupport_student', 'local_swtc');
 
     		list($categoryids[], $capabilities[]) = $this->get_portfolio_name(get_string('sitehelp_portfolio', 'local_swtc'), $cats);
@@ -1855,7 +1812,7 @@ class swtc_user {
                 // 'GTP Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('gtp_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_gtp_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_gtp_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1880,7 +1837,7 @@ class swtc_user {
     			// 'Lenovo Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('lenovo_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_lenovo_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_lenovo_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1900,7 +1857,7 @@ class swtc_user {
                 //                  will be the same (i.e. will help in transition).
                 // SWTC ********************************************************************************
                 case get_string('ibm_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_ibm_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_ibm_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1914,7 +1871,7 @@ class swtc_user {
     			// 'ServiceProvider Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('serviceprovider_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_serviceprovider_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_serviceprovider_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1928,7 +1885,7 @@ class swtc_user {
     			// 'Lenovo Internal Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('lenovointernal_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_lenovointernal_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_lenovointernal_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1942,7 +1899,7 @@ class swtc_user {
     			// 'Maintech Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('maintech_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_maintech_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_maintech_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1956,7 +1913,7 @@ class swtc_user {
     			// 'Lenovo Shared Resources (Master)' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('lenovosharedresources_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_lenovosharedresources', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_lenovosharedresources', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1970,7 +1927,7 @@ class swtc_user {
     			// 'ASP Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('asp_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_asp_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_asp_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -1984,7 +1941,7 @@ class swtc_user {
     			// 'PremierSupport Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('premiersupport_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_premiersupport_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_premiersupport_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -2002,7 +1959,7 @@ class swtc_user {
     			// 'ServiceDelivery Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('servicedelivery_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_servicedelivery_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_servicedelivery_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -2020,7 +1977,7 @@ class swtc_user {
     			// 'Site Help Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('sitehelp_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_sitehelp_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_sitehelp_portfolio', 'local_swtc');
 
                     // Load all the roleids. Remember that ALL roles have access to this portfolio.
                     foreach ($roles as $role) {
@@ -2066,7 +2023,7 @@ class swtc_user {
     			// 'Curriculums Portfolio' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('curriculums_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_ebg_access_curriculums_portfolio', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_curriculums_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {
@@ -2189,7 +2146,7 @@ class swtc_user {
      *
      * @param The portfolio name to look for and the list of all portfolios.
      *
-     * @return $tmp   The catlist array used to set $SESSION->EBGLMS->USER.
+     * @return $tmp   The catlist array used to set $SESSION->SWTC->USER.
      * @return string   The capability.
      *
      *
@@ -2301,7 +2258,7 @@ class swtc_user {
         //****************************************************************************************.
         // PremierSupport administrators
         //****************************************************************************************.
-    	} else if (preg_match(get_string('$access_premiersupport_pregmatch_admin', 'local_swtc'), $user_access_type)) {
+    	} else if (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $user_access_type)) {
     		// If the portfolio is PremierSupport, continue with the admin access.
     		if (stripos($cat['catname'], get_string('premiersupport_portfolio', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_premiersupport_administrator', 'local_swtc');
@@ -2314,7 +2271,7 @@ class swtc_user {
         //****************************************************************************************.
         // PremierSupport GEO administrators
         //****************************************************************************************.
-        } else if (preg_match(get_string('$access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $user_access_type)) {
+        } else if (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $user_access_type)) {
     		// If the portfolio is PremierSupport, continue with the GEO admin access.
     		if (stripos($cat['catname'], get_string('premiersupport_portfolio', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_premiersupport_geoadministrator', 'local_swtc');
@@ -2327,7 +2284,7 @@ class swtc_user {
         //****************************************************************************************.
         // PremierSupport site administrators
         //****************************************************************************************.
-        } else if (preg_match(get_string('$access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $user_access_type)) {
+        } else if (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $user_access_type)) {
     		// If the portfolio is PremierSupport, continue with the site admin access.
     		if (stripos($cat['catname'], get_string('premiersupport_portfolio', 'local_swtc')) !== false) {
     			$roleshortname = get_string('role_premiersupport_siteadministrator', 'local_swtc');

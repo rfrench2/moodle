@@ -38,38 +38,140 @@
  *
  */
 
-$capabilities = array(
-	/**
-	* Portfolio One section.
-	*/
-	'local/swtc:swtc_access_one_portfolio' => array(
-        'riskbitmask' => RISK_CONFIG,
-        'captype' => 'write',
-		'contextlevel' => CONTEXT_COURSECAT
-//		'clonepermissionsfrom' => 'moodle/category:viewhiddencategories'
-    ),
-	/**
-	 * Portfolio Two section.
-	 */
-	'local/swtc:swtc_access_two_portfolio' => array(
-		'riskbitmask' => RISK_CONFIG,
-		'captype' => 'write',
-		'contextlevel' => CONTEXT_COURSECAT
-	),
-    /**
-	 * Site Help section.
-	 */
-	'local/swtc:swtc_access_sitehelp_portfolio' => array(
-		'riskbitmask' => RISK_CONFIG,
-		'captype' => 'write',
-		'contextlevel' => CONTEXT_COURSECAT
-	),
-	/**
-	 * Curriculums Portfolio section.
-	 */
-	'local/swtc:swtc_access_curriculums_portfolio' => array(
-		'riskbitmask' => RISK_CONFIG,
-		'captype' => 'write',
-		'contextlevel' => CONTEXT_COURSECAT
-	),
-);
+ $capabilities = array(
+ 	/**
+ 	* GTP section.
+ 	*/
+ 	'local/swtc:swtc_access_gtp_portfolio' => array(
+         'riskbitmask' => RISK_CONFIG,
+         'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ //		'clonepermissionsfrom' => 'moodle/category:viewhiddencategories'
+     ),
+ 	/**
+ 	 * Lenovo section.
+ 	 */
+ 	'local/swtc:swtc_access_lenovo_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * IBM section.
+ 	 */
+ 	'local/swtc:swtc_access_ibm_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * ServiceProvider section.
+ 	 */
+ 	'local/swtc:swtc_access_serviceprovider_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * Lenovo Internal section.
+ 	 */
+ 	'local/swtc:swtc_access_lenovointernal_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * Lenovo Shared Resources (Master) section.
+ 	 */
+ 	'local/swtc:swtc_access_lenovosharedresources' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * Maintech section.
+ 	 */
+ 	'local/swtc:swtc_access_maintech_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * ASP section.
+ 	 */
+ 	'local/swtc:swtc_access_asp_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * PremierSupport section.
+ 	 */
+ 	'local/swtc:swtc_access_premiersupport_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * ServiceDelivery section.
+ 	 */
+ 	'local/swtc:swtc_access_servicedelivery_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * Site Help section.
+ 	 */
+ 	'local/swtc:swtc_access_sitehelp_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+ 	/**
+ 	 * Curriculums Portfolio section.
+ 	 */
+ 	'local/swtc:swtc_access_curriculums_portfolio' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * View curriculums section.
+ 	 */
+ 	'local/swtc:swtc_view_curriculums' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * View management reports section.
+ 	 */
+ 	'local/swtc:swtc_view_mgmt_reports' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * View student reports section.
+ 	 */
+ 	'local/swtc:swtc_view_stud_reports' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
+     /**
+ 	 * For all PremierSupport users, added custom submit assignment capability.
+ 	 */
+ 	'local/swtc:swtc_mod_assign_submit_premiersupport' => array(
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_MODULE
+ 	),
+     /**
+ 	 * For all ServiceDelivery users, added custom submit assignment capability.
+ 	 */
+ 	'local/swtc:swtc_mod_assign_submit_servicedelivery' => array(
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_MODULE
+ 	),
+ );

@@ -56,8 +56,10 @@ class observer {
      *
      */
     public static function user_loggedin(\core\event\user_loggedin $event) {
-        global $SESSION, $USER;
+        global $USER;
 
+        $swtc_user = swtc_get_user($USER);       // 10/24/20
+        $swtc_user->assign_user_role($event);     // 10/17/20
         // print_object("in observer user_loggedin; about to print __namespace__");        // SWTC-debug
         // print_object(__NAMESPACE__);        // SWTC-debug
         // print_object("in observer user_loggedin; about to print backtrace");        // SWTC-debug
@@ -151,14 +153,13 @@ class observer {
 
         // After including swtc_userlib.
         // The following yeilds:
-        //
-        $swtc_user = swtc_get_user($USER);
+        // WORKS! WORKS! WORKS! WORKS! WORKS! WORKS! WORKS!
+        // $swtc_user = swtc_get_user($USER);
 
         // print_object("in observer user_loggedin; about to print swtc_user");        // SWTC-debug
     	// print_object($swtc_user);		// 10/16/20 - SWTC
         //  WORKS! WORKS! WORKS! WORKS! WORKS! WORKS!
-        // $debug = new swtc_debug();        // 10/19/20 - SWTC
-        $swtc_debug = swtc_set_debug();
+        // $swtc_debug = swtc_set_debug();
         // print_object("in observer user_loggedin; about to print swtc_debug");        // SWTC-debug
     	// print_object($swtc_debug);
     	// die;		// 10/16/20 - SWTC
@@ -167,8 +168,6 @@ class observer {
         // print_object($SESSION);      // SWTC-debug
         // die;     // SWTC-debug
         // require_once($CFG->dirroot . '/local/swtc/lib/locallib.php');        // 10/17/20
-
-        // local_swtc_assign_user_role($event);     // 10/17/20
     }
 
     /**
@@ -183,8 +182,10 @@ class observer {
      *
      */
     public static function user_loggedinas(\core\event\user_loggedinas $event) {
+        global $USER;
 
-        local_swtc_assign_user_role($event);
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -199,7 +200,10 @@ class observer {
      *
      */
     public static function user_updated(\core\event\user_updated $event) {
-        local_swtc_assign_user_role($event);
+        global $USER;
+
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -214,7 +218,10 @@ class observer {
      *
      */
     public static function user_created(\core\event\user_created $event) {
-        local_swtc_assign_user_role($event);
+        global $USER;
+
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -229,6 +236,7 @@ class observer {
      *
      */
     public static function course_viewed(\core\event\course_viewed $event) {
+        global $USER;
 
         // print_object($event);
         // Lenovo ********************************************************************************
@@ -239,9 +247,10 @@ class observer {
         //         // featuredcourses_block_course_slider_dynamically_add($event->courseid);
         //     }
         // }
-        return;     // 10/17/20 - SWTC
+        // return;     // 10/17/20 - SWTC
         if (isloggedin()) {     // 10/14/20
-            local_swtc_assign_user_role($event);
+            $swtc_user = swtc_get_user($USER);
+            $swtc_user->assign_user_role($event);
         }
     }
 
@@ -257,10 +266,12 @@ class observer {
      *
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
+        global $USER;
 
         // print_object("In observer:user_enrolment_created. About to print event");
         // print_object($event);
-        local_swtc_assign_user_role($event);
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -275,7 +286,10 @@ class observer {
      *
      */
     public static function role_assigned(\core\event\role_assigned $event) {
-        local_swtc_assign_user_role($event);
+        global $USER;
+
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -290,7 +304,10 @@ class observer {
      *
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
-        local_swtc_assign_user_role($event);
+        global $USER;
+
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -305,7 +322,10 @@ class observer {
      *
      */
     public static function user_enrolment_updated(\core\event\user_enrolment_updated $event) {
-        local_swtc_assign_user_role($event);
+        global $USER;
+
+        $swtc_user = swtc_get_user($USER);
+        $swtc_user->assign_user_role($event);
     }
 
     /**
@@ -320,6 +340,7 @@ class observer {
      *
      */
     public static function course_updated(\core\event\course_updated $event) {
+        global $USER;
 
         // print_object($event);
         // Lenovo ********************************************************************************
@@ -344,6 +365,7 @@ class observer {
      *
      */
     public static function course_created(\core\event\course_created $event) {
+        global $USER;
 
         // print_object($event);
         // Lenovo ********************************************************************************
@@ -368,6 +390,7 @@ class observer {
      *
      */
     public static function observe_all($event) {
+        global $USER;
         // global $SESSION;
 
         // Only print for debugging.
