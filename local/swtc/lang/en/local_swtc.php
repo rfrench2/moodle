@@ -231,6 +231,7 @@ $string['premiersupport_portfolio'] = 'PremierSupport Portfolio';
 $string['servicedelivery_portfolio'] = 'ServiceDelivery Portfolio';
 $string['sitehelp_portfolio'] = 'Site Help Portfolio';
 $string['curriculums_portfolio'] = 'Curriculums Portfolio';
+$string['practicalactivities_portfolio'] = 'PracticalActivities Portfolio';
 $string['none_portfolio'] = 'PORTFOLIO NONE';
 
 

@@ -81,6 +81,9 @@ require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 function local_swtc_extend_navigation(global_navigation $nav) {
 	global $USER;
 
+	// SWTC - Debug 10/30/20
+	return;
+
 	// SWTC ******************************************************************************
 	// 10/14/20 - If we're not logged in, return.
 	// SWTC ******************************************************************************
@@ -289,6 +292,9 @@ function local_swtc_extend_navigation(global_navigation $nav) {
  **/
 function local_swtc_extend_settings_navigation(settings_navigation $settingsnav, context $context) {
 	global $USER;
+
+	// SWTC - Debug 10/30/20
+	return;
 
 	// SWTC ******************************************************************************
 	// 10/14/20 - If we're not logged in, return.
@@ -876,6 +882,9 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 		return;
 	}
 
+	// SWTC - Debug 10/30/20
+	return;
+
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
     $swtc_user = swtc_get_user($USER);
@@ -1459,7 +1468,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 }
 
 function local_swtc_extend_navigation_category_settings(navigation_node $parentnode, context_coursecat $context) {
-    global $CFG, $SESSION;
+    global $USER;
 
 	// SWTC ******************************************************************************
 	// 10/14/20 - If we're not logged in, return.
@@ -1468,53 +1477,13 @@ function local_swtc_extend_navigation_category_settings(navigation_node $parentn
 		return;
 	}
 
-    // Local temporary EBGLMS variables.
-    $swtc_user = null;
+	// SWTC - Debug 10/30/20
+	return;
 
-    $debug = null;          // 07/18/18 - To make sure debug is NOT set at the start.
-
-    // SWTC ********************************************************************************
-    // Access to the top-level $SWTC global variables (it should ALWAYS be available; set in /lib/swtc.php).
-    //      To use: if (isset($SESSION->SWTC))
-    // SWTC ********************************************************************************
-    if (isset($SESSION->SWTC)) {
-        require_once($CFG->dirroot.'/local/swtc/lib/swtclib.php');
-        // Set all the EBGLMS variables that will be used.
-        $swtc_user = $SESSION->SWTC->USER;
-
-        // Remember - PremierSupport and ServiceDelivery managers and admins have special access.
-
-    }
-
-    // SWTC ********************************************************************************
-    // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
-    //      (set in local/swtc/settings.php) to enable debugging from this point forward.
-    //
-    // Setup the second-level $DEBUG global variable only if $debug is available.
-    //      To use: $debug = $SESSION->SWTC->DEBUG;
-    //
-    //  Note: swtc_debug.php includes the "require_once($CFG->dirroot.'/local/swtc/lib/debuglib.php');" call.
-    // SWTC ********************************************************************************
-    if (get_config('local_swtc', 'swtcdebug')) {
-        $debug = new stdClass();
-
-        // SWTC ********************************************************************************
-        // If debugging is set, link debuglib (so that all variables and functions are available).
-        //      Note: After including "debuglib.php", the global DEBUG flag will be set.
-        // SWTC ********************************************************************************
-        require_once($CFG->dirroot.'/local/swtc/lib/debuglib.php');
-
-        // If the local debug flag is set, check to see if the global DEBUG flag has already been set.
-        //  If the global DEBUG is set, set a local reference to it.
-        if (debug_authorized_user($swtc_user->username)) {
-            $debug = swtc_set_debug();
-        } else {
-            // TODO: Local debug is set (so we want to debug), but GLOBAL debug is not for some reason. Not sure what to do here.
-            $debug = null;
-        }
-    } else {
-        $debug = null;
-    }
+	//****************************************************************************************
+	// SWTC swtc_user and debug variables.
+    $swtc_user = swtc_get_user($USER);
+	$debug = swtc_set_debug();
 
     // SWTC ********************************************************************************
     // If debugging, output header information.

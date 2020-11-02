@@ -188,7 +188,7 @@ class swtc_user {
      *
     */
     public function __construct($user) {
-        global $SESSION;
+
 
         // print_object("In swtc_user __construct");		// 10/18/20 - SWTC
         // print_object("In swtc_user __construct; about to print backtrace");		// 10/16/20 - SWTC
@@ -333,16 +333,19 @@ class swtc_user {
     function assign_user_role($eventdata) {
     	global $USER, $DB, $COURSE, $SESSION;
 
-      	// SWTC ******************************************************************************
+        // SWTC - Debug 10/30/20
+        // return;
+
+        // SWTC ******************************************************************************
       	// SWTC LMS swtc_user and debug variables.
       	$swtc_user = swtc_get_user($USER, $eventdata->relateduserid);
       	$debug = swtc_set_debug();
 
     	// Other Lenovo variables.
-      	$user_related = null;           // Only set IF working with a related user (i.e. swtc_get_relateduser is called).
-      	$eventname = '';						// The event / message that has been triggered.
-    	$catlist = array();					// A list of all the top-level categories defined (returned from get_user_access).
-      	$tmp_user = new stdClass();    // Hold return values from get_user_access.
+        $user_related = null;       // Only set IF working with a related user (i.e. swtc_get_relateduser is called).
+      	$eventname = '';             // The event / message that has been triggered.
+    	$catlist = array();			// A list of all the top-level categories defined (returned from get_user_access).
+      	$tmp_user = new stdClass();  // Hold return values from get_user_access.
         // SWTC ********************************************************************************
 
     	if (isset($debug)) {
@@ -373,29 +376,22 @@ class swtc_user {
     		return;
     	}
 
-        // SWTC ********************************************************************************
-        // Removed a section of code, comments, or both. See archived versions of module for information.
-        // SWTC ********************************************************************************
-
     	// Load the event name (if it's needed later).
     	$eventname = $eventdata->eventname;
-
-    	if (isset($debug)) {
-    		$messages[] = "eventname is :<strong>$eventname</strong>.";
-            $debug->logmessage($messages, 'both');
-            unset($messages);
-    	}
 
         // SWTC ********************************************************************************
     	// Trick to refresh the users roles without logging out and logging in again.
     	//		If the user is already logged OUT and their role changes, they get an updated view next time they login.
-    	//		However, if the user is already logged IN and their role changes, we must reload a web page for the new role assignments to take affect.
-    	//			This means capturing the course_viewed message, calling purge_all_caches, and immediately returning.
+    	//		However, if the user is already logged IN and their role changes, we must reload a web page
+    	//		   for the new role assignments to take affect. This means capturing the course_viewed message,
+    	//		   calling purge_all_caches, and immediately returning.
     	//
     	// Will tell user to click on the home page link to refresh their access, but viewing any course will work.
-    	//		In fact, just clicking refresh in the web browser should work (have not testing will all browsers in all circumstances).
-    	// 09/26/16 - Since we are now putting activities on the front page, we cannot just return anymore (so that access restrictions can be set).
-    	//							If the user is viewing any course other than the front page, purge_all_caches and return.
+    	//		In fact, just clicking refresh in the web browser should work (have not testing will all
+    	//		   browsers in all circumstances).
+    	// 09/26/16 - Since we are now putting activities on the front page, we cannot just return anymore
+    	//             (so that access restrictions can be set). If the user is viewing any course other than
+    	//             the front page, purge_all_caches and return.
     	// if (($eventname == '\core\event\course_viewed') and ($eventdata->courseid != 1) ) {
         // SWTC ********************************************************************************
         if ($eventname == '\core\event\course_viewed') {
@@ -441,21 +437,18 @@ class swtc_user {
     	}
 
         // SWTC ********************************************************************************
-        // Removed a section of code, comments, or both. See archived versions of module for information.
-        // SWTC ********************************************************************************
-
-        // SWTC ********************************************************************************
     	// Check to see if the administrator is working on behalf of a user, or the actual user is doing something.
-    	//		Important! If an administrator is working on behalf of a user (for example, updating the user's profile or creating a new user),
-    	//			$eventdata->relateduserid will be the userid of the user and the userid the rest of the plug-in should work with.
-    	//			If a "regular" user is doing something, $eventdata->relateduserid will be empty.
+    	//		Important! If an administrator is working on behalf of a user (for example, updating the
+    	//		   user's profile or creating a new user), $eventdata->relateduserid will be the userid of
+    	//		   the user and the userid the rest of the plug-in should work with. If a "regular" user is
+    	//		   doing something, $eventdata->relateduserid will be empty.
     	//
     	// Sets variables:
-    	//			$swtc_user->userid								The userid of the "actual" user (not the administrator).
-        //			$swtc_user->username							The username of the "actual" user (not the administrator).
-    	//			$swtc_user->user_access_type			The most important variable; triggers all the rest that follows.
+    	//			$swtc_user->userid		The userid of the "actual" user (not the administrator).
+        //			$swtc_user->username	The username of the "actual" user (not the administrator).
+    	//			$swtc_user->user_access_type	The most important variable; triggers all the rest that follows.
         //          $swtc_user->timestamp
-        //			$swtc_user->user_access_type2     // @02
+        //			$swtc_user->user_access_type2
         //
         // 07/12/18 - Added call to swtc_get_relateduser.
     	// SWTC ********************************************************************************
@@ -644,15 +637,12 @@ class swtc_user {
             unset($messages);
     	}
 
-        // SWTC ********************************************************************************
-        // Removed a section of code, comments, or both. See archived versions of module for information.
-        // SWTC ********************************************************************************
-
-
     	// SWTC ********************************************************************************
-        // For each of the messages being captured, get the user access type, role,  and category id they SHOULD have access to (function below).
+        // For each of the messages being captured, get the user access type, role,  and category id they
+        //      SHOULD have access to (function below).
     	//
-    	//			The $swtc_user is returned. It is a multidimensional array that has the following format (Note: roleid will be loaded later):
+    	//	    The $swtc_user is returned. It is a multidimensional array that has the following format
+    	//	        (Note: roleid will be loaded later):
     	//			$access = array(
     	//					'portfolio'=>'',
     	//					'roleshortname'=>'',
@@ -662,8 +652,8 @@ class swtc_user {
     	//			);
     	//
         // SWTC ********************************************************************************
-        // No need to return access (values set directly in EBGLMS) nor allroles (called again in swtc_load_roleids).
-        //  No need to send $swtc_user->user_access_type as that is part of EBGLMS.
+        // No need to return access (values set directly in SWTC) nor allroles (called again in swtc_load_roleids).
+        //  No need to send $swtc_user->user_access_type as that is part of SWTC.
         //      Also update timestamp.
         // SWTC ********************************************************************************
         list($catlist, $tmp_user) = $this->get_user_access();
@@ -711,34 +701,40 @@ class swtc_user {
     	}
 
         // SWTC ********************************************************************************
-    	// Special case check - For each course that has self-enrollment enabled, the Administrator defines a default role for each
-        //      self-enrollment instance.
-    	//		In most cases, the default role is fine (students enrolling as students). However, in some cases, the user's role in course must be changed
-    	//		(for example, student changing to instructor).
+    	// Special case check - For each course that has self-enrollment enabled, the Administrator
+    	//     defines a default role for each self-enrollment instance.
+    	//		In most cases, the default role is fine (students enrolling as students). However,
+    	//		   in some cases, the user's role in course must be changed (for example, student
+    	//		   changing to instructor).
     	//
     	//	If the user is enrolling in a course (self-enrollment):
-    	//		Check to see if the current user is student (and not an Administrator acting on behalf of the student). In other words, if an Administrator is
-    	//					enrolling the user, whatever role the Administrator gives the user is fine).
-    	//		Check to see if they are enrolled as the correct type of user (for example, for a course in the IBM portfolio, the self-enrollment default role
-    	//					is 'IBM-student'). However, a user with a role of 'Lenovo-instructor' can enroll in the course. So, the 'Lenovo-instructor' role must be
-    	//					assigned and the 'IBM-student' role must be unassigned.
-    	//		In other words, if the user's role in the course is different than what is in their user profile ("Accesstype"), assign correct
-        //          role / unassign incorrect role.
+    	//		Check to see if the current user is student (and not an Administrator acting on behalf
+    	//		   of the student). In other words, if an Administrator is enrolling the user, whatever
+    	//		   role the Administrator gives the user is fine).
+    	//		Check to see if they are enrolled as the correct type of user (for example, for a course
+    	//		   in the IBM portfolio, the self-enrollment default role is 'IBM-student'). However, a
+    	//		   user with a role of 'Lenovo-instructor' can enroll in the course. So, the
+    	//		   'Lenovo-instructor' role must be assigned and the 'IBM-student' role must be unassigned.
+    	//		In other words, if the user's role in the course is different than what is in their user
+    	//		   profile ("Accesstype"), assign correct role / unassign incorrect role.
     	//
-    	//	Important - Any roles unassigned or assigned in the 'main' course flow to any metacourses linked to the 'main' course. In other words,
-    	//			any roles that need to be unassigned or assigned must be done in the 'main' course only (not in the metacourse) - no need to do anything
-    	//			in any metacourses.
+    	//	Important - Any roles unassigned or assigned in the 'main' course flow to any metacourses linked to
+    	//	    the 'main' course. In other words, any roles that need to be unassigned or assigned must be done
+    	//	    in the 'main' course only (not in the metacourse) - no need to do anything in any metacourses.
     	//
-    	//		Notes:
-    	//			Remember to check if the current user is the student (and not an Administrator acting on behalf of the student).
-    	//			Remember that once the student self-enrolls in a course, if a metalink exists to that course, an automatic enrollment is processed
-        //              for each metacourse (in other words, the student does NOT enroll in any metacourses). Because two classes are enrolled, two
-        //              '\core\event\role_assigned' messages are generated - one for each course.
-    	//			Check to see which course the '\core\event\role_assigned' message is associated with. If it is for the 'main' course, continue. If it is for any
-    	//				metacourses, ignore them.
-    	//			Remember that the user cannot enroll themself in the 'Shared resources (Master)' course (because enrollment is via a course metalink).
-        //              Therefore, after checking, if the user is not enrolled in course, we must return without doing anything and the user will get an
-        //              error.***not sure of this***
+    	// Notes:
+    	//     Remember to check if the current user is the student (and not an Administrator acting on
+    	//         behalf of the student).
+    	//     Remember that once the student self-enrolls in a course, if a metalink exists to that course,
+    	//         an automatic enrollment is processed for each metacourse (in other words, the student does
+    	//         NOT enroll in any metacourses). Because two classes are enrolled, two
+        //          '\core\event\role_assigned' messages are generated - one for each course.
+    	//     Check to see which course the '\core\event\role_assigned' message is associated with. If it is
+    	//         for the 'main' course, continue. If it is for any metacourses, ignore them.
+    	//     Remember that the user cannot enroll themself in the 'Shared resources (Master)' course
+    	//         (because enrollment is via a course metalink). Therefore, after checking, if the user is
+    	//         not enrolled in course, we must return without doing anything and the user will get an
+    	//         error.***not sure of this***
     	//
         // SWTC ********************************************************************************
     	if ($eventname == '\core\event\role_assigned') {
@@ -888,22 +884,22 @@ class swtc_user {
     	}
 
         // SWTC ********************************************************************************
-    	//	At this point, we've determined all the roles defined in the system (above), all the categories in the system (above), and (most importantly)
-    	// 			the role the user 'should ' have in the category.
+    	// At this point, we've determined all the roles defined in the system (above), all the categories
+    	//     in the system (above), and (most importantly) the role the user 'should ' have in the category.
     	//
-    	// Part 4 of 4 - At this point, we've determined all the roles defined in the system, all the categories in the system, and (most importantly)
-    	// 			the role the user 'should' have in the category. Nothing left to do, but check to see if the user really does have that capability
-        //              in that category.
-    	//			If not, assign it to them. Search for name of capability and set the master capability variable.
-    	//			If they have a role in a category they shouldn't, remove them from the role.
+    	// Part 4 of 4 - At this point, we've determined all the roles defined in the system, all the categories
+    	//     in the system, and (most importantly) the role the user 'should' have in the category. Nothing
+    	//     left to do, but check to see if the user really does have that capability in that category.
+    	//	   If not, assign it to them. Search for name of capability and set the master capability variable.
+    	//     If they have a role in a category they shouldn't, remove them from the role.
     	//
-    	//			Logic flow is the following:
-    	//				For each of the top-level categories (all top-level categories are checked each time)
-    	//					Should user have access? (if 'catname' == access['catname or if 'catname' == ALL)
-    	//						If yes
-    	//							Add the capability
-    	//						If no
-    	//							Remove the capability
+    	//     Logic flow is the following:
+    	//         For each of the top-level categories (all top-level categories are checked each time)
+    	//             Should user have access? (if 'catname' == access['catname or if 'catname' == ALL)
+    	//                 If yes
+    	//                     Add the capability
+    	//                 If no
+    	//                     Remove the capability
     	//
     	//	Remember! $catlist array format is below (defined in function get_user_access):
     	//			Array
@@ -931,12 +927,14 @@ class swtc_user {
     	//
     	// Main loop ("For each of the top-level categories defined on the site...").
         //
-        //  07/11/18 - Changed PremierSupport roles to only have PremierSupport-student roles outside the PremierSupport portfolio
-        //                      (even administrators and managers). This is to prevent PremierSupport admins and mgrs from having more access
-        //                      to a course when they are enrolled in a course outside the PremierSupport portfolio.
-        // 07/12/18 - Remember to skip roles returned with contextid = 1 (which is System context); added check if user_related is set.
-        //                  If so, use that user information to determine access; to make sure all changes are made, changing swtc_user to temp_user
-        //                  (since no information is saved in this section); remember to unset SESSION->SWTC->USER->relateduser at the end.
+        // 07/11/18 - Changed PremierSupport roles to only have PremierSupport-student roles outside the
+        //      PremierSupport portfolio (even administrators and managers). This is to prevent
+        //      PremierSupport admins and mgrs from having more access to a course when they are enrolled
+        //      in a course outside the PremierSupport portfolio.
+        // 07/12/18 - Remember to skip roles returned with contextid = 1 (which is System context); added check
+        //      if user_related is set. If so, use that user information to determine access; to make sure all
+        //      changes are made, changing swtc_user to temp_user (since no information is saved in this section);
+        //      remember to unset SESSION->SWTC->USER->relateduser at the end.
         // SWTC ********************************************************************************
         if (isset($user_related)) {
             $temp_user = $user_related;
@@ -1190,13 +1188,17 @@ class swtc_user {
     }
 
     // SWTC ********************************************************************************
-    // Get the logged in user customized user profile value 'Accesstype'. Accesstype is  used to determine which portfolio of classes
-    // the user should have access to (in other words, which top-level category they should have access to). Note that this function returns the
-    //	information the user 'should' have access to. What the user actually has access to (and whether they need more or less access) is
-    //  determined above.
-    // 			Important! Case of Accesstype is important. It must match the case defined in Moodle.
-    // 			Returns array: first element portfolio value; second element the user's role shortname (i.e. 'ibm-student' or 'gtp-administrator');
-    //				third element is the top-level category id the user 'should' have access to (checked above).
+    // Get the logged in user customized user profile value 'Accesstype'. Accesstype is used to determine
+    //      which portfolio of classes the user should have access to (in other words, which top-level
+    //      category they should have access to). Note that this function returns the information the
+    //      user 'should' have access to. What the user actually has access to (and whether they need
+    //      more or less access) is determined above.
+    //
+    //  Important! Case of Accesstype is important. It must match the case defined in Moodle.
+    //
+    //  Returns array: first element portfolio value; second element the user's role shortname
+    //      (i.e. 'ibm-student' or 'gtp-administrator'); third element is the top-level category id
+    //      the user 'should' have access to (checked above).
     //
     // SWTC ********************************************************************************
     /**
@@ -1207,7 +1209,6 @@ class swtc_user {
      * @return $array   The catlist array.
      * @return $array   An array of values used to set $SESSION->SWTC->USER.
      *
-     *
      * History:
      *
      * 10/23/20 - Initial writing.
@@ -1216,20 +1217,23 @@ class swtc_user {
     function get_user_access() {
     	global $USER, $SESSION;
 
+        // SWTC - Debug 10/30/20
+        // return;
+
         // SWTC ********************************************************************************.
         // SWTC LMS swtc_user and debug variables.
         $swtc_user = swtc_get_user($USER);
         $debug = swtc_set_debug();
 
         // Other Lenovo variables.
-        $cats = array();						        // A list of all the top-level category information defined (returned to assign_user_role).
+        $cats = array();        // A list of all the top-level category information defined (returned to assign_user_role).
         $temp_user = new stdClass();    // Returned to calling function.
 
         // Temporary variables. Use these during the function and return values.
         $roleshortname = null;
         $portfolio = null;
-        $categoryids = array();		    // A list of all the categories the user should have access to (set in $swtc_user->categoryids).
-        $capabilities = array();		    // A list of all the capabilities the user should have (set in $swtc_user->capabilities).
+        $categoryids = array(); // A list of all the categories the user should have access to (set in $swtc_user->categoryids).
+        $capabilities = array();    // A list of all the capabilities the user should have (set in $swtc_user->capabilities).
         $roleid = null;
 
         // SWTC ********************************************************************************
@@ -1277,13 +1281,15 @@ class swtc_user {
     	}
 
         // SWTC ********************************************************************************
-    	// We already know what the user's role should be (either they have it or need it assigned to them from above).
-        //      And we've loaded all the roles defined in the system (Part 1). However, we don't know the specific roleid ($role->id) assigned
-        //      to that role name. In the $roles array, search for the role ($access[roleshortname]) that the user should have. Once found,
-        //      save the $role->id ($userroleid) in $swtc_user->roleid. Later, we will use this array to list all the other roles the user
-        //      should NOT have and remove them.
+    	// We already know what the user's role should be (either they have it or need it assigned to
+    	//     them from above). And we've loaded all the roles defined in the system (Part 1). However,
+    	//     we don't know the specific roleid ($role->id) assigned to that role name. In the $roles array,
+    	//     search for the role ($access[roleshortname]) that the user should have. Once found,
+        //      save the $role->id ($userroleid) in $swtc_user->roleid. Later, we will use this array to
+        //      list all the other roles the user should NOT have and remove them.
         // SWTC ********************************************************************************
-        // Load all the roles (context is not needed (see below)). The returned value, $roles, is an array that has the following format:
+        // Load all the roles (context is not needed (see below)). The returned value, $roles, is an
+        //      array that has the following format:
     	// 			[11] => stdClass Object
     	//		    (
     	//			        [id] => 11
@@ -1294,18 +1300,18 @@ class swtc_user {
     	//			        [archetype] => teacher
     	//			        ***[localname] => Lenovo-instructor - field not returned using get_all_roles()
     	//			    )
-    	//		 01/23/16 - Don't think the instance is needed: $context = context_coursecat::instance(CONTEXT_COURSECAT);
-    	//		 		Changing role_get_names() to get_all_roles().
-    	//		 			get_all_roles() defined in /lib/accesslib.php. Returns array of all the defined roles (just like role_get_names),
-        //                      except it does not contain the role localname field (that field is added by role_fix_names()). It DOES contain
-        //                      the role shortname field (that we use later). Note: get_all_roles() does NOT need a context to be passed to return
-        //                      all the defined roles (also doesn't matter what type of user that runs it).
+    	//
+    	// 01/23/16 - Don't think the instance is needed: $context = context_coursecat::instance(CONTEXT_COURSECAT);
+    	//		 		Changing role_get_names() to get_all_roles(). get_all_roles() defined in /lib/accesslib.php.
+    	//		 		Returns array of all the defined roles (just like role_get_names), except it does not contain
+    	//		 		the role localname field (that field is added by role_fix_names()). It DOES contain
+        //              the role shortname field (that we use later). Note: get_all_roles() does NOT need a context
+        //              to be passed to return all the defined roles (also doesn't matter what type of user that runs it).
         //
-    	//		09/27/16 - Important! Hidden dependency is that the role name and the role shortname must match!
+    	// 09/27/16 - Important! Hidden dependency is that the role name and the role shortname must match!
         // SWTC ********************************************************************************
     	$roles = get_all_roles();
 
-        // SWTC ********************************************************************************
         $cats = $this->loadcatids($roles);
 
         // SWTC ********************************************************************************
@@ -1323,12 +1329,13 @@ class swtc_user {
 
         // SWTC ********************************************************************************
     	// Determine what portfolio the user should be able to view based on value in access_type
-    	// Important! Since the switch statement is using the EXACT $access_xxx_yyy stirngs for comparison to the Accesstype flag,
-    	//		they must be defined that way in the /lang/en/local_swtc.php file...
+    	//     Important! Since the switch statement is using the EXACT $access_xxx_yyy strings for
+    	//     comparison to the Accesstype flag, they must be defined that way in the
+    	//     /lang/en/local_swtc.php file...
         //
     	// 03/29/16 - Even though all users might use a shared resource, no users should have direct access to
         //                  'Lenovo Shared Resources (Master)' except Lenovo-admins.
-    	//	08/31/16 - Adding Lenovo-stud and Lenovo-inst to Maintech Portfolio.
+    	// 08/31/16 - Adding Lenovo-stud and Lenovo-inst to Maintech Portfolio.
         // SWTC ********************************************************************************
     	if (isset($debug)) {
     		$messages[] = "swtc_user array follows: ";
@@ -2187,6 +2194,9 @@ class swtc_user {
      */
     function change_user_access($cat, &$user) {
         global $DB;
+
+        // SWTC - Debug 10/30/20
+        return;
 
         // SWTC ********************************************************************************.
         // SWTC SWTC swtc_user and debug variables.
