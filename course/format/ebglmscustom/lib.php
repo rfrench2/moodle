@@ -18,13 +18,48 @@
  * This file contains main class for the course format Topic
  *
  * @since     Moodle 2.0
- * @package   format_swtccustom
- * @copyright 2020 SWTC LMS
+ * @package   format_topics
+ * @copyright 2009 Sam Hemelryk
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * History:
+ * @since     Moodle 2.0
+ * @package   format_ebglmscustom
+ * @copyright 2019 Lenovo EBG LMS
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * 10/23/20 - Initial writing.
+ * Lenovo history:
+ *
+ * 03/14/16 - Added 'COURSETYPE_LENOVOINTERNAL' constant; added 'Lenovo Internal Portfolio' option to pull-down menu.
+ * 05/19/16 - Added 'PORTFOLIO_LENOVOSHAREDRESOURCES' and 'PORTFOLIO_MAINTECH' constants; added code to support Maintech portfolio.
+ * 05/25/16 - Copied rest of functions from course/format/topics/lib.php (get_section_name fixed the section name issue we've been having).
+ * 08/17/16 - Fixed section0name not getting used (changed 'format_topics' to 'format_ebglmscustom').
+ * 08/25/16 - Changed "Lenovo and IBM Portfolio" values to just "IBM Portfolio" so that values will be the same (i.e. will help in transition).
+ * 04/11/17 - Added courseversion and machinetypes field to form.
+ * 04/17/17 - Removed (or commented-out) courseversion (not implementing now).
+ * 05/02/17 - Finished fix for section names started on 08/17/16.
+ * 03/03/18 - Added ASP and PremierSupport portfolios.
+ * 08/31/18 - Updated based on format/topics version "2018051400" (for Moodle 3.5+); adding iscurriculum, ispartofcurriculum,
+ *                      and curriculums (iscertification later).
+ * 11/12/18 - Added strings for ServiceDelivery and PracticalActivities portfolios.
+ * 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
+ * 05/30/19 - Added related courses listbox to /course/edit_form.php; added related courses to course format options.
+ * 06/20/19 - Create "related courses" section if course format option "relatedcourses" is set.
+ * 07/01/19 - For Moodle 3.7 (and all previous), need to pass more fields to get_courses (since coursecatlib::get_courses
+ *                   eventually calls get_course which requires "visible" and "category" fields).
+ * 08/01/19 - Removed creation of related courses section; added calls to load related_courses_slider block.
+ * 08/12/19 - Added course duration to course overview (and course format options).
+ * 08/19/19 - In course_format_options, changed get_courses to relatedcourses_getall to return all courses for listbox; in
+ *                      update_course_format_options, saving related courses to course format options AND local_ebglms_rc table.
+ * 08/22/19 - Changed call from relatedcourses_getall to local_ebglms_get_all_courses.
+ * 09/11/19 - In course_format_options, added important note about "machinetypes" and "duration".
+ * 10/15/19 - Changed to new Lenovo EBGLMS classes and methods to load ebglms_user and debug.
+ * 12/06/19 - Added "Curriculums Portfolio" and "Site Help Portfolio" as selections; changed strings from dashes
+ *                      "practicalactivities-portfolio" to underscores "practicalactivities_portfolio"; removed course format option "relatedcourses".
+ * 01/06/20 - In create_edit_form_elements, changed 'duration' from PARAM_INT to PARAM_TEXT.
+ * 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
+ * PTR2020Q107 - @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
+ *                      to remove duplication of common strings.
+ * PTR2020Q107 - @02 - 04/29/20 - Changed way "section 0" is loaded (like other course formats).
  *
  */
 
@@ -32,20 +67,20 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot. '/course/format/lib.php');
 require_once($CFG->dirroot. '/course/lib.php');     // 06/20/19
 
-// SWTC ********************************************************************************.
-// Include SWTC LMS user and debug functions.
-// SWTC ********************************************************************************.
+// Lenovo ********************************************************************************.
+// Include Lenovo EBGLMS user and debug functions.
+// Lenovo ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/relatedcourseslib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
+require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');         // Include curriculum utility functions.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');   // Include constants.
+// require_once($CFG->dirroot.'/local/ebglms/lib/relatedcourseslib.php');   // Include related courses utility functions.
 
 
 /**
  * Define the new coursetype for the ebglsmcustom course format.
- * Important! Values must match the values defined in swtc local plugin lib.php...
- * 11/14/18 - Constants moved to /local/swtc/lib/swtc_constants.php.
+ * Important! Values must match the values defined in ebglms local plugin lib.php...
+ * 11/14/18 - Constants moved to /local/ebglms/lib/ebglms_constants.php.
  */
 // define('COURSETYPE_GTP', 3);
 // define('COURSETYPE_LENOVOANDIBM', 4);
@@ -64,11 +99,11 @@ require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
 /**
  * Main class for the Topics course format
  *
- * @package    format_swtccustom
- * @copyright  2020 SWTC LMS
+ * @package    format_ebglmscustom
+ * @copyright  2012 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_swtccustom extends format_base {
+class format_ebglmscustom extends format_base {
 
     /**
      * Returns true if this course format uses sections
@@ -87,9 +122,9 @@ class format_swtccustom extends format_base {
      * @param int|stdClass $section Section object from database or just field section.section
      * @return string Display name that the course format prefers, e.g. "Topic 2"
      *
-     * History:
+     * Lenovo history:
      *
-     * 10/23/20 - Initial writing.
+     *  @02 - 04/29/20 - Changed way "section 0" is loaded (like other course formats).
      *
      */
     public function get_section_name($section) {
@@ -99,7 +134,7 @@ class format_swtccustom extends format_base {
             return format_string($section->name, true, array('context' => context_course::instance($this->courseid)));
         } if ($section->section == 0) {        // @02
             // Return the general section.      // @02
-            return get_string('section0name', 'format_swtccustom');       // @02
+            return get_string('section0name', 'format_ebglmscustom');       // @02
         } else {
             return $this->get_default_section_name($section);
         }
@@ -119,12 +154,12 @@ class format_swtccustom extends format_base {
         if ($section->section == 0) {
             // Return the general section.
             // return get_string('section0name', 'format_topics');
-            return get_string('section0name', 'format_swtccustom');
+            return get_string('section0name', 'format_ebglmscustom');
         } else {
             // Use format_base::get_default_section_name implementation which
             // will display the section name in "Topic n" format.
             // return parent::get_default_section_name($section);
-            return get_string('sectionname', 'format_swtccustom');
+            return get_string('sectionname', 'format_ebglmscustom');
         }
     }
 
@@ -260,7 +295,7 @@ class format_swtccustom extends format_base {
     /**
      * Definitions of the additional options that this course format uses for course
      *
-     * SWTC LMS custom format uses the following options:
+     * EBG LMS custom format uses the following options:
      * - coursedisplay
      * - numsections        // 08/31/18 - Since format_topics removed "numsections" in Moodle 3.3, so will we.
      * - hiddensections
@@ -275,16 +310,28 @@ class format_swtccustom extends format_base {
      * @param bool $foreditform
      * @return array of options
      *
-     * History:
+     * Lenovo history:
      *
-     * 10/23/20 - Initial writing.
+     *  xx/xx/15 - Added coursetype field to form.
+     * 09/10/18 - Adding iscurriculum, ispartofcurriculum, and curriculums.
+	 * 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
+     * 05/30/19 - Added related courses listbox to /course/edit_form.php; added related courses to course format options.
+     * 07/01/19 - For Moodle 3.7 (and all previous), need to pass more fields to get_courses (since coursecatlib::get_courses
+     *                   eventually calls get_course which requires "visible" and "category" fields).
+     * 08/19/19 - Changed get_courses to relatedcourses_getall to return all courses for listbox.
+     * 08/22/19 - Changed call from relatedcourses_getall to local_ebglms_get_all_courses.
+     * 09/11/19 - Added important note about "machinetypes" and "duration".
+     * 12/06/19 - Added "Curriculums Portfolio" and "Site Help Portfolio" as selections; changed strings from dashes
+     *                      "practicalactivities-portfolio" to underscores "practicalactivities_portfolio"; removed course format option "relatedcourses".
+     * @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
+     *                      to remove duplication of common strings.
      *
      */
     public function course_format_options($foreditform = false) {
-        global $DB;
+        global $DB;     // Lenovo
 
         static $courseformatoptions = false;
-        $curriculum_array = array();
+        $curriculum_array = array();            // Lenovo
         // $relatedcourses_array = array();      // 05/30/19
         $trunclength = 100;
 
@@ -299,32 +346,32 @@ class format_swtccustom extends format_base {
                     'default' => $courseconfig->coursedisplay,
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS custom format */
+                /* EBG LMS custom format */
                 'coursetype' => array(
-                    'default' => get_config('format_swtccustom', 'coursetype'),
+                    'default' => get_config('format_ebglmscustom', 'coursetype'),
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS iscurriculum field */        // 08/31/18
+                /* EBG LMS iscurriculum field */        // 08/31/18
                 'iscurriculum' => array(
                     'default' => 0,
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS ispartofcurriculum field */        // 09/10/18
+                /* EBG LMS ispartofcurriculum field */        // 09/10/18
                 'ispartofcurriculum' => array(
                     'default' => 0,
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS curriculums field */        // 09/10/18
+                /* EBG LMS curriculums field */        // 09/10/18
                 'curriculums' => array(
                     'default' => 0,
                     'type' => PARAM_TEXT,
                 ),
-                /* SWTC LMS related courses field */        // 05/30/19
+                /* EBG LMS related courses field */        // 05/30/19
                 // 'relatedcourses' => array(
                 //     'default' => 0,
                 //     'type' => PARAM_TEXT,
                 // ),
-                // SWTC ********************************************************************************.
+                // Lenovo ********************************************************************************.
                 // 09/11/19 - Special note about the course format options "machinetypes" and "duration":
                 //      Even though "machinetypes" and "duration" are course format options, and their values reside in the
                 //          course_format_options table, they cannot be processed here.
@@ -337,13 +384,13 @@ class format_swtccustom extends format_base {
                 //          course format option function calls (for example, course_get_format($course->id)->get_format_options()).
                 //          Therefore, in Moosh scripts (or anywhere else for that matter), we must use raw database calls to
                 //          query, get, and update all course format options.
-                // SWTC ********************************************************************************.
-                /* SWTC LMS machinetypes field */        // 09/11/19
+                // Lenovo ********************************************************************************.
+                /* EBG LMS machinetypes field */        // 09/11/19
                 // 'machinetypes' => array(
                 //     'default' => 'N/A',
                 //     'type' => PARAM_TEXT,
                 // ),
-                /* SWTC LMS duration field */        // 09/11/19
+                /* EBG LMS duration field */        // 09/11/19
                 // 'duration' => array(
                 //     'default' => 0,
                 //     'type' => PARAM_INT,
@@ -351,10 +398,10 @@ class format_swtccustom extends format_base {
             );
         }
 
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************
         // 10/22/18 - Get all the curriculum courses and fill the "curriculums" select element.
 		// 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
-        // SWTC ********************************************************************************
+        // Lenovo ********************************************************************************
         $records = curriculums_getall();
 
         foreach ($records as $record) {
@@ -364,17 +411,17 @@ class format_swtccustom extends format_base {
         asort($curriculum_array);
         // print_object($curriculum_array);
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
         // 05/30/19 - Get a list of all the courses.
         // 07/01/19 - For Moodle 3.7 (and all previous), need to pass more fields to get_courses (since coursecatlib::get_courses
         //                  eventually calls get_course which requires "visible" and "category" fields).
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
         // $records = get_courses('all', 'c.sortorder ASC', 'c.id, c.sortorder, c.visible, c.fullname, c.shortname, c.category');
 
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
         // 08/19/19 - Only list courses NOT in top level categories 60 (Lenovo Internal) and 73 (resource).
-        // SWTC ********************************************************************************.
-        // $records = local_swtc_get_all_courses();
+        // Lenovo ********************************************************************************.
+        // $records = local_ebglms_get_all_courses();
         //
         // if ($records->valid()) {
         //     foreach ($records as $record) {
@@ -422,47 +469,47 @@ class format_swtccustom extends format_base {
                     'help' => 'coursedisplay',
                     'help_component' => 'moodle',
                 ),
-                /* SWTC LMS custom format */
+                /* EBG LMS custom format */
                 'coursetype' => array(
-                    'label' => new lang_string('coursetype', 'format_swtccustom'),
+                    'label' => new lang_string('coursetype', 'format_ebglmscustom'),
                     'element_type' => 'select',
                     'element_attributes' => array(
                         array(
-                            COURSETYPE_SERVICEPROVIDER => get_string('serviceprovider_portfolio', 'local_swtc'),
-                            COURSETYPE_GTP => get_string('gtp_portfolio', 'local_swtc'),
-                            COURSETYPE_IBM => get_string('ibm_portfolio', 'local_swtc'),
-                            COURSETYPE_LENOVO => get_string('lenovo_portfolio', 'local_swtc'),
-                            COURSETYPE_LENOVOINTERNAL => get_string('lenovointernal_portfolio', 'local_swtc'),
-                            COURSETYPE_LENOVOSHAREDRESOURCES => get_string('lenovosharedresources_portfolio', 'local_swtc'),
-                            COURSETYPE_MAINTECH => get_string('maintech_portfolio', 'local_swtc'),
-                            COURSETYPE_ASP => get_string('asp_portfolio', 'local_swtc'),
-                            COURSETYPE_PREMIERSUPPORT => get_string('premiersupport_portfolio', 'local_swtc'),
-                            COURSETYPE_SERVICEDELIVERY => get_string('servicedelivery_portfolio', 'local_swtc'),
-                            COURSETYPE_PRACTICALACTIVITIES => get_string('practicalactivities_portfolio', 'local_swtc'),
-                            COURSETYPE_CURRICULUMS => get_string('curriculums_portfolio', 'local_swtc'),
-                            COURSETYPE_SITEHELP => get_string('sitehelp_portfolio', 'local_swtc')
+                            COURSETYPE_SERVICEPROVIDER => get_string('serviceprovider_portfolio', 'local_ebglms'),
+                            COURSETYPE_GTP => get_string('gtp_portfolio', 'local_ebglms'),
+                            COURSETYPE_IBM => get_string('ibm_portfolio', 'local_ebglms'),
+                            COURSETYPE_LENOVO => get_string('lenovo_portfolio', 'local_ebglms'),
+                            COURSETYPE_LENOVOINTERNAL => get_string('lenovointernal_portfolio', 'local_ebglms'),
+                            COURSETYPE_LENOVOSHAREDRESOURCES => get_string('lenovosharedresources_portfolio', 'local_ebglms'),
+                            COURSETYPE_MAINTECH => get_string('maintech_portfolio', 'local_ebglms'),
+                            COURSETYPE_ASP => get_string('asp_portfolio', 'local_ebglms'),
+                            COURSETYPE_PREMIERSUPPORT => get_string('premiersupport_portfolio', 'local_ebglms'),
+                            COURSETYPE_SERVICEDELIVERY => get_string('servicedelivery_portfolio', 'local_ebglms'),
+                            COURSETYPE_PRACTICALACTIVITIES => get_string('practicalactivities_portfolio', 'local_ebglms'),
+                            COURSETYPE_CURRICULUMS => get_string('curriculums_portfolio', 'local_ebglms'),
+                            COURSETYPE_SITEHELP => get_string('sitehelp_portfolio', 'local_ebglms')
                         )
                     ),
                     'help' => 'coursetype',
-                    'help_component' => 'format_swtccustom',
+                    'help_component' => 'format_ebglmscustom',
                 ),
-                /* SWTC LMS iscurriculum field */
+                /* EBG LMS iscurriculum field */        // 08/31/18
                 'iscurriculum' => array(
-                    'label' => new lang_string('iscurriculum', 'format_swtccustom'),
+                    'label' => new lang_string('iscurriculum', 'format_ebglmscustom'),
                     'element_type' => 'advcheckbox',
                     'help' => 'iscurriculum',
-                    'help_component' => 'format_swtccustom',
+                    'help_component' => 'format_ebglmscustom',
                 ),
-                /* SWTC LMS ispartofcurriculum field */
+                /* EBG LMS ispartofcurriculum field */        // 09/10/18
                 'ispartofcurriculum' => array(
-                    'label' => new lang_string('ispartofcurriculum', 'format_swtccustom'),
+                    'label' => new lang_string('ispartofcurriculum', 'format_ebglmscustom'),
                     'element_type' => 'advcheckbox',
                     'help' => 'ispartofcurriculum',
-                    'help_component' => 'format_swtccustom',
+                    'help_component' => 'format_ebglmscustom',
                 ),
-                /* SWTC LMS curriculums field */
+                /* EBG LMS curriculums field */        // 09/10/18
                 'curriculums' => array(
-                    'label' => new lang_string('curriculums', 'format_swtccustom'),
+                    'label' => new lang_string('curriculums', 'format_ebglmscustom'),
                     'element_type' => 'select',
                     'element_attributes' => array(
                         $curriculum_array,
@@ -470,11 +517,11 @@ class format_swtccustom extends format_base {
                         'size' => 10,
                     ),
                     'help' => 'curriculums',
-                    'help_component' => 'format_swtccustom',
+                    'help_component' => 'format_ebglmscustom',
                 ),
-                /* SWTC LMS related courses field */
+                /* EBG LMS related courses field */        // 05/30/19
                 // 'relatedcourses' => array(
-                //     'label' => new lang_string('relatedcourses', 'format_swtccustom'),
+                //     'label' => new lang_string('relatedcourses', 'format_ebglmscustom'),
                 //     'element_type' => 'select',
                 //     'element_attributes' => array(
                 //         $relatedcourses_array,
@@ -482,7 +529,7 @@ class format_swtccustom extends format_base {
                 //         'size' => 10,
                 //     ),
                 //     'help' => 'relatedcourses',
-                //     'help_component' => 'format_swtccustom',
+                //     'help_component' => 'format_ebglmscustom',
                 // ),
             );
 
@@ -500,9 +547,15 @@ class format_swtccustom extends format_base {
      * @param bool $forsection 'true' if this is a section edit form, 'false' if this is course edit form.
      * @return array array of references to the added form elements.
      *
-     * History:
+     * Lenovo history:
      *
-     * 10/23/20 - Initial writing.
+     *  04/11/17 - Added courseversion and machinetypes field to form.
+     *  04/17/17 - Removed (or commented-out) courseversion (not implementing now).
+     *  06/27/18 - Added default for machinetypes.
+     * 08/12/19 - Added course duration to course overview (and course format options).
+     * 01/06/20 - In create_edit_form_elements, changed 'duration' from PARAM_INT to PARAM_TEXT.
+     * @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
+     *                      to remove duplication of common strings.
      *
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
@@ -526,11 +579,11 @@ class format_swtccustom extends format_base {
         }
 
         // Next, 'Machine types' field.
-        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('machinetypes', 'format_swtccustom'));
-        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/swtc/lang/en/local_swtc.php
+        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('machinetypes', 'format_ebglmscustom'));
+        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
         //      to remove duplication of common strings.
-        $mform->insertElementBefore($mform->createElement('text', 'machinetypes', get_string('machinetypes', 'local_swtc'), ''), 'category');
-        $mform->addHelpButton('machinetypes', 'machinetypes', 'local_swtc');
+        $mform->insertElementBefore($mform->createElement('text', 'machinetypes', get_string('machinetypes', 'local_ebglms'), ''), 'category');
+        $mform->addHelpButton('machinetypes', 'machinetypes', 'local_ebglms');
         $mform->setType('machinetypes', PARAM_TEXT);
         $mform->addRule('machinetypes', get_string('required'), 'required', null, 'client');
 
@@ -545,16 +598,16 @@ class format_swtccustom extends format_base {
         }
 
         // Next, 'Duration' field (maxlength of 4).
-        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('duration', 'format_swtccustom'));
-        // $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'format_swtccustom'), 'maxlength="4" size="10"'), 'category');        // 01/06/20
-        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/swtc/lang/en/local_swtc.php
+        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('duration', 'format_ebglmscustom'));
+        // $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'format_ebglmscustom'), 'maxlength="4" size="10"'), 'category');        // 01/06/20
+        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
         //      to remove duplication of common strings.
-        $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'local_swtc'), ''), 'category');  // 01/06/20
-        $mform->addHelpButton('duration', 'duration', 'local_swtc');
+        $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'local_ebglms'), ''), 'category');  // 01/06/20
+        $mform->addHelpButton('duration', 'duration', 'local_ebglms');
         // $mform->setType('duration', PARAM_INT);      // 01/06/20
         $mform->setType('duration', PARAM_TEXT);    // 01/06/20
         $mform->addRule('duration', get_string('required'), 'required', null, 'client');
-        // $mform->addRule('duration', get_string('duration_help', 'local_swtc'), 'numeric', null, 'client');      // 01/06/20
+        // $mform->addRule('duration', get_string('duration_help', 'local_ebglms'), 'numeric', null, 'client');      // 01/06/20
 
         // Load form element value with 'duration' from database (if it exists).
         $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => 0, 'name' => 'duration'));
@@ -572,7 +625,7 @@ class format_swtccustom extends format_base {
     /**
      * Updates format options for a course
      *
-     * In case if course format was changed to 'swtccustom', we try to copy options
+     * In case if course format was changed to 'ebglmscustom', we try to copy options
      * 'coursedisplay', 'hiddensections', and others from the previous format.
      *
      * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
@@ -580,34 +633,45 @@ class format_swtccustom extends format_base {
      *     this object contains information about the course before update
      * @return bool whether there were any changes to the options values
      *
-     * History:
+     * Lenovo history:
      *
-     * 10/23/20 - Initial writing.
+     *  04/11/17 - Added courseversion and machinetypes field to form.
+     *  04/17/17 - Removed (or commented-out) courseversion (not implementing now).
+     * 10/22/18 - Adding iscurriculum, ispartofcurriculum, and curriculums.
+     * 05/30/19 - Added related courses listbox to /course/edit_form.php; added related courses to course format options.
+     * 06/20/19 - Create "related courses" section if course format option "relatedcourses" is set.
+     * 08/01/19 - Removed creation of related courses section; added calls to load related_courses_slider block.
+     * 08/12/19 - Added course duration to course overview (and course format options).
+     * 08/19/19 - Saving related courses to course format options AND local_ebglms_rc table.
+     * 10/15/19 - Changed to new Lenovo EBGLMS classes and methods to load ebglms_user and debug.
+     * 12/06/19 - Added "Curriculums Portfolio" and "Site Help Portfolio" as selections; changed strings from dashes
+     *                      "practicalactivities-portfolio" to underscores "practicalactivities_portfolio"; removed course format option "relatedcourses".
+     * 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
      *
      */
     public function update_course_format_options($data, $oldcourse = null) {
-        global $DB, $CFG, $USER, $SESSION;
+        global $DB, $CFG, $USER, $SESSION;     // Lenovo
 
-        // SWTC ********************************************************************************.
-        // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user($USER);
-        $debug = swtc_set_debug();
+        // Lenovo ********************************************************************************.
+        // Lenovo EBGLMS ebglms_user and debug variables.
+        $ebglms_user = ebglms_get_user($USER);
+        $debug = ebglms_get_debug();
 
         // Other Lenovo variables.
         $sectionid = 0;
-        // SWTC ********************************************************************************.
+        // Lenovo ********************************************************************************.
 
         if (isset($debug)) {
-            // SWTC ********************************************************************************
+            // Lenovo ********************************************************************************
             // Always output standard header information.
-            // SWTC ********************************************************************************
+            // Lenovo ********************************************************************************
             $messages[] = "Lenovo ********************************************************************************.";
-            $messages[] = "Entering /course/format/swtccustom/lib.php==update_course_format_options.enter.";
-            $messages[] = "About to print swtc_user.";
-            $messages[] = print_r($swtc_user, true);
-            $messages[] = "Finished printing swtc_user.";
+            $messages[] = "Entering /course/format/ebglmscustom/lib.php==update_course_format_options.enter.";
+            $messages[] = "About to print ebglms_user.";
+            $messages[] = print_r($ebglms_user, true);
+            $messages[] = "Finished printing ebglms_user.";
             $messages[] = "Lenovo ********************************************************************************.";
-            $debug->logmessage($messages, 'logfile');
+            debug_logmessage($messages, 'logfile');
             unset($messages);
         }
 
@@ -622,7 +686,7 @@ class format_swtccustom extends format_base {
                 $messages[] = "Finished printing options. About to print data (only includes definition of options, not actual data).";
                 $messages[] = print_r($data, true);
                 $messages[] = "Finished printing data (includes changes just made to course).";
-                $debug->logmessage($messages, 'detailed');
+                debug_logmessage($messages, 'detailed');
                 unset($messages);
                // print_object($records);
                // print_object($options);
@@ -643,17 +707,17 @@ class format_swtccustom extends format_base {
             foreach ($options as $key => $unused) {
                 if (isset($debug)) {
                     $messages[] = "key (course format option) is :$key.";
-                    $debug->logmessage($messages, 'detailed');
+                    debug_logmessage($messages, 'detailed');
                     unset($messages);
                    // print_object($key);
                 }
 
                 if (!array_key_exists($key, $data)) {
                     if (array_key_exists($key, $oldcourse)) {
-                        // SWTC ********************************************************************************.
+                        // Lenovo ********************************************************************************.
                         // 05/30/19 - Special case: If removing all related courses, $data['relatedcourses'] will NOT be set. Therefore,
                         //      it really doesn't matter what the relatedcourses are in $oldcourse (because they will be removed).
-                        // SWTC ********************************************************************************
+                        // Lenovo ********************************************************************************
                         // if ($key !== 'relatedcourses') {
                             $data[$key] = $oldcourse[$key];
                         // }
@@ -661,13 +725,13 @@ class format_swtccustom extends format_base {
                 }
             }
 
-            // SWTC ********************************************************************************
+            // Lenovo ********************************************************************************
             // 10/22/18 - Get information for "curriculums". If "curriculums" did not exist, it would have been added
             //              just above here.
             // 10/23/18 - Ignore if "ispartofcurriculum" is NOT set.
             //  TODO: Dynamically disable curriculums select form element if "ispartofcurriculum" is NOT set.
             // 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
-            // SWTC ********************************************************************************
+            // Lenovo ********************************************************************************
             // if ((array_key_exists('ispartofcurriculum', $data)) && (!empty($data['ispartofcurriculum']))) {
             if (array_key_exists('curriculums', $data)) {
                 if (!empty($data['ispartofcurriculum'])) {
@@ -683,7 +747,7 @@ class format_swtccustom extends format_base {
                 }
             }
 
-            // SWTC ********************************************************************************.
+            // Lenovo ********************************************************************************.
             // 05/30/19 - Added related courses listbox to /course/edit_form.php; added related courses to course format options.
             //          Notes:
             //              $data is the current data that is returned from the just edited form. $curriculums and / or $relatedcourses might
@@ -709,7 +773,7 @@ class format_swtccustom extends format_base {
             //                  )
             //
             //              Before saving to database, it must be imploded into a string.
-            // SWTC ********************************************************************************.
+            // Lenovo ********************************************************************************.
             // if (array_key_exists('relatedcourses', $data)) {
             //     // print_object($data['relatedcourses']);
             //     // print_r("in lib.php\n");
@@ -717,7 +781,7 @@ class format_swtccustom extends format_base {
             //     if (!empty($data['relatedcourses'])) {
             //         if (is_array($data['relatedcourses'])) {
             //             // print_object($data['relatedcourses']);
-            //             // Save the related courses in the local_swtc_rc table.
+            //             // Save the related courses in the local_ebglms_rc table.
             //             relatedcourses_put_courses($this->courseid, $data['relatedcourses']);
             //
             //             // Format to save in course format options.
@@ -727,12 +791,12 @@ class format_swtccustom extends format_base {
             //         }
             //     } else {
             //         $data['relatedcourses'] = 0;
-            //         // Also remove the courses from the local_swtc_rc table.
+            //         // Also remove the courses from the local_ebglms_rc table.
             //         relatedcourses_put_courses($this->courseid, array());
             //     }
             // } else {
             //     $data['relatedcourses'] = 0;
-            //     // Also remove the courses from the local_swtc_rc table.
+            //     // Also remove the courses from the local_ebglms_rc table.
             //     relatedcourses_put_courses($this->courseid, array());
             // }
 
@@ -826,21 +890,22 @@ class format_swtccustom extends format_base {
      * @param null|lang_string|string $editlabel
      * @return \core\output\inplace_editable
      *
-     * History:
+     * Lenovo history:
      *
-     * 10/23/20 - Initial writing.
+     * @01 - 04/28/20 - Moved some DCG custom course format strings to /local/ebglms/lang/en/local_ebglms.php
+     *                      to remove duplication of common strings.
      *
      */
     public function inplace_editable_render_section_name($section, $linkifneeded = true,
                                                          $editable = null, $edithint = null, $editlabel = null) {
         if (empty($edithint)) {
             // $edithint = new lang_string('editsectionname', 'format_topics');
-            $edithint = new lang_string('editsectionname', 'local_swtc');
+            $edithint = new lang_string('editsectionname', 'local_ebglms');
         }
         if (empty($editlabel)) {
             $title = get_section_name($section->course, $section);
             // $editlabel = new lang_string('newsectionname', 'format_topics', $title);
-            $editlabel = new lang_string('newsectionname', 'local_swtc', $title);
+            $editlabel = new lang_string('newsectionname', 'local_ebglms', $title);
         }
         return parent::inplace_editable_render_section_name($section, $linkifneeded, $editable, $edithint, $editlabel);
     }
@@ -880,7 +945,7 @@ class format_swtccustom extends format_base {
         // For show/hide actions call the parent method and return the new content for .section_availability element.
         $rv = parent::section_action($section, $action, $sr);
         // $renderer = $PAGE->get_renderer('format_topics');
-        $renderer = $PAGE->get_renderer('format_swtccustom');
+        $renderer = $PAGE->get_renderer('format_ebglmscustom');
         $rv['section_availability'] = $renderer->section_availability($this->get_section($section));
         return $rv;
     }
@@ -909,7 +974,7 @@ class format_swtccustom extends format_base {
 
         // print_object($eventdata);
 
-        // local_swtc_assign_user_role($eventdata);
+        // local_ebglms_assign_user_role($eventdata);
 
     }
 }
@@ -922,19 +987,19 @@ class format_swtccustom extends format_base {
  * @param mixed $newvalue
  * @return \core\output\inplace_editable
  *
- * History:
+ * Lenovo history:
  *
- * 10/23/20 - Initial writing.
+ * 05/02/17 - Finished fix for section names started on 08/17/16.
  *
  */
-function format_swtccustom_inplace_editable($itemtype, $itemid, $newvalue) {
+function format_ebglmscustom_inplace_editable($itemtype, $itemid, $newvalue) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/course/lib.php');
     if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
         $section = $DB->get_record_sql(
             'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
             // array($itemid, 'topics'), MUST_EXIST); 05/02/17
-            array($itemid, 'swtccustom'), MUST_EXIST);
+            array($itemid, 'ebglmscustom'), MUST_EXIST);
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
     }
 }

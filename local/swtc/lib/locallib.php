@@ -117,7 +117,7 @@ function local_swtc_find_context_from_name($portfolio_name, $cats) {
  *
  * History:
  *
- * 10/15/20 - Original version.
+ * 11/06/20 - Initial writing.
  *
  */
 function local_swtc_change_user_access($cat, &$user) {
@@ -126,7 +126,7 @@ function local_swtc_change_user_access($cat, &$user) {
     // SWTC ********************************************************************************
     // SWTC LMS swtc_user and debug variables.
     $swtc_user = swtc_get_user($user);
-    $debug = swtc_get_debug();
+    $debug = swtc_set_debug();
 
     // Other Lenovo variables.
     $roleshortname = null;
@@ -142,8 +142,8 @@ function local_swtc_change_user_access($cat, &$user) {
         $messages[] = "swtc_user array follows :";
         $messages[] = print_r($swtc_user, true);
         $messages[] = "swtc_user array ends.";
-        // debug_logmessage(print_r($swtc, true), 'detailed');
-        debug_logmessage($messages, 'both');
+        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $debug->logmessage($messages, 'both');
         unset($messages);
 	}
 
@@ -199,7 +199,7 @@ function local_swtc_get_all_accesstypes() {
         $messages[] = print_r($alltypes, true);
         $messages[] = "Finished printing alltypes.";
         // print_object($alltypes);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -290,8 +290,8 @@ function local_swtc_capture_click($data) {
         $messages[] = "swtc_user array follows :";
         $messages[] = print_r($swtc_user, true);
         $messages[] = "swtc_user array ends.";
-        // debug_logmessage(print_r($swtc, true), 'detailed');
-        debug_logmessage($messages, 'both');
+        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $debug->logmessage($messages, 'both');
         unset($messages);
 	}
 
@@ -480,8 +480,8 @@ function local_swtc_capture_enrollment($data) {
         $messages[] = "swtc_user array follows :";
         $messages[] = print_r($swtc_user, true);
         $messages[] = "swtc_user array ends.";
-        // debug_logmessage(print_r($swtc, true), 'detailed');
-        debug_logmessage($messages, 'both');
+        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $debug->logmessage($messages, 'both');
         unset($messages);
 	}
 

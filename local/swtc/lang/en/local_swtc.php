@@ -901,7 +901,7 @@ $string['swtc:swtc_access_lenovo_portfolio'] = 'Access to Lenovo portfolio';
 // $string['swtc:swtc_access_lenovoandibm_portfolio'] = 'Access to Lenovo and IBM portfolios';
 $string['swtc:swtc_access_serviceprovider_portfolio'] = 'Access to ServiceProvider portfolio';
 $string['swtc:swtc_access_lenovointernal_portfolio'] = 'Access to Lenovo Internal portfolio';
-$string['swtc:swtc_access_lenovosharedresources'] = 'Access to Lenovo Shared Resources (Master)';
+$string['swtc:swtc_access_lenovosharedresources_portfolio'] = 'Access to Lenovo Shared Resources (Master)';
 $string['swtc:swtc_access_maintech_portfolio'] = 'Access to Maintech portfolio';
 $string['swtc:swtc_access_ibm_portfolio'] = 'Access to IBM portfolio';
 $string['swtc:swtc_access_asp_portfolio'] = 'Access to ASP portfolio';
@@ -918,11 +918,13 @@ $string['swtc:swtc_mod_assign_submit_servicedelivery'] = 'Submit assignment (Ser
 // Customized capabilites strings...
 // Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
 $string['cap_swtc_access_gtp_portfolio'] = 'local/swtc:swtc_access_gtp_portfolio';
+$string['cap_swtc_access_gtp_pregmatch'] = '/access_gtp_portfolio/i';
+
 $string['cap_swtc_access_lenovo_portfolio'] = 'local/swtc:swtc_access_lenovo_portfolio';
 // $string['cap_swtc_access_lenovoandibm_portfolio'] = 'local/swtc:swtc_access_lenovoandibm_portfolio';
 $string['cap_swtc_access_serviceprovider_portfolio'] = 'local/swtc:swtc_access_serviceprovider_portfolio';
 $string['cap_swtc_access_lenovointernal_portfolio'] = 'local/swtc:swtc_access_lenovointernal_portfolio';
-$string['cap_swtc_access_lenovosharedresources'] = 'local/swtc:swtc_access_lenovosharedresources';
+$string['cap_swtc_access_lenovosharedresources_portfolio'] = 'local/swtc:swtc_access_lenovosharedresources_portfolio';
 $string['cap_swtc_access_maintech_portfolio'] = 'local/swtc:swtc_access_maintech_portfolio';
 $string['cap_swtc_access_ibm_portfolio'] = 'local/swtc:swtc_access_ibm_portfolio';
 $string['cap_swtc_access_asp_portfolio'] = 'local/swtc:swtc_access_asp_portfolio';
@@ -1173,3 +1175,10 @@ $string['machinetypes_help'] = 'List all machine type(s) for the system(s) speci
 
 $string['duration'] = 'Duration (in minutes only)';
 $string['duration_help'] = 'Estimated duration to complete this course (in minutes only).';
+
+// SWTC  ********************************************************************************.
+// Portfolio Settings page strings.
+// SWTC ********************************************************************************.
+$string['portfolio_access_settings'] = 'Porfolio access settings';
+
+$string['allowaccesstoportfolio'] = 'Allow users with role {$a->rolename} access to the {$a->portfolio}';

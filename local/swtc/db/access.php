@@ -83,7 +83,7 @@
  	/**
  	 * Lenovo Shared Resources (Master) section.
  	 */
- 	'local/swtc:swtc_access_lenovosharedresources' => array(
+ 	'local/swtc:swtc_access_lenovosharedresources_portfolio' => array(
  		'riskbitmask' => RISK_CONFIG,
  		'captype' => 'write',
  		'contextlevel' => CONTEXT_COURSECAT

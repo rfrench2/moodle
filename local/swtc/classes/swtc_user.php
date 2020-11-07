@@ -40,6 +40,7 @@ use \cache;
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************
 // require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
+require_once($CFG->dirroot . '/local/swtc/lib/locallib.php');
 
 
 /**
@@ -333,8 +334,8 @@ class swtc_user {
     function assign_user_role($eventdata) {
     	global $USER, $DB, $COURSE, $SESSION;
 
-        // SWTC - Debug 10/30/20
-        // return;
+        // SWTC - Debug 11/06/20
+        return;
 
         // SWTC ******************************************************************************
       	// SWTC LMS swtc_user and debug variables.
@@ -1920,7 +1921,7 @@ class swtc_user {
     			// 'Lenovo Shared Resources (Master)' - add the capabilities, roleshortnames, and roleids for the top-level category.
                 // SWTC ********************************************************************************
                 case get_string('lenovosharedresources_portfolio', 'local_swtc'):
-                    $cats[$key]['capability']  = get_string('cap_swtc_access_lenovosharedresources', 'local_swtc');
+                    $cats[$key]['capability']  = get_string('cap_swtc_access_lenovosharedresources_portfolio', 'local_swtc');
 
                     // Load all the roleids.
                     foreach ($roles as $role) {

@@ -78,6 +78,8 @@ $sql = "SELECT ra.id, ra.userid, ra.contextid, ra.roleid, ra.component, ra.itemi
       ORDER BY contextlevel DESC, contextid ASC, r.sortorder ASC";
 $roleassignments = $DB->get_records_sql($sql, array($user->id));
 
+print_object($roleassignments); // SWTC
+
 $allroles = role_fix_names(get_all_roles());
 
 // In order to display a nice tree of contexts, we need to get all the
@@ -118,6 +120,9 @@ foreach ($roleassignments as $ra) {
 
 $assignableroles = get_assignable_roles($usercontext, ROLENAME_BOTH);
 $overridableroles = get_overridable_roles($usercontext, ROLENAME_BOTH);
+
+print_object($assignableroles);// SWTC
+print_object($contexts);// SWTC
 
 // Print the header.
 $fullname = fullname($user, has_capability('moodle/site:viewfullnames', $coursecontext));

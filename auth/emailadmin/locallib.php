@@ -1,4 +1,4 @@
-SWTC history<?php
+<?php
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -264,7 +264,7 @@ class invitation_manager {
                         if (count($invites) == 1) {
                             return array(null, null);
                         } else {
-                            continue;
+                            continue 2;
                         }
                         break;
                 }
@@ -279,7 +279,7 @@ class invitation_manager {
      *
      * @return string  $status       Returns invite status string.
      *
-     * SWTC history:
+     * History:
      *
      * 10/30/20 - Initial writing.
      *
@@ -322,7 +322,7 @@ class invitation_manager {
      * @param string $status
      * @param object $invitation
 	 *
-	 * SWTC history:
+	 * History:
 	 *
 	 * 10/30/20 - Initial writing.
 	 *
@@ -542,7 +542,7 @@ class invitation_manager {
      *
      * @return object           Returns the existing record with new fields set.
 	 *
-	 * SWTC history:
+	 * History:
 	 *
 	 * 01/03/19 - New function.
 	 *
@@ -651,7 +651,7 @@ function print_page_tabs($active_tab) {
     global $CFG, $COURSE;
 
     $tabs[] = new tabobject('history', new moodle_url('/local/swtc/lib/invitehistory.php', array('courseid' => $COURSE->id)),
-                            get_string('invitehistory', 'local_swtc'));
+                            get_string('swtcinvitehistory', 'local_swtc'));
     // $tabs[] = new tabobject('invite',
     //                 new moodle_url('/enrol/invitation/invitation.php',
     //                         array('courseid' => $COURSE->id)),

@@ -101,5 +101,11 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     $ADMIN->add('swtcadmin', new  admin_externalpage('swtcinvitehistory', new lang_string('swtcinvitehistory', 'local_swtc'),
                     new moodle_url("$CFG->wwwroot/local/swtc/lib/invitehistory.php")));
 
+    // SWTC *******************************************************************************
+    // Portfolio access settings form.
+    // SWTC *******************************************************************************
+    $ADMIN->add('swtcadmin', new  admin_externalpage('portfolio_access_settings', new lang_string('portfolio_access_settings', 'local_swtc'),
+                                    new moodle_url("$CFG->wwwroot/local/swtc/lib/portfolio_access_settings.php")));
+
     // print("Did I get here...xxx.</br>");
 }

@@ -19,18 +19,12 @@
  *
  * @package    local
  * @subpackage swtc
- * @copyright  2018 Lenovo DCG Education Services
+ * @copyright  2020 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
  *
- *	11/01/18 - Initial writing. Added local_swtc_userinvitation and local_swtc_userbookmarks.
- * 06/07/19 - Adding local_swtc_courses to hold featured courses (and possibly other course data).
- * 07/18/19 - Changed local_swtc_courses "courseids" to "courseid"; added fields "views", "enrollments", and "active".
- * 08/05/19 - Changed table name from "local_swtc_courses" to "local_swtc_sc".
- * 08/16/19 - Added "viewuserids" and "enrollmentuserids" to "local_swtc_rc" table; added
- *                  "local_swtc_rc_details" to track users interaction with all related courses throughout the site.
- * 08/22/19 - Changed table names to "local_swtc_sc"and "local_swtc_rc"; added "local_swtc_sc_details".
+ * 11/02/20 - Initial writing.
  *
  */
 
@@ -43,8 +37,9 @@ function xmldb_local_swtc_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    // Version is the version of the local_swtc plugin. Remember that production, sandbox, and debug sites may (will) have different versions.
-    if ($oldversion < 2015121125) {
+    // Version is the version of the local_swtc plugin. Remember that production, sandbox, and debug
+    // sites may (will) have different versions.
+    if ($oldversion < 2020110206) {
 
         // Define table local_swtc_userinvitation to be created.
         $table = new xmldb_table('local_swtc_userinvitation');
@@ -74,10 +69,10 @@ function xmldb_local_swtc_upgrade($oldversion) {
         }
 
         // Ebglms savepoint reached.
-        upgrade_plugin_savepoint(true, 2015121125, 'local', 'swtc');
+        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
-    if ($oldversion < 2015121125) {
+    if ($oldversion < 2020110206) {
 
         // Define table local_swtc_userbookmarks to be created.
         $table = new xmldb_table('local_swtc_userbookmarks');
@@ -101,10 +96,10 @@ function xmldb_local_swtc_upgrade($oldversion) {
         }
 
         // Ebglms savepoint reached.
-        upgrade_plugin_savepoint(true, 2015121125, 'local', 'swtc');
+        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
-	if ($oldversion < 2015121138) {
+	if ($oldversion < 2020110206) {
 
         // Define index name (unique) to be dropped form local_swtc_userbookmarks.
         $table = new xmldb_table('local_swtc_userbookmarks');
@@ -122,13 +117,13 @@ function xmldb_local_swtc_upgrade($oldversion) {
         $dbman->add_key($table, $key);
 
         // Ebglms savepoint reached.
-        upgrade_plugin_savepoint(true, 2015121138, 'local', 'swtc');
+        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
     // Lenovo ********************************************************************************.
     // Define tables "local_swtc_sc", "local_swtc_rc", "local_swtc_rc_details", and "local_swtc_sc_details"
     // Lenovo ********************************************************************************.
-    if ($oldversion < 2015121266) {
+    if ($oldversion < 2020110206) {
 
         // Lenovo ********************************************************************************.
         // Define table local_swtc_sc to be created.
@@ -226,7 +221,29 @@ function xmldb_local_swtc_upgrade($oldversion) {
         }
 
         // Ebglms savepoint reached.
-        upgrade_plugin_savepoint(true, 2015121266, 'local', 'swtc');
+        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
+    }
+
+    if ($oldversion < 2020110206) {
+
+        // Define table local_swtc_gtp_portfolio_access to be created.
+        $table = new xmldb_table('local_swtc_gtp_portfolio_access');
+
+        // Adding fields to table local_swtc_gtp_portfolio_access.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('roleid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('capability', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table local_swtc_gtp_portfolio_access.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for local_swtc_gtp_portfolio_access.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Ebglms savepoint reached.
+        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
     return true;
