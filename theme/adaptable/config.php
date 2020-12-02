@@ -156,8 +156,14 @@ $usedashboard = true;
 // Disabling block docking.
 $THEME->enable_dock = false;
 
+// SWTC ********************************************************************************.
+// Include SWTC LMS renderer functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/renderer.php');
+
 // Call the renderer.
-$THEME->rendererfactory = 'theme_overridden_renderer_factory';
+// $THEME->rendererfactory = 'theme_overridden_renderer_factory';       // SWTC
+$THEME->rendererfactory = 'local_swtc_renderer_factory';
 
 // Load the theme layouts.
 $THEME->layouts = array(

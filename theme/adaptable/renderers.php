@@ -22,7 +22,17 @@
  * @copyright  2015-2017 Fernando Acedo (3-bits.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * SWTC history:
+ *
+ * 11/09/20 - Initial writing; moved majority of customized code from here to
+ *          functions defined in /local/ebglms/classes/traits/lenovo_adaptable.php;
+ *          added utility functions.
+ *
  */
+// SWTC ********************************************************************************.
+// SWTC customized code for Adaptable theme.
+// SWTC ********************************************************************************.
+// use \local_swtc\traits\swtc_adaptable;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -33,6 +43,9 @@ require_once($CFG->dirroot.'/course/format/topics/renderer.php');
 require_once($CFG->dirroot.'/course/format/weeks/renderer.php');
 
 use \theme_adaptable\traits\single_section_page;
+
+// print_object(get_declared_classes());       // SWTC
+// echo '"', __NAMESPACE__, '"';       // SWTC
 
 /**
  * Class for implementing topics format rendering.
@@ -209,6 +222,11 @@ if (file_exists("$CFG->dirroot/course/format/flexible/renderer.php")) {
  * Core renderers for Adaptable theme
  */
 class theme_adaptable_core_renderer extends core_renderer {
+    // SWTC ********************************************************************************.
+    // SWTC customized code for Adaptable theme.
+    // SWTC ********************************************************************************.
+    // use swtc_adaptable;
+
     /** @var custom_menu_item language The language menu if created */
     protected $language = null;
 

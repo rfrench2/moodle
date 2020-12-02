@@ -23,128 +23,21 @@
  *
  * History:
  * 10/15/20 - Initial writing.
- *
- */
- /**
- * Notes about using this file
- *
- *	The capabilities defined here are only read (and copied into the Moodle database) when the SWTC LMS local
- *		plugin module is installed or upgraded. So every time you edit the db/access.php file you must:
- *		Increase the plugin's version number by editing the file local/swtc/version.php.
- *		Go to the the Administration ► Notifications page, and click through the steps to let Moodle
- *			upgrade itself. You should see the name of your module (swtc) in one of the steps.
- *
- *
+ * 11/08/20 - Most capabilities not needed anymore since using
+ *          moodle/category:viewcourselist.
  *
  */
 
  $capabilities = array(
- 	/**
- 	* GTP section.
- 	*/
- 	'local/swtc:swtc_access_gtp_portfolio' => array(
-         'riskbitmask' => RISK_CONFIG,
-         'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- //		'clonepermissionsfrom' => 'moodle/category:viewhiddencategories'
-     ),
- 	/**
- 	 * Lenovo section.
- 	 */
- 	'local/swtc:swtc_access_lenovo_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * IBM section.
- 	 */
- 	'local/swtc:swtc_access_ibm_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * ServiceProvider section.
- 	 */
- 	'local/swtc:swtc_access_serviceprovider_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * Lenovo Internal section.
- 	 */
- 	'local/swtc:swtc_access_lenovointernal_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * Lenovo Shared Resources (Master) section.
- 	 */
- 	'local/swtc:swtc_access_lenovosharedresources_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * Maintech section.
- 	 */
- 	'local/swtc:swtc_access_maintech_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
- 	 * ASP section.
- 	 */
- 	'local/swtc:swtc_access_asp_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
- 	 * PremierSupport section.
- 	 */
- 	'local/swtc:swtc_access_premiersupport_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
- 	 * ServiceDelivery section.
- 	 */
- 	'local/swtc:swtc_access_servicedelivery_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
- 	 * Site Help section.
- 	 */
- 	'local/swtc:swtc_access_sitehelp_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
- 	/**
- 	 * Curriculums Portfolio section.
- 	 */
- 	'local/swtc:swtc_access_curriculums_portfolio' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
- 	 * View curriculums section.
- 	 */
- 	'local/swtc:swtc_view_curriculums' => array(
- 		'riskbitmask' => RISK_CONFIG,
- 		'captype' => 'write',
- 		'contextlevel' => CONTEXT_COURSECAT
- 	),
-     /**
+    /**
+	 * View curriculums section.
+	 */
+	'local/swtc:swtc_view_curriculums' => array(
+		'riskbitmask' => RISK_CONFIG,
+		'captype' => 'write',
+		'contextlevel' => CONTEXT_COURSECAT
+	),
+    /**
  	 * View management reports section.
  	 */
  	'local/swtc:swtc_view_mgmt_reports' => array(
