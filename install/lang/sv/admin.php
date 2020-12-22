@@ -37,5 +37,5 @@ $string['clitypevalue'] = 'Värde för typ';
 $string['clitypevaluedefault'] = 'skriv in värdet, klicka på "Enter" om du vill använda standardvärdet ({$a})';
 $string['cliunknowoption'] = 'Ej identifierade alternativ: {$a} Var snäll och använd alternativet Hjälp.';
 $string['cliyesnoprompt'] = 'skriv in y (betyder ja) eller n (betyder nej)';
-$string['environmentrequireinstall'] = 'är nödvändig att installera/aktivera';
-$string['environmentrequireversion'] = 'version {$a->needed} är nödvändig och du använder {$a->current}';
+$string['environmentrequireinstall'] = 'måste vara installerat och aktiverat';
+$string['environmentrequireversion'] = 'version {$a->needed} krävs och du använder {$a->current}';
