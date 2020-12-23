@@ -196,7 +196,7 @@ module.exports = function(grunt) {
                 }
             },
             options: {
-                implementation: sass,
+                implementation: node-sass,
                 includePaths: ["theme/boost/scss/", "theme/classic/scss/"]
             }
         },
