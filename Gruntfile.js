@@ -196,7 +196,6 @@ module.exports = function(grunt) {
                 }
             },
             options: {
-                implementation: sass,
                 includePaths: ["theme/boost/scss/", "theme/classic/scss/"]
             }
         },
@@ -365,8 +364,6 @@ module.exports = function(grunt) {
     tasks.gherkinlint = function() {
         const done = this.async();
         const options = grunt.config('gherkinlint.options');
-        
-        const sass = require('node-sass');
 
         // Grab the gherkin-lint linter and required scaffolding.
         const linter = require('gherkin-lint/src/linter.js');
