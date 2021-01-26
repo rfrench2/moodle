@@ -67,7 +67,7 @@ class renderer extends \core_user\output\myprofile\renderer {
         if ($this->enabletabbedprofile) {
             /* We need the user id!
             From user/profile.php - technically by the time we are instantiated then the user id will have been validated. */
-            global $DB, $USER;
+            global $CFG, $DB, $USER;
             $userid = optional_param('id', 0, PARAM_INT);
             $userid = $userid ? $userid : $USER->id;
             $this->user = \core_user::get_user($userid);
@@ -118,7 +118,7 @@ class renderer extends \core_user\output\myprofile\renderer {
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::start_tag('div', array('class' => 'ucol2 col-md-8')); // Col two.
-        $output .= $this->tabs($categories);
+        $output .= $this->tabs($categories, $tree);
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::end_tag('div');
@@ -189,11 +189,10 @@ class renderer extends \core_user\output\myprofile\renderer {
      * @return array
      */
     protected function message_user() {
-        global $CFG, $USER;
+        global $CFG, $PAGE, $USER;
         $output = array();
 
-        // Use Moodle code just in case!
-        $course = ($this->page->context->contextlevel == CONTEXT_COURSE) ? $this->page->course : null;
+        $course = ($PAGE->context->contextlevel == CONTEXT_COURSE) ? $PAGE->course : null;  // Use Moodle code just in case!
         $user = $this->user;
 
         if (user_can_view_profile($user, $course)) {
@@ -208,7 +207,7 @@ class renderer extends \core_user\output\myprofile\renderer {
                         $linkattributes = \core_message\helper::messageuser_link_params($user->id);
                         // Change the id to us instead of copying the method.
                         $linkattributes['id'] = 'adaptable-message-user-button';
-                        $this->adaptable_messageuser_requirejs();
+                        self::adaptable_messageuser_requirejs();
                     }
                     $userbuttons['messages'] = array(
                         'buttontype' => 'message',
@@ -216,7 +215,7 @@ class renderer extends \core_user\output\myprofile\renderer {
                         'url' => new \moodle_url('/message/index.php', array('id' => $user->id)),
                         'image' => 't/message',
                         'linkattributes' => $linkattributes,
-                        'page' => $this->page
+                        'page' => $PAGE
                     );
                 }
 
@@ -236,12 +235,12 @@ class renderer extends \core_user\output\myprofile\renderer {
                         ),
                         'image' => 't/'.$contactimage,
                         'linkattributes' => \core_message\helper::togglecontact_link_params($user, $iscontact),
-                        'page' => $this->page
+                        'page' => $PAGE
                     );
                     \core_message\helper::togglecontact_requirejs();
                 }
 
-                $this->page->requires->string_for_js('changesmadereallygoaway', 'moodle');
+                $PAGE->requires->string_for_js('changesmadereallygoaway', 'moodle');
                 foreach ($userbuttons as $button) {
                     $image = $this->pix_icon($button['image'], $button['title'], 'moodle', array(
                         'class' => 'iconsmall',
@@ -269,13 +268,15 @@ class renderer extends \core_user\output\myprofile\renderer {
      *
      * @return void
      */
-    public function adaptable_messageuser_requirejs() {
+    public static function adaptable_messageuser_requirejs() {
+        global $PAGE;
+
         static $done = false;
         if ($done) {
             return;
         }
 
-        $this->page->requires->js_call_amd('core_message/message_user_button', 'send', array('#adaptable-message-user-button'));
+        $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', array('#adaptable-message-user-button'));
         $done = true;
     }
 
@@ -371,8 +372,9 @@ class renderer extends \core_user\output\myprofile\renderer {
         $output = '';
 
         if (!empty($this->user)) {
+            global $OUTPUT;
             $output .= html_writer::start_tag('li', array('class' => 'adaptableuserpicture'));
-            $output .= $this->output->user_picture($this->user, array('size' => '1'));
+            $output .= $OUTPUT->user_picture($this->user, array('size' => '1'));
             $output .= html_writer::end_tag('li');
         }
 
@@ -400,9 +402,11 @@ class renderer extends \core_user\output\myprofile\renderer {
     /**
      * About me.
      *
+     * @param string $tree
+     *
      * @return array
      */
-    protected function create_aboutme() {
+    protected function create_aboutme($tree) {
         $aboutme = new category('aboutme', get_string('aboutme', 'theme_adaptable'));
         $descriptionempty = false;
         $interestsempty = false;
@@ -420,8 +424,9 @@ class renderer extends \core_user\output\myprofile\renderer {
 
         // Interests.
         if (!empty($this->user->userdetails['interests'])) {
+            global $OUTPUT;
             // Odd but just the way things can be!
-            $interests = $this->output->tag_list(\core_tag_tag::get_item_tags('core', 'user', $this->user->id), '');
+            $interests = $OUTPUT->tag_list(\core_tag_tag::get_item_tags('core', 'user', $this->user->id), '');
         } else {
             $interests = get_string('usernointerests', 'theme_adaptable');
             $interestsempty = true;
@@ -540,10 +545,11 @@ class renderer extends \core_user\output\myprofile\renderer {
      * Create tabs.
      *
      * @param array $categories
+     * @param string $tree
      *
      * @return string
      */
-    protected function tabs($categories) {
+    protected function tabs($categories, $tree) {
         global $USER;
 
         static $tabcategories = array('coursedetails');
@@ -553,7 +559,7 @@ class renderer extends \core_user\output\myprofile\renderer {
         $tabdata->tabs = array();
 
         // Aboutme tab.
-        $aboutme = $this->create_aboutme();
+        $aboutme = $this->create_aboutme($tree);
         $category = $aboutme['category'];
         $aboutmetab = new \stdClass;
         $aboutmetab->name = $category->name;

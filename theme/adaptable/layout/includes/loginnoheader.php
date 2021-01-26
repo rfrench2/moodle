@@ -37,6 +37,44 @@ $PAGE->requires->js_call_amd('theme_adaptable/bsoptions', 'init', array());
 
 $responsivealerts = $PAGE->theme->settings->responsivealerts;
 
+// Select fonts used.
+$fontname = '';
+$fontheadername = '';
+$fonttitlename = '';
+$fontweight = '';
+$fontheaderweight = '';
+$fonttitleweight = '';
+$fontssubset = '';
+
+switch ($PAGE->theme->settings->fontname) {
+    case 'default':
+        // Get the default font used by the browser.
+    break;
+
+    default:
+        // Get the Google fonts.
+        $fontname = str_replace(" ", "+", $PAGE->theme->settings->fontname);
+        $fontheadername = str_replace(" ", "+", $PAGE->theme->settings->fontheadername);
+        $fonttitlename = str_replace(" ", "+", $PAGE->theme->settings->fonttitlename);
+
+        $fontweight = ':400,400i';
+        $fontheaderweight = ':400,400i';
+        $fonttitleweight = ':700,700i';
+        $fontssubset = '';
+
+        // Get the Google Font weights.
+        $fontweight = ':'.$PAGE->theme->settings->fontweight.','.$PAGE->theme->settings->fontweight.'i';
+        $fontheaderweight = ':'.$PAGE->theme->settings->fontheaderweight.','.$PAGE->theme->settings->fontheaderweight.'i';
+        $fonttitleweight = ':'.$PAGE->theme->settings->fonttitleweight.','.$PAGE->theme->settings->fonttitleweight.'i';
+
+        // Get the Google fonts subset.
+        if (!empty($PAGE->theme->settings->fontsubset)) {
+            $fontssubset = '&subset='.$PAGE->theme->settings->fontsubset;
+        } else {
+            $fontssubset = '';
+        }
+    break;
+}
 $standardscreenwidthclass = 'standard';
 if (!empty($PAGE->theme->settings->standardscreenwidth)) {
     $standardscreenwidthclass = $PAGE->theme->settings->standardscreenwidth;
@@ -52,12 +90,67 @@ echo $OUTPUT->doctype();
 
 <?php
 
-theme_adaptable_initialise_full();
+theme_adaptable_initialise_full($PAGE);
 $setfull = theme_adaptable_get_full();
 
-// Include header.
-require_once(dirname(__FILE__) . '/head.php');
-?>
+// HTML head.
+echo $OUTPUT->standard_head_html() ?>
+    <!-- CSS print media -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $wwwroot; ?>/theme/adaptable/style/print.css" media="print">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+    <meta name="twitter:site" value="<?php echo $SITE->fullname; ?>" />
+    <meta name="twitter:title" value="<?php echo $OUTPUT->page_title(); ?>" />
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="<?php echo $OUTPUT->page_title(); ?>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<?php echo $wwwroot; ?>" />
+    <meta name="og:site_name" value="<?php echo $SITE->fullname; ?>" />
+
+    <!-- Chrome, Firefox OS and Opera on Android topbar color -->
+    <meta name="theme-color" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <!-- Windows Phone topbar color -->
+    <meta name="msapplication-navbutton-color" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <!-- iOS Safari topbar color -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <?php
+    // Load fonts.
+    if ((!empty($fontname)) && ($fontname != 'default') && ($fontname != 'custom')) {
+        ?>
+    <!-- Load Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=<?php echo $fontname.$fontweight.$fontssubset; ?>'
+    rel='stylesheet'
+    type='text/css'>
+    <?php
+    }
+    ?>
+
+    <?php
+    if ((!empty($fontheadername)) && ($fontheadername != 'default') && ($fontname != 'custom')) {
+    ?>
+        <link href='https://fonts.googleapis.com/css?family=<?php echo $fontheadername.$fontheaderweight.$fontssubset; ?>'
+        rel='stylesheet'
+        type='text/css'>
+    <?php
+    }
+    ?>
+
+    <?php
+    if ((!empty($fonttitlename)) && ($fonttitlename != 'default') && ($fontname != 'custom')) {
+    ?>
+        <link href='https://fonts.googleapis.com/css?family=<?php echo $fonttitlename.$fonttitleweight.$fontssubset; ?>'
+        rel='stylesheet'
+        type='text/css'>
+    <?php
+    }
+    ?>
+</head>
 
 <body <?php echo $OUTPUT->body_attributes(array('two-column')); ?>>
 

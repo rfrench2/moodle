@@ -33,7 +33,7 @@ if ($ADMIN->fulltree) {
     format_text(get_string('headerdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Header image.
-    $name = 'theme_adaptable/headerbgimage'; // TODO - served by 'theme_adaptable_pluginfile'?
+    $name = 'theme_adaptable/headerbgimage';
     $title = get_string('headerbgimage', 'theme_adaptable');
     $description = get_string('headerbgimagedesc', 'theme_adaptable');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'headerbgimage');
@@ -49,6 +49,7 @@ if ($ADMIN->fulltree) {
         'no' => get_string('displayloginno', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'button', $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Show username.
@@ -79,6 +80,7 @@ if ($ADMIN->fulltree) {
     $title = get_string('coursepageheaderhidesitetitle', 'theme_adaptable');
     $description = get_string('coursepageheaderhidesitetitledesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Favicon file setting.
@@ -86,8 +88,10 @@ if ($ADMIN->fulltree) {
     $title = get_string('favicon', 'theme_adaptable');
     $description = get_string('favicondesc', 'theme_adaptable');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'favicon');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
+    // Display Course title in the header.
     $name = 'theme_adaptable/sitetitle';
     $title = get_string('sitetitle', 'theme_adaptable');
     $description = get_string('sitetitledesc', 'theme_adaptable');
@@ -97,6 +101,7 @@ if ($ADMIN->fulltree) {
         'custom' => get_string('sitetitlecustom', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'default', $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Site title.
@@ -105,6 +110,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('sitetitletextdesc', 'theme_adaptable');
     $default = '';
     $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Display Course title in the header.
@@ -136,7 +142,6 @@ if ($ADMIN->fulltree) {
     $title = get_string('sitetitlepadding', 'theme_adaptable');
     $description = get_string('sitetitlepaddingdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '0px 0px 15px 0px');
-    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Site Title Maximum Width.
@@ -152,6 +157,7 @@ if ($ADMIN->fulltree) {
     $title = get_string('coursetitlemaxwidth', 'theme_adaptable');
     $description = get_string('coursetitlemaxwidthdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '20', PARAM_INT);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Breadcrumb home.
@@ -163,6 +169,7 @@ if ($ADMIN->fulltree) {
         'icon' => get_string('breadcrumbhomeicon', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'icon', $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Breadcrumb separator.
@@ -170,6 +177,7 @@ if ($ADMIN->fulltree) {
     $title = get_string('breadcrumbseparator', 'theme_adaptable');
     $description = get_string('breadcrumbseparatordesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, 'angle-right');
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Choose to display search box or social icons.
@@ -182,6 +190,7 @@ if ($ADMIN->fulltree) {
         'search' => get_string('socialorsearchsearch', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'search', $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Search box padding.
@@ -198,6 +207,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablesavecanceloverlaydesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // My courses section.
@@ -214,6 +224,7 @@ if ($ADMIN->fulltree) {
         'style2' => get_string('headerstyle2', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'style1', $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Header 2 search box.

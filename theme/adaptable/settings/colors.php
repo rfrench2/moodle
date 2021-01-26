@@ -26,11 +26,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-// Colors section.
-$temp = new admin_settingpage('theme_adaptable_color', get_string('colorsettings', 'theme_adaptable'));
-if ($ADMIN->fulltree) {
+    // Colors section.
+    $temp = new admin_settingpage('theme_adaptable_color', get_string('colorsettings', 'theme_adaptable'));
     $temp->add(new admin_setting_heading('theme_adaptable_color', get_string('colorsettingsheading', 'theme_adaptable'),
-        format_text(get_string('colordesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
+                   format_text(get_string('colordesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Main colors heading.
     $name = 'theme_adaptable/settingsmaincolors';
@@ -381,5 +380,5 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-}
-$ADMIN->add('theme_adaptable', $temp);
+
+    $ADMIN->add('theme_adaptable', $temp);

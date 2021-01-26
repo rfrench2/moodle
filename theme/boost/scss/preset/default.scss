@@ -34,14 +34,12 @@ $warning-outline: #a6670e;
 
 // Options
 $enable-rounded: false !default;
-$enable-responsive-font-sizes: true !default;
 
 // Body
 $body-color:    $gray-900 !default;
 
 // Fonts
 $font-size-base: 0.9375rem !default;
-$rfs-base-font-size: 0.9rem !default;
 $headings-font-weight:   300 !default;
 
 // Navbar
@@ -58,23 +56,12 @@ $breadcrumb-bg:                     transparent !default;
 $breadcrumb-divider: "/" !default;
 $breadcrumb-divider-rtl: "/" !default;
 
-// Floating elements positions
-$gototop-bottom-position: 50px !default;
-
 // Alerts
 $alert-border-width:                0 !default;
 
 $card-group-margin: .25rem;
 
-// Custom control size
-$custom-control-indicator-size: 1.25rem;
-
-$input-btn-focus-color: rgba($primary, .75) !default;
-
 $input-border-color: $gray-500 !default;
-
-$dropdown-link-hover-color: $white;
-$dropdown-link-hover-bg: $primary;
 
 // stylelint-disable
 $theme-colors: () !default;
@@ -87,17 +74,6 @@ $theme-colors: map-merge((
     danger: $danger,
 ), $theme-colors);
 // stylelint-enable
-
-$spacer: 1rem !default;
-$spacers: (
-    0: 0,
-    1: ($spacer * .25),
-    2: ($spacer * .5),
-    3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 2),
-    6: ($spacer * 3)
-) !default;
 
 // Import FontAwesome.
 @import "fontawesome";
@@ -112,7 +88,6 @@ $spacers: (
 
 body {
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 .navbar {
@@ -140,4 +115,4 @@ body {
     @include button-outline-variant($warning-outline);
 }
 
-@include bg-variant(".bg-gray", $gray-200, true);
+@include bg-variant(".bg-gray", $gray-200);

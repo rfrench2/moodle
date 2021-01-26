@@ -66,7 +66,7 @@ function rrelatedcourses_put_courses($parentcourseid, $relatedcourses) {
 
     if (isset($debug)) {
         $messages[] = "In /local/swtc/lib/relatedcourseslib.php ===relatedcourses_put_courses.enter===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -150,7 +150,7 @@ function rrelatedcourses_put_courses($parentcourseid, $relatedcourses) {
 
     if (isset($debug)) {
         $messages[] = "In /local/swtc/lib/relatedcourseslib.php ===relatedcourses_put_courses.exit===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -200,7 +200,7 @@ function rrelatedcourses_get_courses($courseid) {
         // $messages[] = print_r($record, true);
         // $messages[] = "Finished printing record.";
         // print_object($record);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -279,7 +279,7 @@ function rrelatedcourses_get_courses($courseid) {
          // print_object($relatedcourses);
         $messages[] = "Finished printing relatedcourses.===";
         $messages[] = "In /local/swtc/lib/relatedcourseslib.php ===relatedcourses_get_courses.exit===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 

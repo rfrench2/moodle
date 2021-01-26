@@ -547,7 +547,7 @@ function curriculum_report_completion_index($swtc_user, $courseid, $groupid = nu
 
     if (isset($debug)) {
         $messages[] = "In /local/swtc/lib/curriculums.php === curriculum_report_completion_index.enter===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -732,7 +732,7 @@ function curriculum_report_completion_index($swtc_user, $courseid, $groupid = nu
         // print_object($parentnode);
         $messages[] = "systemcontext follows :.\n";
         $messages[] = print_r($systemcontext, true);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -778,7 +778,7 @@ function curriculum_report_completion_index($swtc_user, $courseid, $groupid = nu
         // print_object($where);
         $messages[] = print_r($where, true);
         $messages[] = "Finished printing where (again) ==curriculum_report_completion_index.===.\n";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -801,7 +801,7 @@ function curriculum_report_completion_index($swtc_user, $courseid, $groupid = nu
     if (isset($debug)) {
         $messages[] = "total is :$total. grandtotal is :$grandtotal  ==1.1.curriculum_report_completion_index.===.\n";
         // print_object("total is :$total. grandtotal is :$grandtotal");       // 10/23/19
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
     // SWTC ********************************************************************************

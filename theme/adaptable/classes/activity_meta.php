@@ -124,8 +124,4 @@ class activity_meta {
      * @var int $numrequiregrading - number of submissions requiring grading
      */
     public $numrequiregrading = 0;
-    /**
-     * @var int $numparticipants - number of participants
-     */
-    public $numparticipants = 0;
 }

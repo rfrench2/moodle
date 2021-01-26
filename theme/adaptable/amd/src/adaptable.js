@@ -59,28 +59,6 @@ define(['jquery', 'core/log'], function($ , log) {
                 $(".breadcrumb li:not(:last-child) span").not('.separator').addClass('');
                 $(".breadcrumb li:last-child").addClass("lastli");
 
-                // Edit button keep position.  Needs session storage!
-                try {
-                    $('.context-header-settings-menu .dropdown-menu .dropdown-item a[href*="edit"], #edittingbutton a').click(function(event) {
-                        event.preventDefault();
-
-                        var to = $(window).scrollTop();
-                        sessionStorage.setItem('scrollTo', to);
-                        var url = $(this).prop('href');
-                        window.location.replace(url);
-
-                        return false;
-                    });
-                    var scrollTo = sessionStorage.getItem('scrollTo');
-                    if (scrollTo != null) {
-                        window.scrollTo(0, scrollTo);
-                        sessionStorage.removeItem('scrollTo');
-                    }
-                } catch(e) {
-                    log.debug('Adaptable: Session storage exception: ' + e.name);
-                }
-
-                // Scroll to top.
                 var offset = 50;
                 var duration = 500;
                 var bttOn;
@@ -112,14 +90,6 @@ define(['jquery', 'core/log'], function($ , log) {
                     $('html, body').animate({scrollTop: 0}, duration);
                     return false;
                 })
-
-                // Anchor.
-                if (window.location.hash) {
-                    if ($("body").hasClass("pagelayout-course")) {
-                        var anchorTop = $(window.location.hash).offset().top;
-                        $('html, body').animate({scrollTop: anchorTop - 102}, duration);
-                    }
-                }
             });
         }
     };

@@ -112,8 +112,7 @@ $THEME->layouts = [
     // Embeded pages, like iframe/object embeded in moodleform - it needs as much space as possible.
     'embedded' => array(
         'file' => 'embedded.php',
-        'regions' => array('side-pre'),
-        'defaultregion' => 'side-pre',
+        'regions' => array()
     ),
     // Used during upgrade and install, and for the 'This site is undergoing maintenance' message.
     // This must not have any blocks, links, or API calls that would lead to database or cache interaction.
@@ -149,6 +148,7 @@ $THEME->layouts = [
 
 $THEME->parents = [];
 $THEME->enable_dock = false;
+$THEME->csstreepostprocessor = 'theme_boost_css_tree_post_processor';
 $THEME->extrascsscallback = 'theme_boost_get_extra_scss';
 $THEME->prescsscallback = 'theme_boost_get_pre_scss';
 $THEME->precompiledcsscallback = 'theme_boost_get_precompiled_css';

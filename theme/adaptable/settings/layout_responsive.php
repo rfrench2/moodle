@@ -37,6 +37,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide Full Header.
@@ -46,6 +47,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide Social icons.
@@ -72,6 +74,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide course title.
@@ -81,6 +84,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide activity / section navigation.
@@ -110,6 +114,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide breadcrumbs on small screens.
@@ -119,6 +124,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-md-flex';
     $choices = $screensizeflex;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide Slider.
@@ -128,6 +134,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Hide Footer.
@@ -137,6 +144,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Mobile colors heading.

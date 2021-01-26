@@ -62,7 +62,7 @@ class adaptable_admin_setting_getprops extends admin_setting {
      * @param string $saveprops Save properties
      */
     public function __construct($name, $heading, $information, $props, $settingsectionname,
-        $returnbuttonname, $savepropsbuttonname, $saveprops) {
+                                $returnbuttonname, $savepropsbuttonname, $saveprops) {
         $this->nosave = true;
         $this->props = $props;
         $this->returnbuttonname = $returnbuttonname;

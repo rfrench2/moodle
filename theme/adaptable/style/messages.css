@@ -24,7 +24,12 @@
  */
 
 @media screen and (min-width: 768px) {
-    /* M3.7+ */
+    /* M3.6 */
+    .message-drawer,
+    .message-drawer .btn,
+    .message-drawer .btn a,
+    .message-drawer .form-control,
+    /* M3.7 */
     .message-app.drawer,
     .message-app.drawer .btn,
     .message-app.drawer .btn a,
@@ -32,16 +37,20 @@
         font-size: 105%;
     }
 
-    /* M3.7+ */
+    /* M3.6 */
+    .message-drawer .btn,
+    /* M3.7 */
     .message-app.drawer .btn {
         height: auto;
     }
 
-    .message-app.drawer { /* M3.7+ */
+    .message-drawer, /* M3.6 */
+    .message-app.drawer { /* M3.7 */
         width: 400px;
     }
 
-    .message-app.drawer.hidden { /* M3.7+ */
+    .message-drawer.hidden, /* M3.6 */
+    .message-app.drawer.hidden { /* M3.7 */
         right: -400px;
     }
 }
@@ -81,9 +90,6 @@
     color: inherit !important;
 }
 
-[data-region='message-drawer'] [data-region='content-messages-footer-container'] .btn-link {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    padding: 1px 1px 0 0 !important;
+[data-region='message-drawer'] [data-region='body-container'] .btn-link:hover {
+    color: #fff !important;
 }

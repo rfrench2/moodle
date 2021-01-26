@@ -35,35 +35,25 @@ $blocks-column-width: 360px !default;
 $blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width / 2 );
 
 /* We put an absolutely positioned div in a relatively positioned div so it takes up no space */
-@include media-breakpoint-up(sm) {
-    #region-main-settings-menu {
-        position: relative;
-        float: left;
-        width: 100%;
-    }
-
-    #region-main-settings-menu > div {
-        position: absolute;
-        right: 0;
-        z-index: 100;
-        margin: 1rem;
-    }
-
-    .region_main_settings_menu_proxy {
-        width: 4rem;
-        height: 2rem;
-        background-color: $body-bg;
-        margin-left: $card-spacer-x / 2;
-        margin-bottom: $card-spacer-x / 2;
-        border-bottom-left-radius: 0.5rem;
-        float: right;
-    }
+#region-main-settings-menu {
+    position: relative;
+    float: left;
+    width: 100%;
 }
-
-@include media-breakpoint-down(sm) {
-    #region-main-settings-menu .menubar {
-        justify-content: flex-end;
-    }
+#region-main-settings-menu > div {
+    position: absolute;
+    right: 0;
+    z-index: 100;
+    margin: 1rem;
+}
+.region_main_settings_menu_proxy {
+    width: 4rem;
+    height: 2rem;
+    background-color: $body-bg;
+    margin-left: $card-spacer-x / 2;
+    margin-bottom: $card-spacer-x / 2;
+    border-bottom-left-radius: 0.5rem;
+    float: right;
 }
 
 // Required for IE11 to prevent blocks being pushed under the content.
@@ -298,8 +288,8 @@ body.drawer-open-left #region-main.has-blocks {
 
 .block_recentlyaccesseditems {
     img.icon {
-        height: 24px;
-        width: 24px;
+        height: auto;
+        width: auto;
         margin-right: 6px;
     }
 }
@@ -357,50 +347,4 @@ body.drawer-open-left #region-main.has-blocks {
 
 .block.invisibleblock .card-title {
     color: $text-muted;
-}
-
-@include media-breakpoint-down(sm) {
-    .block.card {
-        border-left: 0;
-        border-right: 0;
-    }
-}
-
-.block_social_activities li a.movehere,
-.block_site_main_menu li a.movehere {
-    display: block;
-    width: 100%;
-    height: 2rem;
-    border: 2px dashed $gray-800;
-    margin: 4px 0;
-}
-
-.pagelayout-embedded {
-    .has-fake-blocks {
-        padding: 1rem;
-        display: flex;
-    }
-
-    .has-fake-blocks .embedded-main {
-        order: 0;
-        width: calc(100% - #{$blocks-column-width});
-        margin-right: 1rem;
-    }
-
-    .embedded-blocks {
-        order: 1;
-        width: $blocks-column-width;
-    }
-
-    @media (max-width: 767.98px) {
-        .has-fake-blocks {
-            display: block;
-        }
-        .has-fake-blocks .embedded-main {
-            width: 100%;
-        }
-        .embedded-blocks {
-            width: 100%;
-        }
-    }
 }

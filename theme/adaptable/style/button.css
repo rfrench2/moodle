@@ -28,20 +28,23 @@
 /* Default style for all the buttons */
 .btn,
 .btn a {
+    display: inline-block;
+    margin-bottom: 0;
+    font-family: [[setting:fontname]];
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    text-shadow: none;
+    vertical-align: middle;
+    cursor: pointer;
     background-image: none;
     border: 1px solid #ccc;
     border-color: #e6e6e6 #e6e6e6 #bfbfbf;
     border-bottom-color: #b3b3b3;
     border-radius: [[setting:buttonradius]];
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
-    cursor: pointer;
-    font-family: [[setting:fontname]];
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 0;
     padding: 6px 12px 6px;
-    text-align: center;
-    text-shadow: none;
+    height: 36px;
 }
 
 /* Primary button */
@@ -100,17 +103,14 @@ a#adaptable-message-user-button,
 
 /* Secondary button */
 .btn-secondary {
+    min-height: 32px;
+    margin-left: 6px;    
     background-color: [[setting:buttoncolorscnd]];
     color: [[setting:buttontextcolorscnd]];
-    min-height: 32px;
     text-decoration: none !important;
 }
 
-a.btn-secondary {
-    color: [[setting:buttontextcolorscnd]];
-}
-
-.btn-secondary:hover {
+.btn-secondary:hover {    
     background-color: [[setting:buttonhovercolorscnd]];
     color: [[setting:buttontextcolorscnd]];
     text-decoration: none !important;
@@ -184,10 +184,6 @@ button.close {
 
 .navbar #edittingbutton .singlebutton {
     line-height: inherit;
-}
-
-.navbar #edittingbutton .singlebutton:first-child {
-    margin-right: 6px;
 }
 
 #edittingbutton #coursesearchnavbar .form-group .btn {

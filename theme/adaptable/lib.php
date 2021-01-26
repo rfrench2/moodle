@@ -50,35 +50,6 @@ function theme_adaptable_process_css($css, $theme) {
     // Set category custom CSS.
     $css = theme_adaptable_set_categorycustomcss($css, $theme->settings);
 
-    // Collapsed Topics colours.
-    if (empty($theme->settings->collapsedtopicscoloursenabled)) {
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname a,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname a:hover,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span.the_toggle h3.sectionname a:focus,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden h3.sectionname'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden h3.sectionname a,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden h3.sectionname a:hover,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden h3.sectionname a:focus {'.PHP_EOL;
-        $css .= '    color: [[setting:sectionheadingcolor]];'.PHP_EOL;
-        $css .= '}'.PHP_EOL;;
-
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content div.toggle,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content div.toggle:hover,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content div.toggle:focus {'.PHP_EOL;
-        $css .= '    background-color: [[setting:coursesectionheaderbg]];'.PHP_EOL;
-        $css .= '}'.PHP_EOL;
-
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span:hover,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content .toggle span:focus,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden:hover,'.PHP_EOL;
-        $css .= '.theme_adaptable .course-content ul.ctopics li.section .content.sectionhidden:focus {'.PHP_EOL;
-        $css .= '    color: inherit;'.PHP_EOL;
-        $css .= '}'.PHP_EOL;
-    }
-
     // Set custom CSS.
     if (!empty($theme->settings->customcss)) {
         $customcss = $theme->settings->customcss;
@@ -473,17 +444,19 @@ function theme_adaptable_get_zoom() {
 
 /**
  * Set user preferences for zoom (show / hide block) function
+ * @param moodle_page $page
  * @return void
  */
-function theme_adaptable_initialise_zoom() {
+function theme_adaptable_initialise_zoom(moodle_page $page) {
     user_preference_allow_ajax_update('theme_adaptable_zoom', PARAM_TEXT);
 }
 
 /**
  * Set the user preference for full screen
+ * @param moodle_page $page
  * @return void
  */
-function theme_adaptable_initialise_full() {
+function theme_adaptable_initialise_full(moodle_page $page) {
     if (theme_adaptable_get_setting('enablezoom')) {
         user_preference_allow_ajax_update('theme_adaptable_full', PARAM_TEXT);
     }
@@ -605,19 +578,13 @@ function theme_adaptable_pluginfile($course, $cm, $context, $filearea, $args, $f
             return $theme->setting_file_serve('homebk', $args, $forcedownload, $options);
         } else if ($filearea === 'pagebackground') {
             return $theme->setting_file_serve('pagebackground', $args, $forcedownload, $options);
-        } else if ($filearea === 'frontpagerendererdefaultimage') {
-            return $theme->setting_file_serve('frontpagerendererdefaultimage', $args, $forcedownload, $options);
-        } else if ($filearea === 'headerbgimage') {
-            return $theme->setting_file_serve('headerbgimage', $args, $forcedownload, $options);
-        } else if ($filearea === 'loginbgimage') {
-            return $theme->setting_file_serve('loginbgimage', $args, $forcedownload, $options);
-        } else if (preg_match("/^p[1-9][0-9]?$/", $filearea)) {
+        } else if (preg_match("/^p[1-9][0-9]?$/", $filearea) !== false) {
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
         } else if ((substr($filearea, 0, 9) === 'marketing') && (substr($filearea, 10, 5) === 'image')) {
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        } else if (preg_match("/^categoryheaderbgimage[1-9][0-9]*$/", $filearea)) { // Link: http://regexpal.com/ useful.
+        } else if (preg_match("/^categoryheaderbgimage[1-9][0-9]*$/", $filearea) !== false) { // Link: http://regexpal.com/ useful.
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        } else if (preg_match("/^categoryheaderlogo[1-9][0-9]*$/", $filearea)) { // Link: http://regexpal.com/ useful.
+        } else if (preg_match("/^categoryheaderlogo[1-9][0-9]*$/", $filearea) !== false) { // Link: http://regexpal.com/ useful.
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
         } else if ($filearea === 'iphoneicon') {
             return $theme->setting_file_serve('iphoneicon', $args, $forcedownload, $options);
@@ -645,9 +612,10 @@ function theme_adaptable_pluginfile($course, $cm, $context, $filearea, $args, $f
  * Get course activities for this course menu
  */
 function theme_adaptable_get_course_activities() {
-    global $PAGE;
+    GLOBAL $CFG, $PAGE, $OUTPUT;
     // A copy of block_activity_modules.
     $course = $PAGE->course;
+    $content = new stdClass();
     $modinfo = get_fast_modinfo($course);
     $modfullnames = array();
 
@@ -700,11 +668,6 @@ function theme_adaptable_page_init(moodle_page $page) {
     $page->requires->jquery_plugin('easing', 'theme_adaptable');
     $page->requires->jquery_plugin('adaptable', 'theme_adaptable');
 
-    if ((isloggedin()) && (theme_adaptable_get_setting('enableaccesstool')) &&
-        (file_exists($CFG->dirroot . "/local/accessibilitytool/lib.php"))) {
-        require_once($CFG->dirroot . "/local/accessibilitytool/lib.php");
-        local_accessibilitytool_page_init($page);
-    }
 }
 
 /**
@@ -756,7 +719,7 @@ function theme_adaptable_grid($left, $hassidepost) {
  *
  */
 function theme_adaptable_get_current_page() {
-    global $PAGE;
+    global $COURSE, $PAGE;
 
     // This will store the kind of activity page type we find. E.g. It will get populated with 'section' or similar.
     $currentpage = '';
@@ -777,6 +740,9 @@ function theme_adaptable_get_current_page() {
 
                 $currentpage = 'coursepage';
 
+                // Get raw querystring params from URL.
+                $getparams = http_build_query($_GET);
+
                 // Check url paramaters.  Count should be 1 if course home page. Use this to check if section page.
                 $urlparams = $url->params();
 
@@ -790,58 +756,4 @@ function theme_adaptable_get_current_page() {
     }
 
     return $currentpage;
-}
-
-/**
- * Extend the course navigation.
- *
- * Ref: MDL-69249.
- *
- * @param navigation_node $coursenode The navigation node.
- * @param stdClass $course The course.
- * @param context_course $coursecontext The course context.
- */
-function theme_adaptable_extend_navigation_course($coursenode, $course, $coursecontext) {
-    global $PAGE;
-
-    if (($PAGE->theme->name == 'adaptable') && ($PAGE->user_allowed_editing())) {
-        // Add the turn on/off settings.
-        if ($PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
-            // We are on the course page, retain the current page params e.g. section.
-            $baseurl = clone($PAGE->url);
-            $baseurl->param('sesskey', sesskey());
-        } else {
-            // Edit on the main course page.
-            $baseurl = new moodle_url(
-                '/course/view.php',
-                array('id' => $course->id, 'return' => $PAGE->url->out_as_local_url(false), 'sesskey' => sesskey())
-            );
-        }
-
-        $editurl = clone($baseurl);
-        if ($PAGE->user_is_editing()) {
-            $editurl->param('edit', 'off');
-            $editstring = get_string('turneditingoff');
-        } else {
-            $editurl->param('edit', 'on');
-            $editstring = get_string('turneditingon');
-        }
-
-        $childnode = navigation_node::create(
-            $editstring,
-            $editurl,
-            navigation_node::TYPE_SETTING, null, 'turneditingonoff', new pix_icon('i/edit', '')
-        );
-        $keylist = $coursenode->get_children_key_list();
-        if (!empty($keylist)) {
-            if (count($keylist) > 1) {
-                $beforekey = $keylist[1];
-            } else {
-                $beforekey = $keylist[0];
-            }
-        } else {
-            $beforekey = null;
-        }
-        $coursenode->add_node($childnode, $beforekey);
-    }
 }

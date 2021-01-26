@@ -27,10 +27,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-// Frontpage Block Regions Section.
-$temp = new admin_settingpage('theme_adaptable_dash_block_regions',
+    // Frontpage Block Regions Section.
+    $temp = new admin_settingpage('theme_adaptable_dash_block_regions',
         get_string('dashboardblockregionsettings', 'theme_adaptable'));
-if ($ADMIN->fulltree) {
+
     $temp->add(new admin_setting_heading('theme_adaptable_heading', get_string('dashblocklayoutbuilder', 'theme_adaptable'),
         format_text(get_string('dashblocklayoutbuilderdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -38,6 +38,7 @@ if ($ADMIN->fulltree) {
     $title = get_string('dashblocksenabled', 'theme_adaptable');
     $description = get_string('dashblocksenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/dashblocksposition';
@@ -46,12 +47,41 @@ if ($ADMIN->fulltree) {
     $default = $dashboardblockregionposition['abovecontent'];
     $choices = $dashboardblockregionposition;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
-    // Dashboard block region builder.
+    // Block region builder.
     $noregions = 20; // Number of block regions defined in config.php.
-    list('imgblder' => $imgblder, 'totalblocks' => $totalblocks) = \theme_adaptable\toolbox::admin_settings_layout_builder(
-        $temp, 'dashblocklayoutlayoutrow', $bootstrap12defaults, $bootstrap12);
+    $totalblocks = 0;
+    $imgpath = $CFG->wwwroot.'/theme/adaptable/pix/layout-builder/';
+    $imgblder = '';
+    for ($i = 1; $i <= 8; $i++) {
+        $name = 'theme_adaptable/dashblocklayoutlayoutrow' . $i;
+        $title = get_string('dashblocklayoutlayoutrow', 'theme_adaptable');
+        $description = get_string('dashblocklayoutlayoutrowdesc', 'theme_adaptable');
+        $default = $bootstrap12defaults[$i - 1];
+        $choices = $bootstrap12;
+        $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $temp->add($setting);
+
+        $settingname = 'dashblocklayoutlayoutrow' . $i;
+
+        if (!isset($PAGE->theme->settings->$settingname)) {
+            $PAGE->theme->settings->$settingname = '0-0-0-0';
+        }
+
+        if ($PAGE->theme->settings->$settingname != '0-0-0-0') {
+            $imgblder .= '<img src="' . $imgpath . $PAGE->theme->settings->$settingname . '.png' . '" style="padding-top: 5px">';
+        }
+
+        $vals = explode('-', $PAGE->theme->settings->$settingname);
+        foreach ($vals as $val) {
+            if ($val > 0) {
+                $totalblocks ++;
+            }
+        }
+    }
 
     $temp->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
         format_text(get_string('layoutcheckdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
@@ -67,5 +97,5 @@ if ($ADMIN->fulltree) {
     $temp->add(new admin_setting_heading('theme_adaptable_dashlayoutblockscount', '', $mktcountmsg));
 
     $temp->add(new admin_setting_heading('theme_adaptable_dashlayoutbuilder', '', $imgblder));
-}
-$ADMIN->add('theme_adaptable', $temp);
+
+    $ADMIN->add('theme_adaptable', $temp);

@@ -49,7 +49,7 @@ class editprofile_form extends \moodleform {
      * Define the form.
      */
     public function definition() {
-        global $COURSE;
+        global $USER, $CFG, $COURSE;
 
         $mform = $this->_form;
         $editoroptions = null;
@@ -90,7 +90,7 @@ class editprofile_form extends \moodleform {
      * Extend the form definition after data has been parsed.
      */
     public function definition_after_data() {
-        global $DB, $OUTPUT, $USER;
+        global $USER, $CFG, $DB, $OUTPUT;
 
         $mform = $this->_form;
 
@@ -161,9 +161,13 @@ class editprofile_form extends \moodleform {
      * @return array|bool
      */
     public function validation($usernew, $files) {
+        global $CFG, $DB;
+
         $usernew = (object)$usernew;
 
+        $user = $DB->get_record('user', array('id' => $usernew->id));
         $err = array();
+
         // Next the customisable profile fields.
         $err += profile_validation($usernew, $files);
 
@@ -183,11 +187,13 @@ class editprofile_form extends \moodleform {
       * @param stdClass $user
       */
     public function editprofile_definition(&$mform, $editoroptions, $filemanageroptions, $user) {
-        global $CFG, $USER;
+        global $CFG, $USER, $DB;
 
         if ($user->id > 0) {
             useredit_load_preferences($user, false);
         }
+
+        $stringman = get_string_manager();
 
         $mform->addElement('editor', 'description_editor', get_string('userdescription'),
                            'class="adaptablemyeditprofile"', $editoroptions);

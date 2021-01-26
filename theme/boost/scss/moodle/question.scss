@@ -174,6 +174,10 @@
         }
     }
 
+    .highlight {
+        @extend .text-dark;
+    }
+
     label {
         margin: 0;
         display: block;
@@ -309,6 +313,14 @@ body.path-question-type {
 .que.multichoice .answer div.r1 .icon.fa-remove {
     text-indent: 0;
 }
+.qtype_multichoice_clearchoice {
+    padding-top: 10px;
+    label {
+        cursor: pointer;
+        text-decoration: underline;
+        padding-left: 30px;
+    }
+}
 
 .formulation input[type="text"],
 .formulation select {
@@ -330,7 +342,11 @@ body.path-question-type {
 }
 
 .que .comment {
-    @include alert-variant(theme-color-level('success', $alert-bg-level), theme-color-level('success', $alert-border-level), theme-color-level('success', $alert-color-level)); /* stylelint-disable-line max-line-length */
+    @extend .alert-success;
+}
+
+.que .history {
+    @extend .card;
 }
 
 .que .ablock {
@@ -353,15 +369,16 @@ body.path-question-type {
 }
 
 .que .correctness {
+    @extend .tag;
     &.correct {
-        @include badge-variant($success);
+        background-color: $state-success-text;
     }
     &.partiallycorrect {
-        @include badge-variant($warning);
+        background-color: $state-warning-text;
     }
     &.notanswered,
     &.incorrect {
-        @include badge-variant($danger);
+        background-color: $state-danger-text;
     }
 }
 
@@ -370,7 +387,7 @@ body.path-question-type {
 }
 
 .que .validationerror {
-    color: map-get($theme-colors, 'danger');
+    @extend .text-danger;
 }
 // copied from .formFieldState in mixin.less
 // and made more specific
@@ -423,20 +440,11 @@ body.jsenabled .questionflag input[type=checkbox] {
     margin: 1em 0;
 }
 
-#page-question-preview .collapsibleregion {
-    .collapsibleregioncaption,
-    .collapsibleregionextracontent {
-        display: inline-block;
-    }
-}
-
 // imported from quiz.css
 
 #page-mod-quiz-edit ul.slots .activityinstance {
     > a {
-        display: flex;
-        max-width: 100%;
-        align-items: center;
+        display: inline;
         text-indent: 0;
         padding-left: 0;
     }

@@ -38,6 +38,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('stickynavbardesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Enable/Disable menu items.
@@ -46,6 +47,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablehomedesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enablehomeredirect';
@@ -53,6 +55,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablehomeredirectdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enablemyhome';
@@ -60,6 +63,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablemyhomedesc', 'theme_adaptable', get_string('myhome'));
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enableevents';
@@ -67,6 +71,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableeventsdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enablethiscourse';
@@ -74,6 +79,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablethiscoursedesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enablecoursesections';
@@ -113,6 +119,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablezoomshowtextdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/enableshowhideblocks';
@@ -120,6 +127,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableshowhideblocksdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Show / hide text for the show / hide blocks button.
@@ -135,6 +143,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablenavbarwhenloggedoutdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Settings icon and Edit button.
@@ -147,6 +156,7 @@ if ($ADMIN->fulltree) {
         'cogandbutton' => get_string('editsettingsbuttonshowcogandbutton', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'cog', $choices );
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/displayeditingbuttontext';
@@ -154,6 +164,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('displayeditingbuttontextdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // My courses section.
@@ -169,6 +180,7 @@ if ($ADMIN->fulltree) {
         'includehidden' => get_string('mysitesinclude', 'theme_adaptable'),
         'disabled' => get_string('mysitesdisabled', 'theme_adaptable')
     );
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $setting = new admin_setting_configselect($name, $title, $description, 'excludehidden', $choices);
     $temp->add($setting);
 
@@ -183,12 +195,14 @@ if ($ADMIN->fulltree) {
     $title = get_string('mycoursesmenulimit', 'theme_adaptable');
     $description = get_string('mycoursesmenulimitdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '20', PARAM_INT);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/mysitesmaxlength';
     $title = get_string('mysitesmaxlength', 'theme_adaptable');
     $description = get_string('mysitesmaxlengthdesc', 'theme_adaptable');
     $setting = new admin_setting_configselect($name, $title, $description, '30', $from20to40);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/mysitessortoverride';
@@ -198,11 +212,10 @@ if ($ADMIN->fulltree) {
         'off' => get_string('mysitessortoverrideoff', 'theme_adaptable'),
         'strings' => get_string('mysitessortoverridestrings', 'theme_adaptable'),
         'profilefields' => get_string('mysitessortoverrideprofilefields', 'theme_adaptable'),
-        'profilefieldscohort' => get_string('mysitessortoverrideprofilefieldscohort', 'theme_adaptable'),
-        'myoverview' => get_string('mysitessortoverridemyoverview', 'theme_adaptable'),
-        'last' => get_string('mysitessortoverridelast', 'theme_adaptable')
+        'profilefieldscohort' => get_string('mysitessortoverrideprofilefieldscohort', 'theme_adaptable')
     );
-    $setting = new admin_setting_configselect($name, $title, $description, 'myoverview', $choices);
+    $setting = new admin_setting_configselect($name, $title, $description, 'off', $choices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_adaptable/mysitessortoverridefield';
@@ -221,35 +234,8 @@ if ($ADMIN->fulltree) {
         'fullnamenohover' => get_string('mysitesmenudisplayfullnamenohover', 'theme_adaptable'),
         'fullnamehover' => get_string('mysitesmenudisplayfullnamefullnameonhover', 'theme_adaptable')
     );
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $setting = new admin_setting_configselect($name, $title, $description, 'shortcodehover', $displaychoices);
-    $temp->add($setting);
-
-    $name = 'theme_adaptable/chiddenicon';
-    $title = get_string('chiddenicon', 'theme_adaptable');
-    $description = get_string('chiddenicondesc', 'theme_adaptable');
-    $default = 'eye-slash';
-    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
-
-    $name = 'theme_adaptable/cfrozenicon';
-    $title = get_string('cfrozenicon', 'theme_adaptable');
-    $description = get_string('cfrozenicondesc', 'theme_adaptable');
-    $default = 'snowflake-o';
-    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
-
-    $name = 'theme_adaptable/cneveraccessedicon';
-    $title = get_string('cneveraccessedicon', 'theme_adaptable');
-    $description = get_string('cneveraccessedicondesc', 'theme_adaptable');
-    $default = 'exclamation-circle';
-    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
-
-    $name = 'theme_adaptable/cdefaulticon';
-    $title = get_string('cdefaulticon', 'theme_adaptable');
-    $description = get_string('cdefaulticondesc', 'theme_adaptable');
-    $default = 'graduation-cap';
-    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
     $temp->add($setting);
 
     // This course section.
@@ -266,6 +252,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     // Display Grades.
@@ -277,6 +264,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 }
 

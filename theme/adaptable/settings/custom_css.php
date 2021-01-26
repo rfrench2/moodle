@@ -26,9 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-// Custom CSS and JS section.
-$temp = new admin_settingpage('theme_adaptable_generic', get_string('customcssjssettings', 'theme_adaptable'));
-if ($ADMIN->fulltree) {
+    // Custom CSS and JS section.
+    $temp = new admin_settingpage('theme_adaptable_generic', get_string('customcssjssettings', 'theme_adaptable'));
     $temp->add(new admin_setting_heading('theme_adaptable_generic', get_string('genericsettingsheading', 'theme_adaptable'),
         format_text(get_string('genericsettingsdescription', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -68,6 +67,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('jssectionrestricteddashboardonlydesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-}
-$ADMIN->add('theme_adaptable', $temp);
+
+    $ADMIN->add('theme_adaptable', $temp);

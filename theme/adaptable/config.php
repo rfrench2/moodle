@@ -23,6 +23,11 @@
  * @copyright  2017-2019 Manoj Solanki (Coventry University)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * Lenovo history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ * 11/14/19 - Experimenting with other layouts and adding the Lenovo sliders.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -81,6 +86,8 @@ $courselayoutregions = array('side-post',
         'course-top-c',
         'course-top-d',
         'news-slider-a',
+        'related-slider-a',             // 08/01/19 Lenovo
+        'suggest-slider-a',          // 08/01/19 Lenovo
         'course-tab-one-a',
         'course-tab-two-a',
         'my-tab-one-a',
@@ -133,9 +140,9 @@ $THEME->sheets = array(
         'navigation',
         'notifications',
         'responsive',
+        'search',
         'tabs',
         'user',
-        'print',
         'categorycustom',
         'custom'
 );
@@ -186,15 +193,18 @@ $THEME->layouts = array(
     ),
     // Part of course, typical for modules - default page layout if $cm specified in require_login().
     'incourse' => array(
-        'file' => 'columns2.php',
-        'regions' => array('side-post', 'course-section-a'),
-        'defaultregion' => 'side-post',
-    ),
+       // 'file' => 'columns2.php',             // 11/14/19 - Lenovo
+       'file' => 'course.php',
+       // 'regions' => array('side-post', 'course-section-a'),          // 11/14/19 - Lenovo
+       'regions' => array('side-post', 'related-slider-a'),        // 11/14/19 - Lenovo
+       'defaultregion' => 'side-post',
+   ),
     // The site home page.
     'frontpage' => array(
         'file' => 'frontpage.php',
         'regions' => $regions,
-        'defaultregion' => 'side-post'
+        'defaultregion' => 'side-post',
+        'options' => array('nonavbar' => true),
     ),
     // Server administration scripts.
     'admin' => array(
@@ -260,8 +270,11 @@ $THEME->layouts = array(
     ),
     // The pagelayout used for reports.
     'report' => array(
-        'file' => 'columns2.php',
-        'regions' => array('side-post'),
+        'file' => 'columns2.php',            // 11/14/19 - Lenovo
+        // 'file' => 'course.php',
+        'regions' => array('side-post'),             // 11/14/19 - Lenovo
+        // 'regions' => array('side-post', 'related-slider-a'),        // 11/14/19 - Lenovo - doesn't work.
+        // 'regions' => $courselayoutregions,          // 11/14/19 - Lenovo
         'defaultregion' => 'side-post',
     ),
     // The pagelayout used for safebrowser and securewindow.

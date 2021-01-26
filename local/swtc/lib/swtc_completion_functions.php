@@ -83,7 +83,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         $messages[] = "Lenovo ********************************************************************************.";
         $messages[] = "Entering lenovo_completion_functions.php. ===lenovo_report_completion.enter.";
         $messages[] = "Lenovo ********************************************************************************.";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -97,7 +97,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         // print_object($where);
         $messages[] = "Finished printing where ==lenovo_report_completion===.\n";
         // print_object($parentnode);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -160,7 +160,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         $messages[] = "Finished printing where (again).\n";
         $messages[] = "grandtotal is :$grandtotal.\n";
         // print_object($grandtotal);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -211,7 +211,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         // Always output standard header information.
         // SWTC ********************************************************************************.
         $messages[] = "Entering lenovo_completion_functions.php ===lenovo_set_where_conditions_by_accesstype.enter===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -409,7 +409,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         $messages[] = "Finished printing where (again).";
         $messages[] = "grandtotal is :$grandtotal.";
         // print_object($grandtotal);
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -495,7 +495,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         // Always output standard header information.
         // SWTC ********************************************************************************.
         $messages[] = "Entering lenovo_completion_functions.php ===lenovo_set_where_conditions_on_accesstype.enter===";
-        debug_logmessage($messages, 'both');
+        $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
@@ -570,7 +570,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
                 // print_object("==/lib/completionlib.php:get_num_tracked_users=== - groups follows :\n");
                 // print_object($groups);
                 $messages[] = "Finished printing groups.\n";
-                debug_logmessage($messages, 'both');
+                $debug->logmessage($messages, 'both');
                 unset($messages);
             }
         }
@@ -606,7 +606,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
         // print_object("==/lib/completionlib.php:get_num_tracked_users===.\n");
         // print_object($enrolledsql);
         // print_object($params);
-        debug_logmessage($messages, 'detailed');
+        $debug->logmessage($messages, 'detailed');
         unset($messages);
     }
     // SWTC ********************************************************************************

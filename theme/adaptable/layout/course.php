@@ -24,6 +24,11 @@
  * @author     2019 G J Barnard - {@link http://moodle.org/user/profile.php?id=442195}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * Lenovo history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ * 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -61,7 +66,7 @@ if ($movesidebartofooter) {
 
 <div class="container outercont">
     <?php
-        echo $OUTPUT->page_navbar();
+        echo $OUTPUT->page_navbar(false);
     ?>
     <div id="page-content" class="row<?php echo $regions['direction'];?>">
         <?php
@@ -142,6 +147,13 @@ if ($movesidebartofooter) {
 
                         echo $OUTPUT->course_content_header();
                         echo $OUTPUT->main_content();
+                        
+                        // Lenovo ********************************************************************************.
+                        // 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
+                        // Lenovo ********************************************************************************.
+                        echo $OUTPUT->get_block_regions('customrowsetting', 'related-slider-', '12-0-0-0');     // 08/01/19 Lenovo
+                        echo $OUTPUT->get_block_regions('customrowsetting', 'suggest-slider-', '12-0-0-0');     // 08/01/19 Lenovo
+                        
                         echo $OUTPUT->course_content_footer();
 
                         echo '</section>';
@@ -161,6 +173,13 @@ if ($movesidebartofooter) {
                 }
                 echo $OUTPUT->course_content_header();
                 echo $OUTPUT->main_content();
+                
+                // Lenovo ********************************************************************************.
+                // 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
+                // Lenovo ********************************************************************************.
+                echo $OUTPUT->get_block_regions('customrowsetting', 'related-slider-', '12-0-0-0');     // 08/01/19 Lenovo
+                echo $OUTPUT->get_block_regions('customrowsetting', 'suggest-slider-', '12-0-0-0');     // 08/01/19 Lenovo
+                
                 echo $OUTPUT->course_content_footer();
             }
             ?>

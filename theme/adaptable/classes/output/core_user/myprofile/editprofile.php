@@ -46,7 +46,7 @@ class editprofile {
      * @return array
      */
     public static function generate_form() {
-        global $CFG, $DB, $PAGE, $USER;
+        global $CFG, $DB, $PAGE, $SITE, $USER;
 
         $userid = optional_param('id', 0, PARAM_INT);
         $userid = $userid ? $userid : $USER->id;

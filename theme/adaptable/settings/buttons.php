@@ -26,9 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-// Buttons Section.
-$temp = new admin_settingpage('theme_adaptable_buttons', get_string('buttonsettings', 'theme_adaptable'));
-if ($ADMIN->fulltree) {
+    // Buttons Section.
+    $temp = new admin_settingpage('theme_adaptable_buttons', get_string('buttonsettings', 'theme_adaptable'));
     $temp->add(new admin_setting_heading('theme_adaptable_header', get_string('buttonsettingsheading', 'theme_adaptable'),
     format_text(get_string('buttondesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -228,5 +227,5 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_configselect($name, $title, $description, '0px', $shadowchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-}
-$ADMIN->add('theme_adaptable', $temp);
+
+    $ADMIN->add('theme_adaptable', $temp);

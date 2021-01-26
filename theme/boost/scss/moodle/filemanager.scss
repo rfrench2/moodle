@@ -119,15 +119,12 @@
 }
 
 .fp-viewbar:not(.disabled) a.checked {
-    background-color: darken(map-get($theme-colors, 'secondary'), 10%);
-    color: color-yiq(darken(map-get($theme-colors, 'secondary'), 10%));
-    border-color: darken(map-get($theme-colors, 'secondary'), 12.5%);
+    @extend .btn-secondary.active;
 }
 
 .fp-viewbar.disabled a {
-    pointer-events: none;
-    opacity: $btn-disabled-opacity;
-    @include box-shadow(none);
+    @extend .btn.disabled;
+    @extend .btn-secondary.disabled;
 }
 
 .file-picker .fp-clear-left {
@@ -188,7 +185,6 @@
 
 .fp-iconview .fp-filename-field {
     height: 33px;
-    margin-top: 3px;
     word-wrap: break-word;
     overflow: hidden;
     position: absolute;
@@ -558,7 +554,6 @@ a.ygtvspacer:hover {
 .filemanager.fm-maxfiles .fp-btn-add,
 .filemanager.fm-maxfiles .dndupload-message,
 .filemanager.fm-noitems .fp-btn-download,
-.filemanager.fm-noitems .fp-btn-delete,
 .filemanager .fm-empty-container,
 .filemanager.fm-noitems .filemanager-container .fp-content {
     display: none;
@@ -630,7 +625,7 @@ a.ygtvspacer:hover {
 }
 
 .fitem.disabled .fp-btn-choose {
-    color: $text-muted;
+    @extend .text-muted;
 }
 
 .fitem.disabled .filepicker-filelist .filepicker-filename {
@@ -741,12 +736,10 @@ a.ygtvspacer:hover {
 }
 
 .filemanager .fp-iconview .fp-folder.fp-hascontextmenu .fp-contextmenu {
+    display: block;
     position: absolute;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    right: 7px;
+    bottom: 5px;
 }
 
 .filemanager .fp-treeview .fp-folder.fp-hascontextmenu .fp-contextmenu,

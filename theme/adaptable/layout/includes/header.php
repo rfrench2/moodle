@@ -44,10 +44,10 @@ if ( (strstr($PAGE->pagetype, 'course')) ||
 }
 
 // Screen size.
-theme_adaptable_initialise_zoom();
+theme_adaptable_initialise_zoom($PAGE);
 $setzoom = theme_adaptable_get_zoom();
 
-theme_adaptable_initialise_full();
+theme_adaptable_initialise_full($PAGE);
 $setfull = theme_adaptable_get_full();
 
 $bsoptionsdata = array('data' => array());
@@ -80,8 +80,8 @@ if (
     (isloggedin() && !isguestuser()) ||
     (!empty($PAGE->theme->settings->enablenavbarwhenloggedout)) ) {
 
-    // Show navbar unless disabled by config.
-    if (empty($PAGE->layout_options['nonavbar'])) {
+    // Remove menu navbar in Quiz pages even if they don't use SEB.
+    if ($PAGE->pagetype != "mod-quiz-attempt") {
         $shownavbar = true;
     }
 }
@@ -149,6 +149,45 @@ if (isloggedin()) {
     $usermenu = $OUTPUT->render_from_template('theme_adaptable/usermenu', $data);
 }
 
+// Select fonts used.
+$fontname = '';
+$fontheadername = '';
+$fonttitlename = '';
+$fontweight = '';
+$fontheaderweight = '';
+$fonttitleweight = '';
+$fontssubset = '';
+
+switch ($PAGE->theme->settings->fontname) {
+    case 'default':
+        // Get the default font used by the browser.
+    break;
+
+    default:
+        // Get the Google fonts.
+        $fontname = str_replace(" ", "+", $PAGE->theme->settings->fontname);
+        $fontheadername = str_replace(" ", "+", $PAGE->theme->settings->fontheadername);
+        $fonttitlename = str_replace(" ", "+", $PAGE->theme->settings->fonttitlename);
+
+        $fontweight = ':400,400i';
+        $fontheaderweight = ':400,400i';
+        $fonttitleweight = ':700,700i';
+        $fontssubset = '';
+
+        // Get the Google Font weights.
+        $fontweight = ':'.$PAGE->theme->settings->fontweight.','.$PAGE->theme->settings->fontweight.'i';
+        $fontheaderweight = ':'.$PAGE->theme->settings->fontheaderweight.','.$PAGE->theme->settings->fontheaderweight.'i';
+        $fonttitleweight = ':'.$PAGE->theme->settings->fonttitleweight.','.$PAGE->theme->settings->fonttitleweight.'i';
+
+        // Get the Google fonts subset.
+        if (!empty($PAGE->theme->settings->fontsubset)) {
+            $fontssubset = '&subset='.$PAGE->theme->settings->fontsubset;
+        } else {
+            $fontssubset = '';
+        }
+    break;
+}
+
 // Get the HTML for the settings bits.
 $html = theme_adaptable_get_html_for_settings($OUTPUT, $PAGE);
 
@@ -175,9 +214,66 @@ echo $OUTPUT->doctype();
     <link rel="icon" href="<?php echo $OUTPUT->favicon(); ?>" />
 
 <?php
-// Include header.
-require_once(dirname(__FILE__) . '/head.php');
+// HTML head.
+echo $OUTPUT->standard_head_html() ?>
+    <!-- CSS print media -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $wwwroot; ?>/theme/adaptable/style/print.css" media="print">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+    <meta name="twitter:site" value="<?php echo $SITE->fullname; ?>" />
+    <meta name="twitter:title" value="<?php echo $OUTPUT->page_title(); ?>" />
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="<?php echo $OUTPUT->page_title(); ?>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<?php echo $wwwroot; ?>" />
+    <meta name="og:site_name" value="<?php echo $SITE->fullname; ?>" />
+
+    <!-- Chrome, Firefox OS and Opera on Android topbar color -->
+    <meta name="theme-color" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <!-- Windows Phone topbar color -->
+    <meta name="msapplication-navbutton-color" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <!-- iOS Safari topbar color -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="<?php echo $PAGE->theme->settings->maincolor; ?>" />
+
+    <?php
+    // Load fonts.
+    if ((!empty($fontname)) && ($fontname != 'default') && ($fontname != 'custom')) {
+        ?>
+    <!-- Load Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=<?php echo $fontname.$fontweight.$fontssubset; ?>'
+    rel='stylesheet'
+    type='text/css'>
+    <?php
+    }
+    ?>
+
+    <?php
+    if ((!empty($fontheadername)) && ($fontheadername != 'default') && ($fontname != 'custom')) {
+    ?>
+        <link href='https://fonts.googleapis.com/css?family=<?php echo $fontheadername.$fontheaderweight.$fontssubset; ?>'
+        rel='stylesheet'
+        type='text/css'>
+    <?php
+    }
+    ?>
+
+    <?php
+    if ((!empty($fonttitlename)) && ($fonttitlename != 'default') && ($fontname != 'custom')) {
+    ?>
+        <link href='https://fonts.googleapis.com/css?family=<?php echo $fonttitlename.$fonttitleweight.$fontssubset; ?>'
+        rel='stylesheet'
+        type='text/css'>
+    <?php
+    }
+    ?>
+</head>
+
+<?php
 // If it is a mobile and the header is not hidden or it is a desktop there will be a page header.
 $pageheader = 'has-page-header';
 
@@ -191,7 +287,7 @@ if (!empty($PAGE->theme->settings->responsivesectionnav)) {
     $nomobilenavigation = 'nomobilenavigation';
 }
 ?>
-<body <?php echo $OUTPUT->body_attributes(array('theme_adaptable', 'two-column', $setzoom, 'header-'.$adaptableheaderstyle,
+<body <?php echo $OUTPUT->body_attributes(array('two-column', $setzoom, 'header-'.$adaptableheaderstyle,
         $pageheader, $hasheaderbg, $nomobilenavigation)); ?>>
 
 <?php
@@ -201,7 +297,7 @@ echo $OUTPUT->standard_top_of_body_html();
 // echo $OUTPUT->get_dev_alert();.
 ?>
 
-<div id="page" class="<?php echo "$setfull $showiconsclass $standardscreenwidthclass"; ?>">
+<div id="page" class="container-fluid <?php echo "$setfull $showiconsclass $standardscreenwidthclass"; ?>">
 
 <?php
     echo $OUTPUT->get_alert_messages();
@@ -212,7 +308,7 @@ echo $OUTPUT->standard_top_of_body_html();
 
     <header id="adaptable-page-header-wrapper" <?php echo $headerbg; ?> >
 
-    <div id="above-header" class="mb-lg-3">
+    <div id="above-header" class="mb-2 mb-lg-3">
         <div class="container">
             <nav class="navbar navbar-expand btco-hover-menu">
 
@@ -260,8 +356,8 @@ echo $OUTPUT->standard_top_of_body_html();
 
                         <?php
 
-                        // Remove Messages and Notifications icons when no navbar.
-                        if (empty($PAGE->layout_options['nonavbar'])) {
+                        // Remove Messages and Notifications icons in Quiz pages even if they don't use SEB.
+                        if ($PAGE->pagetype != "mod-quiz-attempt") {
                             echo '<div class="my-auto mx-md-1">' . $OUTPUT->navbar_plugin_output() . '</div>';
                         }
 
@@ -334,8 +430,8 @@ echo $OUTPUT->standard_top_of_body_html();
 
         <div class="col-lg-8 p-0 my-auto">
             <?php
-            // Remove Search Box or Social icons when no navbar.
-            if (empty($PAGE->layout_options['nonavbar'])) {
+            // Remove Search Box or Social icons in Quiz pages even if they don't use SEB.
+            if ($PAGE->pagetype != "mod-quiz-attempt") {
                 // Social icons.
                 if ($PAGE->theme->settings->socialorsearch == 'social') {
                         ?>

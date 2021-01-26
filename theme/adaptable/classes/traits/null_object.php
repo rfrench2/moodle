@@ -73,7 +73,7 @@ trait null_object {
      * @param string $prop
      * @param string $val
      */
-    public function set_default($prop, $val) {
+    protected function set_default($prop, $val) {
 
         if (isset($this->_defaults[$prop])) {
             throw new \coding_exception('Default value already set for '.$prop.' - '.$this->_defaults[$prop]);

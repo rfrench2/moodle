@@ -222,6 +222,7 @@ trait single_section_page {
      * @return string HTML to output.
      */
     protected function section_nav_selection_content($course, $sections, $displaysection, $section = 1) {
+        global $CFG;
         $o = '';
         $sectionmenu = array();
         $sectionmenu[course_get_url($course)->out(false)] = get_string('maincoursepage', 'theme_adaptable');

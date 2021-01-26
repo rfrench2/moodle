@@ -40,7 +40,30 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2017 Manoj Solanki (Coventry University)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * Lenovo history:
+ *
+ *	10/14/19 - Moved majority of customized code from here to /local/swtc/classes/traits/swtc_adaptable.php (including history).
+ * 10/21/19 - Added call to local_swtc_find_and_remove_shared_resources.
+ * 11/06/19 - SWTC for Moodle 3.7+; to solve missing definitions elsewhere, changing require_once to require for swtc.php
+ *	                        moved majority of customized code from here to /local/swtc/classes/traits/swtc_adaptable.php (including history);
+ *                         added call to swtc_find_and_remove_excludecourses.
+ *
  */
+
+// SWTC ********************************************************************************.
+// SWTC customized code for Adaptable theme.
+// SWTC ********************************************************************************.
+use \local_swtc\traits\swtc_adaptable;
+
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+// SWTC ********************************************************************************.
+// Include SWTC functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_lib_enrollib.php');
 
 use cm_info;
 use core_text;
@@ -63,6 +86,11 @@ use action_link;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_renderer extends \core_course_renderer {
+
+    // SWTC ********************************************************************************.
+    // SWTC customized code for Adaptable theme.
+    // SWTC ********************************************************************************.
+    use swtc_adaptable;
 
     /**
      * Build the HTML for the module chooser javascript popup
@@ -89,8 +117,9 @@ class course_renderer extends \core_course_renderer {
      * @return string
      */
     protected function coursecat_coursebox(coursecat_helper $chelper, $course, $additionalclasses = '') {
+        global $CFG, $OUTPUT, $PAGE;
         $type = theme_adaptable_get_setting('frontpagerenderer');
-        if ($type == 3 || $this->output->body_id() != 'page-site-index') {
+        if ($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
             return parent::coursecat_coursebox($chelper, $course, $additionalclasses = '');
         }
 
@@ -102,6 +131,10 @@ class course_renderer extends \core_course_renderer {
 
         if ($type == 4) {
             $additionalcss = 'hover covtiles';
+            $type = 2;
+            $covhidebutton = "true";
+        } else {
+            $covhidebutton = "false";
         }
 
         if (!isset($this->strings->summary)) {
@@ -126,7 +159,7 @@ class course_renderer extends \core_course_renderer {
         }
 
         // Number of tiles per row: 12=1 tile / 6=2 tiles / 4 (default)=3 tiles / 3=4 tiles / 2=6 tiles.
-        $spanclass = $this->page->theme->settings->frontpagenumbertiles;
+        $spanclass = $PAGE->theme->settings->frontpagenumbertiles;
 
         // Display course tiles depending the number per row.
         $content .= html_writer::start_tag('div',
@@ -149,7 +182,7 @@ class course_renderer extends \core_course_renderer {
         }
 
         if ($type == 1) {
-            $content .= $this->coursecat_coursebox_enrolmenticons($course);
+            $content .= $this->coursecat_coursebox_enrolmenticons($course, $type);
         }
 
         if (($type == 1) || ($showcourses < self::COURSECAT_SHOW_COURSES_EXPANDED)) {
@@ -175,9 +208,9 @@ class course_renderer extends \core_course_renderer {
             $btn = html_writer::tag('span', get_string('course', 'theme_adaptable') . ' ' .
                     $arrow, array('class' => 'get_stringlink'));
 
-            if (($type != 4) || (empty($this->page->theme->settings->covhidebutton))) {
+            if (empty($PAGE->theme->settings->covhidebutton)) {
                 $content .= html_writer::link(new moodle_url('/course/view.php',
-                    array('id' => $course->id)), $btn, array('class' => " coursebtn submit btn btn-info btn-sm"));
+                        array('id' => $course->id)), $btn, array('class' => " coursebtn submit btn btn-info btn-sm"));
             }
         }
 
@@ -215,27 +248,21 @@ class course_renderer extends \core_course_renderer {
      *
      * Type - 1 = No Overlay.
      * Type - 2 = Overlay.
-     * Type - 3 = Moodle default.
-     * Type - 4 = Coventry tiles.
      *
      * @param coursecat_helper $chelper
      * @param string $course
      * @param int $type = 3
      * @return string
      */
-    protected function coursecat_coursebox_content(coursecat_helper $chelper, $course, $type = 3) {
-        global $CFG;
+    protected function coursecat_coursebox_content(coursecat_helper $chelper, $course, $type=3) {
+        global $CFG, $OUTPUT, $PAGE;
 
         if ($course instanceof stdClass) {
             require_once($CFG->libdir. '/coursecatlib.php');
             $course = new core_course_list_element($course);
         }
-        if ($type == 3 || $this->output->body_id() != 'page-site-index') {
+        if ($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
             return parent::coursecat_coursebox_content($chelper, $course);
-        }
-        if ($type == 4) {
-            // From this method's perspective 2 and 4 are the same.
-            $type = 2;
         }
         $content = '';
 
@@ -255,7 +282,7 @@ class course_renderer extends \core_course_renderer {
                     $contentimages .= html_writer::end_tag('div');
                 } else {
                     $contentimages .= html_writer::tag('div', '', array('class' => 'cimbox',
-                        'style' => 'background-image: url(\''.$url.'\');'));
+                                                       'style' => 'background-image: url(\''.$url.'\');'));
                 }
             } else {
                 $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
@@ -268,9 +295,9 @@ class course_renderer extends \core_course_renderer {
         }
         if (strlen($contentimages) == 0 && $type == 2) {
             // Default image.
-            $url = $this->page->theme->setting_file_url('frontpagerendererdefaultimage', 'frontpagerendererdefaultimage');
+            $url = $PAGE->theme->setting_file_url('frontpagerendererdefaultimage', 'frontpagerendererdefaultimage');
             $contentimages .= html_writer::tag('div', '', array('class' => 'cimbox',
-                'style' => 'background-image: url(\''.$url.'\');'));
+                                               'style' => 'background-image: url(\''.$url.'\');'));
         }
         $content .= $contentimages.$contentfiles;
 
@@ -279,12 +306,10 @@ class course_renderer extends \core_course_renderer {
         }
 
         if ($type == 2) {
-            $content .= html_writer::start_tag('a', array(
-                'class' => 'coursebox-content',
-                'href' => new moodle_url('/course/view.php', array('id' => $course->id))
-            ));
+            $content .= html_writer::start_tag('div', array('class' => 'coursebox-content'));
             $coursename = $chelper->get_course_formatted_name($course);
-            $content .= html_writer::tag('h3', $coursename, array('class' => $course->visible ? '' : 'dimmed'));
+            $content .= html_writer::tag('h3', html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
+                    $coursename, array('class' => $course->visible ? '' : 'dimmed')));
         }
         $content .= html_writer::start_tag('div', array('class' => 'summary'));
         if (ISSET($coursename)) {
@@ -329,8 +354,8 @@ class course_renderer extends \core_course_renderer {
             }
         }
         if ($type == 2) {
-            $content .= html_writer::end_tag('a');
-            // End coursebox-content.
+            $content .= html_writer::end_tag('div');
+            // End course-content.
         }
         $content .= html_writer::tag('div', '', array('class' => 'boxfooter')); // Coursecat.
 
@@ -380,19 +405,27 @@ class course_renderer extends \core_course_renderer {
      * Frontpage course list
      *
      * @return string
+     *
+     * Lenovo history:
+     *
+     *	10/14/19 - Moved majority of customized code from here to /local/swtc/classes/traits/swtc_adaptable.php (including history).
+     * 10/21/19 - Added call to local_swtc_find_and_remove_shared_resources.
+     *	11/03/19 - Changed name of local_swtc_find_and_remove_shared_resources to swtc_find_and_remove_excludecourses.
+	 *
      */
     public function frontpage_my_courses() {
-        global $CFG, $DB;
+        global $USER, $CFG, $DB;
         $output = '';
         if (!isloggedin() or isguestuser()) {
             return '';
         }
-        // Calls a core renderer method (render_mycourses) to get list of a user's current courses that they are enrolled on.
-        $sortedcourses = $this->render_mycourses();
+        // Calls a local method (render_mycourses) to get list of a user's current courses that they are enrolled on.
+        $courses = $this->render_mycourses();
+        list($sortedcourses) = $this->render_mycourses();
 
         if (!empty($sortedcourses) || !empty($rcourses) || !empty($rhosts)) {
             $chelper = new coursecat_helper();
-            if (count($sortedcourses) > $CFG->frontpagecourselimit) {
+            if (count($courses) > $CFG->frontpagecourselimit) {
                 // There are more enrolled courses than we can display, display link to 'My courses'.
                 $totalcount = count($sortedcourses);
                 $courses = array_slice($sortedcourses, 0, $CFG->frontpagecourselimit, true);
@@ -409,7 +442,16 @@ class course_renderer extends \core_course_renderer {
                 $totalcount = $DB->count_records('course') - 1;
             }
             $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->set_attributes(
-                array('class' => 'frontpage-course-list-enrolled'));
+                    array('class' => 'frontpage-course-list-enrolled'));
+
+            // SWTC ********************************************************************************.
+            // Search for courses that should be removed for the user.
+            // 10/21/19 - Added call to local_swtc_find_and_remove_shared_resources.
+            // 11/03/19 - Changed name of local_swtc_find_and_remove_shared_resources to swtc_find_and_remove_excludecourses.
+            // SWTC ********************************************************************************.
+            $sortedcourses = swtc_find_and_remove_excludecourses($sortedcourses);
+            $totalcount = count($sortedcourses);        // 10/21/19 - Get a new total.
+
             $output .= $this->coursecat_courses($chelper, $sortedcourses, $totalcount);
 
             if (!empty($rcourses)) {
@@ -536,38 +578,22 @@ class course_renderer extends \core_course_renderer {
             return parent::course_section_cm_name($mod, $displayoptions);
         }
 
+        $output = '';
         if (!$mod->uservisible && empty($mod->availableinfo)) {
             // Nothing to be displayed to the user.
-            return '';
+            return $output;
         }
-
-        if (!$mod->url) {
-            return '';
-        }
-
-        $templateclass = new \core_course\output\course_module_name($mod, $this->page->user_is_editing(), $displayoptions);
-        $data = $this->adaptable_course_section_cm_name($mod, $templateclass);
-
-        return $this->output->render_from_template('core/inplace_editable', $data['templatedata']);
-    }
-
-    /**
-     * Common course_section_cm_name code.
-     *
-     * @param cm_info $mod
-     * @param course_module_name $templateclass
-     *
-     * @return array('templatedata', 'groupinglabel').
-     */
-    protected function adaptable_course_section_cm_name(cm_info $mod, $templateclass) {
         $url = $mod->url;
+        if (!$url) {
+            return $output;
+        }
 
         // Accessibility: for files get description via icon, this is very ugly hack!
         $instancename = $mod->get_formatted_name();
         $altname = $mod->modfullname;
-        /* Avoid unnecessary duplication: if e.g. a forum name already
-           includes the word forum (or Forum, etc) then it is unhelpful
-           to include that in the accessible description that is added. */
+        // Avoid unnecessary duplication: if e.g. a forum name already
+        // includes the word forum (or Forum, etc) then it is unhelpful
+        // to include that in the accessible description that is added.
         if (false !== strpos(core_text::strtolower($instancename),
                 core_text::strtolower($altname))) {
                     $altname = '';
@@ -578,11 +604,11 @@ class course_renderer extends \core_course_renderer {
             $altname = get_accesshide(' '.$altname);
         }
 
-        /* For items which are hidden but available to current user
-           ($mod->uservisible), we show those as dimmed only if the user has
-           viewhiddenactivities, so that teachers see 'items which might not
-           be available to some students' dimmed but students do not see 'item
-           which is actually available to current student' dimmed. */
+        // For items which are hidden but available to current user
+        // ($mod->uservisible), we show those as dimmed only if the user has
+        // viewhiddenactivities, so that teachers see 'items which might not
+        // be available to some students' dimmed but students do not see 'item
+        // which is actually available to current student' dimmed.
         $linkclasses = '';
         $accesstext = '';
         $textclasses = '';
@@ -603,19 +629,22 @@ class course_renderer extends \core_course_renderer {
             }
 
         } else {
+
             $linkclasses .= ' dimmed';
             $textclasses .= ' dimmed_text';
+
         }
 
-        /* Get on-click attribute value if specified and decode the onclick - it
-           has already been encoded for display. */
+        // Get on-click attribute value if specified and decode the onclick - it
+        // has already been encoded for display (puke).
         $onclick = htmlspecialchars_decode($mod->onclick, ENT_QUOTES);
 
         $groupinglabel = $mod->get_grouping_label($textclasses);
 
-        /* Display link itself.
-           Get icon url, but strip -24, -64, -256  etc from the end of filetype icons so we
-           only need to provide one SVG, see MDL-47082. (Used from snap theme). */
+        // Display link itself.
+
+        // Get icon url, but strip -24, -64, -256  etc from the end of filetype icons so we
+        // only need to provide one SVG, see MDL-47082. (Used from snap theme).
         $imageurl = \preg_replace('/-\d\d\d?$/', '', $mod->get_icon_url());
 
         $activitylink = html_writer::empty_tag('img', array('src' => $imageurl,
@@ -627,18 +656,21 @@ class course_renderer extends \core_course_renderer {
             $outputlink .= html_writer::link($url, $activitylink, array('class' => $linkclasses, 'onclick' => $onclick)) .
             $groupinglabel;
         } else {
-            /* We may be displaying this just in order to show information
-               about visibility, without the actual link ($mod->uservisible).*/
+            // We may be displaying this just in order to show information
+            // about visibility, without the actual link ($mod->uservisible).
             $outputlink .= html_writer::tag('div', $activitylink, array('class' => $textclasses)) .
             $groupinglabel;
         }
 
-        $templatedata = $templateclass->export_for_template($this->output);
+        $tmpl = new \core_course\output\course_module_name($mod, $this->page->user_is_editing(), $displayoptions);
+        $templatedata = $tmpl->export_for_template($this->output);
 
         // Variable displayvalue element is purposely overriden below with link including custom icon created above.
         $templatedata['displayvalue'] = $outputlink;
 
-        return array('templatedata' => $templatedata, 'groupinglabel' => $groupinglabel);
+        $output .= $this->output->render_from_template('core/inplace_editable', $templatedata);
+
+        return $output;
     }
 
     // New methods added for activity styling below.  Adapted from snap theme by Moodleroooms.
@@ -650,12 +682,12 @@ class course_renderer extends \core_course_renderer {
      * that module type wants to display (i.e. number of unread forum posts)
      *
      * This function calls:
-     * core_course_renderer::course_section_cm_name()
-     * core_course_renderer::course_section_cm_text()
-     * core_course_renderer::course_section_cm_availability()
-     * core_course_renderer::course_section_cm_completion()
-     * course_get_cm_edit_actions()
-     * core_course_renderer::course_section_cm_edit_actions()
+     * {@link core_course_renderer::course_section_cm_name()}
+     * {@link core_course_renderer::course_section_cm_text()}
+     * {@link core_course_renderer::course_section_cm_availability()}
+     * {@link core_course_renderer::course_section_cm_completion()}
+     * {@link course_get_cm_edit_actions()}
+     * {@link core_course_renderer::course_section_cm_edit_actions()}
      *
      * @param stdClass $course
      * @param completion_info $completioninfo
@@ -665,6 +697,7 @@ class course_renderer extends \core_course_renderer {
      * @return string
      */
     public function course_section_cm($course, &$completioninfo, cm_info $mod, $sectionreturn, $displayoptions = array()) {
+        global $PAGE;
         $output = '';
         // We return empty string (because course module will not be displayed at all) if
         // 1) The activity is not visible to users and
@@ -742,7 +775,7 @@ class course_renderer extends \core_course_renderer {
 
         // Get further information.
         $settingname = 'coursesectionactivityfurtherinformation'. $mod->modname;
-        if (isset ($this->page->theme->settings->$settingname) && $this->page->theme->settings->$settingname == true) {
+        if (isset ($PAGE->theme->settings->$settingname) && $PAGE->theme->settings->$settingname == true) {
             $output .= html_writer::start_tag('div', array('class' => 'activity-meta-container'));
             $output .= $this->course_section_cm_get_meta($mod);
             $output .= html_writer::end_tag('div');
@@ -774,7 +807,8 @@ class course_renderer extends \core_course_renderer {
      * @return string
      */
     protected function course_section_cm_get_meta(cm_info $mod) {
-        global $COURSE;
+
+        global $COURSE, $OUTPUT;
 
         $content = '';
 
@@ -782,14 +816,9 @@ class course_renderer extends \core_course_renderer {
             return '';
         }
 
-        // If module is not visible to the user then don't bother getting meta data.
-        if (!$mod->uservisible) {
-            return '';
-        }
-
         // Do we have an activity function for this module for returning meta data?
         $meta = \theme_adaptable\activity::module_meta($mod);
-        if (($meta == null) || (!$meta->is_set(true))) {
+        if (!$meta->is_set(true)) {
             // Can't get meta data for this module.
             return '';
         }
@@ -820,11 +849,14 @@ class course_renderer extends \core_course_renderer {
 
         // Activity due date.
         if (!empty($meta->extension) || !empty($meta->timeclose)) {
+            $due = get_string('due', 'theme_adaptable');
             if (!empty($meta->extension)) {
                 $field = 'extension';
             } else if (!empty($meta->timeclose)) {
                 $field = 'timeclose';
             }
+
+            $pastdue = $meta->$field < time();
 
             // Create URL for due date.
             $url = new \moodle_url("/mod/{$mod->modname}/view.php", ['id' => $mod->id]);
@@ -873,11 +905,11 @@ class course_renderer extends \core_course_renderer {
             $engagementmeta = array();
 
             // Below, !== false means we get 0 out of x submissions.
-            if (!$meta->submissionnotrequired && $meta->numparticipants !== false) {
+            if (!$meta->submissionnotrequired && $meta->numsubmissions !== false) {
                 $engagementmeta[] = get_string('xofy'.$meta->submitstrkey, 'theme_adaptable',
                         (object) array(
                                 'completed' => $meta->numsubmissions,
-                                'participants' => $meta->numparticipants
+                                'participants' => \theme_adaptable\utils::course_participant_count($COURSE->id, $mod->modname)
                         )
                         );
             }
@@ -1006,4 +1038,44 @@ class course_renderer extends \core_course_renderer {
     }
 
     // End.
+
+    /**
+     * Lenovo frontpage_available_courses
+     *
+     * @package    local
+     * @subpackage swtc
+     * @copyright  2019 Lenovo EBG Server Education
+     * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+     *
+     * Lenovo history:
+     *
+     *	10/11/19 - Moved frontpage_available_courses and search_courses from here to /local/swtc/lib/swtc_adaptable.php.
+     *
+    */
+    // public function frontpage_available_courses() {
+    //
+    //     return $this->swtc_adaptable_frontpage_available_courses();
+    // }
+
+    /**
+     * Lenovo Renders html to display search result page
+     *
+     * @param array $searchcriteria may contain elements: search, blocklist, modulelist, tagid
+     * @return string
+     *
+     * @package    local
+     * @subpackage swtc
+     * @copyright  2019 Lenovo EBG Server Education
+     * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+     *
+     * Lenovo history:
+     *
+     *	10/11/19 - Moved frontpage_available_courses and search_courses from here to /local/swtc/lib/swtc_adaptable.php.
+     *
+     */
+    // function search_courses($searchcriteria) {
+    //
+    //     return $this->swtc_adaptable_search_courses($searchcriteria);
+    // }
+
 }

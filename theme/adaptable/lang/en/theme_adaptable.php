@@ -23,6 +23,10 @@
  * @copyright 2017-2019 Manoj Solanki (Coventry University)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * Lenovo history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ *
  */
 
 // General.
@@ -108,6 +112,8 @@ $string['region-course-top-c'] = 'Course page top region 3';
 $string['region-course-top-d'] = 'Course page top region 4';
 
 $string['region-news-slider-a'] = 'Course page slider region';
+$string['region-related-slider-a'] = 'Lenovo related course page slider region';    // 08/01/19 Lenovo
+$string['region-suggest-slider-a'] = 'Lenovo suggested course page slider region';    // 08/01/19 Lenovo
 
 $string['region-course-section-a'] = 'Course page activity end bottom region';
 
@@ -131,10 +137,8 @@ $string['settingsmessagescolors'] = 'Messages Pop-Up Colours';
 $string['settingsfootercolors'] = 'Footer Colours';
 $string['settingsfonts'] = 'Fonts';
 $string['settingsanalytics'] = 'Analytics';
-$string['settingsblocksgeneral'] = 'General';
 $string['settingscolors'] = 'Colours';
 $string['settingsborders'] = 'Borders';
-$string['settingscourses'] = 'Courses';
 $string['settingstopicsweeks'] = 'Topics / Weeks';
 $string['settingsblockicons'] = 'Icons';
 
@@ -498,9 +502,6 @@ $string['enablepostsdesc'] = 'Display a link to the my posts page';
 $string['enablefeed'] = 'My Feedback';
 $string['enablefeeddesc'] = 'Display a link to the users "My Feedback" page - Note: this requires the <a href="https://moodle.org/plugins/report_myfeedback" target="blank">My Feedback Plugin</a>';
 
-$string['enableaccesstool'] = 'Accessibility Tool';
-$string['enableaccesstooldesc'] = 'Display a link to the users "Accessibility Tool" Preferences page - Note: this requires the <a href="https://github.com/sharpchi/moodle-local_accessibilitytool" target="blank">Accessibility Tool Plugin</a>';
-
 $string['myblogs'] = 'My Blogs';
 
 $string['noenrolments'] = 'No enrolments found.';
@@ -555,8 +556,6 @@ $string['mysitessortoverrideoff'] = 'Display all enrolled courses in single flat
 $string['mysitessortoverridestrings'] = 'Display enrolled containing strings in first list, others in sub menu';
 $string['mysitessortoverrideprofilefields'] = 'Display courses found in profile fields in first list, others in sub menu';
 $string['mysitessortoverrideprofilefieldscohort'] = 'Display courses found in profile fields + cohorts in first list, others in sub menu';
-$string['mysitessortoverridemyoverview'] = 'Use list from my overview';
-$string['mysitessortoverridelast'] = 'Last accessed time or enrolment start time if never accessed';
 
 $string['mysitesmaxlength'] = 'My Courses Max Length';
 $string['mysitesmaxlengthdesc'] = 'Adjust the max length of coursenames in the My Courses dropdown to optimise for your font.';
@@ -575,15 +574,6 @@ $string['enablehomedesc'] = 'Display a link to the frontpage.';
 
 $string['enablehomeredirect'] = 'Enable Home redirect=0';
 $string['enablehomeredirectdesc'] = 'Enable redirect=0 on home. This is for use on sites where where My Home is default homepage. It prevents users clicking the Home link from being redirected back to My Home / Dashboard';
-
-$string['chiddenicon'] = 'My courses hidden icon';
-$string['chiddenicondesc'] = 'The Font Awesome 4 icon without the prefixing \'fa-\' to be used for hidden courses.  If empty, the default will be used.';
-$string['cfrozenicon'] = 'My courses frozen icon';
-$string['cfrozenicondesc'] = 'The Font Awesome 4 icon without the prefixing \'fa-\' to be used for frozen courses.  If empty, the default will be used.';
-$string['cneveraccessedicon'] = 'My courses never accessed icon';
-$string['cneveraccessedicondesc'] = 'The Font Awesome 4 icon without the prefixing \'fa-\' to be used for courses that the user is enrolled on but not accessed.  If empty, the default will be used.';
-$string['cdefaulticon'] = 'My courses default icon';
-$string['cdefaulticondesc'] = 'The Font Awesome 4 icon without the prefixing \'fa-\' to be used for courses when they don\'t already have an icon.  If empty, the default will be used.';
 
 
 // Colours *********************************************************.
@@ -700,9 +690,6 @@ $string['marketblocksbackgroundcolordesc'] = 'Set the Marketing blocks region ba
 
 $string['sectionheadingcolor'] = 'Section Heading Text Colour';
 $string['sectionheadingcolordesc'] = 'Set the colour for section headings text';
-
-$string['collapsedtopicscoloursenabled'] = 'Collapsed Topics toggle fore and backgound colour settings';
-$string['collapsedtopicscoloursenableddesc'] = 'Use Collapsed Topics fore and bacground colour settings instead of Adaptable\'s \'sectionheadingcolor\' and \'coursesectionheaderbg\' settings.';
 
 $string['homebk'] = 'Frontpage Background Image';
 $string['homebkdesc'] = 'Upload an image that will be a background image on the homepage.';
@@ -878,9 +865,6 @@ $string['socialwallactionlinkcolordesc'] = 'The colour of action links in Social
 $string['socialwallactionlinkhovercolor'] = 'Action link hover colour';
 $string['socialwallactionlinkhovercolordesc'] = 'The colour of action links when hovered in Social Wall.';
 
-// Blocks General **************************************************.
-$string['shownavigationblockoncoursepage'] = 'Show Navigation Block on course page';
-$string['shownavigationblockoncoursepagedesc'] = 'Set this to show the navigation block on the course page.';
 
 // Fonts ***********************************************************.
 $string['fontsettings'] = 'Fonts';
@@ -888,7 +872,7 @@ $string['fontsettingsheading'] = 'Modify the fonts used throughout the theme.';
 $string['fontdesc'] = 'You can select the <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> that you would like to use throughout the theme. Select the subset needed (latin is always included) and enter the right font weight or the font will not displayed.';
 
 $string['fontname'] = 'Main font';
-$string['fontnamedesc'] = 'Select the default font, \'sans-serif\', or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in the site.';
+$string['fontnamedesc'] = 'Select the default font or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in the site.';
 
 $string['customfontname'] = 'Custom Main font';
 $string['customfontnamedesc'] = 'Enter the name of the custom Main Font only if you selected &apos;Custom&apos; in the Main Font dropdown.';
@@ -897,7 +881,7 @@ $string['fontsize'] = 'Main font size';
 $string['fontsizedesc'] = 'Select the default font size (in percentage) used in the whole site.';
 
 $string['fontheadername'] = 'Headers font';
-$string['fontheadernamedesc'] = 'Select the default font, \'sans-serif\', or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in the text and blocks headers.';
+$string['fontheadernamedesc'] = 'Select the default font or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in the text and blocks headers.';
 
 $string['customfontheadername'] = 'Custom Header font';
 $string['customfontheadernamedesc'] = 'Enter the name of the custom Header font only if you selected &apos;Custom&apos; in the Header Font dropdown.';
@@ -915,7 +899,7 @@ $string['fontheaderweight'] = 'Headers font weight';
 $string['fontheaderweightdesc'] = 'Headers font weight used in the site. Select a value from 100 to 900 depending the font selected.';
 
 $string['fonttitlename'] = 'Site / Course title font';
-$string['fonttitlenamedesc'] = 'Select the default font, \'sans-serif\', or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in title site and course titles.';
+$string['fonttitlenamedesc'] = 'Select the default font or <a href="https://www.google.com/fonts" target="_blank">Google Fonts</a> used in title site and course titles.';
 
 $string['customfonttitlename'] = 'Custom Title font';
 $string['customfonttitlenamedesc'] = 'Enter the name of the custom Title Font only if you selected &apos;Custom&apos; in the Title Font dropdown.';
@@ -1432,12 +1416,8 @@ Moodle.com|http://moodle.com/
 $string['toolsmenulabel'] = 'Tools';
 $string['toolsmenulabel2'] = 'Tools 2';
 $string['events'] = 'Events';
-$string['future'] = 'Future';
-$string['hiddencourses'] = 'Hidden Courses';
-$string['hiddenfromview'] = 'Hidden From View';
-$string['inprogress'] = 'In Progress';
 $string['mysites'] = 'My Courses';
-$string['past'] = 'Past';
+$string['hiddencourses'] = 'Hidden Courses';
 $string['pastcourses'] = 'Past Courses';
 $string['people'] = 'Participants';
 $string['help'] = 'Help';
@@ -1607,22 +1587,6 @@ $string['socialicondesc'] = 'Set Font Awesome icon for example: fa-facebook';
 
 $string['socialiconlist'] = 'Social Icon List';
 $string['socialiconlistdesc'] = 'Enter a delimited list to setup the social icons / links you need using the format: url|title|icon';
-
-// Templates.
-$string['templatessettings'] = 'Templates';
-$string['templatesheading'] = 'Templates Settings';
-$string['templatesheadingdesc'] = 'Override templates';
-$string['templatessel'] = 'Templates to override';
-$string['templatesseldesc'] = 'Select the templates to override, then each will be shown on their own page.  If not selected here, then the template will not be overridden even if it is enabled.  To select none, use the \'Ctrl\' key.';
-$string['overridetemplate'] = 'Override template: {$a}';
-$string['activatetemplateoverride'] = 'Activate template override for \'{$a}\'';
-$string['activatetemplateoverridedesc'] = 'When ticked then the value in the \'{$a->setting}\' setting will be used as the \'{$a->template}\' template if it contains text.';
-$string['overriddentemplate'] = 'Overridden template: {$a}';
-$string['overriddentemplatedesc'] = 'If set then the text here will be used as the template \'{$a}\'.  To ensure that the preview works, there needs to be the standard example context in JSON format.';
-$string['overriddentemplatepreview'] = 'Setting overridden preview';
-$string['overriddentemplatenopreview'] = 'No preview because of missing JSON example';
-$string['originaltemplatepreview'] = 'Original / overridden theme file preview';
-$string['originaltemplatesource'] = 'Original / overridden theme file source';
 
 // Analytics *********************************.
 $string['analyticssettings'] = 'Analytics';

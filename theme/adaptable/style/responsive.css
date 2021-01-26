@@ -26,242 +26,38 @@
 */
 
 /* =====================================================
-Media Queries - max's in reverse
-order for prescidence.
-====================================================== */
+Default Bootstrap 4 Media Queries
 
-/*=====================================================
-1200px
+(max-width : 480px)
+(max-width : 767px)
+(max-width : 979px)
+(max-width : 1200px)
 ======================================================= */
 
-@media (max-width: 1199px) {
-    .showhideblocksdesc,
-    .zoomdesc {
-        display: none;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar-nav > li > a {
-        padding: 2px 4px;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:first-child a {
-        margin-left: -4px;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:last-child a {
-        margin-right: -4px;
-    }
-}
-
 /*=====================================================
-979px
+480px
 ======================================================= */
-@media (max-width: 979px) {
-    #page-header {
-        min-height: 60px;
+@media (max-width: 480px) {
+    .flex-caption {
+        width: auto !important;
+        padding: 5px 0 !important;
+        position: relative !important;
+        margin-top: -1px !important;
+        background-color: #000 !important;
     }
 
-    .langdesc {
-        display: inline;
-    }
-    .slidestyle2 .flex-caption {
-        right: -800px;
-    }
-    .slidestyle2 .flex-active-slide .flex-caption {
-        right: 0;
-        transition: all 1s ease;
-    }
-    .slidestyle2 .flex-caption h3 {
-        max-width: 970px;
-    }
-    .slidestyle2 .flex-caption br {
-        display: none;
-    }
-    .slidestyle2 .flex-caption {
-        top: 25%;
-    }
-    .slidestyle2 .flex-direction-nav {
-        display: none;
-    }
-    .slidestyle2 .flex-caption h4 {
-        font-size: 23px;
-        line-height: 30px;
-    }
-    .slidestyle2 .flex-caption a.submit {
-        font-size: 14px;
-        float: none;
-        white-space: normal;
+    #page-content {
+        padding: 0;
         width: auto;
+        margin-top: 15px;
     }
 
-    .navbar {
-        float: none !important;
-    }
-
-    .navbar .pull-right {
-        float: none;
-    }
-
-    .navbar .nav > li > a {
-        margin: 0 10px 0 0 !important;
-    }
-
-    .flex-direction-nav .flex-next {
-        right: 0 !important;
-    }
-
-    .flex-direction-nav .flex-prev {
-        left: 0 !important;
-    }
-
-    /* Header */
-    /* Logo */
-    #logocontainer {
-        display: block !important;
-        margin: 5px 0;
-        padding: 0;
-        clear:both;
-        width: 100%;
-        height: auto;
-    }
-
-    #logo img {
-        display: block;
-        margin: 0 auto;
-    }
-
-    /* Site title */
-    #sitetitle {
-        clear: both;
-        display: block;
-        margin: 5px 0;
-        max-width: 100%;
-        text-align: center;
-        padding: 0;
-        height: auto;
-        top: 0;
-        left: 0;
-    }
-
-    /* Social Icons */
-    .socialbox {
-        display: table;
-        padding: 5px;
-        float: none;
-        clear: both;
-        margin: 15px auto;
-    }
-
-    .coursebox .panel-body p {
-        font-size: 90%;
-        line-height: 130%;
-    }
-
-    .enrolmenticons {
+    #page-header .userimg {
         display: none;
     }
 
-    #edittingbutton a,
-    #edittingbutton .btn {
-        margin-left: 10px !important;
-    }
-
-    .searchbox {
-        padding-bottom: 5px;
-    }
-
-    .search-box, .searchbox {
-        margin: 0;
-        width: 100%;
-    }
-
-    #search-1 {
-        width: calc(100% - 39px);
-    }
-
-    .hbl, .sbl, .hbll, .sbll {
-        display: none !important;
-    }
-
-    .nav-collapse .nav {
-        width: 100%;
-        margin-left: 0 !important;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar {
-        border-bottom: 0;
-    }
-
-    #page-header a img {
-        margin: 0 auto;
-        float: none;
-        display: block;
-    }
-
-    .nav .dropdown-menu li a {
-        color: [[setting:menufontcolor]];
-    }
-
-    .nav-collapse.active {
-        background-color: [[setting:mobilemenubkcolor]];
-        height: auto;
-        top: 6px;
-        padding-bottom: 4px;
-    }
-
-    #edittingbutton {
-        margin-left: 10px;
-    }
-
-    .menutitle {
-        float: none;
-    }
-
-    /* New styles for Adaptable 2. */
-    #adaptable-page-header-wrapper .nav-link {
-        padding: inherit;
-    }
-
-    #adaptable-page-header-wrapper .fa {
-        height: 24px;
-        margin-right: .5rem;
-        width: 24px;
-    }
-
-    #adaptable-page-header-wrapper .topmenuleft {
-        float: left !important;
-        margin: 0;
-        padding: 5px 5px 0 0;
-    }
-
-    #adaptable-page-header-wrapper .navbar .popover-region {
-        margin: 4px 0 0 4px;
-    }
-
-    .has-page-header.page-header-margin.header-style1 #page {
-        margin-top: 30px;
-    }
-
-    .mobiletheme.page-header-margin.header-style1.has-header-bg .headerbgimage {
-        background-image: none !important;
-    }
-
-    .page-header-margin.header-style2 #page {
-        margin-top: 84px;
-    }
-
-    /* Course activity and section layout updates to remove any extra padding on smaller screens. */
-    .section .activity .activityinstance {
-        min-width: 100%;
-    }
-
-    .activity-meta-container {
-        margin: 0 0 0 20px;
-    }
-
-    #region-main,
-    .pagelayout-mydashboard #region-main {
-        padding: 0 15px;
+    #coursesearchbox2 {
+        display: none;
     }
 }
 
@@ -480,7 +276,7 @@ order for prescidence.
     }
 
     .page-header-margin.header-style2 #page {
-        margin-top: 62px;
+        margin-top: 46px;
     }
 
     .socialbox a {
@@ -492,49 +288,7 @@ order for prescidence.
         font-size: [[setting:responsivesocialsize]];
         line-height: [[setting:responsivesocialsize]];
     }
-    .custom-select {
-        max-width:100%;
-    }
 }
-
-
-/*=====================================================
-576px
-======================================================= */
-@media (max-width: 576px) {
-    .page-header-margin.header-style2 #page {
-        margin-top: 38px;
-    }
-}
-
-/*=====================================================
-480px
-======================================================= */
-@media (max-width: 480px) {
-    .flex-caption {
-        width: auto !important;
-        padding: 5px 0 !important;
-        position: relative !important;
-        margin-top: -1px !important;
-        background-color: #000 !important;
-    }
-
-    #page-content {
-        padding: 0;
-        width: auto;
-        margin-top: 15px;
-    }
-
-    #page-header .userimg {
-        display: none;
-    }
-
-    #coursesearchbox2 {
-        display: none;
-    }
-}
-
-/* Mins in ascending order.
 
 /*=====================================================
 768px
@@ -544,6 +298,246 @@ order for prescidence.
         margin-left: 0;
     }
 }
+
+/*=====================================================
+979px
+======================================================= */
+@media (max-width: 979px) {
+    #page-header {
+        min-height: 60px;
+    }
+
+    .langdesc {
+        display: inline;
+    }
+    .slidestyle2 .flex-caption {
+        right: -800px;
+    }
+    .slidestyle2 .flex-active-slide .flex-caption {
+        right: 0;
+        transition: all 1s ease;
+    }
+    .slidestyle2 .flex-caption h3 {
+        max-width: 970px;
+    }
+    .slidestyle2 .flex-caption br {
+        display: none;
+    }
+    .slidestyle2 .flex-caption {
+        top: 25%;
+    }
+    .slidestyle2 .flex-direction-nav {
+        display: none;
+    }
+    .slidestyle2 .flex-caption h4 {
+        font-size: 23px;
+        line-height: 30px;
+    }
+    .slidestyle2 .flex-caption a.submit {
+        font-size: 14px;
+        float: none;
+        white-space: normal;
+        width: auto;
+    }
+
+    .navbar {
+        float: none !important;
+    }
+
+    .navbar .pull-right {
+        float: none;
+    }
+
+    .navbar .nav > li > a {
+        margin: 0 10px 0 0 !important;
+    }
+
+    .flex-direction-nav .flex-next {
+        right: 0 !important;
+    }
+
+    .flex-direction-nav .flex-prev {
+        left: 0 !important;
+    }
+
+/* Header */
+    /* Logo */
+    #logocontainer {
+        display: block !important;
+        margin: 5px 0;
+        padding: 0;
+        clear:both;
+        width: 100%;
+        height: auto;
+    }
+
+    #logo img {
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Site title */
+    #sitetitle {
+        clear: both;
+        display: block;
+        margin: 5px 0;
+        max-width: 100%;
+        text-align: center;
+        padding: 0;
+        height: auto;
+        top: 0;
+        left: 0;
+    }
+
+    /* Social Icons */
+    .socialbox {
+        display: table;
+        padding: 5px;
+        float: none;
+        clear: both;
+        margin: 15px auto;
+    }
+
+    .coursebox .panel-body p {
+        font-size: 90%;
+        line-height: 130%;
+    }
+
+    .enrolmenticons {
+        display: none;
+    }
+
+    #edittingbutton a,
+    #edittingbutton .btn {
+        margin-left: 10px !important;
+    }
+
+    .searchbox {
+        padding-bottom: 5px;
+    }
+
+    .search-box, .searchbox {
+        margin: 0;
+        width: 100%;
+    }
+
+    #search-1 {
+        width: calc(100% - 39px);
+    }
+
+    .hbl, .sbl, .hbll, .sbll {
+        display: none !important;
+    }
+
+    .nav-collapse .nav {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    #adaptable-page-header-wrapper #main-navbar {
+        border-bottom: 0;
+    }
+
+    #page-header a img {
+        margin: 0 auto;
+        float: none;
+        display: block;
+    }
+
+    .nav .dropdown-menu li a {
+        color: [[setting:menufontcolor]];
+    }
+
+    .nav-collapse.active {
+        background-color: [[setting:mobilemenubkcolor]];
+        height: auto;
+        top: 6px;
+        padding-bottom: 4px;
+    }
+
+    #edittingbutton {
+        margin-left: 10px;
+    }
+
+    .menutitle {
+        float: none;
+    }
+
+    /* New styles for Adaptable 2. */
+    #adaptable-page-header-wrapper .nav-link {
+        padding: inherit;
+    }
+
+    #adaptable-page-header-wrapper .fa {
+        height: 24px;
+        margin-right: .5rem;
+        width: 24px;
+    }
+
+    #adaptable-page-header-wrapper .topmenuleft {
+        float: left !important;
+        margin: 0;
+        padding: 5px 5px 0 0;
+    }
+
+    #adaptable-page-header-wrapper .navbar .popover-region {
+        margin: 4px 0 0 4px;
+    }
+
+    .page-header-margin.header-style1 #page {
+        margin-top: 50px;
+    }
+
+    .has-page-header.page-header-margin.header-style1 #page {
+        margin-top: 112px;
+    }
+
+    .mobiletheme.page-header-margin.header-style1.has-header-bg .headerbgimage {
+        background-image: none !important;
+    }
+
+    .page-header-margin.header-style2 #page {
+        margin-top: 72px;
+    }
+
+    /* Course activity and section layout updates to remove any extra padding on smaller screens. */
+    .section .activity .activityinstance {
+        min-width: 100%;
+    }
+
+    .activity-meta-container {
+        margin: 0 0 0 20px;
+    }
+
+    #region-main,
+    .pagelayout-mydashboard #region-main {
+        padding: 0 5px;
+    }
+}
+
+/*=====================================================
+1200px
+======================================================= */
+
+@media (max-width: 1199px) {
+    .showhideblocksdesc,
+    .zoomdesc {
+        display: none;
+    }
+
+    #adaptable-page-header-wrapper #main-navbar .navbar-nav > li > a {
+        padding: 2px 4px;
+    }
+
+    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:first-child a {
+        margin-left: -4px;
+    }
+
+    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:last-child a {
+        margin-right: -4px;
+    }
+}
+
 
 /*=====================================================
 1201px or higher / nozoom
@@ -600,6 +594,43 @@ Other.
         min-width: 140px;
         margin-top: 5px;
     }
+}
+
+/* Dropdown */
+@media (min-width: 481px) {
+    /* On hover only for large screens adjusted to exclude ipad portrait.
+       min-width changed to 481 to avoid problems with dropdown menus in tablets and some mobiles (resolutions under 1024px)
+       probably the best option is remove min-width after testing in several screen resolutions.
+    */
+/*     .dropdown-menu .sub-menu {
+        left: 100%;
+        position: absolute;
+        top: -10px;
+        visibility: hidden;
+        margin-top: -1px;
+    }
+
+    .newmenus .dropdown-menu {
+        left: 0;
+        position: absolute;
+        visibility: hidden;
+        margin-top: 0;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        display: none;
+    }
+
+    .dropdown-menu li:hover .sub-menu,
+    .newmenus:hover .dropdown-menu {
+        visibility: visible;
+    }
+
+    .dropdown:hover>.dropdown-menu {
+        display: block;
+    } */
+    /*end on hover hack */
+
 }
 
 @media (min-width: 481px) {

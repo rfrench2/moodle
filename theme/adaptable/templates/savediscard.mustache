@@ -18,13 +18,6 @@
     @template theme_adaptable/savediscard
 
     Save / Discard floating buttons template.
-
-    Example context (json):
-    {
-        "topmargin": "5px",
-        "discardtext": "Cancel",
-        "savetext": "Save"
-    }
 }}
 
 {{#js}}
@@ -36,5 +29,5 @@ require(['theme_adaptable/savebutton'], function(mod) {
 <div id="savediscardsection" style="margin-top: {{{ topmargin }}};">
 <input id="adminresetbutton" class="form-submit" style="float: right; margin-right: 20px;" type="reset"
     form="adminsettings" value=" {{{ discardtext }}}" />
-<input id="adminsubmitbutton" style="float: right; margin-right: 20px;" type="submit" form="adminsettings" value=" {{{ savetext }}}" />
+<input id="adminsubmitbutton" style="float: right;margin-right: 20px;" type="submit" form="adminsettings" value=" {{{ savetext }}}" />
 </div>

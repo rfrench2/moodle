@@ -49,7 +49,7 @@ class toolbox {
      * @param string $setting Setting
      * @param Obj $theconfig
      *
-     * @return string Setting url
+     * return string Setting url
      */
     static public function get_setting_moodle_url($setting, $theconfig = null) {
         $settingurl = null;
@@ -102,10 +102,10 @@ class toolbox {
                 // The last entry in the array is the top level category.
                 $catid = $catids[(count($catids) - 1)];
             }
-        } else if (!empty($PAGE->course->category)) {
+        } else if (!empty($$PAGE->course->category)) {
             $catid = $PAGE->course->category;
             // See if the course category is a top level one.
-            if (!array_key_exists($catid, self::get_top_level_categories())) {
+            if (!array_key_exists($key, self::get_top_level_categories())) {
                 $catid = false;
             }
         }
@@ -365,51 +365,6 @@ class toolbox {
     }
 
     /**
-     * States if the Kaltura plugin is installed.
-     * Ref: https://moodle.org/plugins/view.php?id=447
-     *
-     * @return boolean true or false.
-     */
-    static public function kalturaplugininstalled() {
-        global $CFG;
-
-        static $paths = array(
-            'local/kalturamediagallery',
-            'local/mymedia'
-        );
-
-        $hascount = 0;
-        foreach ($paths as $path) {
-            if (file_exists($CFG->dirroot.'/'.$path)) {
-                $hascount++;
-            }
-        }
-
-        return (count($paths) == $hascount);
-    }
-
-    /**
-     * Gets the Font Awesome markup for the given icon.
-     *
-     * @param string $theicon
-     * @param array $classes - Optional extra classes to add.
-     * @param array $attributes - Optional attributes to add.
-     * @param string $content - Optional content.
-     *
-     * @return string markup or empty string if no icon specified.
-     */
-    static public function getfontawesomemarkup($theicon, $classes = array(), $attributes = array(), $content = '') {
-        $icon = '';
-        if (!empty($theicon)) {
-            $classes[] = 'fa fa-'.$theicon;
-            $attributes['aria-hidden'] = 'true';
-            $attributes['class'] = implode(' ', $classes);
-            $icon = \html_writer::tag('i', $content, $attributes);
-        }
-        return $icon;
-    }
-
-    /**
      * Returns the RGB for the given hex.
      *
      * @param string $hex
@@ -443,108 +398,5 @@ class toolbox {
         $rgba = self::hex2rgb($hex);
         $rgba[] = $alpha;
         return 'rgba('.implode(", ", $rgba).')'; // Returns the rgba values separated by commas.
-    }
-
-    /**
-     * Gets the overridden template if the setting for that template has been enabled and set.
-     *
-     * @param string $templatename
-     * @return string or false if not overridden.
-     */
-    static public function get_template_override($templatename) {
-        $template = false;
-
-        $overridetemplates = get_config('theme_adaptable', 'templatessel');
-        if ($overridetemplates) {
-            $overridetemplates = explode(',', $overridetemplates);
-
-            if (in_array($templatename, $overridetemplates)) {
-                global $PAGE;
-
-                $overridetemplatesetting = str_replace('/', '_', $templatename);
-                $setting = 'activatetemplateoverride_'.$overridetemplatesetting;
-
-                if (!empty($PAGE->theme->settings->$setting)) {
-                    $setting = 'overriddentemplate_'.$overridetemplatesetting;
-
-                    if (!empty($PAGE->theme->settings->$setting)) {
-                        $template = $PAGE->theme->settings->$setting;
-                    }
-                }
-            }
-        }
-
-        return $template;
-    }
-
-
-    /**
-     * Renderers the overridden template if the setting for that template has been enabled and set.
-     *
-     * @param string $templatename
-     * @param array|stdClass $data Context containing data for the template.
-     * @return string or false if not overridden.
-     */
-    static public function apply_template_override($templatename, $data) {
-        $output = false;
-
-        $template = self::get_template_override($templatename);
-        if (!empty($template)) {
-            global $PAGE;
-            $renderer = $PAGE->get_renderer('theme_adaptable', 'mustache');
-
-            /* Pass in the setting value as our Mustache engine uses the Mustache_Loader_StringLoader
-               instead of effectively the Mustache_Loader_FilesystemLoader and that just returns the
-               'name' as passed in.  The engine then calls 'loadSource' from 'loadTemplate' which can
-               have 'Mustache_Source' as an input, being the mustache template source itself. */
-            $output = $renderer->render_from_template($template, $data);
-        }
-
-        return $output;
-    }
-
-    /**
-     * Admin setting layout builder to build the setting layout and reduce code duplication.
-     *
-     * @param admin_settingpage $settingpage
-     * @param string $adminsettingname
-     * @param array $admindefaults
-     * @param array $adminchoices
-     *
-     * @return array of the imgblder and totalblocks.
-     */
-    static public function admin_settings_layout_builder($settingpage, $adminsettingname, $admindefaults, $adminchoices) {
-        global $CFG, $PAGE;
-
-        $totalblocks = 0;
-        $imgpath = $CFG->wwwroot.'/theme/adaptable/pix/layout-builder/';
-        $imgblder = '';
-        for ($i = 1; $i <= 5; $i++) {
-            $name = 'theme_adaptable/'.$adminsettingname.$i;
-            $title = get_string($adminsettingname, 'theme_adaptable');
-            $description = get_string($adminsettingname.'desc', 'theme_adaptable');
-            $default = $admindefaults[$i - 1];
-            $setting = new \admin_setting_configselect($name, $title, $description, $default, $adminchoices);
-            $settingpage->add($setting);
-
-            $settingname = $adminsettingname.$i;
-
-            if (!isset($PAGE->theme->settings->$settingname)) {
-                $PAGE->theme->settings->$settingname = '0-0-0-0';
-            }
-
-            if ($PAGE->theme->settings->$settingname != '0-0-0-0') {
-                $imgblder .= '<img src="'.$imgpath.$PAGE->theme->settings->$settingname.'.png'.'" style="padding-top: 5px">';
-            }
-
-            $vals = explode('-', $PAGE->theme->settings->$settingname);
-            foreach ($vals as $val) {
-                if ($val > 0) {
-                    $totalblocks++;
-                }
-            }
-        }
-
-        return array('imgblder' => $imgblder, 'totalblocks' => $totalblocks);
     }
 }

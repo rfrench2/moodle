@@ -28,18 +28,15 @@
 /* Main elements selectors */
 html,
 body {
+    margin: 0;
+    padding: 0;
+    background-color: [[setting:backcolor]];
+    background-size: 100% auto;
     color: [[setting:fontcolor]];
     font-family: [[setting:fontname]], sans-serif;
     font-size: [[setting:fontsize]];
     font-weight: [[setting:fontweight]] !important;
     line-height: normal;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-color: [[setting:backcolor]];
-    background-size: 100% auto;
 }
 
 /* Headings */
@@ -205,13 +202,13 @@ div.signuppanel h2 {
 }
 
 #header2 {
-    background-color: transparent;
-    border-bottom: none;
+    border-bottom: none solid [[setting:maincolor]];
     clear: both;
-    color: [[setting:headertextcolor2]];
     margin-bottom: 0;
-    min-height: [[setting:pageheaderheight]];
+    background-color: transparent;
     padding-top: 0;
+    min-height: [[setting:pageheaderheight]];
+    color: [[setting:headertextcolor2]];
 }
 
 /* Override default boost max height for header2. */
@@ -240,17 +237,7 @@ div.signuppanel h2 {
     margin: 0;
     padding: 0;
     max-width: inherit;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    display: -ms-flexbox;
-    display: flex;
-    height: 100%;
     [[setting:homebkg]]
-}
-
-.container.outercont {
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
 }
 
 /* Header */
@@ -262,8 +249,9 @@ div.signuppanel h2 {
 
 #page-header {
     background-color: transparent;
-    border-bottom: none;
+    border-bottom: none solid [[setting:maincolor]];
     clear: both;
+    color: [[setting:headertextcolor2]];
     margin-bottom: 0;
     min-height: [[setting:pageheaderheight]];
     padding-top: 0;
@@ -529,8 +517,13 @@ a.component-expand .badge {
 }
 
 #marketblocks {
+    overflow: hidden;
+    padding: 0 0 10px 0;
     background-color: [[setting:marketblocksbackgroundcolor]];
-    padding-bottom: 10px;
+}
+
+#marketblocks .span4 {
+    overflow: hidden;
 }
 
 #marketblocks .internalmarket {
@@ -598,7 +591,7 @@ span.fa-chevron-right.fa {
 
 #page-footer {
     background-color: [[setting:footerbkcolor]];
-    margin: auto 0 0;
+    margin: 10px 0 0;
     text-align: left;
     color: [[setting:footertextcolor]] !important;
     border-top: 0;
@@ -723,7 +716,7 @@ span.fa-chevron-right.fa {
 
 /* Overridden from Boost theme to ignore background colour set on dashboard. */
 #page-my-index {
-    background-color: unset;
+  background-color: unset;
 }
 
 .navbar .nav-collapse.in {
@@ -1270,7 +1263,7 @@ input[type="radio"], input[type="checkbox"] {
     height: auto;
     line-height: 1;
     margin: 0;
-    padding: 3px 0 0;
+    padding: 0;
 }
 
 .modal-header .close:hover,
@@ -1442,7 +1435,8 @@ div.no-overflow, .yui3-datatable {
 }
 
 /* Search box */
-#page-header .searchbox {
+.searchbox {
+    float: right;
     padding: [[setting:searchboxpadding]];
 }
 
@@ -1533,7 +1527,6 @@ div.questionbankwindow.block {
 }
 
 #block-region-side-post {
-    padding-right: 0;
     transition: all .5s ease-in-out;
 }
 
@@ -1657,9 +1650,8 @@ div.questionbankwindow.block {
   color: [[setting:rendereroverlayfontcolor]] !important;
 }
 
-.coursebox.panel.hover .panel-body:hover .coursebox-content h3,
-.coursebox.panel.hover .panel-body:focus .coursebox-content h3 {
-    color: [[setting:rendereroverlayfontcolor]] !important;
+.coursebox.panel.hover .panel-body:hover .coursebox-content h3 a {
+  color: [[setting:rendereroverlayfontcolor]] !important;
 }
 
 .coursebox.hover .teachers li a,
@@ -1678,7 +1670,7 @@ div.questionbankwindow.block {
 .coursebox.hover:hover .summary {
     display: block;
     height: auto;
-    min-width: 100%;
+    min-width: 90%;
     width: auto;
 }
 
@@ -2047,7 +2039,8 @@ Change the filter selector for other colours */
     padding-right: 0;
 }
 
-.message-app.drawer .btn-block { /* M3.7+ */
+.message-drawer .btn-block, /* M3.6 */
+.message-app.drawer .btn-block { /* M3.7 */
     margin-left: 0;
 }
 
@@ -2372,10 +2365,7 @@ img.smallicon {
 .form-group textarea.form-control {
     margin: 0 0 0.7rem 0;
 }
-.moodle-dialogue-base .chooserdialogue .moodle-dialogue-wrap .moodle-dialogue-hd .yui3-widget-buttons {
-    padding:0.6em;
-}
- 
+.moodle-dialogue-base .chooserdialogue .moodle-dialogue-wrap .moodle-dialogue-hd .yui3-widget-buttons {padding:0.6em;} 
 .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd .yui3-widget-buttons {
     padding: 1em;
 }
@@ -2503,19 +2493,13 @@ img.smallicon {
 
 /* Login Page */
 /* Background Image */
-/*rtl:ignore*/
 #page-login-index .outercont {
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    left: 50%;
-    padding: 0 15px;
-    position: relative;
-    margin: 0;
-    transform: translateX(-50%);
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 #page-login-index #page-footer {
-    margin: auto 0 0 !important;
+    margin: 0 !important;
 }
 
 #page-login-index .fullin.narrow .container,
@@ -2531,7 +2515,7 @@ img.smallicon {
 }
 
 #page-login-index #page {
-    background:none;
+	background:none;
 }
 
 .progressbar_container {

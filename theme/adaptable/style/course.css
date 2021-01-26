@@ -83,9 +83,10 @@
 }
 
 /* Course tiles */
-.coursebox.panel .panel-body {
-    border: 4px solid [[setting:tilesbordercolor]];
-    margin: 2px;
+.coursebox.panel {
+    background-color: #fafafa !important;
+    border: 5px solid rgba(255,255,255,1);
+    border-radius: 2px;
 }
 
 .coursebox.panel,
@@ -147,14 +148,19 @@
     font-size: 105%;
 }
 
+.courses .coursebox {
+  background-color: #f0f0f0 !important;
+  padding: 4px;
+  border-radius: 6px;
+}
+
 .courses .coursebox.even {
   background-color: #eee !important;
 }
 
 .coursebox > .info > .coursename a {
-    background-size: 14px;
-    font-size: 14px;
-    font-weight: normal;
+  font-weight: normal;
+  font-size: 80%;
 }
 
 .coursebox > .info > h3.name,
@@ -323,8 +329,7 @@
     z-index: 9; /* Override .cimbox class. */
 }
 
-.covtiles .panel-body .coursebox-content:hover,
-.covtiles .panel-body .coursebox-content:focus {
+.covtiles .panel-body:hover .coursebox-content {
     height: calc(100% - 5px);
 }
 
@@ -343,15 +348,14 @@
     border-radius: [[setting:coursesectionborderradius]];
 }
 
-.site-topic ul,
-.course-content ul {
-    margin-left: 0.1em;
+.site-topic ul.section, .course-content ul.section {
+    margin: 0 0;
 }
 
-.site-topic ul.section, 
-.course-content ul.section {
-    margin: 0;
+.site-topic ul,
+.course-content ul {
     padding-left: 0.2em;
+    margin-left: 1.2rem;
 }
 
 #newdiscussionform {
@@ -419,19 +423,16 @@
 }
 
 .sectionname {
-    background-color: [[setting:coursesectionheaderbg]];
-    border-bottom: [[setting:coursesectionheaderborderstyle]] [[setting:coursesectionheaderbordercolor]] [[setting:coursesectionheaderborderwidth]];
-    border-bottom-left-radius: [[setting:coursesectionheaderborderradiusbottom]];
-    border-bottom-right-radius: [[setting:coursesectionheaderborderradiusbottom]];
-    border-radius: [[setting:coursesectionheaderborderradiustop]];
-    color: [[setting:sectionheadingcolor]];
+    background-color: [[setting:coursesectionheaderbg]] !important;
+    color: [[setting:sectionheadingcolor]] !important;
     margin-bottom: 20px;
     padding: 3px 10px;
+    border-bottom: [[setting:coursesectionheaderborderstyle]] [[setting:coursesectionheaderbordercolor]] [[setting:coursesectionheaderborderwidth]];
+    border-radius: [[setting:coursesectionheaderborderradiustop]];
+    border-bottom-right-radius: [[setting:coursesectionheaderborderradiusbottom]];
+    border-bottom-left-radius: [[setting:coursesectionheaderborderradiusbottom]];
 }
 
-.format-onetopic .onetopic .tab_content {
-    background-color: [[setting:coursesectionheaderbg]];
-}
 
 /* Alter nav on single-section for better onetopic course format support */
 .single-section .nav {
@@ -455,10 +456,8 @@
 }
 
 /* Current Section */
-#page .course-content ul li.section.main.current,
-.format-onetopic .onetopic .nav-tabs .nav-link.active .tab_content,
-.format-onetopic .onetopic .nav-tabs .nav-link.active .tab_content .sectionname {
-    background-color: [[setting:currentcolor]];
+#page .course-content ul li.section.main.current {
+    background: [[setting:currentcolor]];
 }
 
 .course-content ul li.section.hidden .sectionname,
@@ -938,7 +937,7 @@ div.activity-wrapper {
 .context-header-settings-menu,
 .region-main-settings-menu {
     height: 2em;
-    margin: 4px 0 0;
+    margin: 9px 5px 0;
 }
 
 #region-main-settings-menu > div {
