@@ -235,48 +235,48 @@ $string['practicalactivities_portfolio'] = 'PracticalActivities Portfolio';
 $string['none_portfolio'] = 'PORTFOLIO NONE';
 
 
-// Important! String values based on Accesstype must match the customized user profile value 'Accesstype'...
+// Important! String values based on accesstype must match the customized user profile value 'accesstype'...
 // Generic role types...
-// $string['role_gtp_admin'] = 'gtp-admin';
-$string['role_gtp_inst'] = 'gtp-inst';
-$string['role_gtp_stud'] = 'gtp-stud';
-$string['role_gtp_siteadmin'] = 'gtp-siteadmin';
+// $string['role_gtp_administrator'] = 'gtp-administrator';
+$string['role_gtp_instructor'] = 'gtp-instructor';
+$string['role_gtp_student'] = 'gtp-student';
+$string['role_gtp_siteadministrator'] = 'gtp-siteadministrator';
 
-$string['role_ibm_stud'] = 'ibm-stud';
+$string['role_ibm_student'] = 'ibm-student';
 
-$string['role_lenovo_siteadmin'] = 'lenovo-siteadmin';
-$string['role_lenovo_admin'] = 'lenovo-admin';
-$string['role_lenovo_inst'] = 'lenovo-inst';
-$string['role_lenovo_stud'] = 'lenovo-stud';
+$string['role_lenovo_siteadministrator'] = 'lenovo-siteadministrator';
+$string['role_lenovo_administrator'] = 'lenovo-administrator';
+$string['role_lenovo_instructor'] = 'lenovo-instructor';
+$string['role_lenovo_student'] = 'lenovo-student';
 
-$string['role_swtc_siteadmin'] = 'swtc-siteadmin';
-$string['role_swtc_admin'] = 'swtc-admin';
-$string['role_swtc_inst'] = 'swtc-inst';
-$string['role_swtc_stud'] = 'swtc-stud';
+$string['role_swtc_siteadministrator'] = 'swtc-siteadministrator';
+$string['role_swtc_administrator'] = 'swtc-administrator';
+$string['role_swtc_instructor'] = 'swtc-instructor';
+$string['role_swtc_student'] = 'swtc-student';
 
-$string['role_serviceprovider_stud'] = 'serviceprovider-stud';
+$string['role_serviceprovider_student'] = 'serviceprovider-student';
 
-$string['role_maintech_stud'] = 'maintech-stud';
+$string['role_maintech_student'] = 'maintech-student';
 
-$string['role_asp_maintech_stud'] = 'asp-maintech-stud';
+$string['role_asp_maintech_student'] = 'asp-maintech-student';
 
-$string['role_asp_mgr'] = 'asp-mgr';
+$string['role_asp_manager'] = 'asp-manager';
 
-$string['role_premiersupport_stud'] = 'premiersupport-stud';
-$string['role_premiersupport_admin'] = 'premiersupport-admin';
-$string['role_premiersupport_geoadmin'] = 'premiersupport-geoadmin';
-$string['role_premiersupport_siteadmin'] = 'premiersupport-siteadmin';
-$string['role_premiersupport_mgr'] = 'premiersupport-mgr';
+$string['role_premiersupport_student'] = 'premiersupport-student';
+$string['role_premiersupport_administrator'] = 'premiersupport-administrator';
+$string['role_premiersupport_geoadmin'] = 'premiersupport-geoadministrator';
+$string['role_premiersupport_siteadministrator'] = 'premiersupport-siteadministrator';
+$string['role_premiersupport_manager'] = 'premiersupport-manager';
 
-$string['role_servicedelivery_stud'] = 'servicedelivery-stud';
-$string['role_servicedelivery_admin'] = 'servicedelivery-admin';
-$string['role_servicedelivery_geoadmin'] = 'servicedelivery-geoadmin';
-$string['role_servicedelivery_siteadmin'] = 'servicedelivery-siteadmin';
-$string['role_servicedelivery_mgr'] = 'servicedelivery-mgr';
+$string['role_servicedelivery_student'] = 'servicedelivery-student';
+$string['role_servicedelivery_administrator'] = 'servicedelivery-administrator';
+$string['role_servicedelivery_geoadmin'] = 'servicedelivery-geoadministrator';
+$string['role_servicedelivery_siteadministrator'] = 'servicedelivery-siteadministrator';
+$string['role_servicedelivery_manager'] = 'servicedelivery-manager';
 
 // IBM user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['access_ibm_stud'] = 'IBM-stud';
+$string['access_ibm_student'] = 'IBM-student';
 $string['role_ibm_student'] = 'ibm-student';
 $string['access_ibm_pregmatch'] = '/IBM/i';
 
@@ -289,101 +289,101 @@ $string['role_gtp_siteadministrator'] = 'gtp-siteadministrator';
 
 // Avnet (AV) GTP user types...
 $string['access_av_gtp'] = 'AV-GTP';		// 01/17/19
-$string['access_av_gtp_admin'] = 'AV-GTP-admin';
-$string['access_av_gtp_inst'] = 'AV-GTP-inst';
-$string['access_av_gtp_stud'] = 'AV-GTP-stud';
-$string['access_av_gtp_siteadmin'] = 'AV-GTP-siteadmin';
+$string['access_av_gtp_administrator'] = 'AV-GTP-administrator';
+$string['access_av_gtp_instructor'] = 'AV-GTP-instructor';
+$string['access_av_gtp_student'] = 'AV-GTP-student';
+$string['access_av_gtp_siteadministrator'] = 'AV-GTP-siteadministrator';
 
 // Ingram Micro (IM) GTP user types...
 $string['access_im_gtp'] = 'IM-GTP';		// 01/17/19
-$string['access_im_gtp_admin'] = 'IM-GTP-admin';
-$string['access_im_gtp_inst'] = 'IM-GTP-inst';
-$string['access_im_gtp_stud'] = 'IM-GTP-stud';
-$string['access_im_gtp_siteadmin'] = 'IM-GTP-siteadmin';
+$string['access_im_gtp_administrator'] = 'IM-GTP-administrator';
+$string['access_im_gtp_instructor'] = 'IM-GTP-instructor';
+$string['access_im_gtp_student'] = 'IM-GTP-student';
+$string['access_im_gtp_siteadministrator'] = 'IM-GTP-siteadministrator';
 
 // Learn Quest (LQ) GTP user types...
 $string['access_lq_gtp'] = 'LQ-GTP';		// 01/17/19
-$string['access_lq_gtp_admin'] = 'LQ-GTP-admin';
-$string['access_lq_gtp_inst'] = 'LQ-GTP-inst';
-$string['access_lq_gtp_stud'] = 'LQ-GTP-stud';
-$string['access_lq_gtp_siteadmin'] = 'LQ-GTP-siteadmin';
+$string['access_lq_gtp_administrator'] = 'LQ-GTP-administrator';
+$string['access_lq_gtp_instructor'] = 'LQ-GTP-instructor';
+$string['access_lq_gtp_student'] = 'LQ-GTP-student';
+$string['access_lq_gtp_siteadministrator'] = 'LQ-GTP-siteadministrator';
 
 // Lenovo user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['access_lenovo_stud'] = 'Lenovo-stud';
-$string['access_lenovo_pregmatch_stud'] = '/Lenovo-stud/i';                       // ex: Lenovo-stud
+$string['access_lenovo_student'] = 'Lenovo-student';
+$string['access_lenovo_pregmatch_student'] = '/Lenovo-stud/i';                       // ex: Lenovo-stud
 $string['role_lenovo_student'] = 'lenovo-student';
 
-$string['access_lenovo_inst'] = 'Lenovo-inst';
+$string['access_lenovo_instructor'] = 'Lenovo-instructor';
 $string['role_lenovo_instructor'] = 'lenovo-instructor';
 
-$string['access_lenovo_admin'] = 'Lenovo-admin';
-$string['access_lenovo_pregmatch_admin'] = '/Lenovo-admin/i';                       // ex: Lenovo-admin
+$string['access_lenovo_administrator'] = 'Lenovo-administrator';
+$string['access_lenovo_pregmatch_administrator'] = '/Lenovo-admin/i';                       // ex: Lenovo-admin
 $string['role_lenovo_administrator'] = 'lenovo-administrator';
 
-$string['access_lenovo_siteadmin'] = 'Lenovo-siteadmin';                        // 02/13/19
-$string['access_lenovo_pregmatch_siteadmin'] = '/Lenovo-siteadmin/i';                       // ex: Lenovo-siteadmin
+$string['access_lenovo_siteadministrator'] = 'Lenovo-siteadministrator';                        // 02/13/19
+$string['access_lenovo_pregmatch_siteadministrator'] = '/Lenovo-siteadmin/i';                       // ex: Lenovo-siteadmin
 $string['role_lenovo_siteadministrator'] = 'lenovo-siteadministrator';      // 02/13/19
 
 // SWTC user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the SWTC LMS web site.
-$string['access_swtc_stud'] = 'SWTC-stud';
-$string['access_swtc_pregmatch_stud'] = '/SWTC-stud/i';
+$string['access_swtc_student'] = 'SWTC-student';
+$string['access_swtc_pregmatch_student'] = '/SWTC-stud/i';
 $string['role_swtc_student'] = 'swtc-student';
 
-$string['access_swtc_inst'] = 'SWTC-inst';
+$string['access_swtc_instructor'] = 'SWTC-instructor';
 $string['role_swtc_instructor'] = 'swtc-instructor';
 
-$string['access_swtc_admin'] = 'SWTC-admin';
-$string['access_swtc_pregmatch_admin'] = '/SWTC-admin/i';
+$string['access_swtc_administrator'] = 'SWTC-administrator';
+$string['access_swtc_pregmatch_administrator'] = '/SWTC-admin/i';
 $string['role_swtc_administrator'] = 'swtc-administrator';
 
-$string['access_swtc_siteadmin'] = 'SWTC-siteadmin';                        // 02/13/19
-$string['access_swtc_pregmatch_siteadmin'] = '/SWTC-siteadmin/i';                       // ex: SWTC-siteadmin
+$string['access_swtc_siteadministrator'] = 'SWTC-siteadministrator';                        // 02/13/19
+$string['access_swtc_pregmatch_siteadministrator'] = '/SWTC-siteadmin/i';                       // ex: SWTC-siteadmin
 $string['role_swtc_siteadministrator'] = 'swtc-siteadministrator';      // 02/13/19
 
 // Service Provider user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['access_serviceprovider_stud'] = 'ServiceProvider-stud';
-$string['access_serviceprovider_pregmatch_stud'] = '/ServiceProvider-stud/i';                       // ex: ServiceProvider-stud
+$string['access_serviceprovider_student'] = 'ServiceProvider-student';
+$string['access_serviceprovider_pregmatch_student'] = '/ServiceProvider-stud/i';                       // ex: ServiceProvider-stud
 $string['role_serviceprovider_student'] = 'serviceprovider-student';
 
 // Maintech user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['access_maintech_stud'] = 'Maintech-stud';
-$string['access_maintech_pregmatch_stud'] = '/^Maintech-stud/i';                       // ex: Maintech-stud
+$string['access_maintech_student'] = 'Maintech-student';
+$string['access_maintech_pregmatch_student'] = '/^Maintech-stud/i';                       // ex: Maintech-stud
 $string['role_maintech_student'] = 'maintech-student';
 
 // ASP-Maintech user types and roles (shortnames)...
-$string['access_asp_maintech_stud'] = 'ASP-Maintech-stud';
-$string['access_asp_maintech_pregmatch_stud'] = '/^ASP-Maintech-stud/i';                       // ex: ASP-Maintech-stud
+$string['access_asp_maintech_student'] = 'ASP-Maintech-student';
+$string['access_asp_maintech_pregmatch_student'] = '/^ASP-Maintech-stud/i';                       // ex: ASP-Maintech-stud
 $string['role_asp_maintech_student'] = 'asp-maintech-student';
 
 // ASP user types and roles (shortnames)...
-$string['access_asp_mgr'] = 'ASP-mgr';
+$string['access_asp_manager'] = 'ASP-manager';
 $string['role_asp_manager'] = 'asp-manager';
 
 // Lenovo *******************************************************************************
 // PremierSupport section.
 // Lenovo *******************************************************************************
 // PremierSupport user types and roles (shortnames) - main ones.
-$string['access_premiersupport_stud'] = 'PremierSupport-stud';
+$string['access_premiersupport_student'] = 'PremierSupport-student';
 $string['role_premiersupport_student'] = 'premiersupport-student';
-$string['access_premiersupport_mgr'] = 'PremierSupport-mgr';
+$string['access_premiersupport_manager'] = 'PremierSupport-manager';
 $string['role_premiersupport_manager'] = 'premiersupport-manager';
-$string['access_premiersupport_admin'] = 'PremierSupport-admin';
+$string['access_premiersupport_administrator'] = 'PremierSupport-administrator';
 $string['role_premiersupport_administrator'] = 'premiersupport-administrator';
-$string['access_premiersupport_geoadmin'] = 'PremierSupport-geoadmin';
+$string['access_premiersupport_geoadmin'] = 'PremierSupport-geoadministrator';
 $string['role_premiersupport_geoadministrator'] = 'premiersupport-geoadministrator';
-$string['access_premiersupport_siteadmin'] = 'PremierSupport-siteadmin';
+$string['access_premiersupport_siteadministrator'] = 'PremierSupport-siteadministrator';
 $string['role_premiersupport_siteadministrator'] = 'premiersupport-siteadministrator';
 
 $string['access_premiersupport_pregmatch'] = '/PremierSupport/i';                                                       // ex: PremierSupport
-$string['access_premiersupport_pregmatch_stud'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-stud/i';        // ex: PremierSupport-US1-stud
-$string['access_premiersupport_pregmatch_mgr'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-mgr/i';          // ex: PremierSupport-US1-mgr
-$string['access_premiersupport_pregmatch_admin'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-admin/i';  // ex: PremierSupport-US1-admin
+$string['access_premiersupport_pregmatch_student'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-stud/i';        // ex: PremierSupport-US1-stud
+$string['access_premiersupport_pregmatch_manager'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-mgr/i';          // ex: PremierSupport-US1-mgr
+$string['access_premiersupport_pregmatch_administrator'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-admin/i';  // ex: PremierSupport-US1-admin
 $string['access_premiersupport_pregmatch_geoadmin'] = '/PremierSupport-[A-Z][A-Z]-geoadmin/i';  // ex: PremierSupport-US-geoadmin
-$string['access_premiersupport_pregmatch_siteadmin'] = '/PremierSupport-siteadmin/i';                       // ex: PremierSupport-siteadmin
+$string['access_premiersupport_pregmatch_siteadministrator'] = '/PremierSupport-siteadmin/i';                       // ex: PremierSupport-siteadmin
 
 // PremierSupport manager and administrator reporting and preg_match strings.  {$a->fullname}
 // Note: If the user is a PS admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
@@ -405,209 +405,209 @@ $string['groups_premiersupport_all_type_participants'] = 'All PremierSupport {$a
 // Lenovo *******************************************************************************
 // PremierSupport GEO student types.
 // Lenovo *******************************************************************************
-$string['access_premiersupport_us1_stud'] = 'PremierSupport-us1-stud';
-$string['access_premiersupport_ca1_stud'] = 'PremierSupport-ca1-stud';
-$string['access_premiersupport_la1_stud'] = 'PremierSupport-la1-stud';
-$string['access_premiersupport_ap1_stud'] = 'PremierSupport-ap1-stud';
-$string['access_premiersupport_em1_stud'] = 'PremierSupport-em1-stud';
+$string['access_premiersupport_us1_student'] = 'PremierSupport-us1-student';
+$string['access_premiersupport_ca1_student'] = 'PremierSupport-ca1-student';
+$string['access_premiersupport_la1_student'] = 'PremierSupport-la1-student';
+$string['access_premiersupport_ap1_student'] = 'PremierSupport-ap1-student';
+$string['access_premiersupport_em1_student'] = 'PremierSupport-em1-student';
 
-$string['access_premiersupport_us2_stud'] = 'PremierSupport-us2-stud';
-$string['access_premiersupport_ca2_stud'] = 'PremierSupport-ca2-stud';
-$string['access_premiersupport_la2_stud'] = 'PremierSupport-la2-stud';
-$string['access_premiersupport_ap2_stud'] = 'PremierSupport-ap2-stud';
-$string['access_premiersupport_em2_stud'] = 'PremierSupport-em2-stud';
+$string['access_premiersupport_us2_student'] = 'PremierSupport-us2-student';
+$string['access_premiersupport_ca2_student'] = 'PremierSupport-ca2-student';
+$string['access_premiersupport_la2_student'] = 'PremierSupport-la2-student';
+$string['access_premiersupport_ap2_student'] = 'PremierSupport-ap2-student';
+$string['access_premiersupport_em2_student'] = 'PremierSupport-em2-student';
 
-$string['access_premiersupport_us3_stud'] = 'PremierSupport-us3-stud';
-$string['access_premiersupport_ca3_stud'] = 'PremierSupport-ca3-stud';
-$string['access_premiersupport_la3_stud'] = 'PremierSupport-la3-stud';
-$string['access_premiersupport_ap3_stud'] = 'PremierSupport-ap3-stud';
-$string['access_premiersupport_em3_stud'] = 'PremierSupport-em3-stud';
+$string['access_premiersupport_us3_student'] = 'PremierSupport-us3-student';
+$string['access_premiersupport_ca3_student'] = 'PremierSupport-ca3-student';
+$string['access_premiersupport_la3_student'] = 'PremierSupport-la3-student';
+$string['access_premiersupport_ap3_student'] = 'PremierSupport-ap3-student';
+$string['access_premiersupport_em3_student'] = 'PremierSupport-em3-student';
 
-$string['access_premiersupport_us4_stud'] = 'PremierSupport-us4-stud';
-$string['access_premiersupport_ca4_stud'] = 'PremierSupport-ca4-stud';
-$string['access_premiersupport_la4_stud'] = 'PremierSupport-la4-stud';
-$string['access_premiersupport_ap4_stud'] = 'PremierSupport-ap4-stud';
-$string['access_premiersupport_em4_stud'] = 'PremierSupport-em4-stud';
+$string['access_premiersupport_us4_student'] = 'PremierSupport-us4-student';
+$string['access_premiersupport_ca4_student'] = 'PremierSupport-ca4-student';
+$string['access_premiersupport_la4_student'] = 'PremierSupport-la4-student';
+$string['access_premiersupport_ap4_student'] = 'PremierSupport-ap4-student';
+$string['access_premiersupport_em4_student'] = 'PremierSupport-em4-student';
 
-$string['access_premiersupport_us5_stud'] = 'PremierSupport-us5-stud';
-$string['access_premiersupport_ca5_stud'] = 'PremierSupport-ca5-stud';
-$string['access_premiersupport_la5_stud'] = 'PremierSupport-la5-stud';
-$string['access_premiersupport_ap5_stud'] = 'PremierSupport-ap5-stud';
-$string['access_premiersupport_em5_stud'] = 'PremierSupport-em5-stud';
+$string['access_premiersupport_us5_student'] = 'PremierSupport-us5-student';
+$string['access_premiersupport_ca5_student'] = 'PremierSupport-ca5-student';
+$string['access_premiersupport_la5_student'] = 'PremierSupport-la5-student';
+$string['access_premiersupport_ap5_student'] = 'PremierSupport-ap5-student';
+$string['access_premiersupport_em5_student'] = 'PremierSupport-em5-student';
 
 // Lenovo *******************************************************************************
 // PremierSupport GEO manager types.
 // Lenovo *******************************************************************************
-$string['access_premiersupport_us1_mgr'] = 'PremierSupport-us1-mgr';
-$string['access_premiersupport_ca1_mgr'] = 'PremierSupport-ca1-mgr';
-$string['access_premiersupport_la1_mgr'] = 'PremierSupport-la1-mgr';
-$string['access_premiersupport_ap1_mgr'] = 'PremierSupport-ap1-mgr';
-$string['access_premiersupport_em1_mgr'] = 'PremierSupport-em1-mgr';
+$string['access_premiersupport_us1_manager'] = 'PremierSupport-us1-manager';
+$string['access_premiersupport_ca1_manager'] = 'PremierSupport-ca1-manager';
+$string['access_premiersupport_la1_manager'] = 'PremierSupport-la1-manager';
+$string['access_premiersupport_ap1_manager'] = 'PremierSupport-ap1-manager';
+$string['access_premiersupport_em1_manager'] = 'PremierSupport-em1-manager';
 
-$string['access_premiersupport_us2_mgr'] = 'PremierSupport-us2-mgr';
-$string['access_premiersupport_ca2_mgr'] = 'PremierSupport-ca2-mgr';
-$string['access_premiersupport_la2_mgr'] = 'PremierSupport-la2-mgr';
-$string['access_premiersupport_ap2_mgr'] = 'PremierSupport-ap2-mgr';
-$string['access_premiersupport_em2_mgr'] = 'PremierSupport-em2-mgr';
+$string['access_premiersupport_us2_manager'] = 'PremierSupport-us2-manager';
+$string['access_premiersupport_ca2_manager'] = 'PremierSupport-ca2-manager';
+$string['access_premiersupport_la2_manager'] = 'PremierSupport-la2-manager';
+$string['access_premiersupport_ap2_manager'] = 'PremierSupport-ap2-manager';
+$string['access_premiersupport_em2_manager'] = 'PremierSupport-em2-manager';
 
-$string['access_premiersupport_us3_mgr'] = 'PremierSupport-us3-mgr';
-$string['access_premiersupport_ca3_mgr'] = 'PremierSupport-ca3-mgr';
-$string['access_premiersupport_la3_mgr'] = 'PremierSupport-la3-mgr';
-$string['access_premiersupport_ap3_mgr'] = 'PremierSupport-ap3-mgr';
-$string['access_premiersupport_em3_mgr'] = 'PremierSupport-em3-mgr';
+$string['access_premiersupport_us3_manager'] = 'PremierSupport-us3-manager';
+$string['access_premiersupport_ca3_manager'] = 'PremierSupport-ca3-manager';
+$string['access_premiersupport_la3_manager'] = 'PremierSupport-la3-manager';
+$string['access_premiersupport_ap3_manager'] = 'PremierSupport-ap3-manager';
+$string['access_premiersupport_em3_manager'] = 'PremierSupport-em3-manager';
 
-$string['access_premiersupport_us4_mgr'] = 'PremierSupport-us4-mgr';
-$string['access_premiersupport_ca4_mgr'] = 'PremierSupport-ca4-mgr';
-$string['access_premiersupport_la4_mgr'] = 'PremierSupport-la4-mgr';
-$string['access_premiersupport_ap4_mgr'] = 'PremierSupport-ap4-mgr';
-$string['access_premiersupport_em4_mgr'] = 'PremierSupport-em4-mgr';
+$string['access_premiersupport_us4_manager'] = 'PremierSupport-us4-manager';
+$string['access_premiersupport_ca4_manager'] = 'PremierSupport-ca4-manager';
+$string['access_premiersupport_la4_manager'] = 'PremierSupport-la4-manager';
+$string['access_premiersupport_ap4_manager'] = 'PremierSupport-ap4-manager';
+$string['access_premiersupport_em4_manager'] = 'PremierSupport-em4-manager';
 
-$string['access_premiersupport_us5_mgr'] = 'PremierSupport-us5-mgr';
-$string['access_premiersupport_ca5_mgr'] = 'PremierSupport-ca5-mgr';
-$string['access_premiersupport_la5_mgr'] = 'PremierSupport-la5-mgr';
-$string['access_premiersupport_ap5_mgr'] = 'PremierSupport-ap5-mgr';
-$string['access_premiersupport_em5_mgr'] = 'PremierSupport-em5-mgr';
+$string['access_premiersupport_us5_manager'] = 'PremierSupport-us5-manager';
+$string['access_premiersupport_ca5_manager'] = 'PremierSupport-ca5-manager';
+$string['access_premiersupport_la5_manager'] = 'PremierSupport-la5-manager';
+$string['access_premiersupport_ap5_manager'] = 'PremierSupport-ap5-manager';
+$string['access_premiersupport_em5_manager'] = 'PremierSupport-em5-manager';
 
 // Lenovo *******************************************************************************
 // PremierSupport GEO administrator types.
 // Lenovo *******************************************************************************
-$string['access_premiersupport_us1_admin'] = 'PremierSupport-us1-admin';
-$string['access_premiersupport_ca1_admin'] = 'PremierSupport-ca1-admin';
-$string['access_premiersupport_la1_admin'] = 'PremierSupport-la1-admin';
-$string['access_premiersupport_ap1_admin'] = 'PremierSupport-ap1-admin';
-$string['access_premiersupport_em1_admin'] = 'PremierSupport-em1-admin';
+$string['access_premiersupport_us1_administrator'] = 'PremierSupport-us1-administrator';
+$string['access_premiersupport_ca1_administrator'] = 'PremierSupport-ca1-administrator';
+$string['access_premiersupport_la1_administrator'] = 'PremierSupport-la1-administrator';
+$string['access_premiersupport_ap1_administrator'] = 'PremierSupport-ap1-administrator';
+$string['access_premiersupport_em1_administrator'] = 'PremierSupport-em1-administrator';
 
-$string['access_premiersupport_us2_admin'] = 'PremierSupport-us2-admin';
-$string['access_premiersupport_ca2_admin'] = 'PremierSupport-ca2-admin';
-$string['access_premiersupport_la2_admin'] = 'PremierSupport-la2-admin';
-$string['access_premiersupport_ap2_admin'] = 'PremierSupport-ap2-admin';
-$string['access_premiersupport_em2_admin'] = 'PremierSupport-em2-admin';
+$string['access_premiersupport_us2_administrator'] = 'PremierSupport-us2-administrator';
+$string['access_premiersupport_ca2_administrator'] = 'PremierSupport-ca2-administrator';
+$string['access_premiersupport_la2_administrator'] = 'PremierSupport-la2-administrator';
+$string['access_premiersupport_ap2_administrator'] = 'PremierSupport-ap2-administrator';
+$string['access_premiersupport_em2_administrator'] = 'PremierSupport-em2-administrator';
 
-$string['access_premiersupport_us3_admin'] = 'PremierSupport-us3-admin';
-$string['access_premiersupport_ca3_admin'] = 'PremierSupport-ca3-admin';
-$string['access_premiersupport_la3_admin'] = 'PremierSupport-la3-admin';
-$string['access_premiersupport_ap3_admin'] = 'PremierSupport-ap3-admin';
-$string['access_premiersupport_em3_admin'] = 'PremierSupport-em3-admin';
+$string['access_premiersupport_us3_administrator'] = 'PremierSupport-us3-administrator';
+$string['access_premiersupport_ca3_administrator'] = 'PremierSupport-ca3-administrator';
+$string['access_premiersupport_la3_administrator'] = 'PremierSupport-la3-administrator';
+$string['access_premiersupport_ap3_administrator'] = 'PremierSupport-ap3-administrator';
+$string['access_premiersupport_em3_administrator'] = 'PremierSupport-em3-administrator';
 
-$string['access_premiersupport_us4_admin'] = 'PremierSupport-us4-admin';
-$string['access_premiersupport_ca4_admin'] = 'PremierSupport-ca4-admin';
-$string['access_premiersupport_la4_admin'] = 'PremierSupport-la4-admin';
-$string['access_premiersupport_ap4_admin'] = 'PremierSupport-ap4-admin';
-$string['access_premiersupport_em4_admin'] = 'PremierSupport-em4-admin';
+$string['access_premiersupport_us4_administrator'] = 'PremierSupport-us4-administrator';
+$string['access_premiersupport_ca4_administrator'] = 'PremierSupport-ca4-administrator';
+$string['access_premiersupport_la4_administrator'] = 'PremierSupport-la4-administrator';
+$string['access_premiersupport_ap4_administrator'] = 'PremierSupport-ap4-administrator';
+$string['access_premiersupport_em4_administrator'] = 'PremierSupport-em4-administrator';
 
-$string['access_premiersupport_us5_admin'] = 'PremierSupport-us5-admin';
-$string['access_premiersupport_ca5_admin'] = 'PremierSupport-ca5-admin';
-$string['access_premiersupport_la5_admin'] = 'PremierSupport-la5-admin';
-$string['access_premiersupport_ap5_admin'] = 'PremierSupport-ap5-admin';
-$string['access_premiersupport_em5_admin'] = 'PremierSupport-em5-admin';
+$string['access_premiersupport_us5_administrator'] = 'PremierSupport-us5-administrator';
+$string['access_premiersupport_ca5_administrator'] = 'PremierSupport-ca5-administrator';
+$string['access_premiersupport_la5_administrator'] = 'PremierSupport-la5-administrator';
+$string['access_premiersupport_ap5_administrator'] = 'PremierSupport-ap5-administrator';
+$string['access_premiersupport_em5_administrator'] = 'PremierSupport-em5-administrator';
 
 // Lenovo *******************************************************************************
 // PremierSupport GEO administrator user types.
 // Lenovo *******************************************************************************
-$string['access_premiersupport_us_geoadmin'] = 'PremierSupport-us-geoadmin';
-$string['access_premiersupport_ca_geoadmin'] = 'PremierSupport-ca-geoadmin';
-$string['access_premiersupport_la_geoadmin'] = 'PremierSupport-la-geoadmin';
-$string['access_premiersupport_ap_geoadmin'] = 'PremierSupport-ap-geoadmin';
-$string['access_premiersupport_em_geoadmin'] = 'PremierSupport-em-geoadmin';
+$string['access_premiersupport_us_geoadmin'] = 'PremierSupport-us-geoadministrator';
+$string['access_premiersupport_ca_geoadmin'] = 'PremierSupport-ca-geoadministrator';
+$string['access_premiersupport_la_geoadmin'] = 'PremierSupport-la-geoadministrator';
+$string['access_premiersupport_ap_geoadmin'] = 'PremierSupport-ap-geoadministrator';
+$string['access_premiersupport_em_geoadmin'] = 'PremierSupport-em-geoadministrator';
 
 // Lenovo *******************************************************************************
 // PremierSupport GEO site administrator user types.
 // Lenovo *******************************************************************************
-$string['access_premiersupport_us_siteadmin'] = 'PremierSupport-us-siteadmin';
-$string['access_premiersupport_ca_siteadmin'] = 'PremierSupport-ca-siteadmin';
-$string['access_premiersupport_la_siteadmin'] = 'PremierSupport-la-siteadmin';
-$string['access_premiersupport_ap_siteadmin'] = 'PremierSupport-ap-siteadmin';
-$string['access_premiersupport_em_siteadmin'] = 'PremierSupport-em-siteadmin';
+$string['access_premiersupport_us_siteadministrator'] = 'PremierSupport-us-siteadministrator';
+$string['access_premiersupport_ca_siteadministrator'] = 'PremierSupport-ca-siteadministrator';
+$string['access_premiersupport_la_siteadministrator'] = 'PremierSupport-la-siteadministrator';
+$string['access_premiersupport_ap_siteadministrator'] = 'PremierSupport-ap-siteadministrator';
+$string['access_premiersupport_em_siteadministrator'] = 'PremierSupport-em-siteadministrator';
 
 // PremierSupport site administrator user type.
-$string['access_premiersupport_siteadmin'] = 'PremierSupport-siteadmin';
+$string['access_premiersupport_siteadministrator'] = 'PremierSupport-siteadministrator';
 
 // PremierSupport cohort names...also used as course group names.
 $string['cohort_premiersupport_pregmatch_admins'] = '/PS-[A-Z][A-Z]+[1-9]-admins/i';
 $string['cohort_premiersupport_pregmatch_mgrs'] = '/PS-[A-Z][A-Z]+[1-9]-mgrs/i';
-$string['cohort_premiersupport_pregmatch_studs'] = '/PS-[A-Z][A-Z]+[1-9]-studs/i';
+$string['cohort_premiersupport_pregmatch_students'] = '/PS-[A-Z][A-Z]+[1-9]-studs/i';
 $string['cohort_premiersupport_pregmatch_geoadmins'] = '/PS-[A-Z][A-Z]-geoadmins/i';
 $string['cohort_premiersupport_pregmatch_siteadmins'] = '/PS-siteadmins/i';
 
 $string['cohort_premiersupport_ap1_admins'] = 'PS-AP1-admins';
 $string['cohort_premiersupport_ap1_mgrs'] = 'PS-AP1-mgrs';
-$string['cohort_premiersupport_ap1_studs'] = 'PS-AP1-studs';
+$string['cohort_premiersupport_ap1_students'] = 'PS-AP1-studs';
 $string['cohort_premiersupport_ap2_admins'] = 'PS-AP2-admins';
 $string['cohort_premiersupport_ap2_mgrs'] = 'PS-AP2-mgrs';
-$string['cohort_premiersupport_ap2_studs'] = 'PS-AP2-studs';
+$string['cohort_premiersupport_ap2_students'] = 'PS-AP2-studs';
 $string['cohort_premiersupport_ap3_admins'] = 'PS-AP3-admins';
 $string['cohort_premiersupport_ap3_mgrs'] = 'PS-AP3-mgrs';
-$string['cohort_premiersupport_ap3_studs'] = 'PS-AP3-studs';
+$string['cohort_premiersupport_ap3_students'] = 'PS-AP3-studs';
 $string['cohort_premiersupport_ap4_admins'] = 'PS-AP4-admins';
 $string['cohort_premiersupport_ap4_mgrs'] = 'PS-AP4-mgrs';
-$string['cohort_premiersupport_ap4_studs'] = 'PS-AP4-studs';
+$string['cohort_premiersupport_ap4_students'] = 'PS-AP4-studs';
 $string['cohort_premiersupport_ap5_admins'] = 'PS-AP5-admins';
 $string['cohort_premiersupport_ap5_mgrs'] = 'PS-AP5-mgrs';
-$string['cohort_premiersupport_ap5_studs'] = 'PS-AP5-studs';
+$string['cohort_premiersupport_ap5_students'] = 'PS-AP5-studs';
 
 $string['cohort_premiersupport_ca1_admins'] = 'PS-CA1-admins';
 $string['cohort_premiersupport_ca1_mgrs'] = 'PS-CA1-mgrs';
-$string['cohort_premiersupport_ca1_studs'] = 'PS-CA1-studs';
+$string['cohort_premiersupport_ca1_students'] = 'PS-CA1-studs';
 $string['cohort_premiersupport_ca2_admins'] = 'PS-CA2-admins';
 $string['cohort_premiersupport_ca2_mgrs'] = 'PS-CA2-mgrs';
-$string['cohort_premiersupport_ca2_studs'] = 'PS-CA2-studs';
+$string['cohort_premiersupport_ca2_students'] = 'PS-CA2-studs';
 $string['cohort_premiersupport_ca3_admins'] = 'PS-CA3-admins';
 $string['cohort_premiersupport_ca3_mgrs'] = 'PS-CA3-mgrs';
-$string['cohort_premiersupport_ca3_studs'] = 'PS-CA3-studs';
+$string['cohort_premiersupport_ca3_students'] = 'PS-CA3-studs';
 $string['cohort_premiersupport_ca4_admins'] = 'PS-CA4-admins';
 $string['cohort_premiersupport_ca4_mgrs'] = 'PS-CA4-mgrs';
-$string['cohort_premiersupport_ca4_studs'] = 'PS-CA4-studs';
+$string['cohort_premiersupport_ca4_students'] = 'PS-CA4-studs';
 $string['cohort_premiersupport_ca5_admins'] = 'PS-CA5-admins';
 $string['cohort_premiersupport_ca5_mgrs'] = 'PS-CA5-mgrs';
-$string['cohort_premiersupport_ca5_studs'] = 'PS-CA5-studs';
+$string['cohort_premiersupport_ca5_students'] = 'PS-CA5-studs';
 
 $string['cohort_premiersupport_em1_admins'] = 'PS-EM1-admins';
 $string['cohort_premiersupport_em1_mgrs'] = 'PS-EM1-mgrs';
-$string['cohort_premiersupport_em1_studs'] = 'PS-EM1-studs';
+$string['cohort_premiersupport_em1_students'] = 'PS-EM1-studs';
 $string['cohort_premiersupport_em2_admins'] = 'PS-EM2-admins';
 $string['cohort_premiersupport_em2_mgrs'] = 'PS-EM2-mgrs';
-$string['cohort_premiersupport_em2_studs'] = 'PS-EM2-studs';
+$string['cohort_premiersupport_em2_students'] = 'PS-EM2-studs';
 $string['cohort_premiersupport_em3_admins'] = 'PS-EM3-admins';
 $string['cohort_premiersupport_em3_mgrs'] = 'PS-EM3-mgrs';
-$string['cohort_premiersupport_em3_studs'] = 'PS-EM3-studs';
+$string['cohort_premiersupport_em3_students'] = 'PS-EM3-studs';
 $string['cohort_premiersupport_em4_admins'] = 'PS-EM4-admins';
 $string['cohort_premiersupport_em4_mgrs'] = 'PS-EM4-mgrs';
-$string['cohort_premiersupport_em4_studs'] = 'PS-EM4-studs';
+$string['cohort_premiersupport_em4_students'] = 'PS-EM4-studs';
 $string['cohort_premiersupport_em5_admins'] = 'PS-EM5-admins';
 $string['cohort_premiersupport_em5_mgrs'] = 'PS-EM5-mgrs';
-$string['cohort_premiersupport_em5_studs'] = 'PS-EM5-studs';
+$string['cohort_premiersupport_em5_students'] = 'PS-EM5-studs';
 
 $string['cohort_premiersupport_la1_admins'] = 'PS-LA1-admins';
 $string['cohort_premiersupport_la1_mgrs'] = 'PS-LA1-mgrs';
-$string['cohort_premiersupport_la1_studs'] = 'PS-LA1-studs';
+$string['cohort_premiersupport_la1_students'] = 'PS-LA1-studs';
 $string['cohort_premiersupport_la2_admins'] = 'PS-LA2-admins';
 $string['cohort_premiersupport_la2_mgrs'] = 'PS-LA2-mgrs';
-$string['cohort_premiersupport_la2_studs'] = 'PS-LA2-studs';
+$string['cohort_premiersupport_la2_students'] = 'PS-LA2-studs';
 $string['cohort_premiersupport_la3_admins'] = 'PS-LA3-admins';
 $string['cohort_premiersupport_la3_mgrs'] = 'PS-LA3-mgrs';
-$string['cohort_premiersupport_la3_studs'] = 'PS-LA3-studs';
+$string['cohort_premiersupport_la3_students'] = 'PS-LA3-studs';
 $string['cohort_premiersupport_la4_admins'] = 'PS-LA4-admins';
 $string['cohort_premiersupport_la4_mgrs'] = 'PS-LA4-mgrs';
-$string['cohort_premiersupport_la4_studs'] = 'PS-LA4-studs';
+$string['cohort_premiersupport_la4_students'] = 'PS-LA4-studs';
 $string['cohort_premiersupport_la5_admins'] = 'PS-LA5-admins';
 $string['cohort_premiersupport_la5_mgrs'] = 'PS-LA5-mgrs';
-$string['cohort_premiersupport_la5_studs'] = 'PS-LA5-studs';
+$string['cohort_premiersupport_la5_students'] = 'PS-LA5-studs';
 
 $string['cohort_premiersupport_us1_admins'] = 'PS-US1-admins';
 $string['cohort_premiersupport_us1_mgrs'] = 'PS-US1-mgrs';
-$string['cohort_premiersupport_us1_studs'] = 'PS-US1-studs';
+$string['cohort_premiersupport_us1_students'] = 'PS-US1-studs';
 $string['cohort_premiersupport_us2_admins'] = 'PS-US2-admins';
 $string['cohort_premiersupport_us2_mgrs'] = 'PS-US2-mgrs';
-$string['cohort_premiersupport_us2_studs'] = 'PS-US2-studs';
+$string['cohort_premiersupport_us2_students'] = 'PS-US2-studs';
 $string['cohort_premiersupport_us3_admins'] = 'PS-US3-admins';
 $string['cohort_premiersupport_us3_mgrs'] = 'PS-US3-mgrs';
-$string['cohort_premiersupport_us3_studs'] = 'PS-US3-studs';
+$string['cohort_premiersupport_us3_students'] = 'PS-US3-studs';
 $string['cohort_premiersupport_us4_admins'] = 'PS-US4-admins';
 $string['cohort_premiersupport_us4_mgrs'] = 'PS-US4-mgrs';
-$string['cohort_premiersupport_us4_studs'] = 'PS-US4-studs';
+$string['cohort_premiersupport_us4_students'] = 'PS-US4-studs';
 $string['cohort_premiersupport_us5_admins'] = 'PS-US5-admins';
 $string['cohort_premiersupport_us5_mgrs'] = 'PS-US5-mgrs';
-$string['cohort_premiersupport_us5_studs'] = 'PS-US5-studs';
+$string['cohort_premiersupport_us5_students'] = 'PS-US5-studs';
 
 $string['cohort_premiersupport_ap_geoadmins'] = 'PS-AP-geoadmins';
 $string['cohort_premiersupport_ca_geoadmins'] = 'PS-CA-geoadmins';
@@ -627,23 +627,23 @@ $string['cohort_premiersupport_siteadmins'] = 'PS-siteadmins';
 // ServiceDelivery section.
 // Lenovo *******************************************************************************
 // ServiceDelivery user types and roles (shortnames) - main ones.
-$string['access_lenovo_servicedelivery_stud'] = 'Lenovo-ServiceDelivery-stud';
+$string['access_lenovo_servicedelivery_student'] = 'Lenovo-ServiceDelivery-student';
 $string['role_servicedelivery_student'] = 'servicedelivery-student';
-$string['access_lenovo_servicedelivery_mgr'] = 'Lenovo-ServiceDelivery-mgr';
+$string['access_lenovo_servicedelivery_manager'] = 'Lenovo-ServiceDelivery-manager';
 $string['role_servicedelivery_manager'] = 'servicedelivery-manager';
-$string['access_lenovo_servicedelivery_admin'] = 'Lenovo-ServiceDelivery-admin';
+$string['access_lenovo_servicedelivery_administrator'] = 'Lenovo-ServiceDelivery-administrator';
 $string['role_servicedelivery_administrator'] = 'servicedelivery-administrator';
-$string['access_lenovo_servicedelivery_geoadmin'] = 'Lenovo-ServiceDelivery-geoadmin';
+$string['access_lenovo_servicedelivery_geoadmin'] = 'Lenovo-ServiceDelivery-geoadministrator';
 $string['role_servicedelivery_geoadministrator'] = 'servicedelivery-geoadministrator';
-$string['access_lenovo_servicedelivery_siteadmin'] = 'Lenovo-ServiceDelivery-siteadmin';
+$string['access_lenovo_servicedelivery_siteadministrator'] = 'Lenovo-ServiceDelivery-siteadministrator';
 $string['role_servicedelivery_siteadministrator'] = 'servicedelivery-siteadministrator';
 
 $string['access_lenovo_servicedelivery_pregmatch'] = '/Lenovo-ServiceDelivery/i';
-$string['access_lenovo_servicedelivery_pregmatch_stud'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-stud/i';
-$string['access_lenovo_servicedelivery_pregmatch_mgr'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-mgr/i';
-$string['access_lenovo_servicedelivery_pregmatch_admin'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-admin/i';
+$string['access_lenovo_servicedelivery_pregmatch_student'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-stud/i';
+$string['access_lenovo_servicedelivery_pregmatch_manager'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-mgr/i';
+$string['access_lenovo_servicedelivery_pregmatch_administrator'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-admin/i';
 $string['access_lenovo_servicedelivery_pregmatch_geoadmin'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]-geoadmin/i';
-$string['access_lenovo_servicedelivery_pregmatch_siteadmin'] = '/Lenovo-ServiceDelivery-siteadmin/i';
+$string['access_lenovo_servicedelivery_pregmatch_siteadministrator'] = '/Lenovo-ServiceDelivery-siteadmin/i';
 
 // ServiceDelivery manager and administrator reporting and preg_match strings.
 // Note: If the user is a SD admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
@@ -665,211 +665,211 @@ $string['groups_lenovo_servicedelivery_all_type_participants'] = 'All ServiceDel
 // Lenovo *******************************************************************************
 // ServiceDelivery GEO student types.
 // Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_us1_stud'] = 'Lenovo-ServiceDelivery-us1-stud';
-$string['access_lenovo_servicedelivery_ca1_stud'] = 'Lenovo-ServiceDelivery-ca1-stud';
-$string['access_lenovo_servicedelivery_la1_stud'] = 'Lenovo-ServiceDelivery-la1-stud';
-$string['access_lenovo_servicedelivery_ap1_stud'] = 'Lenovo-ServiceDelivery-ap1-stud';
-$string['access_lenovo_servicedelivery_em1_stud'] = 'Lenovo-ServiceDelivery-em1-stud';
+$string['access_lenovo_servicedelivery_us1_student'] = 'Lenovo-ServiceDelivery-us1-student';
+$string['access_lenovo_servicedelivery_ca1_student'] = 'Lenovo-ServiceDelivery-ca1-student';
+$string['access_lenovo_servicedelivery_la1_student'] = 'Lenovo-ServiceDelivery-la1-student';
+$string['access_lenovo_servicedelivery_ap1_student'] = 'Lenovo-ServiceDelivery-ap1-student';
+$string['access_lenovo_servicedelivery_em1_student'] = 'Lenovo-ServiceDelivery-em1-student';
 
-$string['access_lenovo_servicedelivery_us2_stud'] = 'Lenovo-ServiceDelivery-us2-stud';
-$string['access_lenovo_servicedelivery_ca2_stud'] = 'Lenovo-ServiceDelivery-ca2-stud';
-$string['access_lenovo_servicedelivery_la2_stud'] = 'Lenovo-ServiceDelivery-la2-stud';
-$string['access_lenovo_servicedelivery_ap2_stud'] = 'Lenovo-ServiceDelivery-ap2-stud';
-$string['access_lenovo_servicedelivery_em2_stud'] = 'Lenovo-ServiceDelivery-em2-stud';
+$string['access_lenovo_servicedelivery_us2_student'] = 'Lenovo-ServiceDelivery-us2-student';
+$string['access_lenovo_servicedelivery_ca2_student'] = 'Lenovo-ServiceDelivery-ca2-student';
+$string['access_lenovo_servicedelivery_la2_student'] = 'Lenovo-ServiceDelivery-la2-student';
+$string['access_lenovo_servicedelivery_ap2_student'] = 'Lenovo-ServiceDelivery-ap2-student';
+$string['access_lenovo_servicedelivery_em2_student'] = 'Lenovo-ServiceDelivery-em2-student';
 
-$string['access_lenovo_servicedelivery_us3_stud'] = 'Lenovo-ServiceDelivery-us3-stud';
-$string['access_lenovo_servicedelivery_ca3_stud'] = 'Lenovo-ServiceDelivery-ca3-stud';
-$string['access_lenovo_servicedelivery_la3_stud'] = 'Lenovo-ServiceDelivery-la3-stud';
-$string['access_lenovo_servicedelivery_ap3_stud'] = 'Lenovo-ServiceDelivery-ap3-stud';
-$string['access_lenovo_servicedelivery_em3_stud'] = 'Lenovo-ServiceDelivery-em3-stud';
+$string['access_lenovo_servicedelivery_us3_student'] = 'Lenovo-ServiceDelivery-us3-student';
+$string['access_lenovo_servicedelivery_ca3_student'] = 'Lenovo-ServiceDelivery-ca3-student';
+$string['access_lenovo_servicedelivery_la3_student'] = 'Lenovo-ServiceDelivery-la3-student';
+$string['access_lenovo_servicedelivery_ap3_student'] = 'Lenovo-ServiceDelivery-ap3-student';
+$string['access_lenovo_servicedelivery_em3_student'] = 'Lenovo-ServiceDelivery-em3-student';
 
-$string['access_lenovo_servicedelivery_us4_stud'] = 'Lenovo-ServiceDelivery-us4-stud';
-$string['access_lenovo_servicedelivery_ca4_stud'] = 'Lenovo-ServiceDelivery-ca4-stud';
-$string['access_lenovo_servicedelivery_la4_stud'] = 'Lenovo-ServiceDelivery-la4-stud';
-$string['access_lenovo_servicedelivery_ap4_stud'] = 'Lenovo-ServiceDelivery-ap4-stud';
-$string['access_lenovo_servicedelivery_em4_stud'] = 'Lenovo-ServiceDelivery-em4-stud';
+$string['access_lenovo_servicedelivery_us4_student'] = 'Lenovo-ServiceDelivery-us4-student';
+$string['access_lenovo_servicedelivery_ca4_student'] = 'Lenovo-ServiceDelivery-ca4-student';
+$string['access_lenovo_servicedelivery_la4_student'] = 'Lenovo-ServiceDelivery-la4-student';
+$string['access_lenovo_servicedelivery_ap4_student'] = 'Lenovo-ServiceDelivery-ap4-student';
+$string['access_lenovo_servicedelivery_em4_student'] = 'Lenovo-ServiceDelivery-em4-student';
 
-$string['access_lenovo_servicedelivery_us5_stud'] = 'Lenovo-ServiceDelivery-us5-stud';
-$string['access_lenovo_servicedelivery_ca5_stud'] = 'Lenovo-ServiceDelivery-ca5-stud';
-$string['access_lenovo_servicedelivery_la5_stud'] = 'Lenovo-ServiceDelivery-la5-stud';
-$string['access_lenovo_servicedelivery_ap5_stud'] = 'Lenovo-ServiceDelivery-ap5-stud';
-$string['access_lenovo_servicedelivery_em5_stud'] = 'Lenovo-ServiceDelivery-em5-stud';
+$string['access_lenovo_servicedelivery_us5_student'] = 'Lenovo-ServiceDelivery-us5-student';
+$string['access_lenovo_servicedelivery_ca5_student'] = 'Lenovo-ServiceDelivery-ca5-student';
+$string['access_lenovo_servicedelivery_la5_student'] = 'Lenovo-ServiceDelivery-la5-student';
+$string['access_lenovo_servicedelivery_ap5_student'] = 'Lenovo-ServiceDelivery-ap5-student';
+$string['access_lenovo_servicedelivery_em5_student'] = 'Lenovo-ServiceDelivery-em5-student';
 
 // Lenovo *******************************************************************************
 // ServiceDelivery GEO manager user types.
 // Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_us1_mgr'] = 'Lenovo-ServiceDelivery-us1-mgr';
-$string['access_lenovo_servicedelivery_ca1_mgr'] = 'Lenovo-ServiceDelivery-ca1-mgr';
-$string['access_lenovo_servicedelivery_la1_mgr'] = 'Lenovo-ServiceDelivery-la1-mgr';
-$string['access_lenovo_servicedelivery_ap1_mgr'] = 'Lenovo-ServiceDelivery-ap1-mgr';
-$string['access_lenovo_servicedelivery_em1_mgr'] = 'Lenovo-ServiceDelivery-em1-mgr';
+$string['access_lenovo_servicedelivery_us1_manager'] = 'Lenovo-ServiceDelivery-us1-manager';
+$string['access_lenovo_servicedelivery_ca1_manager'] = 'Lenovo-ServiceDelivery-ca1-manager';
+$string['access_lenovo_servicedelivery_la1_manager'] = 'Lenovo-ServiceDelivery-la1-manager';
+$string['access_lenovo_servicedelivery_ap1_manager'] = 'Lenovo-ServiceDelivery-ap1-manager';
+$string['access_lenovo_servicedelivery_em1_manager'] = 'Lenovo-ServiceDelivery-em1-manager';
 
-$string['access_lenovo_servicedelivery_us2_mgr'] = 'Lenovo-ServiceDelivery-us2-mgr';
-$string['access_lenovo_servicedelivery_ca2_mgr'] = 'Lenovo-ServiceDelivery-ca2-mgr';
-$string['access_lenovo_servicedelivery_la2_mgr'] = 'Lenovo-ServiceDelivery-la2-mgr';
-$string['access_lenovo_servicedelivery_ap2_mgr'] = 'Lenovo-ServiceDelivery-ap2-mgr';
-$string['access_lenovo_servicedelivery_em2_mgr'] = 'Lenovo-ServiceDelivery-em2-mgr';
+$string['access_lenovo_servicedelivery_us2_manager'] = 'Lenovo-ServiceDelivery-us2-manager';
+$string['access_lenovo_servicedelivery_ca2_manager'] = 'Lenovo-ServiceDelivery-ca2-manager';
+$string['access_lenovo_servicedelivery_la2_manager'] = 'Lenovo-ServiceDelivery-la2-manager';
+$string['access_lenovo_servicedelivery_ap2_manager'] = 'Lenovo-ServiceDelivery-ap2-manager';
+$string['access_lenovo_servicedelivery_em2_manager'] = 'Lenovo-ServiceDelivery-em2-manager';
 
-$string['access_lenovo_servicedelivery_us3_mgr'] = 'Lenovo-ServiceDelivery-us3-mgr';
-$string['access_lenovo_servicedelivery_ca3_mgr'] = 'Lenovo-ServiceDelivery-ca3-mgr';
-$string['access_lenovo_servicedelivery_la3_mgr'] = 'Lenovo-ServiceDelivery-la3-mgr';
-$string['access_lenovo_servicedelivery_ap3_mgr'] = 'Lenovo-ServiceDelivery-ap3-mgr';
-$string['access_lenovo_servicedelivery_em3_mgr'] = 'Lenovo-ServiceDelivery-em3-mgr';
+$string['access_lenovo_servicedelivery_us3_manager'] = 'Lenovo-ServiceDelivery-us3-manager';
+$string['access_lenovo_servicedelivery_ca3_manager'] = 'Lenovo-ServiceDelivery-ca3-manager';
+$string['access_lenovo_servicedelivery_la3_manager'] = 'Lenovo-ServiceDelivery-la3-manager';
+$string['access_lenovo_servicedelivery_ap3_manager'] = 'Lenovo-ServiceDelivery-ap3-manager';
+$string['access_lenovo_servicedelivery_em3_manager'] = 'Lenovo-ServiceDelivery-em3-manager';
 
-$string['access_lenovo_servicedelivery_us4_mgr'] = 'Lenovo-ServiceDelivery-us4-mgr';
-$string['access_lenovo_servicedelivery_ca4_mgr'] = 'Lenovo-ServiceDelivery-ca4-mgr';
-$string['access_lenovo_servicedelivery_la4_mgr'] = 'Lenovo-ServiceDelivery-la4-mgr';
-$string['access_lenovo_servicedelivery_ap4_mgr'] = 'Lenovo-ServiceDelivery-ap4-mgr';
-$string['access_lenovo_servicedelivery_em4_mgr'] = 'Lenovo-ServiceDelivery-em4-mgr';
+$string['access_lenovo_servicedelivery_us4_manager'] = 'Lenovo-ServiceDelivery-us4-manager';
+$string['access_lenovo_servicedelivery_ca4_manager'] = 'Lenovo-ServiceDelivery-ca4-manager';
+$string['access_lenovo_servicedelivery_la4_manager'] = 'Lenovo-ServiceDelivery-la4-manager';
+$string['access_lenovo_servicedelivery_ap4_manager'] = 'Lenovo-ServiceDelivery-ap4-manager';
+$string['access_lenovo_servicedelivery_em4_manager'] = 'Lenovo-ServiceDelivery-em4-manager';
 
-$string['access_lenovo_servicedelivery_us5_mgr'] = 'Lenovo-ServiceDelivery-us5-mgr';
-$string['access_lenovo_servicedelivery_ca5_mgr'] = 'Lenovo-ServiceDelivery-ca5-mgr';
-$string['access_lenovo_servicedelivery_la5_mgr'] = 'Lenovo-ServiceDelivery-la5-mgr';
-$string['access_lenovo_servicedelivery_ap5_mgr'] = 'Lenovo-ServiceDelivery-ap5-mgr';
-$string['access_lenovo_servicedelivery_em5_mgr'] = 'Lenovo-ServiceDelivery-em5-mgr';
-
-// Lenovo *******************************************************************************
-// ServiceDelivery GEO administrator user types.
-// Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_us1_admin'] = 'Lenovo-ServiceDelivery-us1-admin';
-$string['access_lenovo_servicedelivery_ca1_admin'] = 'Lenovo-ServiceDelivery-ca1-admin';
-$string['access_lenovo_servicedelivery_la1_admin'] = 'Lenovo-ServiceDelivery-la1-admin';
-$string['access_lenovo_servicedelivery_ap1_admin'] = 'Lenovo-ServiceDelivery-ap1-admin';
-$string['access_lenovo_servicedelivery_em1_admin'] = 'Lenovo-ServiceDelivery-em1-admin';
-
-$string['access_lenovo_servicedelivery_us2_admin'] = 'Lenovo-ServiceDelivery-us2-admin';
-$string['access_lenovo_servicedelivery_ca2_admin'] = 'Lenovo-ServiceDelivery-ca2-admin';
-$string['access_lenovo_servicedelivery_la2_admin'] = 'Lenovo-ServiceDelivery-la2-admin';
-$string['access_lenovo_servicedelivery_ap2_admin'] = 'Lenovo-ServiceDelivery-ap2-admin';
-$string['access_lenovo_servicedelivery_em2_admin'] = 'Lenovo-ServiceDelivery-em2-admin';
-
-$string['access_lenovo_servicedelivery_us3_admin'] = 'Lenovo-ServiceDelivery-us3-admin';
-$string['access_lenovo_servicedelivery_ca3_admin'] = 'Lenovo-ServiceDelivery-ca3-admin';
-$string['access_lenovo_servicedelivery_la3_admin'] = 'Lenovo-ServiceDelivery-la3-admin';
-$string['access_lenovo_servicedelivery_ap3_admin'] = 'Lenovo-ServiceDelivery-ap3-admin';
-$string['access_lenovo_servicedelivery_em3_admin'] = 'Lenovo-ServiceDelivery-em3-admin';
-
-$string['access_lenovo_servicedelivery_us4_admin'] = 'Lenovo-ServiceDelivery-us4-admin';
-$string['access_lenovo_servicedelivery_ca4_admin'] = 'Lenovo-ServiceDelivery-ca4-admin';
-$string['access_lenovo_servicedelivery_la4_admin'] = 'Lenovo-ServiceDelivery-la4-admin';
-$string['access_lenovo_servicedelivery_ap4_admin'] = 'Lenovo-ServiceDelivery-ap4-admin';
-$string['access_lenovo_servicedelivery_em4_admin'] = 'Lenovo-ServiceDelivery-em4-admin';
-
-$string['access_lenovo_servicedelivery_us5_admin'] = 'Lenovo-ServiceDelivery-us5-admin';
-$string['access_lenovo_servicedelivery_ca5_admin'] = 'Lenovo-ServiceDelivery-ca5-admin';
-$string['access_lenovo_servicedelivery_la5_admin'] = 'Lenovo-ServiceDelivery-la5-admin';
-$string['access_lenovo_servicedelivery_ap5_admin'] = 'Lenovo-ServiceDelivery-ap5-admin';
-$string['access_lenovo_servicedelivery_em5_admin'] = 'Lenovo-ServiceDelivery-em5-admin';
+$string['access_lenovo_servicedelivery_us5_manager'] = 'Lenovo-ServiceDelivery-us5-manager';
+$string['access_lenovo_servicedelivery_ca5_manager'] = 'Lenovo-ServiceDelivery-ca5-manager';
+$string['access_lenovo_servicedelivery_la5_manager'] = 'Lenovo-ServiceDelivery-la5-manager';
+$string['access_lenovo_servicedelivery_ap5_manager'] = 'Lenovo-ServiceDelivery-ap5-manager';
+$string['access_lenovo_servicedelivery_em5_manager'] = 'Lenovo-ServiceDelivery-em5-manager';
 
 // Lenovo *******************************************************************************
 // ServiceDelivery GEO administrator user types.
 // Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_us_geoadmin'] = 'Lenovo_ServiceDelivery-us-geoadmin';
-$string['access_lenovo_servicedelivery_ca_geoadmin'] = 'Lenovo_ServiceDelivery-ca-geoadmin';
-$string['access_lenovo_servicedelivery_la_geoadmin'] = 'Lenovo_ServiceDelivery-la-geoadmin';
-$string['access_lenovo_servicedelivery_ap_geoadmin'] = 'Lenovo_ServiceDelivery-ap-geoadmin';
-$string['access_lenovo_servicedelivery_em_geoadmin'] = 'Lenovo_ServiceDelivery-em-geoadmin';
+$string['access_lenovo_servicedelivery_us1_administrator'] = 'Lenovo-ServiceDelivery-us1-administrator';
+$string['access_lenovo_servicedelivery_ca1_administrator'] = 'Lenovo-ServiceDelivery-ca1-administrator';
+$string['access_lenovo_servicedelivery_la1_administrator'] = 'Lenovo-ServiceDelivery-la1-administrator';
+$string['access_lenovo_servicedelivery_ap1_administrator'] = 'Lenovo-ServiceDelivery-ap1-administrator';
+$string['access_lenovo_servicedelivery_em1_administrator'] = 'Lenovo-ServiceDelivery-em1-administrator';
+
+$string['access_lenovo_servicedelivery_us2_administrator'] = 'Lenovo-ServiceDelivery-us2-administrator';
+$string['access_lenovo_servicedelivery_ca2_administrator'] = 'Lenovo-ServiceDelivery-ca2-administrator';
+$string['access_lenovo_servicedelivery_la2_administrator'] = 'Lenovo-ServiceDelivery-la2-administrator';
+$string['access_lenovo_servicedelivery_ap2_administrator'] = 'Lenovo-ServiceDelivery-ap2-administrator';
+$string['access_lenovo_servicedelivery_em2_administrator'] = 'Lenovo-ServiceDelivery-em2-administrator';
+
+$string['access_lenovo_servicedelivery_us3_administrator'] = 'Lenovo-ServiceDelivery-us3-administrator';
+$string['access_lenovo_servicedelivery_ca3_administrator'] = 'Lenovo-ServiceDelivery-ca3-administrator';
+$string['access_lenovo_servicedelivery_la3_administrator'] = 'Lenovo-ServiceDelivery-la3-administrator';
+$string['access_lenovo_servicedelivery_ap3_administrator'] = 'Lenovo-ServiceDelivery-ap3-administrator';
+$string['access_lenovo_servicedelivery_em3_administrator'] = 'Lenovo-ServiceDelivery-em3-administrator';
+
+$string['access_lenovo_servicedelivery_us4_administrator'] = 'Lenovo-ServiceDelivery-us4-administrator';
+$string['access_lenovo_servicedelivery_ca4_administrator'] = 'Lenovo-ServiceDelivery-ca4-administrator';
+$string['access_lenovo_servicedelivery_la4_administrator'] = 'Lenovo-ServiceDelivery-la4-administrator';
+$string['access_lenovo_servicedelivery_ap4_administrator'] = 'Lenovo-ServiceDelivery-ap4-administrator';
+$string['access_lenovo_servicedelivery_em4_administrator'] = 'Lenovo-ServiceDelivery-em4-administrator';
+
+$string['access_lenovo_servicedelivery_us5_administrator'] = 'Lenovo-ServiceDelivery-us5-administrator';
+$string['access_lenovo_servicedelivery_ca5_administrator'] = 'Lenovo-ServiceDelivery-ca5-administrator';
+$string['access_lenovo_servicedelivery_la5_administrator'] = 'Lenovo-ServiceDelivery-la5-administrator';
+$string['access_lenovo_servicedelivery_ap5_administrator'] = 'Lenovo-ServiceDelivery-ap5-administrator';
+$string['access_lenovo_servicedelivery_em5_administrator'] = 'Lenovo-ServiceDelivery-em5-administrator';
+
+// Lenovo *******************************************************************************
+// ServiceDelivery GEO administrator user types.
+// Lenovo *******************************************************************************
+$string['access_lenovo_servicedelivery_us_geoadmin'] = 'Lenovo_ServiceDelivery-us-geoadministrator';
+$string['access_lenovo_servicedelivery_ca_geoadmin'] = 'Lenovo_ServiceDelivery-ca-geoadministrator';
+$string['access_lenovo_servicedelivery_la_geoadmin'] = 'Lenovo_ServiceDelivery-la-geoadministrator';
+$string['access_lenovo_servicedelivery_ap_geoadmin'] = 'Lenovo_ServiceDelivery-ap-geoadministrator';
+$string['access_lenovo_servicedelivery_em_geoadmin'] = 'Lenovo_ServiceDelivery-em-geoadministrator';
 
 // Lenovo *******************************************************************************
 // ServiceDelivery GEO site administrator user types.
 // Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_us_siteadmin'] = 'Lenovo_ServiceDelivery-us-siteadmin';
-$string['access_lenovo_servicedelivery_ca_siteadmin'] = 'Lenovo_ServiceDelivery-ca-siteadmin';
-$string['access_lenovo_servicedelivery_la_siteadmin'] = 'Lenovo_ServiceDelivery-la-siteadmin';
-$string['access_lenovo_servicedelivery_ap_siteadmin'] = 'Lenovo_ServiceDelivery-ap-siteadmin';
-$string['access_lenovo_servicedelivery_em_siteadmin'] = 'Lenovo_ServiceDelivery-em-siteadmin';
+$string['access_lenovo_servicedelivery_us_siteadministrator'] = 'Lenovo_ServiceDelivery-us-siteadministrator';
+$string['access_lenovo_servicedelivery_ca_siteadministrator'] = 'Lenovo_ServiceDelivery-ca-siteadministrator';
+$string['access_lenovo_servicedelivery_la_siteadministrator'] = 'Lenovo_ServiceDelivery-la-siteadministrator';
+$string['access_lenovo_servicedelivery_ap_siteadministrator'] = 'Lenovo_ServiceDelivery-ap-siteadministrator';
+$string['access_lenovo_servicedelivery_em_siteadministrator'] = 'Lenovo_ServiceDelivery-em-siteadministrator';
 
 // Lenovo *******************************************************************************
 // ServiceDelivery site administrator user type.
 // Lenovo *******************************************************************************
-$string['access_lenovo_servicedelivery_siteadmin'] = 'Lenovo_ServiceDelivery-siteadmin';
+$string['access_lenovo_servicedelivery_siteadministrator'] = 'Lenovo_ServiceDelivery-siteadministrator';
 
 // ServiceDelivery cohort names...also used as course group names.
 $string['cohort_lenovo_servicedelivery_pregmatch_admins'] = '/SD-[A-Z][A-Z]+[1-9]-admins/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_mgrs'] = '/SD-[A-Z][A-Z]+[1-9]-mgrs/i';
-$string['cohort_lenovo_servicedelivery_pregmatch_studs'] = '/SD-[A-Z][A-Z]+[1-9]-studs/i';
+$string['cohort_lenovo_servicedelivery_pregmatch_students'] = '/SD-[A-Z][A-Z]+[1-9]-studs/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_geoadmins'] = '/SD-[A-Z][A-Z]-geoadmins/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_siteadmins'] = '/SD-siteadmins/i';
 
 $string['cohort_lenovo_servicedelivery_ap1_admins'] = 'SD-AP1-admins';
 $string['cohort_lenovo_servicedelivery_ap1_mgrs'] = 'SD-AP1-mgrs';
-$string['cohort_lenovo_servicedelivery_ap1_studs'] = 'SD-AP1-studs';
+$string['cohort_lenovo_servicedelivery_ap1_students'] = 'SD-AP1-studs';
 $string['cohort_lenovo_servicedelivery_ap2_admins'] = 'SD-AP2-admins';
 $string['cohort_lenovo_servicedelivery_ap2_mgrs'] = 'SD-AP2-mgrs';
-$string['cohort_lenovo_servicedelivery_ap2_studs'] = 'SD-AP2-studs';
+$string['cohort_lenovo_servicedelivery_ap2_students'] = 'SD-AP2-studs';
 $string['cohort_lenovo_servicedelivery_ap3_admins'] = 'SD-AP3-admins';
 $string['cohort_lenovo_servicedelivery_ap3_mgrs'] = 'SD-AP3-mgrs';
-$string['cohort_lenovo_servicedelivery_ap3_studs'] = 'SD-AP3-studs';
+$string['cohort_lenovo_servicedelivery_ap3_students'] = 'SD-AP3-studs';
 $string['cohort_lenovo_servicedelivery_ap4_admins'] = 'SD-AP4-admins';
 $string['cohort_lenovo_servicedelivery_ap4_mgrs'] = 'SD-AP4-mgrs';
-$string['cohort_lenovo_servicedelivery_ap4_studs'] = 'SD-AP4-studs';
+$string['cohort_lenovo_servicedelivery_ap4_students'] = 'SD-AP4-studs';
 $string['cohort_lenovo_servicedelivery_ap5_admins'] = 'SD-AP5-admins';
 $string['cohort_lenovo_servicedelivery_ap5_mgrs'] = 'SD-AP5-mgrs';
-$string['cohort_lenovo_servicedelivery_ap5_studs'] = 'SD-AP5-studs';
+$string['cohort_lenovo_servicedelivery_ap5_students'] = 'SD-AP5-studs';
 
 $string['cohort_lenovo_servicedelivery_ca1_admins'] = 'SD-CA1-admins';
 $string['cohort_lenovo_servicedelivery_ca1_mgrs'] = 'SD-CA1-mgrs';
-$string['cohort_lenovo_servicedelivery_ca1_studs'] = 'SD-CA1-studs';
+$string['cohort_lenovo_servicedelivery_ca1_students'] = 'SD-CA1-studs';
 $string['cohort_lenovo_servicedelivery_ca2_admins'] = 'SD-CA2-admins';
 $string['cohort_lenovo_servicedelivery_ca2_mgrs'] = 'SD-CA2-mgrs';
-$string['cohort_lenovo_servicedelivery_ca2_studs'] = 'SD-CA2-studs';
+$string['cohort_lenovo_servicedelivery_ca2_students'] = 'SD-CA2-studs';
 $string['cohort_lenovo_servicedelivery_ca3_admins'] = 'SD-CA3-admins';
 $string['cohort_lenovo_servicedelivery_ca3_mgrs'] = 'SD-CA3-mgrs';
-$string['cohort_lenovo_servicedelivery_ca3_studs'] = 'SD-CA3-studs';
+$string['cohort_lenovo_servicedelivery_ca3_students'] = 'SD-CA3-studs';
 $string['cohort_lenovo_servicedelivery_ca4_admins'] = 'SD-CA4-admins';
 $string['cohort_lenovo_servicedelivery_ca4_mgrs'] = 'SD-CA4-mgrs';
-$string['cohort_lenovo_servicedelivery_ca4_studs'] = 'SD-CA4-studs';
+$string['cohort_lenovo_servicedelivery_ca4_students'] = 'SD-CA4-studs';
 $string['cohort_lenovo_servicedelivery_ca5_admins'] = 'SD-CA5-admins';
 $string['cohort_lenovo_servicedelivery_ca5_mgrs'] = 'SD-CA5-mgrs';
-$string['cohort_lenovo_servicedelivery_ca5_studs'] = 'SD-CA5-studs';
+$string['cohort_lenovo_servicedelivery_ca5_students'] = 'SD-CA5-studs';
 
 $string['cohort_lenovo_servicedelivery_em1_admins'] = 'SD-EM1-admins';
 $string['cohort_lenovo_servicedelivery_em1_mgrs'] = 'SD-EM1-mgrs';
-$string['cohort_lenovo_servicedelivery_em1_studs'] = 'SD-EM1-studs';
+$string['cohort_lenovo_servicedelivery_em1_students'] = 'SD-EM1-studs';
 $string['cohort_lenovo_servicedelivery_em2_admins'] = 'SD-EM2-admins';
 $string['cohort_lenovo_servicedelivery_em2_mgrs'] = 'SD-EM2-mgrs';
-$string['cohort_lenovo_servicedelivery_em2_studs'] = 'SD-EM2-studs';
+$string['cohort_lenovo_servicedelivery_em2_students'] = 'SD-EM2-studs';
 $string['cohort_lenovo_servicedelivery_em3_admins'] = 'SD-EM3-admins';
 $string['cohort_lenovo_servicedelivery_em3_mgrs'] = 'SD-EM3-mgrs';
-$string['cohort_lenovo_servicedelivery_em3_studs'] = 'SD-EM3-studs';
+$string['cohort_lenovo_servicedelivery_em3_students'] = 'SD-EM3-studs';
 $string['cohort_lenovo_servicedelivery_em4_admins'] = 'SD-EM4-admins';
 $string['cohort_lenovo_servicedelivery_em4_mgrs'] = 'SD-EM4-mgrs';
-$string['cohort_lenovo_servicedelivery_em4_studs'] = 'SD-EM4-studs';
+$string['cohort_lenovo_servicedelivery_em4_students'] = 'SD-EM4-studs';
 $string['cohort_lenovo_servicedelivery_em5_admins'] = 'SD-EM5-admins';
 $string['cohort_lenovo_servicedelivery_em5_mgrs'] = 'SD-EM5-mgrs';
-$string['cohort_lenovo_servicedelivery_em5_studs'] = 'SD-EM5-studs';
+$string['cohort_lenovo_servicedelivery_em5_students'] = 'SD-EM5-studs';
 
 $string['cohort_lenovo_servicedelivery_la1_admins'] = 'SD-LA1-admins';
 $string['cohort_lenovo_servicedelivery_la1_mgrs'] = 'SD-LA1-mgrs';
-$string['cohort_lenovo_servicedelivery_la1_studs'] = 'SD-LA1-studs';
+$string['cohort_lenovo_servicedelivery_la1_students'] = 'SD-LA1-studs';
 $string['cohort_lenovo_servicedelivery_la2_admins'] = 'SD-LA2-admins';
 $string['cohort_lenovo_servicedelivery_la2_mgrs'] = 'SD-LA2-mgrs';
-$string['cohort_lenovo_servicedelivery_la2_studs'] = 'SD-LA2-studs';
+$string['cohort_lenovo_servicedelivery_la2_students'] = 'SD-LA2-studs';
 $string['cohort_lenovo_servicedelivery_la3_admins'] = 'SD-LA3-admins';
 $string['cohort_lenovo_servicedelivery_la3_mgrs'] = 'SD-LA3-mgrs';
-$string['cohort_lenovo_servicedelivery_la3_studs'] = 'SD-LA3-studs';
+$string['cohort_lenovo_servicedelivery_la3_students'] = 'SD-LA3-studs';
 $string['cohort_lenovo_servicedelivery_la4_admins'] = 'SD-LA4-admins';
 $string['cohort_lenovo_servicedelivery_la4_mgrs'] = 'SD-LA4-mgrs';
-$string['cohort_lenovo_servicedelivery_la4_studs'] = 'SD-LA4-studs';
+$string['cohort_lenovo_servicedelivery_la4_students'] = 'SD-LA4-studs';
 $string['cohort_lenovo_servicedelivery_la5_admins'] = 'SD-LA5-admins';
 $string['cohort_lenovo_servicedelivery_la5_mgrs'] = 'SD-LA5-mgrs';
-$string['cohort_lenovo_servicedelivery_la5_studs'] = 'SD-LA5-studs';
+$string['cohort_lenovo_servicedelivery_la5_students'] = 'SD-LA5-studs';
 
 $string['cohort_lenovo_servicedelivery_us1_admins'] = 'SD-US1-admins';
 $string['cohort_lenovo_servicedelivery_us1_mgrs'] = 'SD-US1-mgrs';
-$string['cohort_lenovo_servicedelivery_us1_studs'] = 'SD-US1-studs';
+$string['cohort_lenovo_servicedelivery_us1_students'] = 'SD-US1-studs';
 $string['cohort_lenovo_servicedelivery_us2_admins'] = 'SD-US2-admins';
 $string['cohort_lenovo_servicedelivery_us2_mgrs'] = 'SD-US2-mgrs';
-$string['cohort_lenovo_servicedelivery_us2_studs'] = 'SD-US2-studs';
+$string['cohort_lenovo_servicedelivery_us2_students'] = 'SD-US2-studs';
 $string['cohort_lenovo_servicedelivery_us3_admins'] = 'SD-US3-admins';
 $string['cohort_lenovo_servicedelivery_us3_mgrs'] = 'SD-US3-mgrs';
-$string['cohort_lenovo_servicedelivery_us3_studs'] = 'SD-US3-studs';
+$string['cohort_lenovo_servicedelivery_us3_students'] = 'SD-US3-studs';
 $string['cohort_lenovo_servicedelivery_us4_admins'] = 'SD-US4-admins';
 $string['cohort_lenovo_servicedelivery_us4_mgrs'] = 'SD-US4-mgrs';
-$string['cohort_lenovo_servicedelivery_us4_studs'] = 'SD-US4-studs';
+$string['cohort_lenovo_servicedelivery_us4_students'] = 'SD-US4-studs';
 $string['cohort_lenovo_servicedelivery_us5_admins'] = 'SD-US5-admins';
 $string['cohort_lenovo_servicedelivery_us5_mgrs'] = 'SD-US5-mgrs';
-$string['cohort_lenovo_servicedelivery_us5_studs'] = 'SD-US5-studs';
+$string['cohort_lenovo_servicedelivery_us5_students'] = 'SD-US5-studs';
 
 $string['cohort_lenovo_servicedelivery_ap_geoadmins'] = 'SD-AP-geoadmins';
 $string['cohort_lenovo_servicedelivery_ca_geoadmins'] = 'SD-CA-geoadmins';
@@ -886,12 +886,12 @@ $string['cohort_lenovo_servicedelivery_us_siteadmins'] = 'SD-US-siteadmins';
 $string['cohort_lenovo_servicedelivery_siteadmins'] = 'SD-siteadmins';
 
 // Self-support user types and roles (shortnames)...
-$string['access_selfsupport_stud'] = 'SelfSupport-stud';
+$string['access_selfsupport_student'] = 'SelfSupport-student';
 $string['role_selfsupport_student'] = 'selfsupport-student';
 
 // SiteHelp user types and roles (shortnames)...
-$string['access_sitehelp_stud'] = 'SiteHelp-stud';
-$string['role_sitehelp_stud'] = 'sitehelp-stud';
+$string['access_sitehelp_student'] = 'SiteHelp-student';
+$string['role_sitehelp_student'] = 'sitehelp-student';
 $string['role_sitehelp_student'] = 'sitehelp-student';        // 08/14/18
 
 // Customized capabilites...
@@ -940,14 +940,14 @@ $string['cap_swtc_mod_assign_submit_servicedelivery'] = 'local/swtc:swtc_mod_ass
 // Capability strings for viewing curriculums and viewing reports. Since these are new, use underscores instead of dashes.
 $string['cap_swtc_view_curriculums'] = 'local/swtc:swtc_view_curriculums';
 $string['cap_swtc_view_mgmt_reports'] = 'local/swtc:swtc_view_mgmt_reports';
-$string['cap_swtc_view_stud_reports'] = 'local/swtc:swtc_view_stud_reports';
+$string['cap_swtc_view_student_reports'] = 'local/swtc:swtc_view_student_reports';
 
 $string['swtc:swtc_view_curriculums'] = 'Access to view curriculums';
 $string['swtc:swtc_view_mgmt_reports'] = 'Access to view management reports';
-$string['swtc:swtc_view_stud_reports'] = 'Access to view student reports';
+$string['swtc:swtc_view_student_reports'] = 'Access to view student reports';
 
-// When editing a user, if Accesstype is blank, error message...
-$string['access_type_required'] = 'Accesstype is blank; the EBG Server Education Access type field for each user must be set.';
+// When editing a user, if accesstype is blank, error message...
+$string['access_type_required'] = 'accesstype is blank; the EBG Server Education Access type field for each user must be set.';
 
 // Lenovo *******************************************************************************
 // For site administration menu
@@ -996,7 +996,7 @@ $string['inviteemailmsgtxt'] =
 
 // For site administration menu: ServiceBench sub-menu; also for general ServiceBench support.
 $string['lenovo_servicebench'] = 'ServiceBench';
-$string['profile_field_Accesstype'] = 'profile_field_Accesstype';
+$string['profile_field_accesstype'] = 'profile_field_accesstype';
 $string['profile_field_sbtechnicianid'] = 'profile_field_sbtechnicianid';
 $string['profile_field_tscertifications'] = 'profile_field_tscertifications';
 $string['profile_field_geo'] = 'profile_field_geo';
@@ -1007,7 +1007,7 @@ $string['profile_field_tacertifications'] = 'profile_field_tacertifications';
 $string['profile_field_tacertdates'] = 'profile_field_tacertdates';
 
 // User profile fields - shortnames only
-$string['shortname_Accesstype'] = 'Accesstype';
+$string['shortname_accesstype'] = 'accesstype';
 $string['shortname_sbtechnicianid'] = 'sbtechnicianid';
 $string['shortname_tscertifications'] = 'tscertifications';
 $string['shortname_geo'] = 'geo';
