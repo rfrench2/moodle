@@ -26,7 +26,7 @@
  *
  * 10/14/20 - Initial writing.
  * 10/16/20 - Changed to swtc class.
- * 03/03/21 - Changed class name from swtc_user to SwtcUser.
+ * 03/03/21 - Changed name from swtc_user to SwtcUser.
  *
  **/
 
@@ -56,7 +56,7 @@ require_once($CFG->dirroot . '/local/swtc/lib/locallib.php');
  * Initializes all customized SWTC user information and loads it into $SESSION->SWTC->USER.
  *
  *      IMPORTANT!
- *          DO NOT call this class directly. Use $swtc_set_user from /lib/swtc_userlib.php.
+ *          DO NOT call this directly. Use $swtc_set_user from /lib/swtc_userlib.php.
  *
  * @param N/A
  *
@@ -164,7 +164,7 @@ class SwtcUser {
 	 * Constructor is private, use /locallib/swtc_local_user() to
 	 * retrieve SWTC user information.
 	 */
-	public function __construct($args=[]) {
+	public function __construct($args=array()) {
 
 
 		// print_object("In SwtcUser __construct');		// 10/18/20 - SWTC
@@ -213,12 +213,12 @@ class SwtcUser {
 	 * 03/03/21 - Initial writing.
 	 *
 	 **/
-	public function set_userid($user) {
-	 	$this->userid = (isset($user->id)) ? $user->id : null;
+	public function set_userid($userid) {
+	 	$this->userid = (isset($userid)) ? $userid : null;
 	}
 
-	public function set_username($user) {
-		$this->username = (isset($user->username)) ? $user->username : null;
+	public function set_username($username) {
+		$this->username = (isset($username)) ? $username : null;
 	}
 
 	public function set_user_access_type($user_access_type) {
@@ -229,29 +229,12 @@ class SwtcUser {
 	 	$this->user_access_type2 = $user_access_type2;
 	}
 
-	/**
-	 * Set current date and time for timestamp. Returns value to set $this->timestamp.
-	 *
-	 * History
-	 *
-	 * 10/19/20 - Initial writing.
-	 * 03/02/21 - Removed return of timezone (moved to set_timezone).
-	 *
-	 */
 	public function set_timestamp() {
 		$timezone = core_date::get_user_timezone_object();
 		$today = new DateTime("now", $timezone);
 		$this->timestamp = $today->format('H:i:s.u');
 	}
 
- 	/**
- 	 * Set current timezone.
- 	 *
- 	 * History
- 	 *
- 	 * 03/02/21 - Initial writing.
- 	 *
- 	 */
 	public function set_timezone() {
 		$this->timezone = core_date::get_user_timezone_object();
 	}
@@ -266,20 +249,23 @@ class SwtcUser {
 	 * 11/08/20 - Not needed anymore since using moodle/category:viewcourselist.
 	 * 03/04/21 - It is needed to assign user's role to each top level category they
 	 *				have access too.
+	 * 03/07/21 - Note that in some cases, for example event user_updated (when changing the default editor);
+	 * 			a relateduser IS set. However, it's value is the same as the user. Therefore adding a check.
 	 */
 	function set_user_role($eventdata) {
 		global $USER, $DB, $COURSE;
 
 		/** @var $USER Gets the current user information. */
 		// $this = swtc_get_user($USER);
-		/** @var SwtcDebug Get the current debug information. */
+		/** @var $debug Get the current debug information. */
 		$debug = swtc_get_debug();
 		// $counter = new swtc_counter;        // Debug - 02/26/21
 
 		// Other SWTC variables.
-		/** @var array Only set IF working with a related user (i.e. swtc_get_relateduser is called). */
+		/** @var $user_related Only set IF working with a related user (i.e. get_relateduser is called). */
 		$user_related = null;
-		$tmp_user = new stdClass();    // Hold return values from /local/swtc/classes/SwtcUser.php get_user_access.
+		/** @var $tmp_user Hold return values from /local/swtc/classes/SwtcUser.php get_user_access. */
+		$tmp_user = new SwtcUser();
 		// SWTC ********************************************************************************
 
 		if (isset($debug)) {
@@ -385,9 +371,10 @@ class SwtcUser {
 		//          $this->timestamp
 		//			$this->user_access_type2     // @02
 		//
-		// 07/12/18 - Added call to swtc_get_relateduser.
+		// 07/12/18 - Added call to get_relateduser.
+		// 03/07/21 - Only if userid and relateduserid are not the same.
 		// SWTC ********************************************************************************
-		if (!empty($eventdata->relateduserid)) {		// 01/10/19
+		if (!empty($eventdata->relateduserid) && ($eventdata->objectid !== $eventdata->relateduserid)) {
 
 			if (isset($debug)) {
 				// SWTC ********************************************************************************
@@ -518,19 +505,19 @@ class SwtcUser {
 			}
 
 			// Set the users userid and access_type.
-			// 07/12/18 - Added call to swtc_get_relateduser.
+			// 07/12/18 - Added call to get_relateduser.
 			// 07/18/18 - Set $user_related to $this->relateduser (otherwise $user_related is NULL).
-			$user_related = $this->get_relateduser($eventdata->relateduserid);   // 12/04/18
+			$user_related = ($eventdata->objectid !== $eventdata->relateduserid) ? $this->get_relateduser($eventdata->relateduserid) : null;
 			$this->relateduser = $user_related;       // 12/04/18
 
 			// 07/18/18 - Set $user_related to $this->relateduser (otherwise $user_related is NULL).	// 01/10/19 - Moved above.
 			// $user_related = $this->relateduser;	// 01/10/19
 
 			if (isset($debug)) {
-				$messages[] = "In top of set_user_role (relateduserid). Setting swtc_user->relateduser information of $eventdata->relateduserid. ===11===.";
-				$messages[] = "swtc_get_relateduser follow:";
+				$messages[] = "In top of set_user_role (relateduserid). Setting this->relateduser information of $eventdata->relateduserid. ===11===.";
+				$messages[] = "get_relateduser follow:";
 				$messages[] = print_r($this->relateduser, true);
-				$messages[] = "swtc_get_relateduser end.";
+				$messages[] = "get_relateduser end.";
 				$debug->logmessage($messages, 'detailed');
 				unset($messages);
 			}
@@ -773,8 +760,8 @@ class SwtcUser {
 				$temp_user = clone $this;
 			}
 
-			print_r('after second call to isset - user_related.\n');   // 11/30/18 - RF - testing..
-			print_object($temp_user);
+			// print_r('after second call to isset - user_related.\n');   // 11/30/18 - RF - testing..
+			// print_object($temp_user);
 
 			// SWTC ********************************************************************************
 			// 07/12/18 - Substitute PremierSupport-student as role if outside of PremierSupport portfolio.
@@ -868,7 +855,7 @@ class SwtcUser {
 		//						If no
 		//							Remove the capability
 		//
-		//	Remember! $catlist array format is below (defined in function get_user_access):
+		//	Remember! $catlist array format is below (defined in get_user_access):
 		//			Array
 		//		(
 		//			[0] => Array
@@ -1197,7 +1184,7 @@ class SwtcUser {
 	// SWTC ********************************************************************************
 	// Get the logged in user customized user profile value 'accesstype'. accesstype is used to determine
 	//      which portfolio of classes the user should have access to (in other words, which top-level
-	//      category they should have access to). Note that this function returns the information the
+	//      category they should have access to). Note that get_user_access returns the information the
 	//      user 'should' have access to. What the user actually has access to (and whether they need
 	//      more or less access) is determined above.
 	//
@@ -1225,36 +1212,36 @@ class SwtcUser {
 	function get_user_access() {
 		global $DB, $USER;
 
-		/** @var SwtcDebug Get the current debug information. */
+		/** @var $debug Get the current debug information. */
 		$debug = swtc_get_debug();
 
 		// Temporary variables. Use these during the function.
 		// $temp_user = new stdClass();    // Returned to calling function.
 		$temp_user = clone $this;      // Create a SwtcUser object.
-		print_object("entering get_user_access; about to print temp_user");      // Debug
-		print_object($temp_user);       // Debug
+		// print_object("entering get_user_access; about to print temp_user");      // Debug
+		// print_object($temp_user);       // Debug
 		$roleshortname = null;
 		$portfolio = null;
 		$categoryids = array(); // A list of all the categories the user should have access to (set in $this->categoryids).
 
 		// SWTC ********************************************************************************
-		// 07/12/18 - Added check if swtc_user->relateduser is set. If so, use that user information to determine access.
+		// 07/12/18 - Added check if this->relateduser is set. If so, use that user information to determine access.
 		//                  Note that no switching of users below should be necessary.
 		// SWTC ********************************************************************************
 		if (isset($this->relateduser)) {
 			$messages[] = "SWTC ********************************************************************************.";
 			$messages[] = "Entering /local/swtc/classes/SwtcUser.php. ===3.get_user_access.enter.";
-			$messages[] = "swtc_user->relateduser is set; the userid that will be used throughout get_user_access is :<strong>$this->userid</strong>.";
-			$messages[] = "swtc_user->relateduser is set; the username that will be used throughout get_user_access is :<strong>$this->username</strong>.";
-			$messages[] = "swtc_user->relateduser is set; the user_access_type is :<strong>$this->user_access_type</strong>.";
+			$messages[] = "this->relateduser is set; the userid that will be used throughout get_user_access is :<strong>$this->userid</strong>.";
+			$messages[] = "this->relateduser is set; the username that will be used throughout get_user_access is :<strong>$this->username</strong>.";
+			$messages[] = "this->relateduser is set; the user_access_type is :<strong>$this->user_access_type</strong>.";
 			// $this = $this->relateduser;
 			$user_access_type = $this->relateduser->user_access_type;
 		} else {
 			$messages[] = "SWTC ********************************************************************************.";
 			$messages[] = "Entering /local/swtc/classes/SwtcUser.php. ===3.get_user_access.enter.";
-			$messages[] = "swtc_user->relateduser is NOT set; the userid that will be used throughout get_user_access is :<strong>$this->userid</strong>.";
-			$messages[] = "swtc_user->relateduser is NOT set; the username that will be used throughout get_user_access is :<strong>$this->username</strong>.";
-			$messages[] = "swtc_user->relateduser is NOT set; the user_access_type is :<strong>$this->user_access_type</strong>.";
+			$messages[] = "this->relateduser is NOT set; the userid that will be used throughout get_user_access is :<strong>$this->userid</strong>.";
+			$messages[] = "this->relateduser is NOT set; the username that will be used throughout get_user_access is :<strong>$this->username</strong>.";
+			$messages[] = "this->relateduser is NOT set; the user_access_type is :<strong>$this->user_access_type</strong>.";
 			$user_access_type = $this->user_access_type;
 		}
 		// SWTC ********************************************************************************.
@@ -1326,7 +1313,7 @@ class SwtcUser {
 		// SWTC ********************************************************************************
 		// Check for AV-GTP-admin, AV-GTP-inst, or AV-GTP-stud user
 		// SWTC ********************************************************************************
-	} else if (stripos($user_access_type, get_string('access_av_gtp', 'local_swtc')) !== false) {
+		} else if (stripos($user_access_type, get_string('access_av_gtp', 'local_swtc')) !== false) {
 
 			$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
@@ -1351,7 +1338,7 @@ class SwtcUser {
 		// SWTC ********************************************************************************
 		// Check for IM-GTP-admin, IM-GTP-inst, or IM-GTP-stud user
 		// SWTC ********************************************************************************
-	} else if (stripos($user_access_type, get_string('access_im_gtp', 'local_swtc')) !== false) {
+		} else if (stripos($user_access_type, get_string('access_im_gtp', 'local_swtc')) !== false) {
 
 			$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
@@ -1376,7 +1363,7 @@ class SwtcUser {
 		// SWTC ********************************************************************************
 		// Check for LQ-GTP-admin, LQ-GTP-inst, or LQ-GTP-stud user
 		// SWTC ********************************************************************************
-	} else if (stripos($user_access_type, get_string('access_lq_gtp', 'local_swtc')) !== false) {
+		} else if (stripos($user_access_type, get_string('access_lq_gtp', 'local_swtc')) !== false) {
 
 			$portfolio = get_string('gtp_portfolio', 'local_swtc');
 
@@ -1401,7 +1388,7 @@ class SwtcUser {
 		// SWTC ********************************************************************************
 		// Check for IBM-stud user
 		// SWTC ********************************************************************************
-	} else if (stripos($user_access_type, get_string('access_ibm_student', 'local_swtc')) !== false) {
+		} else if (stripos($user_access_type, get_string('access_ibm_student', 'local_swtc')) !== false) {
 
 			$portfolio = get_string('ibm_portfolio', 'local_swtc');
 			$roleshortname = get_string('role_ibm_student', 'local_swtc');
@@ -1576,8 +1563,8 @@ class SwtcUser {
 		$temp_user->roleid = $role->id;
 		$temp_user->categoryids = $categoryids;
 
-		print_object("exiting get_user_access; about to print temp_user");      // Debug
-		print_object($temp_user);       // Debug
+		// print_object("exiting get_user_access; about to print temp_user");      // Debug
+		// print_object($temp_user);       // Debug
 		// print_object($user_access_type);     // Debug
 
 		if (isset($debug)) {
@@ -1598,37 +1585,22 @@ class SwtcUser {
 	}
 
 	/**
-	 *
-	 *
-	 * @param N/A
-	 *
-	 * @return None
-	 *
-	 * History:
-	 *
-	 * 02/22/21 - Initial writing.
-	 * 02/23/21 - TO TO: function also in swtc_userlib.php.
-	 *
-	 **/
-	/**
 	 * Setup most, but not all, the characteristics of  SESSION->SWTC->USER->relateduser.
-	 * @param  [type] $userid [description]
-	 * @return [type]         [description]
+	 *
+	 * @param  integer $userid The userid of the user.
+	 * @return SwtcUser         The related user's information.
+	 *
 	 * History
 	 *
-	 * 3/4/2021 -
+	 * 02/22/21 - Initial writing.
 	 *
 	 */
 	function get_relateduser($userid) {
-	  global $USER;
 
-	  // SWTC ********************************************************************************.
-	  // SWTC SWTC swtc_user and debug variables.
-	  // $this = swtc_get_user($USER);
-	  // $debug = swtc_get_debug();
 
-	  $relateduser = new stdClass();     // Local temporary relateduserid variables.
-	  // SWTC ********************************************************************************
+		/** @var stdClass Temporary variable to hold related userid information. */
+		$relateduser = new stdClass();
+		// SWTC ********************************************************************************
 		// Set some of the SWTC->relateduser variables that will be used IF a relateduserid is found.
 		// SWTC ********************************************************************************
 		// Get all the user information based on the userid passed in.
@@ -1650,9 +1622,9 @@ class SwtcUser {
 		// 01/17/19 - Since we are working with a related user, assigning the portfolio as the same as the administrator is not a good idea.
 		$relateduser->portfolio = $this->portfolio;      // 11/30/18
 
-	  // @01 - 03/01/20 - Added user timezone to improve performance.
-	  $relateduser->timezone = $this->set_timezone();
-	  $relateduser->timestamp = $this->set_timestamp();
+		// @01 - 03/01/20 - Added user timezone to improve performance.
+		$relateduser->timezone = $this->set_timezone();
+		$relateduser->timestamp = $this->set_timestamp();
 
 		// Important! roleshortname and roleid are what the roles SHOULD be, not necessarily what the roles are.
 		$relateduser->roleshortname = null;
@@ -2160,8 +2132,8 @@ class SwtcUser {
 	 *          they are no longer considered a manager or administrator. Substitute either
 	 *          PremierSupport-student or ServiceDelivery-student as role.
 	 *
-	 * @param $cat		A catlist class variable.
-	 * @param $user		A user class variable.
+	 * @param $cat		A catlist variable.
+	 * @param $user		A user variable.
 	 *
 	 * @return $temp_user	$user (passed in) with the rolename and roleid changed if required.
 	 *

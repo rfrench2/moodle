@@ -72,7 +72,9 @@ require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 
     // SWTC ********************************************************************************.
     // SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+        'userid' => $USER->id,
+        'username' => $USER->username]);
     $debug = swtc_get_debug();
     // SWTC ********************************************************************************.
 

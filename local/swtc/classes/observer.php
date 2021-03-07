@@ -75,7 +75,9 @@ class observer {
      */
     public static function user_loggedinas(\core\event\user_loggedinas $event) {
 
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 
@@ -92,7 +94,8 @@ class observer {
      */
     public static function user_updated(\core\event\user_updated $event) {
 
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid]);
         $swtc_user->set_user_role($event);
     }
 
@@ -109,7 +112,9 @@ class observer {
      */
     public static function user_created(\core\event\user_created $event) {
 
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 
@@ -127,7 +132,8 @@ class observer {
     public static function course_viewed(\core\event\course_viewed $event) {
 
         if (isloggedin()) {     // 10/14/20
-            $swtc_user = swtc_get_user();
+            $swtc_user = swtc_get_user([
+                'userid' => $event->objectid]);
             // print_object($swtc_user);
             $swtc_user->set_user_role($event);
         }
@@ -148,7 +154,9 @@ class observer {
 
         // print_object("In observer:user_enrolment_created. About to print event");
         // print_object($event);
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 
@@ -167,7 +175,9 @@ class observer {
 
         // print_object("in observer role_assigned. about to print event");
         // print_object($event);
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 
@@ -184,7 +194,9 @@ class observer {
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
 
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_user([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 
@@ -201,7 +213,9 @@ class observer {
      */
     public static function user_enrolment_updated(\core\event\user_enrolment_updated $event) {
 
-        $swtc_user = swtc_get_user();
+        $swtc_user = swtc_get_use([
+            'userid' => $event->objectid,
+            'username' => $event->other['username']]);
         $swtc_user->set_user_role($event);
     }
 

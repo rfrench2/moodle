@@ -125,7 +125,9 @@ function local_swtc_change_user_access($cat, &$user) {
 
     // SWTC ********************************************************************************
     // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user($user);
+    $swtc_user = swtc_get_user([
+        'userid' => $user->id,
+        'username' => $user->username]);
     $debug = swtc_set_debug();
 
     // Other Lenovo variables.
@@ -273,7 +275,9 @@ function local_swtc_capture_click($data) {
 
     // SWTC ********************************************************************************
     // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+        'userid' => $USER->id,
+        'username' => $USER->username]);
     $debug = swtc_get_debug();
 
     // Other Lenovo variables.
@@ -466,7 +470,9 @@ function local_swtc_capture_enrollment($data) {
 
     // SWTC ********************************************************************************
     // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+        'userid' => $USER->id,
+        'username' => $USER->username]);
     $debug = swtc_get_debug();
     // SWTC ********************************************************************************
 

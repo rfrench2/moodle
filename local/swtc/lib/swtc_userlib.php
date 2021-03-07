@@ -57,7 +57,7 @@ use local_swtc\SwtcDebug;
  * 03/03/21 - Initial writing.
  *
  **/
-function swtc_set_user($user, $relateduserid = null) {
+function swtc_set_user($userid, $relateduserid = null) {
     global $SESSION;
 
     // SWTC *****************************************************************************
@@ -69,29 +69,25 @@ function swtc_set_user($user, $relateduserid = null) {
     // SWTC *****************************************************************************
     // Setup the SWTC->USER variable.
     // SWTC *****************************************************************************
-    // SWTC *****************************************************************************
-    // Setup the SWTC->USER variable.
-    // SWTC *****************************************************************************
     $SESSION->SWTC->USER = new SwtcUser();
 
     // SWTC ********************************************************************************
 	// Set the additional SwtcUser properties.
 	// SWTC ********************************************************************************
-    $SESSION->SWTC->USER->set_userid($user);
-    $SESSION->SWTC->USER->set_username($user);
+    $SESSION->SWTC->USER->set_userid($userid);
 
     // SWTC ********************************************************************************
 	// Load the user's profile data.
 	// SWTC ********************************************************************************
 	$temp = new stdClass();
-	$temp->id = $user->id;
+	$temp->id = $userid;
 	profile_load_data($temp);
 	// print_object("In SwtcUser __construct; about to print profile data');		// 10/16/20 - SWTC
 	// print_object($temp);		// 10/16/20 - SWTC
 	// $this->user_access_type = $temp->get_string('profile_field_accesstype', 'local_swtc');
 	$SESSION->SWTC->USER->set_user_access_type($temp->profile_field_accesstype);
 
-    // Note: $this->portfolio is set in class definition.
+    // Note: $this->portfolio is set in definition.
     $SESSION->SWTC->USER->set_timestamp();
     $SESSION->SWTC->USER->set_timezone();
 	// $this->user_access_type2 = (null !== $temp->get_string('profile_field_accesstype2', 'local_swtc')) ? $temp->get_string('profile_field_accesstype2', 'local_swtc') : null;
@@ -105,11 +101,11 @@ function swtc_set_user($user, $relateduserid = null) {
     // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
     // print_object($this);		// 10/16/20 - SWTC
 
-    print_object("In swtc_set_user; about to print SESSION->SWTC->USER");
-    print_object($SESSION->SWTC->USER);
-    print_object("In swtc_set_user; about to print backtrace");
-    print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-    print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
+    // print_object("In swtc_set_user; about to print SESSION->SWTC->USER");
+    // print_object($SESSION->SWTC->USER);
+    // print_object("In swtc_set_user; about to print backtrace");
+    // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
+    // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
     // debug_print_backtrace();
     return $SESSION->SWTC->USER;
 
@@ -137,8 +133,14 @@ function swtc_set_user($user, $relateduserid = null) {
  * 10/21/20 - Initial writing.
  *
  **/
-function swtc_get_user($user = null) {
+function swtc_get_user($args=array()) {
     global $SESSION, $USER;
+
+    // print_object($args);
+    print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
+    print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
+    $userid = $args['userid'] ?? null;
+    $username = $args['username'] ?? null;
 
     // SWTC ********************************************************************************
     // If $SESSION is not set, continue.
@@ -158,8 +160,10 @@ function swtc_get_user($user = null) {
             // SWTC *****************************************************************************
             // Setup the SWTC->USER variable.
             // SWTC *****************************************************************************
-            print_object("In swtc_get_user; about to call swtc_set_user");
-            $SESSION->SWTC->USER = swtc_set_user($user);
+            // print_object("In swtc_get_user; about to call swtc_set_user");
+            $SESSION->SWTC->USER = swtc_set_user($userid);
+
+            $SESSION->SWTC->USER->set_username($username);
         }
 
         // SWTC ********************************************************************************
@@ -170,11 +174,11 @@ function swtc_get_user($user = null) {
         // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
         // print_object($this);		// 10/16/20 - SWTC
 
-        print_object("In swtc_get_user; about to print SESSION->SWTC->USER");
-        print_object($SESSION->SWTC->USER);
-        print_object("In swtc_get_user; about to print backtrace");
-        print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-        print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
+        // print_object("In swtc_get_user; about to print SESSION->SWTC->USER");
+        // print_object($SESSION->SWTC->USER);
+        // print_object("In swtc_get_user; about to print backtrace");
+        // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
+        // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
 
         return $SESSION->SWTC->USER;
     }
@@ -224,11 +228,11 @@ function swtc_set_debug() {
     // SWTC ********************************************************************************
     $SESSION->SWTC->DEBUG->logmessage_header('begin');
 
-    print_object("In swtc_set_debug; about to print SESSION->SWTC->DEBUG");
-    print_object($SESSION->SWTC->DEBUG);
-    print_object("In swtc_set_debug; about to print backtrace");
-    print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-    print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
+    // print_object("In swtc_set_debug; about to print SESSION->SWTC->DEBUG");
+    // print_object($SESSION->SWTC->DEBUG);
+    // print_object("In swtc_set_debug; about to print backtrace");
+    // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
+    // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
 
     return $SESSION->SWTC->DEBUG;
 
@@ -261,7 +265,7 @@ function swtc_get_debug() {
             // SWTC ********************************************************************************
             // If $SWTC->USER is not set, continue.
             // SWTC ********************************************************************************
-            print_object("In swtc_userlib->swtc_get_debug; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
+            // print_object("In swtc_userlib->swtc_get_debug; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
             // print_object($SESSION);		// 10/16/20 - SWTC
             if (!isset($SESSION->SWTC->DEBUG)) {
                 // print_object("In swtc_get_user; did I get here 2");		// 10/16/20 - SWTC
@@ -274,84 +278,19 @@ function swtc_get_debug() {
                 // SWTC *****************************************************************************
                 // Setup the SWTC->DEBUG variable.
                 // SWTC *****************************************************************************
-                print_object("In swtc_get_debug; about to call swtc_set_debug");
+                // print_object("In swtc_get_debug; about to call swtc_set_debug");
                 $SESSION->SWTC->DEBUG = swtc_set_debug();
             }
 
-            print_object("In swtc_get_debug; about to print SESSION->SWTC->DEBUG");
-            print_object($SESSION->SWTC->DEBUG);
-            print_object("In swtc_get_debug; about to print backtrace");
-            print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-            print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
+            // print_object("In swtc_get_debug; about to print SESSION->SWTC->DEBUG");
+            // print_object($SESSION->SWTC->DEBUG);
+            // print_object("In swtc_get_debug; about to print backtrace");
+            // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
+            // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
         } else {
             $SESSION->SWTC->DEBUG = null;
         }
 
         return $SESSION->SWTC->DEBUG;
     }
-}
-
-/**
- * Setup most, but not all, the characteristics of  SESSION->SWTC->USER->relateduser.
- *
- * @param N/A
- *
- * @return None
- *
- * History:
- *
- * 10/24/20 - Initial writing.
- * 02/23/21 - TO TO: function also in swtc_userlib.php.
- *
- **/
-function swtc_user_get_relateduser($userid) {
-    global $USER;
-
-    // SWTC ********************************************************************************
-    // SWTC SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
-    // $debug = swtc_get_debug();       // 10/17/20
-
-    $relateduser = new stdClass();     // Local temporary relateduserid variables.
-    // SWTC ********************************************************************************
-
-	// SWTC ********************************************************************************
-	// Set some of the SWTC->relateduser variables that will be used IF a relateduserid is found.
-	// SWTC ********************************************************************************
-	// Get all the user information based on the userid passed in.
-	// Note: '*' returns all fields (normally not needed).
-	$relateduser = core_user::get_user($userid);
-	profile_load_data($relateduser);
-
-	// SWTC ********************************************************************************
-	// Since we are using get_user and profile_load_data, there is no need to copy any other fields.
-	// SWTC ********************************************************************************
-	// $relateduser->username = $relateduser->username;
-
-	// SWTC ********************************************************************************
-	// The following fields MUST be added to $relateduser (as they normally do not exist).
-	// SWTC ********************************************************************************
-	$relateduser->userid = $userid;
-	$relateduser->user_access_type = $relateduser->profile_field_accesstype;
-	// $relateduser->portfolio = 'PORTFOLIO_NONE';      // 11/30/18 - RF - not sure if this is correct.
-	// 01/17/19 - Since we are working with a related user, assigning the portfolio as the same as the administrator is not a good idea.
-    $relateduser->portfolio = $swtc_user->get_portfolio();
-
-    // @01 - 03/01/20 - Added user timezone to improve performance.
-    $relateduser->timestamp = $swtc_user->set_timestamp;
-
-	// Important! roleshortname and roleid are what the roles SHOULD be, not necessarily what the roles are.
-	$relateduser->roleshortname = null;
-	$relateduser->roleid = null;
-
-	$relateduser->categoryids = array();
-
-	// print_object($relateduser);
-
-	// Last step. Note that this sets $SESSION->SWTC->USER->relateduser.
-	// $swtc_user->relateduser = $relateduser;		// 01/10/19
-
-	// print_object($relateduser);
-	return $relateduser;		// 01/10/19
-
 }

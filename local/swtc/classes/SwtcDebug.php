@@ -514,7 +514,9 @@ class SwtcDebug {
         // Setup the second-level $USER global variable.
         //      To use: swtc_user = new SwtcUser($USER);
         // SWTC ********************************************************************************
-        $swtc_user = swtc_get_user($USER);
+        $swtc_user = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
 
         // print_object("in logmessage; about to print swtc_user");        // SWTC-debug
     	// print_object($swtc_user);		// SWTC-debug

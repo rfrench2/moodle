@@ -95,7 +95,9 @@ function local_swtc_extend_navigation(global_navigation $nav) {
 
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+		'userid' => $USER->id,
+		'username' => $USER->username]);
 	$debug = swtc_set_debug();
 
     // Other SWTC variables.
@@ -307,7 +309,9 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
 	return;		// 10/17/20 - SWTC
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+		'userid' => $USER->id,
+		'username' => $USER->username]);
     $debug = swtc_set_debug();
 
     // Other SWTC variables.
@@ -889,7 +893,9 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
 
     //****************************************************************************************
 	// SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+		'userid' => $USER->id,
+		'username' => $USER->username]);
     $debug = swtc_set_debug();
 
     // Other SWTC variables.
@@ -1484,7 +1490,9 @@ function local_swtc_extend_navigation_category_settings(navigation_node $parentn
 
 	//****************************************************************************************
 	// SWTC swtc_user and debug variables.
-    $swtc_user = swtc_get_user($USER);
+    $swtc_user = swtc_get_user([
+		'userid' => $USER->id,
+		'username' => $USER->username]);
 	$debug = swtc_set_debug();
 
     // SWTC ********************************************************************************

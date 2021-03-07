@@ -79,7 +79,9 @@ trait swtc_adaptable {
 
         // SWTC ********************************************************************************.
         // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user($USER);
+        $swtc_user = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
         $debug = swtc_set_debug();
 
         // Other SWTC variables.
@@ -264,7 +266,9 @@ trait swtc_adaptable {
 
         // SWTC ********************************************************************************.
         // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user($USER);
+        $swtc_user = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
         $debug = swtc_set_debug();
 
         // Other SWTC variables.
@@ -313,7 +317,9 @@ trait swtc_adaptable {
 
         //****************************************************************************************.
         // SWTC LMS swtclms_user and debug variables.
-        $swtc_user = swtc_get_user($USER);
+        $swtc_user = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
         $debug = swtc_set_debug();
 
         print_object("Did I get here?");
