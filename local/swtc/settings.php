@@ -19,12 +19,13 @@
  *
  * @package    local
  * @subpackage swtc
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
  *
  * 12/05/20 - Initial writing.
+ * 03/11/21 - Added category / role mapping table.
  *
  **/
  defined('MOODLE_INTERNAL') || die;
@@ -98,7 +99,7 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     // SWTC *******************************************************************************
     //
     // SWTC *******************************************************************************
-    $ADMIN->add('swtcadmin', new  admin_externalpage('swtcinvitehistory', new lang_string('swtcinvitehistory', 'local_swtc'),
+    $ADMIN->add('swtcadmin', new  admin_externalpage('invitehistory', new lang_string('invitehistory', 'local_swtc'),
                     new moodle_url("$CFG->wwwroot/local/swtc/lib/invitehistory.php")));
 
     // SWTC *******************************************************************************
@@ -106,6 +107,4 @@ if ($hassiteconfig) { // Needs this condition or there is error on login page.
     // SWTC *******************************************************************************
     $ADMIN->add('swtcadmin', new  admin_externalpage('portfolio_access_settings', new lang_string('portfolio_access_settings', 'local_swtc'),
                                     new moodle_url("$CFG->wwwroot/local/swtc/lib/portfolio_access_settings.php")));
-
-    // print("Did I get here...xxx.</br>");
 }

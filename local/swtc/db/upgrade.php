@@ -68,7 +68,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Ebglms savepoint reached.
+        // SWTC savepoint reached.
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
@@ -95,7 +95,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Ebglms savepoint reached.
+        // SWTC savepoint reached.
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
@@ -116,7 +116,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
         // Launch add key userid_name.
         $dbman->add_key($table, $key);
 
-        // Ebglms savepoint reached.
+        // SWTC savepoint reached.
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
@@ -220,7 +220,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Ebglms savepoint reached.
+        // SWTC savepoint reached.
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
@@ -242,8 +242,35 @@ function xmldb_local_swtc_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Ebglms savepoint reached.
+        // SWTC savepoint reached.
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
+    }
+
+    if ($oldversion < 2020120529) {
+
+        // Define table local_swtc_port_access to be created.
+        $table = new xmldb_table('local_swtc_port_access');
+
+        // Adding fields to table local_swtc_port_access.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('roleid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('catid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('access', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usercreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_swtc_port_access.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for local_swtc_port_access.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // SWTC savepoint reached.
+        upgrade_plugin_savepoint(true, 2020120529, 'local', 'swtc');
     }
 
     return true;

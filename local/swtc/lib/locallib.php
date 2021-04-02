@@ -20,13 +20,14 @@
  *
  * @package    local
  * @subpackage swtc/lib/locallib.php
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  *
  * History:
  *
  * 10/14/20 - Initial writing.
+ * 03/28/21 - Added *** function.
  *
  **/
 
@@ -52,13 +53,6 @@ require_once($CFG->dirroot. '/user/profile/lib.php');
 require_once($CFG->dirroot.'/enrol/locallib.php');
 require_once($CFG->dirroot. '/user/lib.php');
 
-// SWTC ********************************************************************************
-// Note: portfolio values are now located in
-//			$SESSION->SWTC.
-//     	To use: $swtc = $SESSION->SWTC;
-//      			$portfolios = $SESSION->SWTC->PORTFOLIOS;
-//            $swtc_user = $SESSION->SWTC->USER;
-// SWTC ********************************************************************************
 /**
  * Look for the portfolio name in the $categoryids array. When found, save the values we want and return the newly created array.
  *
@@ -109,8 +103,8 @@ function local_swtc_find_context_from_name($portfolio_name, $cats) {
  * If PremierSupport or ServiceDelivery manager or administrator ventures outside their own portfolio, they are no longer
  *          considered a manager or administrator. Substitute either PremierSupport-student or ServiceDelivery-student as role.
  *
- * @param $cat		A catlist class variable.
- * @param $user		A user class variable.
+ * @param $cat		A catlist variable.
+ * @param $user		A user variable.
  *
  * @return $temp_user	$user (passed in) with the rolename and roleid changed if required.
  *

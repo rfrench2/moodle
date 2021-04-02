@@ -25,6 +25,7 @@
  * History:
  *
  * 12/05/20 - Initial writing.
+ * 03/29/21 - Added strings for Portfolio Access table.
  *
  */
 
@@ -159,7 +160,7 @@ $string['status_invite_expired_message'] = 'Thank-you for requesting access to t
 $string['status_invite_invalid_message'] = 'Thank-you for requesting access to the <strong>SWTC DCG Services Education Learning Management System (LMS)</strong>. A problem was encountered processing this invitation. If you still require access, navigate to the <strong>SWTC DCG Services Education Learning Management System (LMS)</strong> and click on <strong>Create new account</strong>. If you believe that you have received this message in error or are in need of assistance, please contact: {$a->supportemail}.';
 
 // Invite history strings.
-$string['swtcinvitehistory'] = 'Invitation history';
+$string['invitehistory'] = 'Invitation history';
 $string['noinvitehistory'] = 'No invites sent out yet';
 $string['historyid'] = 'ID';
 $string['historyinvitee'] = 'Invitee';
@@ -1180,5 +1181,17 @@ $string['duration_help'] = 'Estimated duration to complete this course (in minut
 // Portfolio Settings page strings.
 // SWTC ********************************************************************************.
 $string['portfolio_access_settings'] = 'Porfolio access settings';
+$string['portfolio_access_button'] = 'Save changes and Apply permissions to all top-level portfolios';
 
 $string['allowaccesstoportfolio'] = 'Allow users with role {$a->rolename} access to the {$a->portfolio}';
+$string['portfoliocatid'] = '{$a->portfolio} has an id of {$a->catid}';
+$string['portfolioroleid'] = '{$a->rolename} has an id of {$a->roleid}';
+
+// $string['portfolio_access_intro1'] = 'Master table of portfolio to customized user roles (accesstype) access permissions.' . "\n\n";
+$string['portfolio_access_intro'] =
+'<p>Master table of portfolio to customized user roles (accesstype) access permissions.<br>' .
+'<br>Initial state of the table is set from values found in the <strong>local_swtc_port_access</strong> database table.' .
+'<br>These values will be used throughout the site to verify a user' . "'" . 's access.' .
+'<br>Including the setting of the <strong>moodle/category:viewcourselist</strong> at the top-level portfolio level.' .
+'<br>In addition to updating the <strong>local_swtc_port_access</strong> database table,' .
+'<br>the changes can be applied to all top-level portfolios.</p>';

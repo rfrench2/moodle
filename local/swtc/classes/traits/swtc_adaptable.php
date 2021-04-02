@@ -322,8 +322,6 @@ trait swtc_adaptable {
             'username' => $USER->username]);
         $debug = swtc_set_debug();
 
-        print_object("Did I get here?");
-
         // Other SWTC variables.
         // $mycourses = 'mycourses';                                        // The key for 'My courses'.
         $mycurriculums = get_string('mycurriculums', 'local_swtc');       // The title for 'My Curriculums'.

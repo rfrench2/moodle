@@ -24,7 +24,7 @@
  *
  * History:
  * 10/17/20 - Initial writing.
- * 02/23/21 - Removed a few events.
+ * 02/23/21 - Removed a few events and cleaned up.
  *
  * Notes about using this file
  *
@@ -58,95 +58,40 @@
 defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_loggedin message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
         array (
             'eventname'   => '\core\event\user_loggedin',
-            // 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_loggedin',
-            // 'internal'    => true,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_loggedinas message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
-         array (
-			'eventname'   => '\core\event\user_loggedinas',
-            // 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
+        array (
+            'eventname'   => '\core\event\user_loggedinas',
             'callback'    => '\local_swtc\observer::user_loggedinas',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_updated message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
 		array (
             'eventname'   => '\core\event\user_updated',
-            // 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_updated',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_created message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
         array (
 			'eventname'   => '\core\event\user_created',
-            // 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_created',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\course_viewed message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
 		array (
 			'eventname'   => '\core\event\course_viewed',
-			// 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::course_viewed',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_enrolment_created message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
         array (
             'eventname'   => '\core\event\user_enrolment_created',
-            // 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_user_enrolment_created',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_enrolment_created',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\role_assigned message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
 		array (
 			'eventname'   => '\core\event\role_assigned',
-			// 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::role_assigned',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_enrolment_deleted message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
 		array (
 			'eventname'   => '\core\event\user_enrolment_deleted',
-			// 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_enrolment_deleted',
-            // 'internal'    => false,
         ),
-        // SWTC ********************************************************************************
-        // Capture the \core\event\user_enrolment_updated message and invoke the function shown in callback.
-        // SWTC ********************************************************************************
 		array (
 			'eventname'   => '\core\event\user_enrolment_updated',
-			// 'includefile' => '/local/swtc/lib/notifications.php',
-            // 'callback'    => 'swtc_assign_user_role',
             'callback'    => '\local_swtc\observer::user_enrolment_updated',
-            // 'internal'    => false,
         ),
 );

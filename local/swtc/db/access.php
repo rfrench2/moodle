@@ -25,10 +25,19 @@
  * 10/15/20 - Initial writing.
  * 11/08/20 - Most capabilities not needed anymore since using
  *          moodle/category:viewcourselist.
+ * 03/11/21 - Experimenting with has_capability to determine user portfolio access.
  *
  */
 
  $capabilities = array(
+    /**
+ 	 * View curriculums section.
+ 	 */
+ 	'local/swtc:swtc_view_curriculums' => array(
+ 		'riskbitmask' => RISK_CONFIG,
+ 		'captype' => 'write',
+ 		'contextlevel' => CONTEXT_COURSECAT
+ 	),
     /**
 	 * View curriculums section.
 	 */
@@ -48,7 +57,7 @@
      /**
  	 * View student reports section.
  	 */
- 	'local/swtc:swtc_view_stud_reports' => array(
+ 	'local/swtc:swtc_view_student_reports' => array(
  		'riskbitmask' => RISK_CONFIG,
  		'captype' => 'write',
  		'contextlevel' => CONTEXT_COURSECAT
