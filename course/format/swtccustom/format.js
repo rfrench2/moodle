@@ -1,7 +1,7 @@
-// Javascript functions for EBG LMS custom course format
-// 05/26/16 - Changed 'ul class' and 'container_class' from 'swtccustom' back to 'topics'.
-// 08/17/16 - Changed back to 'swtccustom' for testing...
-// 05/9/19 - Changed for Moodle 3.6.3.
+// Javascript functions for SWTC LMS custom course format
+// Changed 'ul class' and 'container_class' from 'swtccustom' back to 'topics'.
+// Changed back to 'swtccustom' for testing...
+// Changed for Moodle 3.6.3.
 
 M.course = M.course || {};
 

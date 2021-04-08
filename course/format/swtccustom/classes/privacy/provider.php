@@ -17,7 +17,7 @@
  * Privacy Subsystem implementation for format_swtccustom.
  *
  * @package   format_swtccustom
- * @copyright 2020 SWTC LMS
+ * @copyright 2021 SWTC LMS
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 2.3
  *
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Privacy Subsystem for format_swtccustom implementing null_provider.
  *
- * @copyright 2020 SWTC LMS
+ * @copyright 2021 SWTC LMS
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 2.3
  */

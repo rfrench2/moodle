@@ -18,8 +18,7 @@
  * swtccustom course format.  Display the whole course as "swtccustom" made of modules.
  *
  * @package   format_swtccustom
- * @copyright 2020 SWTC LMS
- * @author N.D.Freear@open.ac.uk, and others.
+ * @copyright 2021 SWTC LMS
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -52,13 +51,10 @@ if (($marker >= 0) && has_capability('moodle/course:setcurrentsection', $context
 }
 
 // Make sure section 0 is created.
-// 08/31/18 - Since format_topics removed "numsections" in Moodle 3.3, so will we.
-// course_create_sections_if_missing($course, range(0, $course->numsections));
+// Since format_topics removed "numsections" in Moodle 3.3, so will we.
 course_create_sections_if_missing($course, 0);
 
 $renderer = $PAGE->get_renderer('format_swtccustom');
-// print("About to print course  ===9.97===.<br />"); // Lenovo
-// print_r($course); // Lenovo
 
 if (!empty($displaysection)) {
     $renderer->print_single_section_page($course, null, null, null, null, $displaysection);

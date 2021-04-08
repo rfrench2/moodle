@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_ebglmscustom related unit tests
+ * format_swtccustom related unit tests
  *
- * @package   format_ebglmscustom
- * @copyright 2015 Lenovo EBG LMS
+ * @package   format_swtccustom
+ * @copyright 2021 SWTC LMS
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,13 +28,13 @@ global $CFG;
 require_once($CFG->dirroot . '/course/lib.php');
 
 /**
- * format_ebglmscustom related unit tests
+ * format_swtccustom related unit tests
  *
- * @package   format_ebglmscustom
- * @copyright 2015 Lenovo EBG LMS
+ * @package   format_swtccustom
+ * @copyright 2021 SWTC LMS
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_ebglmscustom_testcase extends advanced_testcase {
+class format_swtccustom_testcase extends advanced_testcase {
 
     public function test_update_course_numsections() {
         global $DB;
@@ -42,7 +42,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
 
         $generator = $this->getDataGenerator();
 
-        $course = $generator->create_course(array('numsections' => 10, 'format' => 'ebglmscustom'),
+        $course = $generator->create_course(array('numsections' => 10, 'format' => 'swtccustom'),
             array('createsections' => true));
         $generator->create_module('assign', array('course' => $course, 'section' => 7));
 
@@ -63,7 +63,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
     }
 
     /**
-     * Tests for format_ebglmscustom::get_section_name method with default section names.
+     * Tests for format_swtccustom::get_section_name method with default section names.
      */
     public function test_get_section_name() {
         global $DB;
@@ -72,7 +72,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'ebglmscustom'),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'swtccustom'),
             array('createsections' => true));
 
         // Get section names for course.
@@ -87,7 +87,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
     }
 
     /**
-     * Tests for format_ebglmscustom::get_section_name method with modified section names.
+     * Tests for format_swtccustom::get_section_name method with modified section names.
      */
     public function test_get_section_name_customised() {
         global $DB;
@@ -96,7 +96,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'ebglmscustom'),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'swtccustom'),
             array('createsections' => true));
 
         // Get section names for course.
@@ -119,7 +119,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
     }
 
     /**
-     * Tests for format_ebglmscustom::get_default_section_name.
+     * Tests for format_swtccustom::get_default_section_name.
      */
     public function test_get_default_section_name() {
         global $DB;
@@ -128,7 +128,7 @@ class format_ebglmscustom_testcase extends advanced_testcase {
         // Generate a course with 5 sections.
         $generator = $this->getDataGenerator();
         $numsections = 5;
-        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'ebglmscustom'),
+        $course = $generator->create_course(array('numsections' => $numsections, 'format' => 'swtccustom'),
             array('createsections' => true));
 
         // Get section names for course.
@@ -138,10 +138,10 @@ class format_ebglmscustom_testcase extends advanced_testcase {
         $courseformat = course_get_format($course);
         foreach ($coursesections as $section) {
             if ($section->section == 0) {
-                $sectionname = get_string('section0name', 'format_ebglmscustom');
+                $sectionname = get_string('section0name', 'format_swtccustom');
                 $this->assertEquals($sectionname, $courseformat->get_default_section_name($section));
             } else {
-                $sectionname = get_string('sectionname', 'format_ebglmscustom') . ' ' . $section->section;
+                $sectionname = get_string('sectionname', 'format_swtccustom') . ' ' . $section->section;
                 $this->assertEquals($sectionname, $courseformat->get_default_section_name($section));
             }
         }

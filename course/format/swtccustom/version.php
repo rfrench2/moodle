@@ -19,7 +19,7 @@
  *
  * @package    format
  * @package   format_swtccustom
- * @copyright 2020 SWTC
+ * @copyright 2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -30,6 +30,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015112987;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2015112988;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2015111000;        // Requires this Moodle version.
 $plugin->component = 'format_swtccustom';    // Full name of the plugin (used for diagnostics).

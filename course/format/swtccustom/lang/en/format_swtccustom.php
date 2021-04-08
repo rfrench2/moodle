@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_topics', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for course format format_swtccustom.
  *
  * @package   format_swtccustom
- * @copyright 2016 Lenovo EBG LMS
+ * @copyright 2021 SWTC LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -55,7 +54,6 @@ $string['ispartofcurriculum'] = 'Is this course part of a curriculum?';
 $string['ispartofcurriculum_help'] = 'Enable if this course is part of a curriculum. Then select the curriculum(s) this course is a part of.';
 
 $string['sectionname'] = 'Course materials';
-// $string['section0name'] = 'General';
 $string['section0name'] = 'Course overview';
 $string['page-course-view-topics'] = 'Any course main page in topics format';
 $string['page-course-view-topics-x'] = 'Any course page in topics format';
@@ -69,4 +67,4 @@ $string['courseversion_help'] = 'Enter the current version of the course.';
 $string['swtc_header'] = 'SWTC';
 $string['edit_section_warning'] = 'Do not use this for adding or modifying text in the Course overview section (use Course administration > Edit settings > Course summary).';
 
-$string['privacy:metadata'] = 'The Lenovo ebglmscustom course format plugin does not store any personal data.';
+$string['privacy:metadata'] = 'The SWTC ebglmscustom course format plugin does not store any personal data.';

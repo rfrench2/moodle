@@ -19,7 +19,7 @@
  *
  * @since     Moodle 2.0
  * @package   format_swtccustom
- * @copyright 2020 SWTC LMS
+ * @copyright 2021 SWTC LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -36,36 +36,14 @@ require_once($CFG->dirroot. '/course/lib.php');     // 06/20/19
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/relatedcourseslib.php');
-
-
-/**
- * Define the new coursetype for the ebglsmcustom course format.
- * Important! Values must match the values defined in swtc local plugin lib.php...
- * 11/14/18 - Constants moved to /local/swtc/lib/swtc_constants.php.
- */
-// define('COURSETYPE_GTP', 3);
-// define('COURSETYPE_LENOVOANDIBM', 4);
-// define('COURSETYPE_IBM', 4);
-// define('COURSETYPE_LENOVO', 5);
-// define('COURSETYPE_SERVICEPROVIDER', 6);
-// define('COURSETYPE_LENOVOINTERNAL', 7);
-// define('COURSETYPE_LENOVOSHAREDRESOURCES', 8);
-// define('COURSETYPE_MAINTECH', 9);
-// define('COURSETYPE_ASP', 10);
-// define('COURSETYPE_PREMIERSUPPORT', 11);
-// define('COURSETYPE_SERVICEDELIVERY', 12);
-// define('COURSETYPE_PRACTICALACTIVITIES', 13);
-// define('COURSETYPE_NONE', 66);
 
 /**
  * Main class for the Topics course format
  *
  * @package    format_swtccustom
- * @copyright  2020 SWTC LMS
+ * @copyright  2021 SWTC LMS
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_swtccustom extends format_base {
@@ -97,9 +75,9 @@ class format_swtccustom extends format_base {
         if ((string)$section->name !== '') {
             // Return the name the user set.
             return format_string($section->name, true, array('context' => context_course::instance($this->courseid)));
-        } if ($section->section == 0) {        // @02
-            // Return the general section.      // @02
-            return get_string('section0name', 'format_swtccustom');       // @02
+        } if ($section->section == 0) {
+            // Return the general section.
+            return get_string('section0name', 'format_swtccustom');
         } else {
             return $this->get_default_section_name($section);
         }
@@ -118,12 +96,10 @@ class format_swtccustom extends format_base {
     public function get_default_section_name($section) {
         if ($section->section == 0) {
             // Return the general section.
-            // return get_string('section0name', 'format_topics');
             return get_string('section0name', 'format_swtccustom');
         } else {
             // Use format_base::get_default_section_name implementation which
             // will display the section name in "Topic n" format.
-            // return parent::get_default_section_name($section);
             return get_string('sectionname', 'format_swtccustom');
         }
     }
@@ -197,7 +173,7 @@ class format_swtccustom extends format_base {
      */
     public function extend_course_navigation($navigation, navigation_node $node) {
         global $PAGE;
-        // if section is specified in course/view.php, make sure it is expanded in navigation
+        // If section is specified in course/view.php, make sure it is expanded in navigation.
         if ($navigation->includesectionnum === false) {
             $selectedsection = optional_param('section', null, PARAM_INT);
             if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') &&
@@ -206,7 +182,7 @@ class format_swtccustom extends format_base {
             }
         }
 
-        // check if there are callbacks to extend course navigation
+        // Check if there are callbacks to extend course navigation.
         parent::extend_course_navigation($navigation, $node);
 
         // We want to remove the general section if it is empty.
@@ -230,7 +206,7 @@ class format_swtccustom extends format_base {
      *
      * @return array This will be passed in ajax respose
      */
-    function ajax_section_move() {
+    public function ajax_section_move() {
         global $PAGE;
         $titles = array();
         $course = $this->get_course();
@@ -284,8 +260,7 @@ class format_swtccustom extends format_base {
         global $DB;
 
         static $courseformatoptions = false;
-        $curriculum_array = array();
-        // $relatedcourses_array = array();      // 05/30/19
+        $curriculumarray = array();
         $trunclength = 100;
 
         if ($courseformatoptions === false) {
@@ -304,97 +279,35 @@ class format_swtccustom extends format_base {
                     'default' => get_config('format_swtccustom', 'coursetype'),
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS iscurriculum field */        // 08/31/18
+                /* SWTC LMS iscurriculum field */
                 'iscurriculum' => array(
                     'default' => 0,
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS ispartofcurriculum field */        // 09/10/18
+                /* SWTC LMS ispartofcurriculum field */
                 'ispartofcurriculum' => array(
                     'default' => 0,
                     'type' => PARAM_INT,
                 ),
-                /* SWTC LMS curriculums field */        // 09/10/18
+                /* SWTC LMS curriculums field */
                 'curriculums' => array(
                     'default' => 0,
                     'type' => PARAM_TEXT,
                 ),
-                /* SWTC LMS related courses field */        // 05/30/19
-                // 'relatedcourses' => array(
-                //     'default' => 0,
-                //     'type' => PARAM_TEXT,
-                // ),
-                // SWTC ********************************************************************************.
-                // 09/11/19 - Special note about the course format options "machinetypes" and "duration":
-                //      Even though "machinetypes" and "duration" are course format options, and their values reside in the
-                //          course_format_options table, they cannot be processed here.
-                //
-                //      Because they are shown in the General section of the form, they must be processed in
-                //          create_edit_form_elements (below). If they are processed here, an error is produced:
-                //              Undefined index: label in /var/www/html/course/format/lib.php on line 705
-                //
-                //      A side effect of this is "machinetypes" and "duration" will NOT be returned using the normal Moodle
-                //          course format option function calls (for example, course_get_format($course->id)->get_format_options()).
-                //          Therefore, in Moosh scripts (or anywhere else for that matter), we must use raw database calls to
-                //          query, get, and update all course format options.
-                // SWTC ********************************************************************************.
-                /* SWTC LMS machinetypes field */        // 09/11/19
-                // 'machinetypes' => array(
-                //     'default' => 'N/A',
-                //     'type' => PARAM_TEXT,
-                // ),
-                /* SWTC LMS duration field */        // 09/11/19
-                // 'duration' => array(
-                //     'default' => 0,
-                //     'type' => PARAM_INT,
-                // )
             );
         }
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // 10/22/18 - Get all the curriculum courses and fill the "curriculums" select element.
-		// 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
-        // SWTC ********************************************************************************
+        // 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
+        // SWTC ********************************************************************************.
         $records = curriculums_getall();
 
         foreach ($records as $record) {
-            $curriculum_array[$record->courseid] = $record->shortname .' '. $record->fullname;
+            $curriculumarray[$record->courseid] = $record->shortname .' '. $record->fullname;
         }
 
-        asort($curriculum_array);
-        // print_object($curriculum_array);
-
-        // SWTC ********************************************************************************.
-        // 05/30/19 - Get a list of all the courses.
-        // 07/01/19 - For Moodle 3.7 (and all previous), need to pass more fields to get_courses (since coursecatlib::get_courses
-        //                  eventually calls get_course which requires "visible" and "category" fields).
-        // SWTC ********************************************************************************.
-        // $records = get_courses('all', 'c.sortorder ASC', 'c.id, c.sortorder, c.visible, c.fullname, c.shortname, c.category');
-
-        // SWTC ********************************************************************************.
-        // 08/19/19 - Only list courses NOT in top level categories 60 (Lenovo Internal) and 73 (resource).
-        // SWTC ********************************************************************************.
-        // $records = local_swtc_get_all_courses();
-        //
-        // if ($records->valid()) {
-        //     foreach ($records as $record) {
-        //         $fullnamelength = core_text::strlen($record->fullname);
-        //
-        //         // If for some reason the length requested is equal to or is greater than the current length of the course fullname, return
-        //         //      the entire course fullname. If not, return only what was requested.
-        //         if ($trunclength >= $fullnamelength) {
-        //             $coursefullname = $record->fullname;
-        //         } else {
-        //             // shorten_text is in /lib/moodlelib.php.
-        //             $coursefullname = shorten_text($record->fullname, $trunclength);
-        //         }
-        //
-        //         $relatedcourses_array[$record->id] = $record->shortname .' '. $coursefullname;
-        //     }
-        // }
-        //
-        // asort($relatedcourses_array);
-		// print_object($relatedcourses_array);
+        asort($curriculumarray);
 
         if ($foreditform && !isset($courseformatoptions['coursedisplay']['label'])) {
             $courseformatoptionsedit = array(
@@ -465,25 +378,13 @@ class format_swtccustom extends format_base {
                     'label' => new lang_string('curriculums', 'format_swtccustom'),
                     'element_type' => 'select',
                     'element_attributes' => array(
-                        $curriculum_array,
+                        $curriculumarray,
                         'multiple' => 'multiple',
                         'size' => 10,
                     ),
                     'help' => 'curriculums',
                     'help_component' => 'format_swtccustom',
                 ),
-                /* SWTC LMS related courses field */
-                // 'relatedcourses' => array(
-                //     'label' => new lang_string('relatedcourses', 'format_swtccustom'),
-                //     'element_type' => 'select',
-                //     'element_attributes' => array(
-                //         $relatedcourses_array,
-                //         'multiple' => 'multiple',
-                //         'size' => 10,
-                //     ),
-                //     'help' => 'relatedcourses',
-                //     'help_component' => 'format_swtccustom',
-                // ),
             );
 
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
@@ -526,18 +427,20 @@ class format_swtccustom extends format_base {
         }
 
         // Next, 'Machine types' field.
-        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('machinetypes', 'format_swtccustom'));
-        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/swtc/lang/en/local_swtc.php
-        //      to remove duplication of common strings.
-        $mform->insertElementBefore($mform->createElement('text', 'machinetypes', get_string('machinetypes', 'local_swtc'), ''), 'category');
+        // Need to insert it (not just add it).
+        // Moved some SWTC custom course format strings to /local/swtc/lang/en/local_swtc.php
+        // to remove duplication of common strings.
+        $mform->insertElementBefore($mform->createElement('text', 'machinetypes',
+            get_string('machinetypes', 'local_swtc'), ''), 'category');
         $mform->addHelpButton('machinetypes', 'machinetypes', 'local_swtc');
         $mform->setType('machinetypes', PARAM_TEXT);
         $mform->addRule('machinetypes', get_string('required'), 'required', null, 'client');
 
          // Load form element value with 'machinetypes' from database (if it exists).
-        $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => 0, 'name' => 'machinetypes'));
+        $record = $DB->get_record('course_format_options',
+            array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => 0, 'name' => 'machinetypes'));
 
-        // 08/31/18 - Do not set default value so that, if nothing is entered in field, an error occurs.
+        // Do not set default value so that, if nothing is entered in field, an error occurs.
         if ($record) {
             $element = $mform->getElement('machinetypes');
             $machinetypes = $record->value;
@@ -545,21 +448,20 @@ class format_swtccustom extends format_base {
         }
 
         // Next, 'Duration' field (maxlength of 4).
-        // Need to insert it (not just add it). $mform->addElement('text', 'mtlist', get_string('duration', 'format_swtccustom'));
-        // $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'format_swtccustom'), 'maxlength="4" size="10"'), 'category');        // 01/06/20
-        // @01 - 04/28/20 - Moved some DCG custom course format strings to /local/swtc/lang/en/local_swtc.php
-        //      to remove duplication of common strings.
-        $mform->insertElementBefore($mform->createElement('text', 'duration', get_string('duration', 'local_swtc'), ''), 'category');  // 01/06/20
+        // Need to insert it (not just add it).
+        // Moved some SWTC custom course format strings to /local/swtc/lang/en/local_swtc.php
+        // to remove duplication of common strings.
+        $mform->insertElementBefore($mform->createElement('text', 'duration',
+            get_string('duration', 'local_swtc'), ''), 'category');
         $mform->addHelpButton('duration', 'duration', 'local_swtc');
-        // $mform->setType('duration', PARAM_INT);      // 01/06/20
-        $mform->setType('duration', PARAM_TEXT);    // 01/06/20
+        $mform->setType('duration', PARAM_TEXT);
         $mform->addRule('duration', get_string('required'), 'required', null, 'client');
-        // $mform->addRule('duration', get_string('duration_help', 'local_swtc'), 'numeric', null, 'client');      // 01/06/20
 
         // Load form element value with 'duration' from database (if it exists).
-        $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => 0, 'name' => 'duration'));
+        $record = $DB->get_record('course_format_options',
+            array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => 0, 'name' => 'duration'));
 
-        // 08/31/18 - Do not set default value so that, if nothing is entered in field, an error occurs.
+        // Do not set default value so that, if nothing is entered in field, an error occurs.
         if ($record) {
             $element = $mform->getElement('duration');
             $duration = $record->value;
@@ -589,9 +491,10 @@ class format_swtccustom extends format_base {
         global $DB, $CFG, $USER, $SESSION;
 
         // SWTC ********************************************************************************.
-        // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user([
-            'userid' => $event->objectid]);
+        // SWTC LMS swtcuser and debug variables.
+        $swtcuser = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
         $debug = swtc_get_debug();
 
         // Other Lenovo variables.
@@ -599,14 +502,14 @@ class format_swtccustom extends format_base {
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // Always output standard header information.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $messages[] = "Lenovo ********************************************************************************.";
             $messages[] = "Entering /course/format/swtccustom/lib.php==update_course_format_options.enter.";
-            $messages[] = "About to print swtc_user.";
-            $messages[] = print_r($swtc_user, true);
-            $messages[] = "Finished printing swtc_user.";
+            $messages[] = "About to print swtcuser.";
+            $messages[] = print_r($swtcuser, true);
+            $messages[] = "Finished printing swtcuser.";
             $messages[] = "Lenovo ********************************************************************************.";
             $debug->logmessage($messages, 'logfile');
             unset($messages);
@@ -620,138 +523,67 @@ class format_swtccustom extends format_base {
             if (isset($debug)) {
                 $messages[] = "About to print options.";
                 $messages[] = print_r($options, true);
-                $messages[] = "Finished printing options. About to print data (only includes definition of options, not actual data).";
+                $messages[] = "Finished printing options. About to print data
+                    (only includes definition of options, not actual data).";
                 $messages[] = print_r($data, true);
                 $messages[] = "Finished printing data (includes changes just made to course).";
                 $debug->logmessage($messages, 'detailed');
                 unset($messages);
-               // print_object($records);
-               // print_object($options);
-               // print_object($data);
-               // print_object($oldcourse);
             }
 
-            // If running from CLI (Moosh):
-            // var_dump($data);
-            // var_dump($oldcourse);
-
-            // $temp = explode(',', $optiondata['curriculums']);
-            // $tmp_line = implode(',', $line);
-
-
-            // key is the course format options themselves: for example - hiddensections, coursedisplay, coursetype, iscurriculum,
-            //      ispartofcurriculum, curriculums, and relatedcourses (which is an array and has special processing).
+            // Key is the course format options themselves: for example - hiddensections, coursedisplay, coursetype, iscurriculum,
+            // ispartofcurriculum, curriculums, and relatedcourses (which is an array and has special processing).
             foreach ($options as $key => $unused) {
                 if (isset($debug)) {
                     $messages[] = "key (course format option) is :$key.";
                     $debug->logmessage($messages, 'detailed');
                     unset($messages);
-                   // print_object($key);
                 }
 
                 if (!array_key_exists($key, $data)) {
                     if (array_key_exists($key, $oldcourse)) {
                         // SWTC ********************************************************************************.
-                        // 05/30/19 - Special case: If removing all related courses, $data['relatedcourses'] will NOT be set. Therefore,
-                        //      it really doesn't matter what the relatedcourses are in $oldcourse (because they will be removed).
-                        // SWTC ********************************************************************************
-                        // if ($key !== 'relatedcourses') {
-                            $data[$key] = $oldcourse[$key];
-                        // }
+                        // Special case: If removing all related courses, $data['relatedcourses'] will NOT be set. Therefore,
+                        // it really doesn't matter what the relatedcourses are in $oldcourse (because they will be removed).
+                        // SWTC ********************************************************************************.
+                        $data[$key] = $oldcourse[$key];
                     }
                 }
             }
 
-            // SWTC ********************************************************************************
-            // 10/22/18 - Get information for "curriculums". If "curriculums" did not exist, it would have been added
-            //              just above here.
-            // 10/23/18 - Ignore if "ispartofcurriculum" is NOT set.
-            //  TODO: Dynamically disable curriculums select form element if "ispartofcurriculum" is NOT set.
-            // 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
-            // SWTC ********************************************************************************
-            // if ((array_key_exists('ispartofcurriculum', $data)) && (!empty($data['ispartofcurriculum']))) {
+            // SWTC ********************************************************************************.
+            // Get information for "curriculums". If "curriculums" did not exist, it would have been added
+            // just above here.
+            // Ignore if "ispartofcurriculum" is NOT set.
+            // TODO: Dynamically disable curriculums select form element if "ispartofcurriculum" is NOT set.
+            // If course format option does not exist in $data, do NOT zero out the value.
+            // SWTC ********************************************************************************.
             if (array_key_exists('curriculums', $data)) {
                 if (!empty($data['ispartofcurriculum'])) {
-                    // print_object($data['curriculums']);
                     if (!empty($data['curriculums'])) {
                         if (is_array($data['curriculums'])) {
                             $data['curriculums'] = implode(', ', $data['curriculums']);
                         }
                     }
                 } else {
-                    // Some curriculums were selected, but the ispartofcurriculum flag was not set (this situation should not happen in the future).
+                    // Some curriculums were selected, but the ispartofcurriculum flag was not set
+                    // (this situation should not happen in the future).
                     $data['curriculums'] = 0;
                 }
             }
 
-            // SWTC ********************************************************************************.
-            // 05/30/19 - Added related courses listbox to /course/edit_form.php; added related courses to course format options.
-            //          Notes:
-            //              $data is the current data that is returned from the just edited form. $curriculums and / or $relatedcourses might
-            //              the same (empty), the same (several courses selected, but none are new or removed), changed (courses that were
-            //                  selected previously might not be slected now or others might have been added), or empty (it did have some
-            //                  courses selected, but not have any courses now).
-            //
-            //              Several scenarios exist (for curriculums and relatedcourses):
-            //                  - If relatedcourses is empty, it will not be found in $data.
-            //                  - If relatedcourses is not empty, it will initially be an array that looks like the following:
-            //
-            //          [data] => Array
-            // 					(
-            //                      ...
-            //                      [hiddensections] => 1
-            //                      [coursedisplay] => 0
-            //                      [relatedcourses] => array[2]
-            // 					                            (
-            //                                                  [0] => 597
-            //                                                  [1] => 599
-            //                                               )
-            //                      ...
-            //                  )
-            //
-            //              Before saving to database, it must be imploded into a string.
-            // SWTC ********************************************************************************.
-            // if (array_key_exists('relatedcourses', $data)) {
-            //     // print_object($data['relatedcourses']);
-            //     // print_r("in lib.php\n");
-            //     // var_dump($data);
-            //     if (!empty($data['relatedcourses'])) {
-            //         if (is_array($data['relatedcourses'])) {
-            //             // print_object($data['relatedcourses']);
-            //             // Save the related courses in the local_swtc_rc table.
-            //             relatedcourses_put_courses($this->courseid, $data['relatedcourses']);
-            //
-            //             // Format to save in course format options.
-            //             $data['relatedcourses'] = implode(', ', $data['relatedcourses']);
-            //             // 08/01/19 - Unset so duplicate entries are not saved.
-            //             // unset($data['relatedcourses']);
-            //         }
-            //     } else {
-            //         $data['relatedcourses'] = 0;
-            //         // Also remove the courses from the local_swtc_rc table.
-            //         relatedcourses_put_courses($this->courseid, array());
-            //     }
-            // } else {
-            //     $data['relatedcourses'] = 0;
-            //     // Also remove the courses from the local_swtc_rc table.
-            //     relatedcourses_put_courses($this->courseid, array());
-            // }
-
-            // print_object($data);        // 05/30/19 Lenovo
-
-            // Even though machinetypes is a course format option (and is saved as a course format option), it must be handled differently
-            //      because it is shown in the "General" section, not the "Course format" section.
-            // Load form element value with 'machinetypes' from database (if it exists).
-            // 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
+            // Even though machinetypes is a course format option (and is saved as a course format option),
+            // it must be handled differently because it is shown in the "General" section,
+            // not the "Course format" section. Load form element value with 'machinetypes'
+            // from database (if it exists). If course format option does not exist in $data,
+            // do NOT zero out the value.
             if (array_key_exists('machinetypes', $data)) {
                 $newtypes = $data['machinetypes'];
 
-                $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => $sectionid, 'name' => 'machinetypes'));
-                if (isset($debug)) {
-                    // print_object($record);
-                }
+                $record = $DB->get_record('course_format_options', array('courseid' => $this->courseid, 'format' => $this->format,
+                    'sectionid' => $sectionid, 'name' => 'machinetypes'));
 
-                if( !(empty($record))) {
+                if ( !(empty($record))) {
                     $DB->update_record('course_format_options', array(
                         'courseid' => $this->courseid,
                         'format' => $this->format,
@@ -772,16 +604,14 @@ class format_swtccustom extends format_base {
             }
 
             // Do the same processing for duration.
-            // 01/16/20 - In update_course_format_options, if course format option does not exist in $data, do NOT zero out the value.
+            // If course format option does not exist in $data, do NOT zero out the value.
             if (array_key_exists('duration', $data)) {
                 $duration = $data['duration'];
 
-                $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format, 'sectionid' => $sectionid, 'name' => 'duration'));
-                if (isset($debug)) {
-                    // print_object($record);
-                }
+                $record = $DB->get_record('course_format_options',  array('courseid' => $this->courseid, 'format' => $this->format,
+                    'sectionid' => $sectionid, 'name' => 'duration'));
 
-                if( !(empty($record))) {
+                if ( !(empty($record))) {
                     $DB->update_record('course_format_options', array(
                         'courseid' => $this->courseid,
                         'format' => $this->format,
@@ -835,12 +665,10 @@ class format_swtccustom extends format_base {
     public function inplace_editable_render_section_name($section, $linkifneeded = true,
                                                          $editable = null, $edithint = null, $editlabel = null) {
         if (empty($edithint)) {
-            // $edithint = new lang_string('editsectionname', 'format_topics');
             $edithint = new lang_string('editsectionname', 'local_swtc');
         }
         if (empty($editlabel)) {
             $title = get_section_name($section->course, $section);
-            // $editlabel = new lang_string('newsectionname', 'format_topics', $title);
             $editlabel = new lang_string('newsectionname', 'local_swtc', $title);
         }
         return parent::inplace_editable_render_section_name($section, $linkifneeded, $editable, $edithint, $editlabel);
@@ -880,7 +708,6 @@ class format_swtccustom extends format_base {
 
         // For show/hide actions call the parent method and return the new content for .section_availability element.
         $rv = parent::section_action($section, $action, $sr);
-        // $renderer = $PAGE->get_renderer('format_topics');
         $renderer = $PAGE->get_renderer('format_swtccustom');
         $rv['section_availability'] = $renderer->section_availability($this->get_section($section));
         return $rv;
@@ -895,23 +722,6 @@ class format_swtccustom extends format_base {
     public function get_config_for_external() {
         // Return everything (nothing to hide).
         return $this->get_format_options();
-    }
-
-    /**
-     * The course was updated. Determine why it was updated and, if the category was changed, send a notification of the category change.
-     *
-     * This method is called from event observers and it can not use any modinfo or format caches because
-     * events are triggered before the caches are reset.
-     *
-     * @param object $eventdata information about the message (origin, destination, type, content)
-     */
-    public static function course_updated($eventdata) {
-        global $DB, $COURSE, $CFG, $USER, $SESSION;
-
-        // print_object($eventdata);
-
-        // local_swtc_assign_user_role($eventdata);
-
     }
 }
 
@@ -934,7 +744,6 @@ function format_swtccustom_inplace_editable($itemtype, $itemid, $newvalue) {
     if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
         $section = $DB->get_record_sql(
             'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
-            // array($itemid, 'topics'), MUST_EXIST); 05/02/17
             array($itemid, 'swtccustom'), MUST_EXIST);
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
     }
