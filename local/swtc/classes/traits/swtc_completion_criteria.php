@@ -32,14 +32,7 @@
  *
  * History:
  *
- * 12/13/18 - In get_title_detailed, changed course fullname to course shortname so it will format better in reports.
- * 12/15/18 - In get_details, appended course shortname to course fullname so it will format better in reports.
- * 03/20/19 - Changing tooltips hyperlink from viewing course to viewing individual course completion report.
- * 10/15/19 - Initial writing; moved majority of customized code from completion/criteria/completion_criteria_course.php to
- *                      functions defined here; added utility functions; changed to new SWTC LMS classes and methods to load
- *                      swtc_user and debug; added get_title_detailed and get_details.
- * 10/23/19 - Added swtc_get_title_detailed_course and swtc_get_title_detailed_activity.
- * 10/28/19 - Added swtc_get_details_course.
+ * 04/07/21 - Initial writing.
  *
  **/
 
@@ -73,16 +66,9 @@ trait swtc_completion_criteria {
      *
      * @return string
      *
-     * SWTC history:
+     * History:
      *
-     * 12/13/18 - Changed course fullname to course shortname so it will format better in reports.
-     * 12/19/18 - Changed to returning array - course shortname followed by course fullname.
-     * 03/20/19 - Changing tooltips hyperlink from viewing course to viewing individual course completion report. So, need to return
-     *                  course id also. All of the following must be kept in sync:
-     *                   /report/completion/index.php, /completion/criteria/completion_criteria_course.php, and
-     *                  /local/swtc/lib/curriculumslib.php.
-     * 10/23/19 - Moved majority of customized code to here from
-     * /completion/criteria/completion_criteria_course.php (including history).
+     * 04/07/21 - Initial writing.
      *
      */
     public function swtc_get_title_detailed_course($group) {
@@ -101,10 +87,9 @@ trait swtc_completion_criteria {
      *
      * @return  string
      *
-     * SWTC history:
+     * History:
      *
-     * 10/23/19 - Moved majority of customized code to here from
-     * /completion/criteria/completion_criteria_activity.php (including history).
+     * 04/07/21 - Initial writing.
      *
      */
     public function swtc_get_title_detailed_activity() {
@@ -124,10 +109,9 @@ trait swtc_completion_criteria {
      * @return array An array with the following keys:
      *     type, criteria, requirement, status
      *
-     * SWTC history:
+     * History:
      *
-     * 10/28/19 - Moved majority of customized code from here to
-     * /local/swtc/classes/traits/swtc_completion_criteria_course.php (including history).
+     * 04/07/21 - Initial writing.
      *
      */
     public function swtc_get_details_course($completion) {

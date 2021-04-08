@@ -1,18 +1,17 @@
 <?php
-// declare(strict_types=1); // For debugging.
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General protected License as published by
+// it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General protected License for more details.
+// GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General protected License
+// You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
@@ -37,10 +36,9 @@ use stdClass;
 use DateTime;
 use core_date;
 
-// SWTC ********************************************************************************
+// SWTC ********************************************************************************.
 // Include SWTC LMS functions.
-// SWTC ********************************************************************************
-// require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');        // 10/19/20 - SWTC
+// SWTC ********************************************************************************.
 require_once($CFG->dirroot . '/local/swtc/lib/swtc_userlib.php');
 require_once($CFG->dirroot . '/local/swtc/lib/swtclib.php');
 
@@ -62,13 +60,13 @@ require_once($CFG->dirroot . '/local/swtc/lib/swtclib.php');
  *
  */
  /**
- * Version details
- *
- * History:
- *
- * 10/19/20 - Initial writing.
- *
- **/
+  * Version details
+  *
+  * History:
+  *
+  * 10/19/20 - Initial writing.
+  *
+  **/
 class swtc_debug {
     /**
      * General purpose field to pass / print anything that is required.
@@ -113,9 +111,9 @@ class swtc_debug {
     private $force;
 
     // Scope: what to debug?
-    //      'internal' = SWTC functions in SWTC PHP files only.
-    //      'external' = SWTC modified code in other PHP files only.
-    //      'all' = Both internal and external.
+    // 'internal' = SWTC functions in SWTC PHP files only.
+    // 'external' = SWTC modified code in other PHP files only.
+    // 'all' = Both internal and external.
     /**
      * Scope: what to debug?
      *      'internal' = SWTC functions in SWTC PHP files only.
@@ -186,21 +184,16 @@ class swtc_debug {
      *
      * @private array
      */
-    private $PHPLOG;
+    private $phplog;
 
     /** @var integer If set, enable debugging of all events. */
     private $events;
 
     public function __construct() {
 
-        // print_object("In swtc_debug __construct");		// 10/18/20 - SWTC
-        // print_object("In swtc_debug __construct; about to print backtrace");		// 10/16/20 - SWTC
-        // print_object(format_backtrace(debug_backtrace(), true));        // SWTC-debug
-        // print_object($user);		// 10/16/20 - SWTC
-
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Load all the DEBUG default vales.
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         $this->information = '';
         $this->interactive = false;
         $this->preview = false;
@@ -214,24 +207,21 @@ class swtc_debug {
         $this->username = '';
         $this->includes = array();
         $this->counter = null;
-        $this->PHPLOG = null;
+        $this->phplog = null;
         $this->events = null;
 
-        // SWTC *****************************************************************************
-        // Setup the SWTC->DEBUG->PHPLOG private variable.
-        // SWTC *****************************************************************************
-        $this->PHPLOG = null;
-
-        // print_object("In not set SWTC->DEBUG; about to print SESSION->SWTC->DEBUG");		// 10/16/20 - SWTC
-        // print_object($SESSION->SWTC->DEBUG);		// 10/16/20 - SWTC
+        // SWTC ********************************************************************************.
+        // Setup the SWTC->DEBUG->phplog private variable.
+        // SWTC ********************************************************************************.
+        $this->phplog = null;
     }
 
     /**
      * All Setter methods for all properties.
      *
      * Setter methods:
-     *      @param $value
-     *      @return N/A
+     * @param $value
+     * @return N/A
      *
      * History:
      *
@@ -247,140 +237,137 @@ class swtc_debug {
      * 03/09/2021 - Initial writing.
      *
      */
-    function set_events() {
+    public function set_events() {
         $this->events = 1;
     }
 
-    function set_username() {
-        // SWTC ********************************************************************************
+    public function set_username() {
+        // SWTC ********************************************************************************.
         // Save the current user so that if current user is "root", the function can change the ownership of the
-        //      file to the "apache" process (so that files can be written or appended to).
+        // file to the "apache" process (so that files can be written or appended to).
         //
         // Notes:
-        //      This should always be included after any fopen, file_put_contents, or after any call that opens a file
-        //          that potentially both root and apache would write to. This can be invoked using either the "root"
-        //          user (if running from a putty session) or "apache" (if running from Moodle).
-        //      If invoked using "apache" AND the log files are created by "apache", all is well (because "root" will
-        //          append to the log files with no errors). If invoked using "apache" AND the log files were created
-        //          by "root", the web process will FAIL ("apache" will not be able to append to a log file created by "root").
-        //      If invoked using "root", all is well (because "root" will either create or append to the log files with no
-        //            errors).
+        // This should always be included after any fopen, file_put_contents, or after any call that opens a file
+        // that potentially both root and apache would write to. This can be invoked using either the "root"
+        // user (if running from a putty session) or "apache" (if running from Moodle).
+        // If invoked using "apache" AND the log files are created by "apache", all is well (because "root" will
+        // append to the log files with no errors). If invoked using "apache" AND the log files were created
+        // by "root", the web process will FAIL ("apache" will not be able to append to a log file created by "root").
+        // If invoked using "root", all is well (because "root" will either create or append to the log files with no
+        // errors).
         //
-        //  Call posix_getpwuid(posix_geteuid()) to find the user account currently running the dcgsbautouser script
-        //      (normally either "root" or "apache").
+        // Call posix_getpwuid(posix_geteuid()) to find the user account currently running the dcgsbautouser script
+        // (normally either "root" or "apache").
         //
         // Typical logic would be similar to the following:
         //
-        //  if ($debugging->username === 'root') {
-        //      chown($debugging->fqlog, 'apache');
-        //  }
-        // SWTC ********************************************************************************
-        $current_user = posix_getpwuid(posix_geteuid());
-        $this->username = $current_user['name'];
+        // if ($debugging->username === 'root') {
+        // chown($debugging->fqlog, 'apache');
+        // }
+        // SWTC ********************************************************************************.
+        $currentuser = posix_getpwuid(posix_geteuid());
+        $this->username = $currentuser['name'];
     }
 
-
-    function set_fqlog() {
+    public function set_fqlog() {
         global $CFG;
 
-        // SWTC ********************************************************************************
-        // $PATHS holds all important file location information. Even though this information may only be used in a few functions,
+        // SWTC ********************************************************************************.
+        // $paths holds all important file location information. Even though this information may only be used in a few functions,
         // putting information in a global variable makes it easier to maintain.
         // Remember that the pathing is referenced off of the $CFG->dataroot/swtc/sb folder (see above).
         //
         // The following folder structure must be created under /moodledata/repository/ ($CFG->dataroot/repository/):
-        //      debug
-        //      debug/logs
+        // debug
+        // debug/logs
         //
-        //      AND the "debug" repository must be created in LMS (pointing to $CFG->dataroot/repository/debug).
+        // AND the "debug" repository must be created in LMS (pointing to $CFG->dataroot/repository/debug).
         //
-        //      AND Linux filesystem ownership and group should be set to "root:root" for all folders and sub-folders.
+        // AND Linux filesystem ownership and group should be set to "root:root" for all folders and sub-folders.
         //
-        // SWTC ********************************************************************************
-        // To use: $PATHS['debug_logs']
-        // $PATHS = array('debug_folder' => "/lenovo_data/debug/",
-        //                            'debug_log_folder' => "/lenovo_data/debug/logs/",
-        //                            );
-        // SWTC *****************************************************************************
+        // SWTC ********************************************************************************.
+        // To use: $paths['debug_logs']
+        // $paths = array('debug_folder' => "/lenovo_data/debug/",
+        // 'debug_log_folder' => "/lenovo_data/debug/logs/",
+        // );
+        // SWTC ********************************************************************************.
         // 10/11/19 - Changed debug log file location to be off of $CFG->dataroot.
-        // SWTC *****************************************************************************
-        $PATHS = array('debug_folder' => $CFG->dataroot . '/repository/debug/',
+        // SWTC ********************************************************************************.
+        $paths = array('debug_folder' => $CFG->dataroot . '/repository/debug/',
                   'debug_log_folder' => $CFG->dataroot . '/repository/debug/logs/');
 
-        // All log files, like error logs, are written to $PATHS['debug_log_folder'].
-        //      Notes:
-        //          $CFG->tempdir is configured to be "/moodledata/temp", so no need to send that
-        //              part of the path when calling make_temp_directory.
-        //          "Regular" debug log file is named "debug_yyyymmdd.log".
-        //          Detailed debug log file is named "debug_yyyymmdd.detail.log".
-        //          make_temp_directory is defined in /lib/setuplib.php.
-        //          Example call (from csvlib_class.php): $filename = make_temp_directory('csvimport/'.$type.'/'.$USER->id);
-        // $logpath =  "swtc" . $dsep . "sb" . $dsep . "logs";
-        $logpath = $PATHS['debug_log_folder'];
-        $debug_ext = date("Ymd").'.html';                // 04/21/18 - Experimenting...
-        $debug_filename = "debug_".$debug_ext;       // "Regular" debug log file is named "debug_yyyymmdd.log".
+        // All log files, like error logs, are written to $paths['debug_log_folder'].
+        // Notes:
+        // $CFG->tempdir is configured to be "/moodledata/temp", so no need to send that
+        // part of the path when calling make_temp_directory.
+        // "Regular" debug log file is named "debug_yyyymmdd.log".
+        // Detailed debug log file is named "debug_yyyymmdd.detail.log".
+        // make_temp_directory is defined in /lib/setuplib.php.
+        // Example call (from csvlib_class.php): $filename = make_temp_directory('csvimport/'.$type.'/'.$USER->id);
+        // $logpath =  "swtc" . $dsep . "sb" . $dsep . "logs".
+        $logpath = $paths['debug_log_folder'];
+        // Regular debug log file is named "debug_yyyymmdd.log".
+        $debugfilename = "debug_" . date("Ymd") .'.html';
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Check that $logpath was correctly created.
         if (file_exists($logpath) && is_dir($logpath)) {
             // Log, and other, file information.
-            $this->fqlog = $logpath . $debug_filename;
+            $this->fqlog = $logpath . $debugfilename;
         } else {
             // TODO: How to display error? Like purgecache?
-            // echo $OUTPUT->notification(get_string('success'), 'notifysuccess');
             $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
             $this->logmessage("Error opening folder ($logpath). Exiting.", 'display');
             $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
         }
     }
 
-    function set_fqdetailed() {
+    public function set_fqdetailed() {
         global $CFG;
 
-        // SWTC ********************************************************************************
-        // $PATHS holds all important file location information. Even though this information may only be used in a few functions,
+        // SWTC ********************************************************************************.
+        // $paths holds all important file location information. Even though this information may only be used in a few functions,
         // putting information in a global variable makes it easier to maintain.
         // Remember that the pathing is referenced off of the $CFG->dataroot/swtc/sb folder (see above).
         //
         // The following folder structure must be created under /moodledata/repository/ ($CFG->dataroot/repository/):
-        //      debug
-        //      debug/logs
+        // debug
+        // debug/logs
         //
-        //      AND the "debug" repository must be created in LMS (pointing to $CFG->dataroot/repository/debug).
+        // AND the "debug" repository must be created in LMS (pointing to $CFG->dataroot/repository/debug).
         //
-        //      AND Linux filesystem ownership and group should be set to "root:root" for all folders and sub-folders.
+        // AND Linux filesystem ownership and group should be set to "root:root" for all folders and sub-folders.
         //
-        // SWTC ********************************************************************************
-        // To use: $PATHS['debug_logs']
-        // $PATHS = array('debug_folder' => "/lenovo_data/debug/",
-        //                            'debug_log_folder' => "/lenovo_data/debug/logs/",
-        //                            );
-        // SWTC *****************************************************************************// SWTC
+        // SWTC ********************************************************************************.
+        // To use: $paths['debug_logs']
+        // $paths = array('debug_folder' => "/lenovo_data/debug/",
+        // 'debug_log_folder' => "/lenovo_data/debug/logs/",
+        // );
+        // SWTC ********************************************************************************.
         //
-        // SWTC *****************************************************************************// SWTC
-        $PATHS = array('debug_folder' => $CFG->dataroot . '/repository/debug/',
+        // SWTC ********************************************************************************.
+        $paths = array('debug_folder' => $CFG->dataroot . '/repository/debug/',
                       'debug_log_folder' => $CFG->dataroot . '/repository/debug/logs/');
 
-        // All log files, like error logs, are written to $PATHS['debug_log_folder'].
-        //      Notes:
-        //          $CFG->tempdir is configured to be "/moodledata/temp", so no need to send that
-        //              part of the path when calling make_temp_directory.
-        //          "Regular" debug log file is named "debug_yyyymmdd.log".
-        //          Detailed debug log file is named "debug_yyyymmdd.detail.log".
-        //          make_temp_directory is defined in /lib/setuplib.php.
-        //          Example call (from csvlib_class.php): $filename = make_temp_directory('csvimport/'.$type.'/'.$USER->id);
-        $logpath = $PATHS['debug_log_folder'];
-        $detail_ext = date("Ymd").'.detailed.html';    // 04/21/18 - Experimenting...
-        $detail_filename = "debug_".$detail_ext;       // Detailed debug log file is named "debug_yyyymmdd.details.log".
+        // All log files, like error logs, are written to $paths['debug_log_folder'].
+        // Notes:
+        // $CFG->tempdir is configured to be "/moodledata/temp", so no need to send that
+        // part of the path when calling make_temp_directory.
+        // "Regular" debug log file is named "debug_yyyymmdd.log".
+        // Detailed debug log file is named "debug_yyyymmdd.detail.log".
+        // make_temp_directory is defined in /lib/setuplib.php.
+        // Example call (from csvlib_class.php): $filename = make_temp_directory('csvimport/'.$type.'/'.$USER->id).
+        $logpath = $paths['debug_log_folder'];
+        // Detailed debug log file is named "debug_yyyymmdd.details.log".
+        $detailfilename = "debug_" . date("Ymd") . '.detailed.html';
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.***.
         // Check that $logpath was correctly created.
         if (file_exists($logpath) && is_dir($logpath)) {
             // Log, and other, file information.
-            $this->fqdetailed = $logpath . $detail_filename;
+            $this->fqdetailed = $logpath . $detailfilename;
         } else {
             // TODO: How to display error? Like purgecache?
-            // echo $OUTPUT->notification(get_string('success'), 'notifysuccess');
             $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
             $this->logmessage("Error opening folder ($logpath). Exiting.", 'display');
             $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
@@ -391,8 +378,8 @@ class swtc_debug {
      * All Getter methods for all properties.
      *
      * Getter methods:
-     *      @param N/A
-     *      @return value
+     * @param N/A
+     * @return value
      *
      * History:
      *
@@ -406,30 +393,27 @@ class swtc_debug {
         return $debug;
     }
 
-    function get_counter() {
+    public function get_counter() {
         return $this->counter;
     }
 
-    function get_events() {
+    public function get_events() {
         return $this->events;
     }
 
     /*
      * Get the fqlog log file name. REQUIRES $SESSION->SWTC->DEBUG to be set.
      **/
-    function get_fqlog() {
+    public function get_fqlog() {
         return $this->fqlog;
     }
 
     /*
      * Get the fqdetailed log file name. REQUIRES $SESSION->SWTC->DEBUG to be set.
      **/
-    function get_fqdetailed() {
+    public function get_fqdetailed() {
         return $this->fqdetailed;
     }
-
-
-
 
     /**
      * Print log headers ("begin") or footer ("end").
@@ -443,15 +427,14 @@ class swtc_debug {
      * 10/21/20 - Initial writing.
      *
      **/
-    function logmessage_header($option) {
-        // global $CFG, $OUTPUT, $PAGE, $SESSION;
+    public function logmessage_header($option) {
 
         $messages = array();        // Temporary array to queue messages to be written to log file locations.
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Setup the second-level $DEBUG global variable.
-        //      To use: $debug = $this->get_debug();
-        // SWTC ********************************************************************************
+        // To use: $debug = $this->get_debug();
+        // SWTC ********************************************************************************.
         $debug = $this->get_debug();
 
         // Setup date and time variables.
@@ -460,16 +443,11 @@ class swtc_debug {
 
         switch ($option) {
             case 'begin':
-                // echo $OUTPUT->header() = $messages[];
-                // $messages[] = $header;
                 $messages[] = get_string('debug_string', 'local_swtc');
                 $messages[] = "Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***";
                 $messages[] = get_string('debug_string', 'local_swtc');
                 $messages[] = "Starting debugging ===1.debug_start_logfile=== $da ";
-                // $messages[] = "Timestamp is :$today.==1.debug_start===.";
                 $messages[] = "Timestamp is :" .$today->format('H:i:s.u').".==1.debug_start===.";
-                // $messages[] = "Time start is :$time_begin.==1.debug_start===.";
-                // $messages[] = "Log filename is :$debug->debug_fqlog.==1.debug_start===.";
                 $messages[] = "Log filename is :". $debug->fqlog .".==1.debug_start===.";
                 $messages[] = "Detailed log filename is :". $debug->fqdetailed .".==1.debug_start===.";
                 // Write the above header text to 'logfile'. Will create a new file (instead of appending to it).
@@ -484,15 +462,6 @@ class swtc_debug {
                 $messages[] = "About to print SESSION->SWTC->DEBUG. ==1.debug_start===.";
                 $messages[] = print_r($debug, true);
                 $messages[] = "Finished printing SESSION->SWTC->DEBUG. ==1.debug_start===.";
-                //  $messages[] = "About to print SESSION->SWTC->DEBUG using var_dump. ==1.debug_start===.";
-                //  $messages[] = var_dump(swtc_get_debug());
-                //  $messages[] = "Finished printing SESSION->SWTC->DEBUG using var_dump. ==1.debug_start===.";
-                //  $messages[] = "About to print SESSION->SWTC->DEBUG using var_export. ==1.debug_start===.";
-                //  $messages[] = var_export(swtc_get_debug(), true);
-                //  $messages[] = "Finished printing SESSION->SWTC->DEBUG using var_export. ==1.debug_start===.";
-                // $messages[] = "About to print SESSION->SWTC->DEBUG using print_object. ==1.debug_start===.";
-                // $messages[] = print_object(swtc_get_debug(), true);       // Note: Also goes to screen.
-                // $messages[] = "Finished printing SESSION->SWTC->DEBUG using print_object. ==1.debug_start===.";
                 // Write the above header text to 'detailed'. Will create a new file (instead of appending to it).
                 $this->logmessage($messages, 'detailed', 'create');
                 unset($messages);
@@ -500,16 +469,11 @@ class swtc_debug {
 
             case 'end':
                 // Will write to detailed logfile.
-                // cli_write($text, $EBG_DEBUG->detailed);
                 break;
 
             default:
-                // unknown type
+                // Unknown type.
         }
-
-
-        // Write the header text to both log files. Will create a new file (instead of appending to it).
-        // $this->logmessage($messages, 'both', 'create');
 
         return;
 
@@ -528,38 +492,34 @@ class swtc_debug {
      * 10/14/20 - Initial writing.
      *
      **/
-    function logmessage($messages, $option, $flags = null) {
+    public function logmessage($messages, $option, $flags = null) {
         global $USER;
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Setup the second-level $USER global variable.
-        //      To use: swtc_user = new swtc_user($USER);
-        // SWTC ********************************************************************************
-        $swtc_user = swtc_get_user([
+        // To use: swtcuser = new swtc_user($USER);
+        // SWTC ********************************************************************************.
+        $swtcuser = swtc_get_user([
             'userid' => $USER->id,
             'username' => $USER->username]);
 
-        // print_object("in logmessage; about to print swtc_user");        // SWTC-debug
-    	// print_object($swtc_user);		// SWTC-debug
-        // die;
-
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Setup the second-level $DEBUG global variable.
-        //      To use: $debug = $this->get_debug();
-        // SWTC ********************************************************************************
+        // To use: $debug = $this->get_debug();
+        // SWTC ********************************************************************************.
         $debug = $this->get_debug();
 
         if (!isset($debug)) {
             return false;   // SWTC is not set yet.
         } else {
 
-            $tmp_messages = array();
+            $tmpmessages = array();
 
-            //****************************************************************************************
+            // SWTC ********************************************************************************.
             // Assign the correct end of line character:
-            //      If writing to either of the log files (or both for that matter), the end of line character is "\n" (or "<br />").
-            //      If writing to the screen, the end of line character is PHP_EOL.
-            //****************************************************************************************
+            // If writing to either of the log files (or both for that matter), the end of line character is "\n" (or "<br />").
+            // If writing to the screen, the end of line character is PHP_EOL.
+            // SWTC ********************************************************************************.
             if (($option === 'logfile' ) OR ($option === 'detailed') OR ($option === 'both')) {
                 $eol = "\n";
             } else {
@@ -572,52 +532,49 @@ class swtc_debug {
             // Set flags. If flags is already set, it can only be 'create'.
             if (!isset($flags)) {
                 $flags = FILE_APPEND | LOCK_EX;
-            } else {
-                // Leave flags set at whatever value it has.
             }
 
-            //****************************************************************************************
+            // SWTC ********************************************************************************.
             // If writing to either of the log files (or both for that matter), the end of line character is "\n".
-            //      Note: If writing to the screen, loop through messages and add a PHP_EOL and the end of each line.
-            //****************************************************************************************
+            // Note: If writing to the screen, loop through messages and add a PHP_EOL and the end of each line.
+            // SWTC ********************************************************************************.
             // If $messages is an array, loop through adding the $eol.
             if (is_array($messages)) {
                 foreach ($messages as $message) {
-                    $tmp_messages[] = $swtc_user->set_timestamp() . " " . $message . $eol;
-                    // $tmp_messages[] = $swtc_user->set_timezone() . " " . $message . $eol;
+                    $tmpmessages[] = $swtcuser->set_timestamp() . " " . $message . $eol;
                 }
 
                 // Assign back to messages.
-                $messages = $tmp_messages;
-                unset($tmp_messages);
+                $messages = $tmpmessages;
+                unset($tmpmessages);
             } else {
-                // $messages is just one text string. Place $eol character at the end and move on.
-                // 06/03/18 - Added timestamp at the start of each message.
-                $tmp_messages[] = $swtc_user->set_timestamp() . " " . $messages . $eol;
-                // $tmp_messages[] = $swtc_user->set_timezone() . " " . $messages . $eol;
+                // Messages is just one text string. Place $eol character at the end and move on.
+                $tmpmessages[] = $swtcuser->set_timestamp() . " " . $messages . $eol;
 
                 // Assign back to messages.
-                $messages = $tmp_messages;
-                unset($tmp_messages);
+                $messages = $tmpmessages;
+                unset($tmpmessages);
             }
 
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // For each filesystem option, remember to flock and unlock before using file_put_contents.
-            //      Note: Use append option file_put_contents($file, print_r($array, true), FILE_APPEND)
-            //     Per the PHP documentation, file_put_contents is function is identical to calling fopen(), fwrite() and fclose()
-            //         successively to write data to a file.
+            // Note: Use append option file_put_contents($file, print_r($array, true), FILE_APPEND)
+            // Per the PHP documentation, file_put_contents is function is identical to calling fopen(), fwrite() and fclose()
+            // successively to write data to a file.
             //
             // From PHP documentation:
-            //  flags
-            //  The value of flags can be any combination of the following flags (with some restrictions), joined with the binary OR (|) operator.
-            //      FILE_USE_INCLUDE_PATH − Search for filename in the include directory.
-            //      FILE_APPEND − If file filename already exists, append the data to the file instead of overwriting it.
-            //      LOCK_EX − Acquire an exclusive lock on the file while proceeding to the writing.
-            //      FILE_TEXT − data is written in text mode. This flag cannot be used with FILE_BINARY. This flag is only available since PHP 6.
-            //      FILE_BINARY − data will be written in binary mode. This is the default setting and cannot be used with FILE_TEXT.
-            //          This flag is only available since PHP 6
+            // flags
+            // The value of flags can be any combination of the following flags (with some restrictions),
+            // joined with the binary OR (|) operator.
+            // FILE_USE_INCLUDE_PATH − Search for filename in the include directory.
+            // FILE_APPEND − If file filename already exists, append the data to the file instead of overwriting it.
+            // LOCK_EX − Acquire an exclusive lock on the file while proceeding to the writing.
+            // FILE_TEXT − data is written in text mode. This flag cannot be used with FILE_BINARY.
+            // This flag is only available since PHP 6.
+            // FILE_BINARY − data will be written in binary mode. This is the default setting and cannot be used with FILE_TEXT.
+            // This flag is only available since PHP 6
             //
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             switch ($option) {
                 case 'logfile':
                     // Will write to $fqlog.
@@ -626,7 +583,7 @@ class swtc_debug {
                         file_put_contents($fqlog, $messages);
                         return;
                     } else {
-                       file_put_contents($fqlog, $messages, $flags);
+                        file_put_contents($fqlog, $messages, $flags);
                     }
                     break;
 
@@ -654,7 +611,8 @@ class swtc_debug {
 
                 case 'display':
                     // 04/26/18: TODO: Not sure how to print to screen.
-                    // Note: Since we are printing in a web browser (i.e. HTML), to get a line feed, use "\n" at the end of the line in the calling routine.
+                    // Note: Since we are printing in a web browser (i.e. HTML), to get a line feed,
+                    // use "\n" at the end of the line in the calling routine.
                     // Will output to STDOUT.
                     // cli_write($text.PHP_EOL);
                     // $text = $text.PHP_EOL;
@@ -684,7 +642,7 @@ class swtc_debug {
                     break;
 
                 default:
-                    // unknown type
+                    // Unknown type.
             }
         }
 

@@ -1,5 +1,4 @@
 <?php
-// declare(strict_types=1); // For debugging.
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -20,7 +19,7 @@
  *
  * @package    local
  * @subpackage swtc/lib/swtc_userlib.php
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  *
@@ -30,19 +29,10 @@
  *
  **/
 
-// namespace local_swtc;        // 10/21/20
-
 defined('MOODLE_INTERNAL') || die();
 
 use local_swtc\swtc_user;
 use local_swtc\swtc_debug;
-
-// use stdClass;  // 10/21/20
-// use core_date;
-// use core_user;
-// use DateTime;
-
-// require_once($CFG->dirroot.'/local/swtc/lib/swtclib.php');
 
 /**
  * Set a reference to SESSION->SWTC->USER.
@@ -60,68 +50,42 @@ use local_swtc\swtc_debug;
 function swtc_set_user($userid, $relateduserid = null) {
     global $SESSION;
 
-    // SWTC *****************************************************************************
+    // SWTC ********************************************************************************.
     // Setup the SWTC variable.
-    //      Example: /lib/classes/session/manager.php starting around line 86.
-    // SWTC *****************************************************************************
+    // Example: /lib/classes/session/manager.php starting around line 86.
+    // SWTC ********************************************************************************.
     $SESSION->SWTC = new stdClass();
 
-    // SWTC *****************************************************************************
+    // SWTC ********************************************************************************.
     // Setup the SWTC->USER variable.
-    // SWTC *****************************************************************************
+    // SWTC ********************************************************************************.
     $SESSION->SWTC->USER = new swtc_user();
 
-    // SWTC ********************************************************************************
-	// Set the additional swtc_user properties.
-	// SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
+    // Set the additional swtc_user properties.
+    // SWTC ********************************************************************************.
     $SESSION->SWTC->USER->set_userid($userid);
 
-    // SWTC ********************************************************************************
-	// Load the user's profile data.
-	// SWTC ********************************************************************************
-	$temp = new stdClass();
-	$temp->id = $userid;
-	profile_load_data($temp);
-	// print_object("In swtc_user __construct; about to print profile data');		// 10/16/20 - SWTC
-	// print_object($temp);		// 10/16/20 - SWTC
-	// $this->user_access_type = $temp->get_string('profile_field_accesstype', 'local_swtc');
-	$SESSION->SWTC->USER->set_user_access_type($temp->profile_field_accesstype);
+    // SWTC ********************************************************************************.
+    // Load the user's profile data.
+    // SWTC ********************************************************************************.
+    $temp = new stdClass();
+    $temp->id = $userid;
+    profile_load_data($temp);
+    $SESSION->SWTC->USER->set_user_access_type($temp->profile_field_accesstype);
 
     // Note: $this->portfolio is set in definition.
     $SESSION->SWTC->USER->set_timestamp();
     $SESSION->SWTC->USER->set_timezone();
-	// $this->user_access_type2 = (null !== $temp->get_string('profile_field_accesstype2', 'local_swtc')) ? $temp->get_string('profile_field_accesstype2', 'local_swtc') : null;
-	$SESSION->SWTC->USER->set_user_access_type2($temp->profile_field_accesstype2);
+    $SESSION->SWTC->USER->set_user_access_type2($temp->profile_field_accesstype2);
 
-    // SWTC ********************************************************************************
-    // Copy this object to $SESSION->SWTC->USER.
-    // SWTC ********************************************************************************
-    // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
-    // $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
-    // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-    // print_object($this);		// 10/16/20 - SWTC
-
-    // print_object("In swtc_set_user; about to print SESSION->SWTC->USER");
-    // print_object($SESSION->SWTC->USER);
-    // print_object("In swtc_set_user; about to print backtrace");
-    // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-    // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
-    // debug_print_backtrace();
     return $SESSION->SWTC->USER;
-
-
-    // $swtc_user = new swtc_user($user);       // 10/24/20
-    // $swtc_user = swtc_user($user);      // 10/24/20
-    // print_object("In swtc_get_user; about to print backtrace");
-    // print_object(format_backtrace(debug_backtrace(), true));
-    // print_object("In swtc_get_user; about to print swtc_user");		// 10/16/20 - SWTC
-    // print_object($swtc_user);		// 10/16/20 - SWTC
 
 }
 
 /**
-* Get user instance (returns $SESSION->SWTC->USER) if set.
-*      If not set, call swtc_set_user.
+ * Get user instance (returns $SESSION->SWTC->USER) if set.
+ *      If not set, call swtc_set_user.
  *
  * @param $user
  *
@@ -136,63 +100,32 @@ function swtc_set_user($userid, $relateduserid = null) {
 function swtc_get_user($args=array()) {
     global $SESSION, $USER;
 
-    // print_object($args);
-    // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-    // if (isset(debug_backtrace()[1])) {
-    //     print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
-    // }
-
     $userid = $args['userid'] ?? null;
     $username = $args['username'] ?? null;
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // If $SESSION is not set, continue.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     if (is_object($SESSION)) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // If $SWTC->USER is not set, continue.
-        // SWTC ********************************************************************************
-        // print_object("In swtc_userlib->swtc_get_user; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
-        // print_object($SESSION);		// 10/16/20 - SWTC
+        // SWTC ********************************************************************************.
         if (!isset($SESSION->SWTC)) {
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // If $userid is not set, set it to $USER->id.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $userid = (isset($userid)) ? $userid : $USER->id;
 
-            // SWTC *****************************************************************************
+            // SWTC ********************************************************************************.
             // Setup the SWTC->USER variable.
-            // SWTC *****************************************************************************
-            // print_object("In swtc_get_user; about to call swtc_set_user");
+            // SWTC ********************************************************************************.
             $SESSION->SWTC->USER = swtc_set_user($userid);
 
             $SESSION->SWTC->USER->set_username($username);
         }
 
-        // SWTC ********************************************************************************
-        // Copy this object to $SESSION->SWTC->USER.
-        // SWTC ********************************************************************************
-        // $SESSION->SWTC->USER = clone($this);     // 10/19/20 - SWTC
-        // $SESSION->SWTC->USER = $this;       // 10/19/20 - SWTC
-        // print_object("In not set SWTC->USER; about to print this");		// 10/16/20 - SWTC
-        // print_object($this);		// 10/16/20 - SWTC
-
-        // print_object("In swtc_get_user; about to print SESSION->SWTC->USER");
-        // print_object($SESSION->SWTC->USER);
-        // print_object("In swtc_get_user; about to print backtrace");
-        // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-        // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
-
         return $SESSION->SWTC->USER;
     }
-
-    // $swtc_user = new swtc_user($user);       // 10/24/20
-    // $swtc_user = swtc_user($user);      // 10/24/20
-    // print_object("In swtc_get_user; about to print backtrace");
-    // print_object(format_backtrace(debug_backtrace(), true));
-    // print_object("In swtc_get_user; about to print swtc_user");		// 10/16/20 - SWTC
-    // print_object($swtc_user);		// 10/16/20 - SWTC
-
 }
 
 /**
@@ -206,36 +139,30 @@ function swtc_get_user($args=array()) {
 function swtc_set_debug() {
     global $SESSION;
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
-    //      (set in local/swtc/settings.php) to enable debugging from this point forward.
+    // (set in local/swtc/settings.php) to enable debugging from this point forward.
     //
     // Setup the second-level $DEBUG global variable only if $debug is available.
-    //      To use: $debug = $SESSION->SWTC->DEBUG;
-    // SWTC ********************************************************************************
-    // SWTC *****************************************************************************
+    // To use: $debug = $SESSION->SWTC->DEBUG;
+    // SWTC ********************************************************************************.
+    // SWTC ********************************************************************************.
     // Setup the SWTC->DEBUG variable.
-    // SWTC *****************************************************************************
+    // SWTC ********************************************************************************.
     $SESSION->SWTC->DEBUG = new swtc_debug();
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Set the fully qualified log file names.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     $SESSION->SWTC->DEBUG->set_fqlog();
     $SESSION->SWTC->DEBUG->set_fqdetailed();
 
     $SESSION->SWTC->DEBUG->set_username();
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Always output standard header information.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     $SESSION->SWTC->DEBUG->logmessage_header('begin');
-
-    // print_object("In swtc_set_debug; about to print SESSION->SWTC->DEBUG");
-    // print_object($SESSION->SWTC->DEBUG);
-    // print_object("In swtc_set_debug; about to print backtrace");
-    // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-    // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
 
     return $SESSION->SWTC->DEBUG;
 
@@ -253,43 +180,27 @@ function swtc_set_debug() {
 function swtc_get_debug() {
     global $SESSION;
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
-    //      (set in local/swtc/settings.php) to enable debugging from this point forward.
+    // (set in local/swtc/settings.php) to enable debugging from this point forward.
     //
     // Setup the second-level $DEBUG global variable only if $debug is available.
-    //      To use: $debug = $SESSION->SWTC->DEBUG;
-    // SWTC ********************************************************************************
-    // SWTC ********************************************************************************
+    // To use: $debug = $SESSION->SWTC->DEBUG;
+    // SWTC ********************************************************************************.
+    // SWTC ********************************************************************************.
     // If $SESSION is not set, continue.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     if (is_object($SESSION)) {
         if (get_config('local_swtc', 'swtcdebug')) {
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // If $SWTC->USER is not set, continue.
-            // SWTC ********************************************************************************
-            // print_object("In swtc_userlib->swtc_get_debug; did I get here 1; about to print SESSION");		// 10/16/20 - SWTC
-            // print_object($SESSION);		// 10/16/20 - SWTC
+            // SWTC ********************************************************************************.
             if (!isset($SESSION->SWTC->DEBUG)) {
-                // print_object("In swtc_get_user; did I get here 2");		// 10/16/20 - SWTC
-                // SWTC *****************************************************************************
-                // Setup the SWTC variable.
-                //      Example: /lib/classes/session/manager.php starting around line 86.
-                // SWTC *****************************************************************************
-                // $debug = new stdClass();
-
-                // SWTC *****************************************************************************
+                // SWTC ********************************************************************************.
                 // Setup the SWTC->DEBUG variable.
-                // SWTC *****************************************************************************
-                // print_object("In swtc_get_debug; about to call swtc_set_debug");
+                // SWTC ********************************************************************************.
                 $SESSION->SWTC->DEBUG = swtc_set_debug();
             }
-
-            // print_object("In swtc_get_debug; about to print SESSION->SWTC->DEBUG");
-            // print_object($SESSION->SWTC->DEBUG);
-            // print_object("In swtc_get_debug; about to print backtrace");
-            // print_r("Current function : " . debug_backtrace()[0]['function'] . ".<br />");
-            // print_r("Calling function : " . debug_backtrace()[1]['function'] . ".<br />");
         } else {
             $SESSION->SWTC->DEBUG = null;
         }

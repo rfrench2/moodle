@@ -1,18 +1,17 @@
 <?php
-// declare(strict_types=1); // For debugging.
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General protected License as published by
+// it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General protected License for more details.
+// GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General protected License
+// You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
@@ -20,7 +19,7 @@
  *
  * @package    local
  * @subpackage swtc/lib/portfolio_access_settings.php
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -31,8 +30,7 @@
  *
  **/
 
-use local_swtc\swtc_user;
-// use local_swtc\portfolio_access_table;
+use local_swtc\swtcuser;
 
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');
@@ -46,8 +44,8 @@ global $USER, $DB;
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 
 // SWTC ********************************************************************************.
-// SWTC swtc_user and debug variables.
-$swtc_user = swtc_get_user([
+// SWTC swtcuser and debug variables.
+$swtcuser = swtc_get_user([
     'userid' => $USER->id,
     'username' => $USER->username]);
 $debug = swtc_get_debug();
@@ -56,9 +54,9 @@ $baseurl = new moodle_url('/local/swtc/lib/portfolio_access_settings.php');
 // SWTC ********************************************************************************.
 
 if (isset($debug)) {
- $messages[] = "In /local/swtc/lib/portfolio_access_settings.php ===enter===";
- $debug->logmessage($messages, 'both');
- unset($messages);
+    $messages[] = "In /local/swtc/lib/portfolio_access_settings.php ===enter===";
+    $debug->logmessage($messages, 'both');
+    unset($messages);
 }
 
 require_login();
@@ -81,7 +79,7 @@ $PAGE->set_title($pagetitle);
 
 // First create the form.
 $args = array(
-    'user' => $swtc_user,
+    'user' => $swtcuser,
     'tablename' => $tablename,
     'roleid' => $roleid,
     'catid' => $catid
@@ -89,18 +87,15 @@ $args = array(
 
 $settingsform = new portfolio_access_settings_form(null, $args);
 
-// Note: For debugging, use the following line:
-// if (optional_param('submit', false, PARAM_BOOL) && ($formdata = data_submitted()) && confirm_sesskey()) {
+// Note: For debugging, use the following line.
 if (optional_param('submit', false, PARAM_BOOL) && data_submitted() && confirm_sesskey()) {
-    // Note: For debugging, use the following line:
-    // $settingsform->process_submission($formdata);
+    // Note: For debugging, use the following line.
     $settingsform->process_submission();
     redirect($baseurl, 'Portfolio access settings have been saved.');
 }
 
 if (optional_param('portapply', false, PARAM_BOOL) && data_submitted() && confirm_sesskey()) {
-    // Note: For debugging, use the following line:
-    // $settingsform->process_submission($formdata);
+    // Note: For debugging, use the following line.
     $settingsform->process_submission('portapply');
     redirect($baseurl, 'Portfolio access settings have been saved. Access to all top-level portfolios have been updated.');
 }
@@ -120,7 +115,8 @@ echo '<input type="hidden" name="sesskey" value="' . sesskey() . '" />';
 echo html_writer::table($table);
 echo '<div class="buttons">';
 echo '<input type="submit" class="btn btn-primary" name="submit" value="' . get_string('savechanges') . '"/>';
-echo '&nbsp;&nbsp;<input type="submit" class="btn btn-primary" name="portapply" value="' . get_string('portfolio_access_button', 'local_swtc') . '"/>';
+echo '&nbsp;&nbsp;<input type="submit" class="btn btn-primary" name="portapply" value="' .
+    get_string('portfolio_access_button', 'local_swtc') . '"/>';
 echo '</div></form>';
 
 echo $OUTPUT->footer();

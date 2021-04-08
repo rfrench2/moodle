@@ -1,5 +1,4 @@
 <?php
-// declare(strict_types=1); // For debugging.
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*****************************************************************************
+/**
  * Version details
  *
  * @package    local
@@ -33,21 +32,17 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// use \stdClass;       // 10/29/20 - SWTC
-
-// SWTC ********************************************************************************
+// SWTC ********************************************************************************.
 // Include SWTC LMS classes.
-// SWTC ********************************************************************************
+// SWTC ********************************************************************************.
 use \format_swtccustom\output\htmlpage;
 
-// SWTC ********************************************************************************
+// SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
-// SWTC ********************************************************************************
+// SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/swtclib.php');
 
-// require_once($CFG->dirroot. '/config.php');		// 10/14/20
 require_once($CFG->libdir. '/accesslib.php');
 require_once($CFG->dirroot. '/user/profile/lib.php');
 require_once($CFG->dirroot.'/enrol/locallib.php');
@@ -64,13 +59,13 @@ require_once($CFG->dirroot. '/user/lib.php');
  *
  * History:
  *
- *  11/08/18 - Original version.
+ * 11/08/18 - Original version.
  *
  */
-function local_swtc_find_portfolio_name($portfolio_name, $cats) {
+function local_swtc_find_portfolioname($portfolioname, $cats) {
     $tmp = array();
 
-    $cat = $cats[array_search($portfolio_name, array_column($cats, 'catname'))];
+    $cat = $cats[array_search($portfolioname, array_column($cats, 'catname'))];
 
     $tmp['catid'] = $cat['catid'];
     $tmp['catname'] = $cat['catname'];
@@ -94,8 +89,8 @@ function local_swtc_find_portfolio_name($portfolio_name, $cats) {
  *  11/28/18 - Original version.
  *
  */
-function local_swtc_find_context_from_name($portfolio_name, $cats) {
-    $cat = $cats[array_search($portfolio_name, array_column($cats, 'catname'))];
+function local_swtc_find_context_from_name($portfolioname, $cats) {
+    $cat = $cats[array_search($portfolioname, array_column($cats, 'catname'))];
     return $cat['context'];
 }
 
@@ -103,10 +98,10 @@ function local_swtc_find_context_from_name($portfolio_name, $cats) {
  * If PremierSupport or ServiceDelivery manager or administrator ventures outside their own portfolio, they are no longer
  *          considered a manager or administrator. Substitute either PremierSupport-student or ServiceDelivery-student as role.
  *
- * @param $cat		A catlist variable.
- * @param $user		A user variable.
+ * @param $cat        A catlist variable.
+ * @param $user        A user variable.
  *
- * @return $temp_user	$user (passed in) with the rolename and roleid changed if required.
+ * @return $temp_user    $user (passed in) with the rolename and roleid changed if required.
  *
  *
  * History:
@@ -117,46 +112,44 @@ function local_swtc_find_context_from_name($portfolio_name, $cats) {
 function local_swtc_change_user_access($cat, &$user) {
     global $DB;
 
-    // SWTC ********************************************************************************
-    // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user([
+    // SWTC ********************************************************************************.
+    // SWTC LMS swtcuser and debug variables.
+    $swtcuser = swtc_get_user([
         'userid' => $user->id,
         'username' => $user->username]);
     $debug = swtc_set_debug();
 
-    // Other Lenovo variables.
+    // Other SWTC variables.
     $roleshortname = null;
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
 
     if (isset($debug)) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Always output standard header information.
-        // SWTC ********************************************************************************
-        $messages[] = "Lenovo ********************************************************************************";
+        // SWTC ********************************************************************************.
+        $messages[] = "SWTC ********************************************************************************";
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_change_user_access.enter.";
-        $messages[] = "Lenovo ********************************************************************************";
-        $messages[] = "swtc_user array follows :";
-        $messages[] = print_r($swtc_user, true);
-        $messages[] = "swtc_user array ends.";
-        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = "swtcuser array follows :";
+        $messages[] = print_r($swtcuser, true);
+        $messages[] = "swtcuser array ends.";
         $debug->logmessage($messages, 'both');
         unset($messages);
-	}
+    }
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Remember to set the roleid.
-	// 12/19/18 - Instead of directly changing the roleshortname, set a temporary variable and at the end of the function,
-	//						if it is set, then change $user->roleshortname. If not changing role, remember to set it to whatever
-	//						it was when this was called.
-    // SWTC ********************************************************************************
-	if (!empty($roleshortname)) {
-		$user->roleshortname = $roleshortname;
-		$role = $DB->get_record('role', array('shortname' => $user->roleshortname), '*', MUST_EXIST);
-		$user->roleid = $role->id;
-	}
+    // Instead of directly changing the roleshortname, set a temporary variable and at the end of the function,
+    // if it is set, then change $user->roleshortname. If not changing role, remember to set it to whatever
+    // it was when this was called.
+    // SWTC ********************************************************************************.
+    if (!empty($roleshortname)) {
+        $user->roleshortname = $roleshortname;
+        $role = $DB->get_record('role', array('shortname' => $user->roleshortname), '*', MUST_EXIST);
+        $user->roleid = $role->id;
+    }
 
-	// return $tmp_user;
-	return;
+    return;
 }
 
 /**
@@ -177,11 +170,11 @@ function local_swtc_change_user_access($cat, &$user) {
 function local_swtc_get_all_accesstypes() {
     global $DB;
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Variables begin...
 
     // Variables end...
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
 
     // Get ALL the possible user access types.
     $types = $DB->get_record('user_info_field', array('shortname' => 'accesstype'), 'id, param1');
@@ -194,12 +187,11 @@ function local_swtc_get_all_accesstypes() {
         $messages[] = "About to print alltypes.";
         $messages[] = print_r($alltypes, true);
         $messages[] = "Finished printing alltypes.";
-        // print_object($alltypes);
         $debug->logmessage($messages, 'both');
         unset($messages);
     }
 
-	return $alltypes;
+    return $alltypes;
 
 }
 
@@ -220,28 +212,23 @@ function local_swtc_get_all_accesstypes() {
 function local_swtc_get_all_courses() {
     global $DB;
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Variables begin...
-    // SQL variables.
-    $DCG_CUSTOMSQL_MAX_RECORDS = 40000;
-
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Only list courses NOT in top level categories 60 (Lenovo Internal) and 73 (resource).
-    // SWTC ********************************************************************************
-    $where = "WHERE ((cc.path NOT LIKE '/60/%') AND (cc.path NOT LIKE '%/60')) AND ((cc.path NOT LIKE '/73/%') AND (cc.path NOT LIKE '%/73'))";
+    // SWTC ********************************************************************************.
+    $where = "WHERE ((cc.path NOT LIKE '/60/%') AND (cc.path NOT LIKE '%/60'))
+        AND ((cc.path NOT LIKE '/73/%') AND (cc.path NOT LIKE '%/73'))";
 
     $sql = "SELECT c.id, c.sortorder, c.visible, c.fullname, c.shortname, c.category
-                FROM {course} AS c
-                LEFT OUTER JOIN {course_categories} AS cc ON (c.category = cc.id)
+                FROM {course} c
+                LEFT OUTER JOIN {course_categories} cc ON (c.category = cc.id)
                 $where
                 ORDER BY c.shortname ASC";
 
     // Variables end...
-    // SWTC ********************************************************************************
-    $records = $DB->get_recordset_sql($sql, null, 0, $DCG_CUSTOMSQL_MAX_RECORDS);
-
-    // print_object("about to print records");
-    // print_object($records);      // 08/19/19
+    // SWTC ********************************************************************************.
+    $records = $DB->get_recordset_sql($sql, null, 0, SWTC_SQL_MAX_RECORDS);
 
     return $records;
 
@@ -267,89 +254,82 @@ function local_swtc_get_all_courses() {
 function local_swtc_capture_click($data) {
     global $DB, $USER;
 
-    // SWTC ********************************************************************************
-    // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user([
+    // SWTC ********************************************************************************.
+    // SWTC LMS swtcuser and debug variables.
+    $swtcuser = swtc_get_user([
         'userid' => $USER->id,
         'username' => $USER->username]);
     $debug = swtc_get_debug();
 
-    // Other Lenovo variables.
-    $user_access_type = $swtc_user->user_access_type;
-    // SWTC ********************************************************************************
+    // Other SWTC variables.
+    $useraccesstype = $swtcuser->useraccesstype;
+    // SWTC ********************************************************************************.
 
     if (isset($debug)) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Always output standard header information.
-        // SWTC ********************************************************************************
-        $messages[] = "Lenovo ********************************************************************************";
+        // SWTC ********************************************************************************.
+        $messages[] = "SWTC ********************************************************************************";
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_capture_click.enter.";
-        $messages[] = "Lenovo ********************************************************************************";
-        $messages[] = "swtc_user array follows :";
-        $messages[] = print_r($swtc_user, true);
-        $messages[] = "swtc_user array ends.";
-        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = "swtcuser array follows :";
+        $messages[] = print_r($swtcuser, true);
+        $messages[] = "swtcuser array ends.";
         $debug->logmessage($messages, 'both');
         unset($messages);
-	}
+    }
 
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Switch on each type of "click".
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     switch ($data->type) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // User clicked on a "related" course.
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         case 'related':
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // See if the user has clicked on the related course, from the parent course, in the past.
             // $data->parentcourseid      Parent course id.
             // $data->clickedcourseid     The course id that was clicked on.
             // $data->clickeduserid        The userid of the user that did the clicking.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $params = array();
             $params['userid'] = $data->clickeduserid;
             $params['parentcourseid'] = $data->parentcourseid;
             $params['relatedcourseid'] = $data->clickedcourseid;
-            if ($record = $DB->get_record('local_swtc_rc_details', $params)) {
-                // User has clicked this course before.
-                // 08/19/19 - TODO: This section; user clicked on related course, from the parent course, in the past.
-                // 08/27/19 - Should I update "dateclicked" with the new date?
-            } else {
+            if (!$record = $DB->get_record('local_swtc_rc_details', $params)) {
                 // User has NOT clicked this course before.
                 // Save the click by this user.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 // User has NOT clicked this course before; create the record.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 $params = array();
                 $params['userid'] = $data->clickeduserid;
-                $params['accesstype'] = $user_access_type;
+                $params['accesstype'] = $useraccesstype;
                 $params['parentcourseid'] = $data->parentcourseid;
                 $params['relatedcourseid'] = $data->clickedcourseid;
                 $params['dateclicked'] = time();
                 $params['dateenrolled'] = 0;
-                // print_object("about to print params");
-                // print_object($params);
 
                 if ($DB->insert_record('local_swtc_rc_details', $params, false)) {
                     // The record was successfully created.
                     // Update the "clicks" counter in local_swtc_rc.
-                    $params = array('active' => COURSE_ACTIVE, 'parentcourseid' => $data->parentcourseid, 'relatedcourseid' => $data->clickedcourseid);
+                    $params = array('active' => COURSE_ACTIVE, 'parentcourseid' => $data->parentcourseid,
+                        'relatedcourseid' => $data->clickedcourseid);
                     if ($record = $DB->get_record('local_swtc_rc', $params)) {
                         // Increment "clicks".
                         $record->clicks ++;
-                        // print_object("--here--1");
                         // Update just the "clicks" field.
-                        $DB->set_field('local_swtc_rc', 'clicks', $record->clicks, array('active' => COURSE_ACTIVE, 'parentcourseid' => $data->parentcourseid, 'relatedcourseid' => $data->clickedcourseid));
-                        // 01/31/20 - In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
-                        //          inserting (needed for log events function).
+                        $DB->set_field('local_swtc_rc', 'clicks', $record->clicks, array('active' => COURSE_ACTIVE,
+                            'parentcourseid' => $data->parentcourseid, 'relatedcourseid' => $data->clickedcourseid));
+                        // In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
+                        // inserting (needed for log events function).
                         $recordid = $record->id;
                     } else {
-                        // 12/12/19 - Updated to add record in "local_swtc_rc" if the record doesn't exist.
-                        // print_object("--here--2");
-                        // SWTC ********************************************************************************
+                        // Updated to add record in "local_swtc_rc" if the record doesn't exist.
+                        // SWTC ********************************************************************************.
                         // Create the record if it doesn't exist yet.
-                        // SWTC ********************************************************************************
+                        // SWTC ********************************************************************************.
                         // Update the timecreated, get the USER->id of the user, and set "active" to active.
                         $params['active'] = COURSE_ACTIVE;
                         $params['usercreated'] = $USER->id;
@@ -360,58 +340,52 @@ function local_swtc_capture_click($data) {
                         $params['relatedcourseid'] = $data->clickedcourseid;
                         $params['clicks'] = 1;
                         $params['enrollments'] = 0;
-                        // print_object("about to print params");
-                        // print_object($params);
 
                         $DB->insert_record('local_swtc_rc', $params, true);
 
-                        // 01/31/20 - In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
-                        //          inserting (needed for log events function).
+                        // In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
+                        // inserting (needed for log events function).
                         $record = $DB->get_record('local_swtc_rc', $params);
                         $recordid = $record->id;
                     }
                 } else {
                     // The record was NOT successfully created.
                     // Update the "clicks" counter in local_swtc_rc.
-                    $params = array('active' => COURSE_ACTIVE, 'parentcourseid' => $data->parentcourseid, 'relatedcourseid' => $data->clickedcourseid);
+                    $params = array('active' => COURSE_ACTIVE, 'parentcourseid' => $data->parentcourseid,
+                        'relatedcourseid' => $data->clickedcourseid);
                 }
 
-                // 01/31/20 - Added several log event functions to write events and data to mdl_logstore_standard_log.
+                // Added several log event functions to write events and data to mdl_logstore_standard_log.
                 local_swtc_log_related_clicked($recordid, $data->clickedcourseid);
             }
             break;
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // User clicked on a "suggested" course.
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         case 'suggested':
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // See if the user has clicked on the suggested course, from the parent course, in the past.
             // $data->parentcourseid      Parent course id.
             // $data->clickedcourseid     The course id that was clicked on.
             // $data->clickeduserid        The userid of the user that did the clicking.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $params = array();
             $params['userid'] = $data->clickeduserid;
             $params['parentcourseid'] = $data->parentcourseid;
             $params['suggestedcourseid'] = $data->clickedcourseid;
-            if ($record = $DB->get_record('local_swtc_sc_details', $params)) {
-                // User has clicked this course before.
-                // 08/19/19 - TODO: This section; user clicked on suggested course, from the parent course, in the past.
-            } else {
+            if (!$record = $DB->get_record('local_swtc_sc_details', $params)) {
                 // User has NOT clicked this course before.
                 // Save the click by this user.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 // User has NOT clicked this course before; create the record.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 $params = array();
                 $params['userid'] = $data->clickeduserid;
                 $params['parentcourseid'] = $data->parentcourseid;
                 $params['suggestedcourseid'] = $data->clickedcourseid;
                 $params['dateclicked'] = time();
                 $params['dateenrolled'] = 0;
-                // print_object("about to print params");
-                // print_object($params);
 
                 if ($DB->insert_record('local_swtc_sc_details', $params, false)) {
                     // The record was successfully created.
@@ -420,23 +394,16 @@ function local_swtc_capture_click($data) {
                     if ($record = $DB->get_record('local_swtc_sc', $params)) {
                         // Increment "clicks".
                         $record->clicks ++;
-                        // print_object("--here--1");
-                        // Update just the "clicks" field.
-                        $DB->set_field('local_swtc_sc', 'clicks', $record->clicks, array('active' => COURSE_ACTIVE, 'suggestedcourseid' => $data->clickedcourseid));
-                     } else {
-                         // 08/19/19 - TODO: Not sure what to do here.
-                         // print_object("--here--2");
-                     }
-                } else {
-                    // The record was NOT successfully created.
-                    // 08/19/19 - TODO: Not sure what to do here.
+                        $DB->set_field('local_swtc_sc', 'clicks', $record->clicks, array('active' => COURSE_ACTIVE,
+                            'suggestedcourseid' => $data->clickedcourseid));
+                    }
                 }
             }
             break;
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Event - all others
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         default:
             break;
     }
@@ -462,60 +429,56 @@ function local_swtc_capture_click($data) {
 function local_swtc_capture_enrollment($data) {
     global $DB, $USER;
 
-    // SWTC ********************************************************************************
-    // SWTC LMS swtc_user and debug variables.
-    $swtc_user = swtc_get_user([
+    // SWTC ********************************************************************************.
+    // SWTC LMS swtcuser and debug variables.
+    $swtcuser = swtc_get_user([
         'userid' => $USER->id,
         'username' => $USER->username]);
     $debug = swtc_get_debug();
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
 
     if (isset($debug)) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Always output standard header information.
-        // SWTC ********************************************************************************
-        $messages[] = "Lenovo ********************************************************************************";
+        // SWTC ********************************************************************************.
+        $messages[] = "SWTC ********************************************************************************";
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_capture_enrollment.enter.";
-        $messages[] = "Lenovo ********************************************************************************";
-        $messages[] = "swtc_user array follows :";
-        $messages[] = print_r($swtc_user, true);
-        $messages[] = "swtc_user array ends.";
-        // $debug->logmessage(print_r($swtc, true), 'detailed');
+        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = "swtcuser array follows :";
+        $messages[] = print_r($swtcuser, true);
+        $messages[] = "swtcuser array ends.";
         $debug->logmessage($messages, 'both');
         unset($messages);
-	}
+    }
 
-    // 08/23/19 - For debugging.
-    // print_object($data);
-    // return;
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // Switch on each type of "click".
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     switch ($data->type) {
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // User clicked on a "related" course.
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         case 'related':
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // See if the user has previously clicked on the course they just enrolled in.
             // $data->parentcourseid           Parent course id.
             // $data->clickedcourseid          The course they just enrolled in.
             // $data->clickeduserid        The userid of the user that did the clicking.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $params = array();
             $params['userid'] = $data->clickeduserid;
             $params['parentcourseid'] = $data->parentcourseid;
             $params['relatedcourseid'] = $data->clickedcourseid;
             if ($record = $DB->get_record('local_swtc_rc_details', $params)) {
-                // 01/31/20 - In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
-                //          inserting (needed for log events function).
+                // In local_swtc_capture_click and local_swtc_capture_enrollment, saved the record id after
+                // inserting (needed for log events function).
                 $recordid = $record->id;
 
                 // User has clicked this course before. So, capture enrollment.
-                // 08/20/19 - TODO: This section.
-                // SWTC ********************************************************************************
+                // TODO: This section.
+                // SWTC ********************************************************************************.
                 // User has clicked this course before; update the record with the time they enrolled.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 $params = array();
                 $params['userid'] = $data->clickeduserid;
                 $params['parentcourseid'] = $data->parentcourseid;
@@ -535,41 +498,34 @@ function local_swtc_capture_enrollment($data) {
                 if ($record = $DB->get_record('local_swtc_rc', $params)) {
                     // Increment "enrollments".
                     $record->enrollments ++;
-                    // print_object("--here--1");
                     // Update just the "enrollments" field.
                     $DB->set_field('local_swtc_rc', 'enrollments', $record->enrollments, $params);
-                 } else {
-                     // 08/19/19 - TODO: Not sure what to do here.
-                     // print_object("--here--2");
-                 }
+                }
 
-                 // 01/31/20 - Added several log event functions to write events and data to mdl_logstore_standard_log.
+                // Added several log event functions to write events and data to mdl_logstore_standard_log.
                 local_swtc_log_related_enrolled($recordid, $data->clickedcourseid);
-            } else {
-                // User has NOT clicked this course before. So, nothing to do but return.
-                // print_object("user has NOT previously clicked on this course. returning.");
             }
             break;
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // User clicked on a "suggested" course.
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         case 'suggested':
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // See if the user has previously clicked on the course they just enrolled in.
-            //      $data['clickedcourseid']          The coure they just enrolled in.
-            //      $data['userid']              The userid of the user.
-            // SWTC ********************************************************************************
+            // $data['clickedcourseid']          The coure they just enrolled in.
+            // $data['userid']              The userid of the user.
+            // SWTC ********************************************************************************.
             $params = array();
             $params['userid'] = $data->clickeduserid;
             $params['parentcourseid'] = $data->parentcourseid;
             $params['suggestedcourseid'] = $data->clickedcourseid;
             if ($record = $DB->get_record('local_swtc_sc_details', $params)) {
                 // User has clicked this course before. So, capture enrollment.
-                // 08/20/19 - TODO: This section.
-                // SWTC ********************************************************************************
+                // TODO: This section.
+                // SWTC ********************************************************************************.
                 // User has clicked this course before; update the record with the time they enrolled.
-                // SWTC ********************************************************************************
+                // SWTC ********************************************************************************.
                 $params = array();
                 $params['userid'] = $data->clickeduserid;
                 $params['parentcourseid'] = $data->parentcourseid;
@@ -588,23 +544,16 @@ function local_swtc_capture_enrollment($data) {
                 if ($record = $DB->get_record('local_swtc_sc', $params)) {
                     // Increment "enrollments".
                     $record->enrollments ++;
-                    // print_object("--here--1");
                     // Update just the "enrollments" field.
                     $DB->set_field('local_swtc_sc', 'enrollments', $record->enrollments, $params);
-                 } else {
-                     // 08/19/19 - TODO: Not sure what to do here.
-                     // print_object("--here--2");
-                 }
-            } else {
-                // User has NOT clicked this course before. So, nothing to do but return.
-                // print_object("user has NOT previously clicked on this course. returning.");
+                }
             }
             break;
 
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // Event - all others
-            // SWTC ********************************************************************************
-            default:
+            // SWTC ********************************************************************************.
+        default:
                 break;
     }
 
@@ -637,18 +586,18 @@ function local_swtc_capture_enrollment($data) {
  *
  **/
 function local_swtc_log_related_clicked($id, $courseid) {
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // The objectid (id) is the record id from the table being modified.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     $event = \local_swtc\event\related_clicked::create(
                         array('objectid' => $id, 'context' => context_course::instance($courseid)));
     $event->trigger();
 }
 
 function local_swtc_log_related_enrolled($id, $courseid) {
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     // The objectid (id) is the record id from the table being modified.
-    // SWTC ********************************************************************************
+    // SWTC ********************************************************************************.
     $event = \local_swtc\event\related_enrolled::create(
                         array('objectid' => $id, 'context' => context_course::instance($courseid)));
     $event->trigger();
@@ -656,10 +605,10 @@ function local_swtc_log_related_enrolled($id, $courseid) {
 
 if (!function_exists('array_key_first')) {
     function array_key_first(array $arr) {
-        foreach($arr as $key => $unused) {
+        foreach ($arr as $key => $unused) {
             return $key;
         }
-        return NULL;
+        return null;
     }
 }
 

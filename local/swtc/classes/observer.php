@@ -48,59 +48,57 @@ class observer {
      *
      */
     public static function user_loggedin(\core\event\user_loggedin $event) {
-        /**
-         * $event->objectid  The userid (i.e. $USER->id).
-         * $event->other['username']  The username used to login.
-         * An example event looks like the following:
-         * core\event\user_loggedin Object
-         *  (
-         *        [data:protected] => Array
-         *            (
-         *                [eventname] => \core\event\user_loggedin
-         *                [component] => core
-         *                [action] => loggedin
-         *                [target] => user
-         *                [objecttable] => user
-         *                [objectid] => 4
-         *                [crud] => r
-         *                [edulevel] => 0
-         *                [contextid] => 1
-         *                [contextlevel] => 10
-         *                [contextinstanceid] => 0
-         *                [userid] => 4
-         *                [courseid] => 0
-         *                [relateduserid] =>
-         *                [anonymous] => 0
-         *                [other] => Array
-         *                    (
-         *                        [username] => rfrench@lenovo.com
-         *                    )
-         *                [timecreated] => 1615230740
-         *            )
-         *        [logextra:protected] =>
-         *        [context:protected] => context_system Object
-         *            (
-         *                [_id:protected] => 1
-         *                [_contextlevel:protected] => 10
-         *                [_instanceid:protected] => 0
-         *                [_path:protected] => /1
-         *                [_depth:protected] => 1
-         *                [_locked:protected] => 0
-         *            )
-         *        [triggered:core\event\base:private] => 1
-         *        [dispatched:core\event\base:private] =>
-         *        [restored:core\event\base:private] =>
-         *        [recordsnapshots:core\event\base:private] => Array
-         *            (
-         *            )
-         *    )
-         */
-        // $categorycontext = context_coursecat::instance($newcategory->id);
-        // if (has_capability('local/swtc:swtc_access_ibm_portfolio', $systemcontext)) {
-        $swtc_user = swtc_get_user([
+        // SWTC ********************************************************************************.
+        // $event->objectid  The userid (i.e. $USER->id).
+        // $event->other['username']  The username used to login.
+        // An example event looks like the following:
+        // core\event\user_loggedin Object
+        // (
+        // [data:protected] => Array
+        // (
+        // [eventname] => \core\event\user_loggedin
+        // [component] => core
+        // [action] => loggedin
+        // [target] => user
+        // [objecttable] => user
+        // [objectid] => 4
+        // [crud] => r
+        // [edulevel] => 0
+        // [contextid] => 1
+        // [contextlevel] => 10
+        // [contextinstanceid] => 0
+        // [userid] => 4
+        // [courseid] => 0
+        // [relateduserid] =>
+        // [anonymous] => 0
+        // [other] => Array
+        // (
+        // [username] => rfrench@lenovo.com
+        // )
+        // [timecreated] => 1615230740
+        // )
+        // [logextra:protected] =>
+        // [context:protected] => context_system Object
+        // (
+        // [_id:protected] => 1
+        // [_contextlevel:protected] => 10
+        // [_instanceid:protected] => 0
+        // [_path:protected] => /1
+        // [_depth:protected] => 1
+        // [_locked:protected] => 0
+        // )
+        // [triggered:core\event\base:private] => 1
+        // [dispatched:core\event\base:private] =>
+        // [restored:core\event\base:private] =>
+        // [recordsnapshots:core\event\base:private] => Array
+        // (
+        // )
+        // )
+        // SWTC ********************************************************************************.
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
 
     }
 
@@ -117,12 +115,10 @@ class observer {
      */
     public static function user_loggedinas(\core\event\user_loggedinas $event) {
 
-        // print_object("in observer; user_loggedinas - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -137,57 +133,55 @@ class observer {
      *
      */
     public static function user_updated(\core\event\user_updated $event) {
-        /**
-         * $event->objectid  The userid (i.e. $USER->id).
-         * $event->other['username']  The username used to login.
-         * An example event looks like the following:
-         * core\event\user_updated Object
-         * (
-         *  [data:protected] => Array
-         *      (
-         *          [eventname] => \core\event\user_updated
-         *          [component] => core
-         *          [action] => updated
-         *          [target] => user
-         *          [objecttable] => user
-         *          [objectid] => 4
-         *          [crud] => u
-         *          [edulevel] => 0
-         *          [contextid] => 31
-         *          [contextlevel] => 30
-         *          [contextinstanceid] => 4
-         *          [userid] => 4
-         *          [courseid] => 0
-         *          [relateduserid] => 4
-         *          [anonymous] => 0
-         *          [other] =>
-         *          [timecreated] => 1615233955
-         *      )
-         *  [logextra:protected] =>
-         *  [context:protected] => context_user Object
-         *      (
-         *          [_id:protected] => 31
-         *          [_contextlevel:protected] => 30
-         *          [_instanceid:protected] => 4
-         *          [_path:protected] => /1/31
-         *          [_depth:protected] => 2
-         *          [_locked:protected] => 0
-         *      )
-         *  [triggered:core\event\base:private] => 1
-         *  [dispatched:core\event\base:private] =>
-         *  [restored:core\event\base:private] =>
-         *  [recordsnapshots:core\event\base:private] => Array
-         *      (
-         *      )
-         * )
-         * Note: This eventdata was obtained by User menu > Preferences > Editor preference
-         *      and changing editor.
-         */
-        // print_object("in observer; user_updated - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        // SWTC ********************************************************************************.
+        // $event->objectid  The userid (i.e. $USER->id).
+        // $event->other['username']  The username used to login.
+        // An example event looks like the following:
+        // core\event\user_updated Object
+        // (
+        // [data:protected] => Array
+        // (
+        // [eventname] => \core\event\user_updated
+        // [component] => core
+        // [action] => updated
+        // [target] => user
+        // [objecttable] => user
+        // [objectid] => 4
+        // [crud] => u
+        // [edulevel] => 0
+        // [contextid] => 31
+        // [contextlevel] => 30
+        // [contextinstanceid] => 4
+        // [userid] => 4
+        // [courseid] => 0
+        // [relateduserid] => 4
+        // [anonymous] => 0
+        // [other] =>
+        // [timecreated] => 1615233955
+        // )
+        // [logextra:protected] =>
+        // [context:protected] => context_user Object
+        // (
+        // [_id:protected] => 31
+        // [_contextlevel:protected] => 30
+        // [_instanceid:protected] => 4
+        // [_path:protected] => /1/31
+        // [_depth:protected] => 2
+        // [_locked:protected] => 0
+        // )
+        // [triggered:core\event\base:private] => 1
+        // [dispatched:core\event\base:private] =>
+        // [restored:core\event\base:private] =>
+        // [recordsnapshots:core\event\base:private] => Array
+        // (
+        // )
+        // )
+        // Note: This eventdata was obtained by User menu > Preferences > Editor preference
+        // and changing editor.
+        // SWTC ********************************************************************************.
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -202,13 +196,10 @@ class observer {
      *
      */
     public static function user_created(\core\event\user_created $event) {
-
-        // print_object("in observer; user_created - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -223,58 +214,55 @@ class observer {
      *
      */
     public static function course_viewed(\core\event\course_viewed $event) {
-        /**
-         * $event->userid  The userid (i.e. $USER->id).
-         * $event->other['username']  The username used to login.
-         * An example event looks like the following:
-         * core\event\course_viewed Object
-         * (
-         *     [data:protected] => Array
-         *         (
-         *             [eventname] => \core\event\course_viewed
-         *             [component] => core
-         *             [action] => viewed
-         *             [target] => course
-         *             [objecttable] =>
-         *             [objectid] =>
-         *             [crud] => r
-         *             [edulevel] => 2
-         *             [contextid] => 123
-         *             [contextlevel] => 50
-         *             [contextinstanceid] => 6
-         *             [userid] => 4
-         *             [courseid] => 6
-         *             [relateduserid] =>
-         *             [anonymous] => 0
-         *             [other] =>
-         *             [timecreated] => 1615231191
-         *         )
-         *     [logextra:protected] =>
-         *     [context:protected] => context_course Object
-         *         (
-         *             [_id:protected] => 123
-         *             [_contextlevel:protected] => 50
-         *             [_instanceid:protected] => 6
-         *             [_path:protected] => /1/511/513/514/123
-         *             [_depth:protected] => 5
-         *             [_locked:protected] => 0
-         *         )
-         *     [triggered:core\event\base:private] => 1
-         *     [dispatched:core\event\base:private] =>
-         *     [restored:core\event\base:private] =>
-         *     [recordsnapshots:core\event\base:private] => Array
-         *         (
-         *         )
-         * )
-         */
-        // print_object("in observer; course_viewed - about to print event");
-        // print_object($event);
+        // SWTC ********************************************************************************.
+        // $event->userid  The userid (i.e. $USER->id).
+        // $event->other['username']  The username used to login.
+        // An example event looks like the following:
+        // core\event\course_viewed Object
+        // (
+        // [data:protected] => Array
+        // (
+        // [eventname] => \core\event\course_viewed
+        // [component] => core
+        // [action] => viewed
+        // [target] => course
+        // [objecttable] =>
+        // [objectid] =>
+        // [crud] => r
+        // [edulevel] => 2
+        // [contextid] => 123
+        // [contextlevel] => 50
+        // [contextinstanceid] => 6
+        // [userid] => 4
+        // [courseid] => 6
+        // [relateduserid] =>
+        // [anonymous] => 0
+        // [other] =>
+        // [timecreated] => 1615231191
+        // )
+        // [logextra:protected] =>
+        // [context:protected] => context_course Object
+        // (
+        // [_id:protected] => 123
+        // [_contextlevel:protected] => 50
+        // [_instanceid:protected] => 6
+        // [_path:protected] => /1/511/513/514/123
+        // [_depth:protected] => 5
+        // [_locked:protected] => 0
+        // )
+        // [triggered:core\event\base:private] => 1
+        // [dispatched:core\event\base:private] =>
+        // [restored:core\event\base:private] =>
+        // [recordsnapshots:core\event\base:private] => Array
+        // (
+        // )
+        // )
+        // SWTC ********************************************************************************.
 
         if (isloggedin()) {
-            $swtc_user = swtc_get_user([
+            $swtcuser = swtc_get_user([
                 'userid' => $event->userid]);
-            // print_object($swtc_user);
-            $swtc_user->set_user_role($event);
+            $swtcuser->set_user_role($event);
         }
     }
 
@@ -290,13 +278,10 @@ class observer {
      *
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
-
-        // print_object("in observer; user_enrolment_created - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -311,13 +296,10 @@ class observer {
      *
      */
     public static function role_assigned(\core\event\role_assigned $event) {
-
-        // print_object("in observer; role_assigned - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -332,13 +314,10 @@ class observer {
      *
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
-
-        // print_object("in observer; user_enrolment_deleted - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_user([
+        $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
     /**
@@ -353,13 +332,10 @@ class observer {
      *
      */
     public static function user_enrolment_updated(\core\event\user_enrolment_updated $event) {
-
-        // print_object("in observer; user_enrolment_updated - about to print event");
-        // print_object($event);
-        $swtc_user = swtc_get_use([
+        $swtcuser = swtc_get_use([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtc_user->set_user_role($event);
+        $swtcuser->set_user_role($event);
     }
 
 }

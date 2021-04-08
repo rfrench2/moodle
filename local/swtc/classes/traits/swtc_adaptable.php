@@ -42,11 +42,10 @@ defined('MOODLE_INTERNAL') || die();
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
-require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/swtcuserlib.php');
 // SWTC ********************************************************************************.
 // Include SWTC LMS functions.
 // SWTC ********************************************************************************.
-// require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');                     // Some needed functions.
 require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 
 use core_text;
@@ -64,55 +63,47 @@ trait swtc_adaptable {
      *
      * @package    local
      * @subpackage swtc
-     * @copyright  2018 SWTC EBG Server Education
+     * @copyright  2021 SWTC
      * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
      *
      * History:
      *
      * 11/09/20 - Initial writing.
      *
-    */
+     */
     public function frontpage_available_courses() {
-        // global $CFG, $USER, $DB, $PAGE, $COURSE, $OUTPUT;
         global $CFG, $USER, $SESSION;
-        // require_once($CFG->libdir. '/coursecatlib.php');         // Moodle 3.6
 
         // SWTC ********************************************************************************.
-        // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user([
+        // SWTC LMS swtcuser and debug variables.
+        $swtcuser = swtc_get_user([
             'userid' => $USER->id,
             'username' => $USER->username]);
         $debug = swtc_set_debug();
 
         // Other SWTC variables.
-        $swtc_resources = $SESSION->LMS->RESOURCES;
-        $capability = $swtc_user->capabilities[0];
-        $access_selfsupport_stud = get_string("access_selfsupport_stud" , "local_swtc");
+        $selfsupportstud = get_string("access_selfsupport_stud" , "local_swtc");
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
             $debug->logmessage("In lenovo_adaptable ===frontpage_available_courses.enter===.", 'logfile');
         }
 
-        // SWTC ********************************************************************************
-        // 03/02/20 - Added call to core_course_category::make_categories_list with the user's main capability for easier checking
-        //                  of access (before moving to core_course_category::can_view_category).
+        // SWTC ********************************************************************************.
+        // Added call to core_course_category::make_categories_list with the user's main capability for easier checking
+        // of access (before moving to core_course_category::can_view_category).
         // @01 - Fixed core_course_category error in /local/swtc/classes/traits/lenovo_course_renderer.php
-        //              (changed core_course_category to \core_course_category).
-        // SWTC ********************************************************************************
+        // (changed core_course_category to \core_course_category).
+        // SWTC ********************************************************************************.
         $categories = \core_course_category::make_categories_list($capability);
-        // print_object($categories);     // 03/01/20 - SWTC debugging...
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // The following was taken from Moodle/course/renderer.php; function 'frontpage_available_courses().
-        // SWTC ********************************************************************************
-        // SWTC ********************************************************************************
-        // 08/04/18 - Added sort parameters to set_courses_display_options
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
+        // SWTC ********************************************************************************.
         $chelper = new coursecat_helper();
-        // $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->
-        $chelper->set_show_courses($this::COURSECAT_SHOW_COURSES_EXPANDED)->
-                set_courses_display_options(array(
+        $chelper->set_show_courses($this::COURSECAT_SHOW_COURSES_EXPANDED)
+            ->set_courses_display_options(array(
                     'sort' => array('id' => -1, 'shortname' => 1),
                     'recursive' => true,
                     'limit' => $CFG->frontpagecourselimit,
@@ -120,33 +111,29 @@ trait swtc_adaptable {
                     'viewmoretext' => new lang_string('fulllistofcourses')));
 
         $chelper->set_attributes(array('class' => 'frontpage-course-list-all'));
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Starting with Adaptable 1.6.0, the override of the course_renderer class was moved from theme/adaptable/renderers.php to
-        //      theme/adaptable/classes/output/core/course_renderer.php. As such, we need to put prepend pathing information (i.e. '\')
-        //      to locate and use coursecat functions.
-        // SWTC ********************************************************************************
-        // $courses = \coursecat::get(0)->get_courses($chelper->get_courses_display_options());                                     // Moodle 3.6
-        // $totalcount = \coursecat::get(0)->get_courses_count($chelper->get_courses_display_options());                        // Moodle 3.6
-        $courses = \core_course_category::get(0)->get_courses($chelper->get_courses_display_options());                     // Moodle 3.6
-        $totalcount = \core_course_category::get(0)->get_courses_count($chelper->get_courses_display_options());        // Moodle 3.6
+        // theme/adaptable/classes/output/core/course_renderer.php. As such, we need to put prepend pathing information (i.e. '\')
+        // to locate and use coursecat functions.
+        // SWTC ********************************************************************************.
+        $totalcount = \core_course_category::get(0)->get_courses_count($chelper->get_courses_display_options());
 
-        // SWTC ********************************************************************************
-        // 07/13/18 - For each course found, get the top-level category and see if user has access. Code similar to
-        //          /course/renderer.php in function coursecat_category. If user does not have access, remove the course
-        //          from the courses list.
-        // SWTC ********************************************************************************
-        // $index = null;
-        $courses_removed = 0;
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
+        // For each course found, get the top-level category and see if user has access. Code similar to
+        // course/renderer.php in function coursecat_category. If user does not have access, remove the course
+        // from the courses list.
+        // SWTC ********************************************************************************.
+        $coursesremoved = 0;
+        // SWTC ********************************************************************************.
         // Main loop. Find top-level catid of category. If user has access, leave the course in the list.
-        //      If the user doesn't, remove it from the list.
-        // SWTC ********************************************************************************
+        // If the user doesn't, remove it from the list.
+        // SWTC ********************************************************************************.
         // Category id for the category name in question is in $coursecat->id.
-        // In theory, if the category id appears in $swtc_user->categoryids, that alone should be enough to list the category.
-        // SWTC ********************************************************************************
+        // In theory, if the category id appears in $swtcuser->categoryids, that alone should be enough to list the category.
+        // SWTC ********************************************************************************.
         foreach ($courses as $key => $course) {
-            // if (swtc_user_access_category($course->category)) {            // 03/02/20
-            if ((in_array($course->category, array_keys($categories))) || (stripos($swtc_user->user_access_type, $access_selfsupport_stud) !== false)) {
+            if ((in_array($course->category, array_keys($categories)))
+                || (stripos($swtcuser->user_access_type, $selfsupportstud) !== false)) {
                 if (isset($debug)) {
                     $messages[] = print_r("index is :$key. Will list the course===8.4===.", true);
                     $debug->logmessage($messages, 'detailed');
@@ -158,53 +145,56 @@ trait swtc_adaptable {
                     $debug->logmessage($messages, 'both');
                     unset($messages);
                 }
-                $courses_removed++;
+                $coursesremoved++;
                 unset($courses[$key]);
             }
         }
-        $totalcount = $totalcount - $courses_removed;       // SWTC
+        $totalcount = $totalcount - $coursesremoved;
 
-        //
-        // Modification for SWTC EBG LMS site.
-        //		Everyone that self-enrolls in a course that requires a simulator will also automatically be enrolled in the SWTC Internal Portfolio course
-        //		'Shared Resources (Master)'. However, this internal course should never be exposed / shown directly to anyone other than users with the
-        //		SWTC-admin role. Several places throughout the Moodle UI list the student's enrolled courses: the front page,
-        //          the Navigation > My courses node, and the Dashboard (Course overview block).
-        //		This code hides the 'Shared Resources (Master)' course on the student's front page. Since the Adaptable them overrides
-        //              the core_course_renderer function (theme_adaptable_core_course_renderer), we must modify the Adaptable
-        //              renderers.php file to include the base function 'frontpage_available_courses'.
-        //		The added frontpage_available_courses function is only a stub that calls this function - local_swtc_frontpage_available_courses.
+        // SWTC ********************************************************************************.
+        // Modification for SWTC LMS site.
+        // Everyone that self-enrolls in a course that requires a simulator will also automatically
+        // be enrolled in the SWTC Internal Portfolio course 'Shared Resources (Master)'. However,
+        // this internal course should never be exposed / shown directly to anyone other than users with the
+        // SWTC-admin role. Several places throughout the Moodle UI list the student's enrolled courses:
+        // the front page, the Navigation > My courses node, and the Dashboard (Course overview block).
+        // This code hides the 'Shared Resources (Master)' course on the student's front page. Since the
+        // Adaptable them overrides the core_course_renderer function (theme_adaptable_core_course_renderer),
+        // we must modify the Adaptable renderers.php file to include the base function 'frontpage_available_courses'.
+        // The added frontpage_available_courses function is only a stub that calls this function -
+        // local_swtc_frontpage_available_courses.
         //
         // Specific modification (removing 'Shared Resources (Master)' from the returned course list)
-        //		Search $courses for 'Shared Resources (Master)'. If found, remove it.
-        //			If removed, subtract 1 from $totalcount.
-        //		Note: The coursecat::get(0)->get_courses function returns a 'course_in_list' array. The format of course_in_list is:
+        // Search $courses for 'Shared Resources (Master)'. If found, remove it.
+        // If removed, subtract 1 from $totalcount.
+        // Note: The coursecat::get(0)->get_courses function returns a 'course_in_list' array. The format
+        // of course_in_list is:
         //
-        //		[18] => course_in_list Object
-        //				(
-        //					[record:protected] => stdClass Object
-        //						(
-        //							[id] => 18
-        //							[category] => 21
-        //							[sortorder] => 370001
-        //							[shortname] => serviceprovidertest1
-        //							[fullname] => Service-Provider-test-course-1
-        //							[idnumber] =>
-        //							[startdate] => 1449205200
-        //							[visible] => 0
-        //							[cacherev] => 1460571745
-        //							[summary] =>
-        //							[summaryformat] => 1
-        //							[managers] => Array
-        //								(
-        //								)
+        // [18] => course_in_list Object
+        // (
+        // [record:protected] => stdClass Object
+        // (
+        // [id] => 18
+        // [category] => 21
+        // [sortorder] => 370001
+        // [shortname] => serviceprovidertest1
+        // [fullname] => Service-Provider-test-course-1
+        // [idnumber] =>
+        // [startdate] => 1449205200
+        // [visible] => 0
+        // [cacherev] => 1460571745
+        // [summary] =>
+        // [summaryformat] => 1
+        // [managers] => Array
+        // (
+        // )
         //
-        //						)
+        // )
         //
-        //					[coursecontacts:protected] =>
-        //					[canaccess:protected] =>
-        //				)
-        //
+        // [coursecontacts:protected] =>
+        // [canaccess:protected] =>
+        // )
+        // SWTC ********************************************************************************.
         if (isset($debug)) {
             $messages[] = "About to print courses ===33.1===.";
             $messages[] = print_r($courses, true);
@@ -220,14 +210,15 @@ trait swtc_adaptable {
         $courses = swtc_find_and_remove_excludecourses($courses);
         $totalcount = count($courses);          // 10/21/19 - Set new totalcount.
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // The following was taken from Moodle/course/renderer.php; function 'frontpage_available_courses().
         // Starting with Adaptable 1.6.0, the override of the course_renderer class was moved from theme/adaptable/renderers.php to
-        //      theme/adaptable/classes/output/core/course_renderer.php. As such, we need to put prepend pathing information (i.e. '\')
-        //      to locate and use coursecat functions.
-        // SWTC ********************************************************************************
-        // SWTC ********************************************************************************
-        if (!$totalcount && !$this->page->user_is_editing() && has_capability('moodle/course:create', \context_system::instance())) {
+        // theme/adaptable/classes/output/core/course_renderer.php. As such, we need to put prepend pathing information (i.e. '\')
+        // to locate and use coursecat functions.
+        // SWTC ********************************************************************************.
+        // SWTC ********************************************************************************.
+        if (!$totalcount && !$this->page->user_is_editing()
+            && has_capability('moodle/course:create', \context_system::instance())) {
             // Print link to create a new course, for the 1st available category.
             return $this->add_new_course_button();
         }
@@ -236,13 +227,9 @@ trait swtc_adaptable {
             $debug->logmessage("Leaving lenovo_adaptable ===frontpage_available_courses.exit.", 'logfile');
         }
 
-        // return coursecat_courses($chelper, $courses, $totalcount);  // SWTC - coursecat_courses is a protected method.
-        //$courserenderer = $PAGE->get_renderer('core', 'course');
-        //return $courserenderer->courses_list($courses);
-        //return $courserenderer->coursecat_courses($chelper, $courses, $totalcount);
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // The following was taken from Moodle/course/renderer.php; function 'frontpage_available_courses().
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         return $this->coursecat_courses($chelper, $courses, $totalcount);
     }
 
@@ -265,8 +252,8 @@ trait swtc_adaptable {
         global $USER;
 
         // SWTC ********************************************************************************.
-        // SWTC LMS swtc_user and debug variables.
-        $swtc_user = swtc_get_user([
+        // SWTC LMS swtcuser and debug variables.
+        $swtcuser = swtc_get_user([
             'userid' => $USER->id,
             'username' => $USER->username]);
         $debug = swtc_set_debug();
@@ -276,23 +263,24 @@ trait swtc_adaptable {
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // Always output standard header information.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $messages[] = "SWTC ********************************************************************************.";
             $messages[] = "Entering renderers.php. ===theme_adaptable.enter.";
-            $messages[] = "About to print swtc_user.";
-            $messages[] = print_r($swtc_user, true);
-            $messages[] = "Finished printing swtc_user.";
+            $messages[] = "About to print swtcuser.";
+            $messages[] = print_r($swtcuser, true);
+            $messages[] = "Finished printing swtcuser.";
             $messages[] = "SWTC ********************************************************************************.";
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
 
-        // SWTC ********************************************************************************
+        // SWTC ********************************************************************************.
         // Adding two menu items under "My Courses": "My Courses" and "My Curriculums".
-        // SWTC ********************************************************************************
-        if ((has_capability('local/swtc:ebg_view_curriculums', context_system::instance())) || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+        // SWTC ********************************************************************************.
+        if ((has_capability('local/swtc:swtc_view_curriculums', context_system::instance()))
+            || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
             // Use the "mysites" string in theme_adaptable since it is in the correct case ("My Courses").
             $branch->add(get_string('mysites', 'theme_adaptable'), new moodle_url('/my/index.php'), '', null, 'mycourses');
             $branch->add($mycurriculums, new moodle_url('/local/swtc/lib/curriculums.php'), '', null, 'mycurriculums');
@@ -315,27 +303,27 @@ trait swtc_adaptable {
     public function navigation_menu_content() {
         global $PAGE, $COURSE, $OUTPUT, $USER;
 
-        //****************************************************************************************.
-        // SWTC LMS swtclms_user and debug variables.
-        $swtc_user = swtc_get_user([
+        // SWTC ********************************************************************************.
+        // SWTC LMS user and debug variables.
+        $swtcuser = swtc_get_user([
             'userid' => $USER->id,
             'username' => $USER->username]);
         $debug = swtc_set_debug();
 
         // Other SWTC variables.
-        // $mycourses = 'mycourses';                                        // The key for 'My courses'.
-        $mycurriculums = get_string('mycurriculums', 'local_swtc');       // The title for 'My Curriculums'.
-        //****************************************************************************************.
+        // The title for 'My Curriculums'.
+        $mycurriculums = get_string('mycurriculums', 'local_swtc');
+        // SWTC ********************************************************************************.
 
         if (isset($debug)) {
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             // Always output standard header information.
-            // SWTC ********************************************************************************
+            // SWTC ********************************************************************************.
             $messages[] = "SWTC ********************************************************************************.";
             $messages[] = "Entering renderers.php. ===theme_adaptable.enter.";
-            $messages[] = "About to print swtc_user.";
-            $messages[] = print_r($swtc_user, true);
-            $messages[] = "Finished printing swtc_user.";
+            $messages[] = "About to print swtcuser.";
+            $messages[] = print_r($swtcuser, true);
+            $messages[] = "Finished printing swtcuser.";
             $messages[] = "SWTC ********************************************************************************.";
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -569,14 +557,17 @@ trait swtc_adaptable {
                             }
                         }
 
-                        // SWTC ********************************************************************************
+                        // SWTC ********************************************************************************.
                         // Adding two menu items under "My Courses": "My Courses" and "My Curriculums".
-                        // SWTC ********************************************************************************
-                        if ((has_capability('local/swtc:swtc_view_curriculums', context_system::instance())) || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+                        // SWTC ********************************************************************************.
+                        if ((has_capability('local/swtc:swtc_view_curriculums', context_system::instance()))
+                            || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
                             // Use the "mysites" string in theme_adaptable since it is in the
-                            //      correct case ("My Courses").
-                            $branch->add(get_string('mysites', 'theme_adaptable'), new moodle_url('/my/index.php'), '', null, 'mycourses');
-                            $branch->add($mycurriculums, new moodle_url('/local/swtc/lib/curriculums.php'), '', null, 'mycurriculums');
+                            // correct case ("My Courses").
+                            $branch->add(get_string('mysites', 'theme_adaptable'), new moodle_url('/my/index.php'),
+                                '', null, 'mycourses');
+                            $branch->add($mycurriculums, new moodle_url('/local/swtc/lib/curriculums.php'),
+                                '', null, 'mycurriculums');
                         }
                     } else {
                         $noenrolments = get_string('noenrolments', 'theme_adaptable');

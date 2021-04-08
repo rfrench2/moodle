@@ -15,27 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details / History
+ * Version details
  *
  * @package    local
  * @subpackage swtc/db/events.php
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
+ *
  * 10/17/20 - Initial writing.
  * 02/23/21 - Removed a few events and cleaned up.
  *
  * Notes about using this file
  *
- *	The messages that are captured here are routed to the method (callback) in the php file listed (includefile).
- *	Important! The event that is being captured has already happened. For example, for user_loggedin,
- *	the user has already been logged into the SWTC LMS site.
- *			user_created event happens when a new userid is created.
- *			user_updated event happens when an existing user's profile is updated.
- *			user_loggedin event happens when an existing user logs into the site.
- *			course_viewed event happens when a user views a course.
- *			user_enrolment_created event happens when a user is enrolled in a course.
+ *    The messages that are captured here are routed to the method (callback) in the php file listed (includefile).
+ *    Important! The event that is being captured has already happened. For example, for user_loggedin,
+ *    the user has already been logged into the SWTC LMS site.
+ *            user_created event happens when a new userid is created.
+ *            user_updated event happens when an existing user's profile is updated.
+ *            user_loggedin event happens when an existing user logs into the site.
+ *            course_viewed event happens when a user views a course.
+ *            user_enrolment_created event happens when a user is enrolled in a course.
  *          course_updated  event happens when a course is updated for any reason.
  *
  * The following is copied from https://docs.moodle.org/dev/Event_2#Event_observers
@@ -66,32 +67,32 @@ $observers = array(
             'eventname'   => '\core\event\user_loggedinas',
             'callback'    => '\local_swtc\observer::user_loggedinas',
         ),
-		array (
+        array (
             'eventname'   => '\core\event\user_updated',
             'callback'    => '\local_swtc\observer::user_updated',
         ),
         array (
-			'eventname'   => '\core\event\user_created',
+            'eventname'   => '\core\event\user_created',
             'callback'    => '\local_swtc\observer::user_created',
         ),
-		array (
-			'eventname'   => '\core\event\course_viewed',
+        array (
+            'eventname'   => '\core\event\course_viewed',
             'callback'    => '\local_swtc\observer::course_viewed',
         ),
         array (
             'eventname'   => '\core\event\user_enrolment_created',
             'callback'    => '\local_swtc\observer::user_enrolment_created',
         ),
-		array (
-			'eventname'   => '\core\event\role_assigned',
+        array (
+            'eventname'   => '\core\event\role_assigned',
             'callback'    => '\local_swtc\observer::role_assigned',
         ),
-		array (
-			'eventname'   => '\core\event\user_enrolment_deleted',
+        array (
+            'eventname'   => '\core\event\user_enrolment_deleted',
             'callback'    => '\local_swtc\observer::user_enrolment_deleted',
         ),
-		array (
-			'eventname'   => '\core\event\user_enrolment_updated',
+        array (
+            'eventname'   => '\core\event\user_enrolment_updated',
             'callback'    => '\local_swtc\observer::user_enrolment_updated',
         ),
 );

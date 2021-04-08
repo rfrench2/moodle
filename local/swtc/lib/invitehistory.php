@@ -17,7 +17,10 @@
 /**
  * Viewing invitation history script.
  *
- * @package    local_swtc
+ * Version details
+ *
+ * @package    local
+ * @subpackage swtc/lib/invitehistory.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -36,11 +39,11 @@ global $USER, $SESSION;
 // Lenovo ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // Lenovo ********************************************************************************.
-require_once($CFG->dirroot . '/local/swtc/lib/swtc_userlib.php');
+require_once($CFG->dirroot . '/local/swtc/lib/swtcuserlib.php');
 
 // Lenovo ********************************************************************************.
-// SWTC swtc_user and debug variables.
-$swtc_user = swtc_get_user([
+// SWTC swtcuser and debug variables.
+$swtcuser = swtc_get_user([
     'userid' => $USER->id,
     'username' => $USER->username]);
 $debug = swtc_get_debug();
@@ -59,23 +62,22 @@ $actionid = optional_param('actionid', 0, PARAM_INT);
 // Lenovo ********************************************************************************.
 // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
 // Lenovo ********************************************************************************.
-$page = optional_param('page', 0, PARAM_INT);       // @01
-$perpage = optional_param('perpage', 20, PARAM_INT);        // @01
+$page = optional_param('page', 0, PARAM_INT);
+$perpage = optional_param('perpage', 20, PARAM_INT);
 
 // Set up page.
 $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
 // Lenovo ********************************************************************************.
 // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
-// $PAGE->set_url(new moodle_url('/local/swtc/lib/invitehistory.php'));       // @01
+// $PAGE->set_url(new moodle_url('/local/swtc/lib/invitehistory.php'));
 // Lenovo ********************************************************************************.
-$url = new moodle_url('/local/swtc/lib/invitehistory.php', array('perpage' => $perpage, 'page' => $page));      // @01
-$PAGE->set_url($url);      // @01
+$url = new moodle_url('/local/swtc/lib/invitehistory.php', array('perpage' => $perpage, 'page' => $page));
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 $pagetitle = get_string('invitehistory', 'local_swtc');
 $PAGE->set_heading($pagetitle);
 $PAGE->set_title($pagetitle);
-// $PAGE->navbar->add($pagetitle);
 
 // OUTPUT form.
 echo $OUTPUT->header();
@@ -105,29 +107,28 @@ if (empty($invites)) {
 
     // Update invitation if the user decided to revoke/extend/resend an invite.
     if ($inviteid && $actionid) {
-        if (!$curr_invite = $invites[$inviteid]) {
+        if (!$currinvite = $invites[$inviteid]) {
             print_error('invalidinviteid');
         }
         if ($actionid == invitation_manager::INVITE_EXPIRE) {
             // Set the invite to be expired.
-            // $DB->set_field('local_swtc_userinvitation', 'timeexpiration', time()-1, array('id' => $curr_invite->id) );
-            $invitationmanager->set_invite_expired($curr_invite);
+            $invitationmanager->set_invite_expired($currinvite);
 
             echo $OUTPUT->notification(get_string('expire_invite_sucess', 'local_swtc'), 'notifysuccess');
 
-        } elseif ($actionid == invitation_manager::INVITE_EXTEND) {
+        } else if ($actionid == invitation_manager::INVITE_EXTEND) {
             // Set the invite to be extended.
-            $invitationmanager->set_invite_extended($curr_invite);
+            $invitationmanager->set_invite_extended($currinvite);
 
             echo $OUTPUT->notification(get_string('extend_invite_sucess', 'local_swtc'), 'notifysuccess');
 
-        } elseif ($actionid == invitation_manager::INVITE_RESET) {
-			// Set the invite to be like new.
-            $invitationmanager->set_invite_reset($curr_invite);
+        } else if ($actionid == invitation_manager::INVITE_RESET) {
+            // Set the invite to be like new.
+            $invitationmanager->set_invite_reset($currinvite);
 
             echo $OUTPUT->notification(get_string('extend_invite_sucess', 'local_swtc'), 'notifysuccess');
 
-		} else {
+        } else {
             print_error('invalidactionid');
         }
 
@@ -142,7 +143,6 @@ if (empty($invites)) {
             'userid'           => get_string('historyuserid', 'local_swtc'),
             'status'            => get_string('historystatus', 'local_swtc'),
             'datesent'          => get_string('historydatesent', 'local_swtc'),
-            // 'dateused'    => get_string('historydateused', 'local_swtc'),
             'dateexpiration'    => get_string('historydateexpiration', 'local_swtc'),
             'actions'           => get_string('historyactions', 'local_swtc')
     );
@@ -151,8 +151,8 @@ if (empty($invites)) {
     // Lenovo ********************************************************************************.
     // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
     // Lenovo ********************************************************************************.
-    $table->pagesize($perpage, count($invites));      // @01
-    $table->pageable(true);      // @01
+    $table->pagesize($perpage, count($invites));
+    $table->pageable(true);
     $table->define_columns(array_keys($columns));
     $table->define_headers(array_values($columns));
     $table->define_baseurl($PAGE->url);
@@ -161,24 +161,23 @@ if (empty($invites)) {
     $table->setup();
 
     // Lenovo ********************************************************************************.
-    // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
+    // Restricted list shown to 20 and added paging.
     // Lenovo ********************************************************************************.
-    $start = $page * $perpage;      // @01
-    if ($start > count($invites)) {     // @01
-        $page = 0;      // @01
-        $start = 0;     // @01
-    }       // @01
+    $start = $page * $perpage;
+    if ($start > count($invites)) {
+        $page = 0;
+        $start = 0;
+    }
 
-    $results = array_slice($invites, $start, $perpage, true);       // @01
+    $results = array_slice($invites, $start, $perpage, true);
 
-    foreach ($results as $invite) {     // @01
+    foreach ($results as $invite) {
         /* Build display row:
          * [0] - id
          * [1] - invitee
          * [2] - userid
          * [3] - status
          * [4] - dates sent
-         * [5] - used date      // Lenovo - 08/10/18 Skipping for now (Status will have user information in there if invitation was accepted).
          * [5] - expiration date
          * [6] - actions
          */
@@ -205,22 +204,15 @@ if (empty($invites)) {
         // When was the invite sent?
         $row[4] = date('M j, Y g:ia', $invite->timesent);
 
-        // If status is used, then state when it was used.
-        //  if ($status == get_string('status_invite_used', 'local_swtc')) {
-        //      $row[5] = date('M j, Y g:ia', $invite->timeused);
-        //  } else {
-        //      $row[5] = '';
-        //  }
-
         // When does the invite expire?
         $row[5] = date('M j, Y g:ia', $invite->timeexpiration);
 
         // If status is active, then state how many days/minutes left.
         if ($status == get_string('status_invite_active', 'local_swtc')) {
-            $expires_text = sprintf('%s %s',
+            $expirestext = sprintf('%s %s',
                     get_string('historyexpires_in', 'local_swtc'),
                     distance_of_time_in_words(time(), $invite->timeexpiration, true));
-            $row[5] .= ' ' . html_writer::tag('span', '(' . $expires_text . ')', array('expires-text'));
+            $row[5] .= ' ' . html_writer::tag('span', '(' . $expirestext . ')', array('expires-text'));
         }
 
         // Are there any actions user can do?
@@ -235,11 +227,11 @@ if (empty($invites)) {
             // Create link to extend an invite.
             $url->param('actionid', invitation_manager::INVITE_EXTEND);
             $row[6] .= html_writer::link($url, get_string('action_extend_invite', 'local_swtc'));
-        } elseif ($status == get_string('status_invite_expired', 'local_swtc')) {
-			// Create link to reset an invite just like new.
+        } else if ($status == get_string('status_invite_expired', 'local_swtc')) {
+            // Create link to reset an invite just like new.
             $url->param('actionid', invitation_manager::INVITE_RESET);
             $row[6] .= html_writer::link($url, get_string('action_reset_invite', 'local_swtc'));
-		}
+        }
 
         $table->add_data($row);
     }

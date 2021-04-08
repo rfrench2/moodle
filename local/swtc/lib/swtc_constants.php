@@ -19,7 +19,7 @@
  *
  * @package    local
  * @subpackage swtc/lib/swtc_constants.php
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -32,12 +32,10 @@ namespace local_swtc;
 
 defined('MOODLE_INTERNAL') || die();
 
-// SWTC ********************************************************************************
 /**
  * Important! Define the values to use in swtccustom and swtcpractical course formats
  */
 define('COURSETYPE_GTP', 3);
-// define('COURSETYPE_LENOVOANDIBM', 4);
 define('COURSETYPE_IBM', 4);
 define('COURSETYPE_LENOVO', 5);
 define('COURSETYPE_SERVICEPROVIDER', 6);
@@ -54,3 +52,5 @@ define('COURSETYPE_NONE', 66);
 
 define('COURSE_ACTIVE', 1);
 define('COURSE_INACTIVE', 0);
+
+define('SWTC_SQL_MAX_RECORDS', 40000);

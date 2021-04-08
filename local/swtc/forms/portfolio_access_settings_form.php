@@ -19,10 +19,10 @@
  *
  * @package    local
  * @subpackage SWTC
- * @copyright  2021 SWTC Education
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * SWTC history:
+ * History:
  *
  * 03/20/21 - Initial writing.
  *
@@ -54,9 +54,7 @@ class portfolio_access_settings_form extends moodleform {
     protected $capability = 'moodle/category:viewcourselist';
     protected $baseurl = '/local/swtc/lib/portfolio_access_settings.php';
 
-    function definition() {
-
-        // $mform = $this->_form;
+    public function definition() {
 
         // Get all the args.
         $this->user = $this->_customdata['user'];
@@ -73,15 +71,15 @@ class portfolio_access_settings_form extends moodleform {
         $this->define_form_roles($this->user);
 
         // For development and debugging, set roles to only the first,
-        //  or first few, roles.
-        //  If development, set to true; if production, set to false.
+        // or first few, roles.
+        // If development, set to true; if production, set to false.
         $this->development = false;
 
         // Note: load_current_settings must be called from outside this
-        //   form as no settings can be saved in any $this variable. In
-        //   addition, load_current_settings must be called twice: once
-        //   before showing the current state of the permissions (i.e. before
-        //   any changes) and after the Save changes button is clicked.
+        // form as no settings can be saved in any $this variable. In
+        // addition, load_current_settings must be called twice: once
+        // before showing the current state of the permissions (i.e. before
+        // any changes) and after the Save changes button is clicked.
     }
 
     /**
@@ -103,12 +101,13 @@ class portfolio_access_settings_form extends moodleform {
 
         // Get all columns.
         $catids = get_tree(0);
-        foreach($catids as $catid) {
+        foreach ($catids as $catid) {
             $cell = new html_table_cell();
             // Set the row header (the role name) to bold.
             $cell->style = "font-weight: bold";
             $catname = core_course_category::get($catid, MUST_EXIST, true)->name;
-            $cell->text = html_writer::link(new moodle_url($this->baseurl, array('target' => '_blank', 'catid' => $catid)), $catname);
+            $cell->text = html_writer::link(new moodle_url($this->baseurl,
+                array('target' => '_blank', 'catid' => $catid)), $catname);
             // Adding this field so that the cell in the table format correctly.
             $cell->attributes['text2'] = $catname;
             $cell->attributes['title'] = $this->get_header_tooltip($catname, $catid);
@@ -130,7 +129,8 @@ class portfolio_access_settings_form extends moodleform {
             // Set the row header (the role name) to bold.
             $cell->style = "font-weight: bold";
             $catname = core_course_category::get($this->catid, MUST_EXIST, true)->name;
-            $cell->text = html_writer::link(new moodle_url($this->baseurl, array('target' => '_blank', 'catid' => $this->catid)), $catname);
+            $cell->text = html_writer::link(new moodle_url($this->baseurl,
+                array('target' => '_blank', 'catid' => $this->catid)), $catname);
             // Adding this field so that the cell in the table format correctly.
             $cell->attributes['text2'] = $catname;
             $cell->attributes['title'] = $this->get_header_tooltip($catname, $this->catid);
@@ -176,7 +176,7 @@ class portfolio_access_settings_form extends moodleform {
         $allroles = get_all_roles();
         foreach ($allroles as $role) {
             // We need to remove all the localized roles (i.e. roles without a name).
-            //  And we need to save the name for each role.
+            // And we need to save the name for each role.
             if (!empty($role->name)) {
                 $this->roles[$role->id] = $role->name;
             }
@@ -284,39 +284,23 @@ class portfolio_access_settings_form extends moodleform {
                     }
 
                     // Use text2 so that internal cells format correctly.
-                    // $tooltip = $this->get_cell_tooltip($rolename, $column->text);
                     $tooltip = $this->get_cell_tooltip($rolename, $column->attributes['text2']);
-                    // $chkboxname = 's_' . $roleid . '_' . $rolename;
                     $chkboxname = 's_' . $roleid . '_' . $columnid;
 
-                    // Save the current state of the checkbox.
-                    // 03/27/21 - Can't save the state of the checkboxes between states.
-                    // $this->currentdata[$chkboxname] = empty($checked) ? '0' : 1;
-
-                    // 03/27/21 - WORKS! $args = array('class' => "form-check-input", 'id' => $chkboxname, 'for' => $chkboxname, 'title' => $tooltip, 'value' => 1);
-                    // 03/26/27 - WORKS! $row->cells[] = html_writer::checkbox($chkboxname, $chkboxname, $checked, '', $args);
-                    // 03/29/21 - WORKS!!! Experimenting with advcheckbox. The following is taken from data/field/checkbox/field.class.php:
-                    //          '<input type="hidden" name="field_' . $this->field->id . '[]" value="" />';
-                    $row->cells[] = '<input type="hidden" name="' . $chkboxname . '" value="" /><input type="checkbox" name="' . $chkboxname . '" id="' . $chkboxname .
+                    $row->cells[] = '<input type="hidden" name="' . $chkboxname .
+                        '" value="" /><input type="checkbox" name="' . $chkboxname . '" id="' . $chkboxname .
                         '" title="' . $tooltip . '" value="1" ' . $checked . '/>' .
                         '<label for="' . $chkboxname . '" class="accesshide">' . $tooltip . '</label>';
                 } else {
                     // Add the rolename as the row header.
-                    // 03/31/21 - Experimenting...
-                    // WORKS!! $row->cells[] = $rolename;
-                    // WORKS!! The following 5 lines:
                     $cell = new html_table_cell();
                     // Set the row header (the role name) to bold.
                     $cell->style = "font-weight: bold";
-                    // $cell->text = $rolename;
-                    $cell->text = html_writer::link(new moodle_url($this->baseurl, array('target' => '_blank', 'roleid' => $roleid)), $rolename);
+                    $cell->text = html_writer::link(new moodle_url($this->baseurl,
+                        array('target' => '_blank', 'roleid' => $roleid)), $rolename);
                     // Add a tooltip.
                     $cell->attributes['title'] = $this->get_cell0_tooltip($rolename, $roleid);
                     $row->cells[] = $cell;
-
-                    // $attributes['title'] = $this->tooltip;
-                    //$tooltip = $this->get_header_tooltip($colname, $columnid);
-                    //title=" '.$tooltip.' "
                 }
             }
 
@@ -327,7 +311,6 @@ class portfolio_access_settings_form extends moodleform {
         if (isset($debug)) {
             $messages[] = print_r("In get_portfolio_access_table; about to print table.", true);
             $messages[] = print_r($this->table, true);
-            // print_object($this->table);
             $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
@@ -368,7 +351,7 @@ class portfolio_access_settings_form extends moodleform {
      *
      */
     // Note: For debugging, use the following line:
-    // process_submission($formdata) {
+    // process_submission($formdata) {.
     public function process_submission($portapply = null) {
         global $DB;
 
@@ -379,28 +362,20 @@ class portfolio_access_settings_form extends moodleform {
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
-        // print_object("did I get here?? about to print formdata");
-        // print_object($formdata);
+
         $this->load_current_settings();
 
         // Need to create the newly updated settings just like we created the
         // current settings (load_current_settings).
-        //
-        // foreach ($this->data as $catid => $catid['capabilities'])
         foreach ($this->roles as $roleid => $rolename) {
             foreach ($this->columns as $catid => $catname) {
                 // Remember to skip $this->columns[0] which is the column header.
                 // Examples:
-                //      $chkboxname = 's_' . $roleid . '_' . $columnid;
-                //      [s_19_141] => 1
+                // $chkboxname = 's_' . $roleid . '_' . $columnid;
+                // [s_19_141] => 1.
                 if (!empty($catid)) {
-                    // 03/29/21 - START HERE!!!
                     // If we enter the following, the checkbox was set.
-                    // print_r("in process_submission; about to print optional_param and newvalue");
                     $newvalue = (int) optional_param('s_' . $roleid . '_' . $catid, null, PARAM_INT);
-                    // print_r("new value is :$newvalue" . "\n");
-
-                    // if (optional_param('s_' . $roleid . '_' . $catid, false, PARAM_INT)) {
                     // The value SHOULD be either 1 (accessable) or 0 (inaccessable).
                     if (!is_null($newvalue)) {
                         $params = array();
@@ -414,8 +389,9 @@ class portfolio_access_settings_form extends moodleform {
                             // If the NEW value is different than the CURRENT value, change it.
                             if ((int)$record->access !== $newvalue) {
                                 if (isset($debug)) {
-                                    // print_r("currvalue and newvalue are DIFFERENT; changing the [$roleid][$catid] value");
-                                    $messages[] = print_r("Values are DIFFERENT; changing " . $rolename . "(" . $roleid . ") access to " . $catname . "(" . $catid . ") from " . (int)$record->access . " to $newvalue.", true);
+                                    $messages[] = print_r("Values are DIFFERENT; changing " . $rolename . "(" . $roleid .
+                                        ") access to " . $catname . "(" . $catid . ") from " . (int)$record->access .
+                                        " to $newvalue.", true);
                                     $debug->logmessage($messages, 'detailed');
                                     unset($messages);
                                 }
@@ -429,41 +405,28 @@ class portfolio_access_settings_form extends moodleform {
                                     // Since the access has changed, we must update the permissions
                                     // for the top-level category.
                                     // First, prevent all roles from the category.
-                                    // all-category-changecapability.sh -c -d -cap moodle/category:viewcourselist -opt prevent -por gtp -rsn all
-                                    // moosh -n -v swtc-role-update-capability "$debug" "$capability" "$option" "$x" "$roleshortname"
-                                    // moosh -n -v swtc-role-update-capability --deb moodle/category:viewcourselist prevent gtp lenovo
                                     $context = context_coursecat::instance($catid);
                                     $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
-                                    // print_r("roleid is :$roleid, option is :$option");
-                                    // die;
                                     if (assign_capability($this->capability, $option, $roleid, $context->id, true)) {
                                         if (isset($debug)) {
-                                            $messages[] = print_r("Assigned capability for $rolename($roleid) to $catname($catid) successfully.", true);
+                                            $messages[] = print_r("Assigned capability for $rolename($roleid) to
+                                                $catname($catid) successfully.", true);
                                             $debug->logmessage($messages, 'detailed');
                                             unset($messages);
                                         }
                                     } else {
                                         if (isset($debug)) {
-                                            $messages[] = print_r("Error - Unable to assigned capability for $rolename($roleid) to $catname($catid).", true);
+                                            $messages[] = print_r("Error - Unable to assigned capability for
+                                                $rolename($roleid) to $catname($catid).", true);
                                             $debug->logmessage($messages, 'detailed');
                                             unset($messages);
                                         }
                                     }
-                                    // die;
                                 }
-                            } else {
-                                // if (isset($debug)) {
-                                //     // print_r("currvalue and newvalue are the same; nothing to see here\n");
-                                //     $messages[] = print_r("Values are the same; nothing to do.", true);
-                                //     $debug->logmessage($messages, 'detailed');
-                                //     unset($messages);
-                                // }
                             }
                         } else {
                             // The database record did NOT exist...yet.
                             // Add the created date and userid.
-                            // $value = $this->data[$catid]['capabilities'][$roleid]['value'];
-                            // print_r("in process_submission; about to print value :$newvalue");
                             $params = array();
                             $params['roleid'] = $roleid;
                             $params['catid'] = $catid;
@@ -476,7 +439,8 @@ class portfolio_access_settings_form extends moodleform {
                             if ($DB->insert_record($this->tablename, $params, false)) {
                                 // The record was successfully created.
                                 if (isset($debug)) {
-                                    $messages[] = print_r("Added new record: " . $rolename . "(" . $roleid . ") access to " . $catname . "(" . $catid . ") added.", true);
+                                    $messages[] = print_r("Added new record: " . $rolename . "(" . $roleid . ") access to " .
+                                        $catname . "(" . $catid . ") added.", true);
                                     $debug->logmessage($messages, 'detailed');
                                     unset($messages);
                                 }
@@ -484,23 +448,10 @@ class portfolio_access_settings_form extends moodleform {
                                     // Since the access has changed, we must update the permissions
                                     // for the top-level category.
                                     // First, prevent all roles from the category.
-                                    // all-category-changecapability.sh -c -d -cap moodle/category:viewcourselist -opt prevent -por gtp -rsn all
-                                    // moosh -n -v swtc-role-update-capability "$debug" "$capability" "$option" "$x" "$roleshortname"
-                                    // moosh -n -v swtc-role-update-capability --deb moodle/category:viewcourselist prevent gtp lenovo
                                     $context = context_coursecat::instance($catid);
                                     $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
-                                    // print_r("roleid is :$roleid, option is :$option");
-                                    // die;
-                                    if (assign_capability($this->capability, $option, $roleid, $context->id, true)) {
-                                        // print_object("it worked");
-                                    } else {
-                                        // print_object("it DIDNT work");
-                                    }
-                                    // die;
+                                    assign_capability($this->capability, $option, $roleid, $context->id, true);
                                 }
-                            } else {
-                                // The record was NOT successfully created.
-                                // Not sure what to do here either.
                             }
                         }
                     }
@@ -536,13 +487,6 @@ class portfolio_access_settings_form extends moodleform {
      */
     public function get_intro_text() {
         $text = get_string('portfolio_access_intro', 'local_swtc');
-        // $text .= get_string('portfolio_access_intro2', 'local_swtc');
-        // $text = '<p>Master table of portfolio to customized user roles (accesstype) access permissions.<br>';
-        // $text .= '<br>Initial state of the table is set from values found in the <strong>local_swtc_port_access</strong> database table.';
-        // $text .= '<br>These values will be used throughout the site to verify a user' . "'" . 's access.';
-        // $text .= '<br>Including the setting of the <strong>moodle/category:viewcourselist</strong> at the top-level portfolio level.';
-        // $text .= '<br>Changing these values only changes the values in the <strong>local_swtc_port_access</strong> database table.';
-        // $text .= '<br><br><strong>No changing of moodle/category:viewcourselist will be performed.</strong></p>';
         return $text;
     }
 }

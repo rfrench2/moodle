@@ -19,7 +19,7 @@
  *
  * @package    local
  * @subpackage swtc
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -32,23 +32,23 @@
 $string['debug_string'] = 'SWTC *****************************************************************************//';
 $string['swtc'] = 'SWTC';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 //
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 $string['swtcpubdate'] = 'Course publication date';
 $string['swtcpubdate_help'] = 'Set this date to the publication (GA) date of the course. In other words, the date the course will be moved from the SWTC Internal Portfolio to any of the external portfolios.';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // Added strings to support "Curriculums" tab in "My courses".
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 $string['curriculums'] = 'Curriculums';
 $string['mycurriculums'] = 'My Curriculums';
 $string['allcurriculums'] = 'All Curriculums';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // PremierSupport curriculum courses.
-//      TODO: Either make these generic so everyone can use or add "premiersupport" to the names so no one else will use.
-// SWTC *******************************************************************************
+// TODO: Either make these generic so everyone can use or add "premiersupport" to the names so no one else will use.
+// SWTC *******************************************************************************.
 $string['converged_curriculum'] = 'Converged';
 $string['nutanix_curriculum'] = 'Nutanix';
 $string['cutomer_service_curriculum'] = 'Customer Service Techniques';
@@ -61,9 +61,9 @@ $string['registrations_curriculum'] = 'Registrations';
 $string['thinksystem_curriculum'] = 'ThinkSystem';
 $string['vmware_curriculum'] = 'VMware';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // ServiceDelivery curriculum courses.
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 $string['servicedelivery_base_curriculum'] = 'Base';
 $string['servicedelivery_products_curriculum'] = 'Products';
 $string['servicedelivery_appliancesolution_curriculum'] = 'Appliance / Solution';
@@ -105,15 +105,15 @@ $string['maintechsuggestedcourses_header'] = 'Select the courses(s) to feature f
 $string['aspsuggestedcourses'] = 'ASP suggested courses';
 $string['aspsuggestedcourses_header'] = 'Select the courses(s) to feature for ASP users.';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // For use in locking access to customsql report categories (/report/customsql).
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 $string['customsql:viewallcats'] = 'View custom queries reports in all categories';
 $string['customsql:viewpremiersupportcat'] = 'View custom queries reports in PremierSupport category';
 
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // For use in new user account invitation (/auth/emailadmin).
-// SWTC *******************************************************************************
+// SWTC *******************************************************************************.
 // User account invitation invite strings.
 $string['requestinvitation'] = 'Request invitation';
 $string['newuserinvitation'] = 'New User Account Invitation';
@@ -222,9 +222,9 @@ $string['lenovo_portfolio'] = 'Lenovo Portfolio';
 $string['serviceprovider_portfolio'] = 'Service Provider Portfolio';
 $string['lenovointernal_portfolio'] = 'Lenovo Internal Portfolio';
 $string['lenovosharedresources_portfolio'] = 'Lenovo Shared Resources (Master)';
-$string['lensharedsimulators_shortname'] = 'ES10000';			                        // The actual short name for the shared simulator course.
-$string['leninternalsharedresources'] = 'LenInternalSharedResources';			// The actual short name for the 'Shared Resources (Master)' course.
-$string['sharedresources_coursename'] = 'Shared Resources (Master)';		// The actual name for the 'Shared Resources (Master)' course.
+$string['lensharedsimulators_shortname'] = 'ES10000';                                    // The actual short name for the shared simulator course.
+$string['leninternalsharedresources'] = 'LenInternalSharedResources';            // The actual short name for the 'Shared Resources (Master)' course.
+$string['sharedresources_coursename'] = 'Shared Resources (Master)';        // The actual name for the 'Shared Resources (Master)' course.
 $string['maintech_portfolio'] = 'Maintech Portfolio';
 $string['ibm_portfolio'] = 'IBM Portfolio';
 $string['asp_portfolio'] = 'ASP Portfolio';
@@ -289,21 +289,21 @@ $string['role_gtp_student'] = 'gtp-student';
 $string['role_gtp_siteadministrator'] = 'gtp-siteadministrator';
 
 // Avnet (AV) GTP user types...
-$string['access_av_gtp'] = 'AV-GTP';		// 01/17/19
+$string['access_av_gtp'] = 'AV-GTP';        // 01/17/19
 $string['access_av_gtp_administrator'] = 'AV-GTP-administrator';
 $string['access_av_gtp_instructor'] = 'AV-GTP-instructor';
 $string['access_av_gtp_student'] = 'AV-GTP-student';
 $string['access_av_gtp_siteadministrator'] = 'AV-GTP-siteadministrator';
 
 // Ingram Micro (IM) GTP user types...
-$string['access_im_gtp'] = 'IM-GTP';		// 01/17/19
+$string['access_im_gtp'] = 'IM-GTP';        // 01/17/19
 $string['access_im_gtp_administrator'] = 'IM-GTP-administrator';
 $string['access_im_gtp_instructor'] = 'IM-GTP-instructor';
 $string['access_im_gtp_student'] = 'IM-GTP-student';
 $string['access_im_gtp_siteadministrator'] = 'IM-GTP-siteadministrator';
 
 // Learn Quest (LQ) GTP user types...
-$string['access_lq_gtp'] = 'LQ-GTP';		// 01/17/19
+$string['access_lq_gtp'] = 'LQ-GTP';        // 01/17/19
 $string['access_lq_gtp_administrator'] = 'LQ-GTP-administrator';
 $string['access_lq_gtp_instructor'] = 'LQ-GTP-instructor';
 $string['access_lq_gtp_student'] = 'LQ-GTP-student';
@@ -388,8 +388,8 @@ $string['access_premiersupport_pregmatch_siteadministrator'] = '/PremierSupport-
 
 // PremierSupport manager and administrator reporting and preg_match strings.  {$a->fullname}
 // Note: If the user is a PS admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
-//          If the user is a PS GEO admin, the following string is repeated for all GEOs (using 'access_all_geos') in a custom
-//              groups menu (/lib/groupslib.php:groups_sort_menu_options).
+// If the user is a PS GEO admin, the following string is repeated for all GEOs (using 'access_all_geos') in a custom
+// groups menu (/lib/groupslib.php:groups_sort_menu_options).
 // To be used with PremierSupport-admins (assumption is groupname is either "US1" or "US" depending on access type).
 $string['groups_premiersupport_all_group_participants'] = 'All PremierSupport {$a->groupname} enrollments';
 $string['groups_premiersupport_group_participants'] = 'PremierSupport {$a->groupname} enrollments';
@@ -648,8 +648,8 @@ $string['access_lenovo_servicedelivery_pregmatch_siteadministrator'] = '/Lenovo-
 
 // ServiceDelivery manager and administrator reporting and preg_match strings.
 // Note: If the user is a SD admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
-//          If the user is a SD site admin, the following string is repeated for all GEOs (using 'access_all_geos') in a custom
-//              groups menu (/lib/groupslib.php:groups_sort_menu_options).
+// If the user is a SD site admin, the following string is repeated for all GEOs (using 'access_all_geos') in a custom
+// groups menu (/lib/groupslib.php:groups_sort_menu_options).
 // To be used with ServiceDelivery-admins (assumption is groupname is either "US1" or "US" depending on access type).
 $string['groups_lenovo_servicedelivery_all_group_participants'] = 'All ServiceDelivery {$a->groupname} enrollments';
 $string['groups_lenovo_servicedelivery_group_participants'] = 'ServiceDelivery {$a->groupname} enrollments';
@@ -1156,7 +1156,7 @@ $string['suggested_enrolled'] = 'Suggested enrolled';
 
 // SWTC  ********************************************************************************.
 // Common SWTC customized course format strings.
-// SWTC ********************************************************************************.
+// SWTC *******************************************************************************.
 $string['newsectionname'] = 'New name for section {$a}';
 $string['currentsection'] = 'This section';
 $string['editsection'] = 'Edit section';
@@ -1177,9 +1177,9 @@ $string['machinetypes_help'] = 'List all machine type(s) for the system(s) speci
 $string['duration'] = 'Duration (in minutes only)';
 $string['duration_help'] = 'Estimated duration to complete this course (in minutes only).';
 
-// SWTC  ********************************************************************************.
+// SWTC  *******************************************************************************.
 // Portfolio Settings page strings.
-// SWTC ********************************************************************************.
+// SWTC *******************************************************************************.
 $string['portfolio_access_settings'] = 'Porfolio access settings';
 $string['portfolio_access_button'] = 'Save changes and Apply permissions to all top-level portfolios';
 
