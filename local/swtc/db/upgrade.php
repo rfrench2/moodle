@@ -19,7 +19,7 @@
  *
  * @package    local
  * @subpackage swtc
- * @copyright  2020 SWTC
+ * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * History:
@@ -99,7 +99,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
     }
 
-	if ($oldversion < 2020110206) {
+    if ($oldversion < 2020110206) {
 
         // Define index name (unique) to be dropped form local_swtc_userbookmarks.
         $table = new xmldb_table('local_swtc_userbookmarks');
@@ -110,7 +110,7 @@ function xmldb_local_swtc_upgrade($oldversion) {
             $dbman->drop_index($table, $index);
         }
 
-		// Define key userid_name (unique) to be added to local_swtc_userbookmarks.
+        // Define key userid_name (unique) to be added to local_swtc_userbookmarks.
         $key = new xmldb_key('userid_name', XMLDB_KEY_UNIQUE, array('userid', 'name'));
 
         // Launch add key userid_name.
@@ -144,9 +144,6 @@ function xmldb_local_swtc_upgrade($oldversion) {
 
         // Adding keys to table local_swtc_sc.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Adding indexes to table local_swtc_sc. // 06/07/19 - Not sure about this one.
-        // $table->add_index('accesstype', XMLDB_INDEX_UNIQUE, array('accesstype'));
 
         // Conditionally launch create table for local_swtc_sc.
         if (!$dbman->table_exists($table)) {
@@ -216,28 +213,6 @@ function xmldb_local_swtc_upgrade($oldversion) {
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
         // Conditionally launch create table for local_swtc_rc_details.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
-        // SWTC savepoint reached.
-        upgrade_plugin_savepoint(true, 2020110206, 'local', 'swtc');
-    }
-
-    if ($oldversion < 2020110206) {
-
-        // Define table local_swtc_gtp_portfolio_access to be created.
-        $table = new xmldb_table('local_swtc_gtp_portfolio_access');
-
-        // Adding fields to table local_swtc_gtp_portfolio_access.
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('roleid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('capability', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-
-        // Adding keys to table local_swtc_gtp_portfolio_access.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Conditionally launch create table for local_swtc_gtp_portfolio_access.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
