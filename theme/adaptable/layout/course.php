@@ -24,6 +24,12 @@
  * @author     2019 G J Barnard - {@link http://moodle.org/user/profile.php?id=442195}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * SWTC history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ * 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
+ *
+ *
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -142,6 +148,13 @@ if ($movesidebartofooter) {
 
                         echo $OUTPUT->course_content_header();
                         echo $OUTPUT->main_content();
+
+                        // SWTC ********************************************************************************.
+                        // Changed location of loading of related-slider- and suggest-slider-.
+                        // SWTC ********************************************************************************.
+                        echo $OUTPUT->get_block_regions('customrowsetting', 'related-slider-', '12-0-0-0');
+                        echo $OUTPUT->get_block_regions('customrowsetting', 'suggest-slider-', '12-0-0-0');
+
                         echo $OUTPUT->course_content_footer();
 
                         echo '</section>';
@@ -161,6 +174,13 @@ if ($movesidebartofooter) {
                 }
                 echo $OUTPUT->course_content_header();
                 echo $OUTPUT->main_content();
+
+                // SWTC ********************************************************************************.
+                // Changed location of loading of related-slider- and suggest-slider-.
+                // SWTC ********************************************************************************.
+                echo $OUTPUT->get_block_regions('customrowsetting', 'related-slider-', '12-0-0-0');
+                echo $OUTPUT->get_block_regions('customrowsetting', 'suggest-slider-', '12-0-0-0');
+                
                 echo $OUTPUT->course_content_footer();
             }
             ?>

@@ -39,7 +39,6 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2015 Moodlerooms Inc. (http://www.moodlerooms.com) (activity further information functionality)
  * @copyright 2017 Manoj Solanki (Coventry University)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
 
 use cm_info;
@@ -63,7 +62,6 @@ use action_link;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_renderer extends \core_course_renderer {
-
     /**
      * Build the HTML for the module chooser javascript popup
      *

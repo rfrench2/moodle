@@ -22,9 +22,19 @@
  * @copyright  2015-2017 Fernando Acedo (3-bits.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * SWTC history:
+ *
+ * 11/09/20 - Initial writing.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die;
+
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 
 // Load libraries.
 require_once($CFG->dirroot.'/course/renderer.php');
@@ -1882,9 +1892,38 @@ EOT;
      * Returns menu object containing main navigation.
      *
      * @return menu boject
+     *
+     * SWTC history:
+     *
+     * 11/09/20 - Initial writing.
+     *
      */
     public function navigation_menu_content() {
-        global $COURSE;
+        global $USER, $COURSE;
+
+        // SWTC ********************************************************************************.
+        // SWTC swtcuser and debug variables.
+        $swtcuser = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
+        $debug = swtc_get_debug();
+        $mycurriculums = get_string('mycurriculums', 'local_swtc');
+        // SWTC ********************************************************************************.
+
+        if (isset($debug)) {
+            // SWTC ********************************************************************************.
+            // Always output standard header information.
+            // SWTC ********************************************************************************.
+            $messages[] = get_string('swtc_debug', 'local_swtc');
+            $messages[] = "Entering renderers.php. ===theme_adaptable.enter.";
+            $messages[] = "About to print swtcuser.";
+            $messages[] = print_r($swtcuser, true);
+            $messages[] = "Finished printing swtcuser.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
+            $debug->logmessage($messages, 'both');
+            unset($messages);
+        }
+
         $menu = new custom_menu();
 
         $access = true;
@@ -2000,7 +2039,11 @@ EOT;
 
                     $branchlabel .= ' ' . $branchtitle;
 
-                    $branchurl   = new moodle_url('#');
+                    // SWTC ********************************************************************************.
+                    // Fixed the link for "My Courses".
+                    // $branchurl   = new moodle_url('#');
+                    // SWTC ********************************************************************************.
+                    $branchurl   = new moodle_url('/my/index.php');
                     $branchsort  = 10001;
 
                     $menudisplayoption = '';
@@ -2166,6 +2209,17 @@ EOT;
                                         new moodle_url('/course/view.php?id='.$course->id), format_string($course->shortname));
                                 }
                             }
+                        }
+                        // SWTC ********************************************************************************.
+                        // Adding two menu items under "My Courses": "My Courses" and "My Curriculums".
+                        // SWTC ********************************************************************************.
+                        if ((has_capability('local/swtc:ebg_view_curriculums', context_system::instance()))
+                            || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+                            // Use the "mysites" string in theme_adaptable since it is in the correct case ("My Courses").
+                            $branch->add(get_string('mysites', 'theme_adaptable'),
+                                new moodle_url('/my/index.php'), '', null, 'mycourses');
+                            $branch->add($mycurriculums,
+                                new moodle_url('/local/swtc/lib/curriculums.php'), '', null, 'mycurriculums');
                         }
                     } else {
                         $noenrolments = get_string('noenrolments', 'theme_adaptable');

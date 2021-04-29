@@ -23,6 +23,10 @@
  * @copyright 2017-2019 Manoj Solanki (Coventry University)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * SWTC history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ *
  */
 
 // General.
@@ -108,6 +112,8 @@ $string['region-course-top-c'] = 'Course page top region 3';
 $string['region-course-top-d'] = 'Course page top region 4';
 
 $string['region-news-slider-a'] = 'Course page slider region';
+$string['region-related-slider-a'] = 'SWTC related course page slider region';
+$string['region-suggest-slider-a'] = 'SWTC suggested course page slider region';
 
 $string['region-course-section-a'] = 'Course page activity end bottom region';
 
