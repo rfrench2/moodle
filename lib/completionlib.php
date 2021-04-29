@@ -24,9 +24,22 @@
  * @category completion
  * @copyright 1999 onwards Martin Dougiamas   {@link http://moodle.com}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 04/18/21 - Initial writing.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+// require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+// require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
+
+// use \local_swtc\traits\swtc_completionlib;
 
 /**
  * Include the required completion libraries
@@ -219,6 +232,11 @@ function completion_can_view_data($userid, $course = null) {
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class completion_info {
+
+    // SWTC ********************************************************************************.
+    // SWTC customized code for Moodle core completion.
+    // SWTC ********************************************************************************.
+    // use swtc_completionlib;
 
     /* @var stdClass Course object passed during construction */
     private $course;
@@ -1155,8 +1173,9 @@ class completion_info {
     public function get_num_tracked_users($where = '', $whereparams = array(), $groupid = 0) {
         global $DB;
 
+        print_object("get_num_tracked_users in /lib/completionlib.php");
         list($enrolledsql, $enrolledparams) = get_enrolled_sql(
-                context_course::instance($this->course->id), 'moodle/course:isincompletionreports', $groupid, true);
+            context_course::instance($this->course->id), 'moodle/course:isincompletionreports', $groupid, true);
         $sql  = 'SELECT COUNT(eu.id) FROM (' . $enrolledsql . ') eu JOIN {user} u ON u.id = eu.id';
         if ($where) {
             $sql .= " WHERE $where";
@@ -1180,11 +1199,20 @@ class completion_info {
      * @param context $extracontext If set, includes extra user information fields
      *   as appropriate to display for current user in this context
      * @return array Array of user objects with standard user fields
+     *
+     * SWTC history:
+     *
+     * 04/18/21 - Initial writing.
+     *
      */
     public function get_tracked_users($where = '', $whereparams = array(), $groupid = 0,
              $sort = '', $limitfrom = '', $limitnum = '', context $extracontext = null) {
 
         global $DB;
+
+        // SWTC ********************************************************************************.
+        // SWTC customized code for Moodle core completion.
+        // SWTC ********************************************************************************.
 
         list($enrolledsql, $params) = get_enrolled_sql(
                 context_course::instance($this->course->id),
