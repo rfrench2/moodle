@@ -106,12 +106,12 @@ function local_swtc_extend_navigation(global_navigation $nav) {
     $accessselfsupportstud = get_string('accessselfsupportstud', 'local_swtc');
 
     if (isset($debug)) {
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering /local/swtc/lib.php.===local_swtc_extend_navigation.enter.";
         $messages[] = "About to print swtcuser.";
         $messages[] = print_r($swtcuser, true);
         $messages[] = "Finished printing swtcuser.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $debug->logmessage($messages, 'both');
         unset($messages);
     }
@@ -453,9 +453,9 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         // SWTC ********************************************************************************.
         // Always output standard header information.
         // SWTC ********************************************************************************.
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering /local/swtc/lib.php===local_swtc_extend_settings_navigation.enter===.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $debug->logmessage($messages, 'both');
         unset($messages);
 
@@ -466,7 +466,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         // $settingsnav->children->get_key_list() should be the following:
         // Array ( [0] => frontpage [1] => dashboard [2] => siteadministration )
         // SWTC ********************************************************************************.
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "About to print settings_navigation (settingsnav) node.";
         $messages[] = print_r(array_keys((array)$settingsnav), true);
         $messages[] = "Finished printing settings_navigation (settingsnav) node.";
@@ -474,7 +474,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
         $allnodes = $settingsnav->children->get_key_list();
         $messages[] = print_r($allnodes, true);
         $messages[] = "Finished printing children get_key_list.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $debug->logmessage($messages, 'detailed');
         unset($messages);
     }
@@ -521,7 +521,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
             // SWTC ********************************************************************************.
             // Detailed debugging information.
             // SWTC ********************************************************************************.
-            $messages[] = "SWTC ********************************************************************************";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "Entering local_swtc_extend_settings_navigation.removing_frontpage ===2.0.5.enter.";
             $messages[] = "About to print context :";
             $messages[] = print_r($context, true);
@@ -531,7 +531,7 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
             $messages[] = "As an additional reminder, navigation_node namedtypes are as follows :";
             $messages[] = "[0] => system [10] => category [20] => course [30] => structure [40] => activity [50]
                 => resource [60] => custom [70] => setting [71] => siteadmin [80] => user [90] => container";
-            $messages[] = "SWTC ********************************************************************************";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
@@ -654,9 +654,9 @@ function local_swtc_extend_settings_navigation(settings_navigation $settingsnav,
             // SWTC ********************************************************************************.
             // Detailed debugging information.
             // SWTC ********************************************************************************.
-            $messages[] = "SWTC ********************************************************************************";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "I found the <strong>Site administration</strong> menu.";
-            $messages[] = "SWTC ********************************************************************************";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
@@ -878,7 +878,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
     // If debugging, output header information.
     // SWTC ********************************************************************************.
     if (isset($debug)) {
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering local_swtc_extend_navigation_course ===4.enter===.";
         $messages[] = "About to print swtcuser.";
         $messages[] = print_r($swtcuser, true);
@@ -892,7 +892,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
         $messages[] = "As an additional reminder, navigation_node namedtypes are as follows :";
         $messages[] = "[0] => system [10] => category [20] => course [30] => structure [40] => activity [50]
             => resource [60] => custom [70] => setting [71] => siteadmin [80] => user [90] => container";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $debug->logmessage($messages, 'both');
         unset($messages);
     }
@@ -1107,7 +1107,7 @@ function local_swtc_extend_navigation_course(navigation_node $parentnode, stdCla
                 // Added 'group' parameter to URL that is built for each tab for PremierSupport
                 // and ServiceDelivery managers and administrators.
                 // SWTC ********************************************************************************.
-                $groups = groups_get_all_groups($course->id, $USER->id, $course->defaultgroupingid);
+                $groups = swtc_groups_get_all_groups($course->id, $USER->id, $course->defaultgroupingid);
                 // Note: Should only be one returned.
                 foreach ($groups as $group) {
                     $groupid = $group->id;
@@ -1399,12 +1399,12 @@ function local_swtc_extend_navigation_category_settings(navigation_node $parentn
     // If debugging, output header information.
     // SWTC ********************************************************************************.
     if (isset($debug)) {
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering local_swtc_extend_navigation_category_settings ===2.enter===.";
         $messages[] = "About to print navigation_node (parentnode) node";
         $messages[] = print_r(array_keys((array)$parentnode), true);
         $messages[] = "Finished printing navigation_node (parentnode) node";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $debug->logmessage($messages, 'both');
         unset($messages);
     }

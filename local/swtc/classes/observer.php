@@ -34,6 +34,7 @@ namespace local_swtc;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/local/swtc/lib/swtc_userlib.php');
+// require_once($CFG->dirroot . '/local/swtc/lib/portfolio_access.php');
 
 
 class observer {
@@ -98,8 +99,7 @@ class observer {
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
-
+        $swtcuser->set_user_access($event);
     }
 
     /**
@@ -118,7 +118,8 @@ class observer {
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -181,7 +182,8 @@ class observer {
         // SWTC ********************************************************************************.
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -199,7 +201,8 @@ class observer {
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -262,7 +265,8 @@ class observer {
         if (isloggedin()) {
             $swtcuser = swtc_get_user([
                 'userid' => $event->userid]);
-            $swtcuser->set_user_role($event);
+                // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+                // $swtcuser->set_user_role($event);
         }
     }
 
@@ -281,7 +285,8 @@ class observer {
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -296,10 +301,12 @@ class observer {
      *
      */
     public static function role_assigned(\core\event\role_assigned $event) {
+        // print_object("in observer role_assigned. about to print event.");
+        // print_object($event);
         $swtcuser = swtc_get_user([
-            'userid' => $event->objectid,
-            'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            'userid' => $event->objectid]);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -317,7 +324,8 @@ class observer {
         $swtcuser = swtc_get_user([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
     /**
@@ -335,7 +343,8 @@ class observer {
         $swtcuser = swtc_get_use([
             'userid' => $event->objectid,
             'username' => $event->other['username']]);
-        $swtcuser->set_user_role($event);
+            // SWTC - 04/09/21 - MAJOR TESTING - Removing set_user_role.
+            // $swtcuser->set_user_role($event);
     }
 
 }

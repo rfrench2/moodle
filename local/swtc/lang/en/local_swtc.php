@@ -29,7 +29,7 @@
  *
  */
 
-$string['debug_string'] = 'SWTC *****************************************************************************//';
+$string['swtc_debug'] = 'SWTC *******************************************************************************.';
 $string['swtc'] = 'SWTC';
 
 // SWTC *******************************************************************************.
@@ -217,7 +217,6 @@ $string['swtc_set_access_type'] = "Set Access type for all users";
 // Options for the Type of course pull-down menu (taken from SWTC LMS custom course format).
 // Also the names of the top level categories...
 $string['gtp_portfolio'] = 'GTP Portfolio';
-// $string['lenovoandibm_portfolio'] = 'Lenovo and IBM Portfolio';
 $string['lenovo_portfolio'] = 'Lenovo Portfolio';
 $string['serviceprovider_portfolio'] = 'Service Provider Portfolio';
 $string['lenovointernal_portfolio'] = 'Lenovo Internal Portfolio';
@@ -238,7 +237,7 @@ $string['none_portfolio'] = 'PORTFOLIO NONE';
 
 // Important! String values based on accesstype must match the customized user profile value 'accesstype'...
 // Generic role types...
-// $string['role_gtp_administrator'] = 'gtp-administrator';
+$string['role_gtp_administrator'] = 'gtp-administrator';
 $string['role_gtp_instructor'] = 'gtp-instructor';
 $string['role_gtp_student'] = 'gtp-student';
 $string['role_gtp_siteadministrator'] = 'gtp-siteadministrator';
@@ -263,110 +262,93 @@ $string['role_asp_maintech_student'] = 'asp-maintech-student';
 
 $string['role_asp_manager'] = 'asp-manager';
 
-$string['role_premiersupport_student'] = 'premiersupport-student';
-$string['role_premiersupport_administrator'] = 'premiersupport-administrator';
-$string['role_premiersupport_geoadmin'] = 'premiersupport-geoadministrator';
-$string['role_premiersupport_siteadministrator'] = 'premiersupport-siteadministrator';
-$string['role_premiersupport_manager'] = 'premiersupport-manager';
-
-$string['role_servicedelivery_student'] = 'servicedelivery-student';
-$string['role_servicedelivery_administrator'] = 'servicedelivery-administrator';
-$string['role_servicedelivery_geoadmin'] = 'servicedelivery-geoadministrator';
-$string['role_servicedelivery_siteadministrator'] = 'servicedelivery-siteadministrator';
-$string['role_servicedelivery_manager'] = 'servicedelivery-manager';
-
 // IBM user types and roles (shortnames)...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
+// Important! All role strings must match the roles defined on the SWTC LMS web site.
 $string['access_ibm_student'] = 'IBM-student';
 $string['role_ibm_student'] = 'ibm-student';
 $string['access_ibm_pregmatch'] = '/IBM/i';
 
 // GTP roles (shortnames) for ALL GTPs...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['role_gtp_administrator'] = 'gtp-administrator';
-$string['role_gtp_instructor'] = 'gtp-instructor';
-$string['role_gtp_student'] = 'gtp-student';
-$string['role_gtp_siteadministrator'] = 'gtp-siteadministrator';
-
+// Important! All role strings must match the roles defined on the SWTC LMS web site.
 // Avnet (AV) GTP user types...
-$string['access_av_gtp'] = 'AV-GTP';        // 01/17/19
+$string['access_av_gtp'] = 'AV-GTP';
 $string['access_av_gtp_administrator'] = 'AV-GTP-administrator';
 $string['access_av_gtp_instructor'] = 'AV-GTP-instructor';
 $string['access_av_gtp_student'] = 'AV-GTP-student';
 $string['access_av_gtp_siteadministrator'] = 'AV-GTP-siteadministrator';
+$string['access_av_gtp_pregmatch'] = '/AV-GTP/i';
 
 // Ingram Micro (IM) GTP user types...
-$string['access_im_gtp'] = 'IM-GTP';        // 01/17/19
+$string['access_im_gtp'] = 'IM-GTP';
 $string['access_im_gtp_administrator'] = 'IM-GTP-administrator';
 $string['access_im_gtp_instructor'] = 'IM-GTP-instructor';
 $string['access_im_gtp_student'] = 'IM-GTP-student';
 $string['access_im_gtp_siteadministrator'] = 'IM-GTP-siteadministrator';
+$string['access_im_gtp_pregmatch'] = '/IM-GTP/i';
 
 // Learn Quest (LQ) GTP user types...
-$string['access_lq_gtp'] = 'LQ-GTP';        // 01/17/19
+$string['access_lq_gtp'] = 'LQ-GTP';
 $string['access_lq_gtp_administrator'] = 'LQ-GTP-administrator';
 $string['access_lq_gtp_instructor'] = 'LQ-GTP-instructor';
 $string['access_lq_gtp_student'] = 'LQ-GTP-student';
 $string['access_lq_gtp_siteadministrator'] = 'LQ-GTP-siteadministrator';
+$string['access_lq_gtp_pregmatch'] = '/LQ-GTP/i';
 
 // Lenovo user types and roles (shortnames)...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
+// Important! All role strings must match the roles defined on the SWTC LMS web site.
 $string['access_lenovo_student'] = 'Lenovo-student';
-$string['access_lenovo_pregmatch_student'] = '/Lenovo-stud/i';                       // ex: Lenovo-stud
-$string['role_lenovo_student'] = 'lenovo-student';
+$string['access_lenovo_pregmatch_stud'] = '/Lenovo-stud/i';
 
 $string['access_lenovo_instructor'] = 'Lenovo-instructor';
-$string['role_lenovo_instructor'] = 'lenovo-instructor';
+$string['access_lenovo_pregmatch_inst'] = '/Lenovo-inst/i';
 
 $string['access_lenovo_administrator'] = 'Lenovo-administrator';
-$string['access_lenovo_pregmatch_administrator'] = '/Lenovo-admin/i';                       // ex: Lenovo-admin
-$string['role_lenovo_administrator'] = 'lenovo-administrator';
+$string['access_lenovo_pregmatch_admin'] = '/Lenovo-admin/i';
 
-$string['access_lenovo_siteadministrator'] = 'Lenovo-siteadministrator';                        // 02/13/19
-$string['access_lenovo_pregmatch_siteadministrator'] = '/Lenovo-siteadmin/i';                       // ex: Lenovo-siteadmin
-$string['role_lenovo_siteadministrator'] = 'lenovo-siteadministrator';      // 02/13/19
+$string['access_lenovo_siteadministrator'] = 'Lenovo-siteadministrator';
+$string['access_lenovo_pregmatch_siteadmin'] = '/Lenovo-siteadmin/i';
 
 // SWTC user types and roles (shortnames)...
 // Important! All role strings must match the roles defined on the SWTC LMS web site.
 $string['access_swtc_student'] = 'SWTC-student';
-$string['access_swtc_pregmatch_student'] = '/SWTC-stud/i';
+$string['access_swtc_pregmatch_stud'] = '/SWTC-stud/i';
 $string['role_swtc_student'] = 'swtc-student';
 
 $string['access_swtc_instructor'] = 'SWTC-instructor';
 $string['role_swtc_instructor'] = 'swtc-instructor';
 
 $string['access_swtc_administrator'] = 'SWTC-administrator';
-$string['access_swtc_pregmatch_administrator'] = '/SWTC-admin/i';
+$string['access_swtc_pregmatch_admin'] = '/SWTC-admin/i';
 $string['role_swtc_administrator'] = 'swtc-administrator';
 
-$string['access_swtc_siteadministrator'] = 'SWTC-siteadministrator';                        // 02/13/19
-$string['access_swtc_pregmatch_siteadministrator'] = '/SWTC-siteadmin/i';                       // ex: SWTC-siteadmin
-$string['role_swtc_siteadministrator'] = 'swtc-siteadministrator';      // 02/13/19
+$string['access_swtc_siteadministrator'] = 'SWTC-siteadministrator';
+$string['access_swtc_pregmatch_siteadmin'] = '/SWTC-siteadmin/i';
+$string['role_swtc_siteadministrator'] = 'swtc-siteadministrator';
 
 // Service Provider user types and roles (shortnames)...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
+// Important! All role strings must match the roles defined on the SWTC LMS web site.
 $string['access_serviceprovider_student'] = 'ServiceProvider-student';
-$string['access_serviceprovider_pregmatch_student'] = '/ServiceProvider-stud/i';                       // ex: ServiceProvider-stud
+$string['access_serviceprovider_pregmatch_stud'] = '/ServiceProvider-stud/i';
 $string['role_serviceprovider_student'] = 'serviceprovider-student';
 
 // Maintech user types and roles (shortnames)...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
+// Important! All role strings must match the roles defined on the SWTC LMS web site.
 $string['access_maintech_student'] = 'Maintech-student';
-$string['access_maintech_pregmatch_student'] = '/^Maintech-stud/i';                       // ex: Maintech-stud
+$string['access_maintech_pregmatch_stud'] = '/^Maintech-stud/i';
 $string['role_maintech_student'] = 'maintech-student';
 
 // ASP-Maintech user types and roles (shortnames)...
 $string['access_asp_maintech_student'] = 'ASP-Maintech-student';
-$string['access_asp_maintech_pregmatch_student'] = '/^ASP-Maintech-stud/i';                       // ex: ASP-Maintech-stud
+$string['access_asp_maintech_pregmatch_stud'] = '/^ASP-Maintech-stud/i';
 $string['role_asp_maintech_student'] = 'asp-maintech-student';
 
 // ASP user types and roles (shortnames)...
 $string['access_asp_manager'] = 'ASP-manager';
 $string['role_asp_manager'] = 'asp-manager';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport section.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport user types and roles (shortnames) - main ones.
 $string['access_premiersupport_student'] = 'PremierSupport-student';
 $string['role_premiersupport_student'] = 'premiersupport-student';
@@ -380,11 +362,11 @@ $string['access_premiersupport_siteadministrator'] = 'PremierSupport-siteadminis
 $string['role_premiersupport_siteadministrator'] = 'premiersupport-siteadministrator';
 
 $string['access_premiersupport_pregmatch'] = '/PremierSupport/i';                                                       // ex: PremierSupport
-$string['access_premiersupport_pregmatch_student'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-stud/i';        // ex: PremierSupport-US1-stud
-$string['access_premiersupport_pregmatch_manager'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-mgr/i';          // ex: PremierSupport-US1-mgr
-$string['access_premiersupport_pregmatch_administrator'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-admin/i';  // ex: PremierSupport-US1-admin
+$string['access_premiersupport_pregmatch_stud'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-stud/i';        // ex: PremierSupport-US1-stud
+$string['access_premiersupport_pregmatch_mgr'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-man/i';          // ex: PremierSupport-US1-man
+$string['access_premiersupport_pregmatch_admin'] = '/PremierSupport-[A-Z][A-Z]+[1-9]-admin/i';  // ex: PremierSupport-US1-admin
 $string['access_premiersupport_pregmatch_geoadmin'] = '/PremierSupport-[A-Z][A-Z]-geoadmin/i';  // ex: PremierSupport-US-geoadmin
-$string['access_premiersupport_pregmatch_siteadministrator'] = '/PremierSupport-siteadmin/i';                       // ex: PremierSupport-siteadmin
+$string['access_premiersupport_pregmatch_siteadmin'] = '/PremierSupport-siteadmin/i';                       // ex: PremierSupport-siteadmin
 
 // PremierSupport manager and administrator reporting and preg_match strings.  {$a->fullname}
 // Note: If the user is a PS admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
@@ -403,9 +385,9 @@ $string['groups_premiersupport_geo_type_participants'] = 'PremierSupport {$a->gr
 $string['groups_premiersupport_all_participants'] = 'All PremierSupport enrollments';
 $string['groups_premiersupport_all_type_participants'] = 'All PremierSupport {$a->type} enrollments';   // ex: All PremierSupport student enrollments
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport GEO student types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_premiersupport_us1_student'] = 'PremierSupport-us1-student';
 $string['access_premiersupport_ca1_student'] = 'PremierSupport-ca1-student';
 $string['access_premiersupport_la1_student'] = 'PremierSupport-la1-student';
@@ -436,9 +418,9 @@ $string['access_premiersupport_la5_student'] = 'PremierSupport-la5-student';
 $string['access_premiersupport_ap5_student'] = 'PremierSupport-ap5-student';
 $string['access_premiersupport_em5_student'] = 'PremierSupport-em5-student';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport GEO manager types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_premiersupport_us1_manager'] = 'PremierSupport-us1-manager';
 $string['access_premiersupport_ca1_manager'] = 'PremierSupport-ca1-manager';
 $string['access_premiersupport_la1_manager'] = 'PremierSupport-la1-manager';
@@ -469,9 +451,9 @@ $string['access_premiersupport_la5_manager'] = 'PremierSupport-la5-manager';
 $string['access_premiersupport_ap5_manager'] = 'PremierSupport-ap5-manager';
 $string['access_premiersupport_em5_manager'] = 'PremierSupport-em5-manager';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport GEO administrator types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_premiersupport_us1_administrator'] = 'PremierSupport-us1-administrator';
 $string['access_premiersupport_ca1_administrator'] = 'PremierSupport-ca1-administrator';
 $string['access_premiersupport_la1_administrator'] = 'PremierSupport-la1-administrator';
@@ -502,18 +484,18 @@ $string['access_premiersupport_la5_administrator'] = 'PremierSupport-la5-adminis
 $string['access_premiersupport_ap5_administrator'] = 'PremierSupport-ap5-administrator';
 $string['access_premiersupport_em5_administrator'] = 'PremierSupport-em5-administrator';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport GEO administrator user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_premiersupport_us_geoadmin'] = 'PremierSupport-us-geoadministrator';
 $string['access_premiersupport_ca_geoadmin'] = 'PremierSupport-ca-geoadministrator';
 $string['access_premiersupport_la_geoadmin'] = 'PremierSupport-la-geoadministrator';
 $string['access_premiersupport_ap_geoadmin'] = 'PremierSupport-ap-geoadministrator';
 $string['access_premiersupport_em_geoadmin'] = 'PremierSupport-em-geoadministrator';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // PremierSupport GEO site administrator user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_premiersupport_us_siteadministrator'] = 'PremierSupport-us-siteadministrator';
 $string['access_premiersupport_ca_siteadministrator'] = 'PremierSupport-ca-siteadministrator';
 $string['access_premiersupport_la_siteadministrator'] = 'PremierSupport-la-siteadministrator';
@@ -526,7 +508,7 @@ $string['access_premiersupport_siteadministrator'] = 'PremierSupport-siteadminis
 // PremierSupport cohort names...also used as course group names.
 $string['cohort_premiersupport_pregmatch_admins'] = '/PS-[A-Z][A-Z]+[1-9]-admins/i';
 $string['cohort_premiersupport_pregmatch_mgrs'] = '/PS-[A-Z][A-Z]+[1-9]-mgrs/i';
-$string['cohort_premiersupport_pregmatch_students'] = '/PS-[A-Z][A-Z]+[1-9]-studs/i';
+$string['cohort_premiersupport_pregmatch_studs'] = '/PS-[A-Z][A-Z]+[1-9]-studs/i';
 $string['cohort_premiersupport_pregmatch_geoadmins'] = '/PS-[A-Z][A-Z]-geoadmins/i';
 $string['cohort_premiersupport_pregmatch_siteadmins'] = '/PS-siteadmins/i';
 
@@ -624,9 +606,9 @@ $string['cohort_premiersupport_us_siteadmins'] = 'PS-US-siteadmins';
 
 $string['cohort_premiersupport_siteadmins'] = 'PS-siteadmins';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery section.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery user types and roles (shortnames) - main ones.
 $string['access_lenovo_servicedelivery_student'] = 'Lenovo-ServiceDelivery-student';
 $string['role_servicedelivery_student'] = 'servicedelivery-student';
@@ -640,11 +622,11 @@ $string['access_lenovo_servicedelivery_siteadministrator'] = 'Lenovo-ServiceDeli
 $string['role_servicedelivery_siteadministrator'] = 'servicedelivery-siteadministrator';
 
 $string['access_lenovo_servicedelivery_pregmatch'] = '/Lenovo-ServiceDelivery/i';
-$string['access_lenovo_servicedelivery_pregmatch_student'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-stud/i';
-$string['access_lenovo_servicedelivery_pregmatch_manager'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-mgr/i';
-$string['access_lenovo_servicedelivery_pregmatch_administrator'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-admin/i';
+$string['access_lenovo_servicedelivery_pregmatch_stud'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-stud/i';
+$string['access_lenovo_servicedelivery_pregmatch_mgr'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-man/i';
+$string['access_lenovo_servicedelivery_pregmatch_admin'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]+[1-9]-admin/i';
 $string['access_lenovo_servicedelivery_pregmatch_geoadmin'] = '/Lenovo-ServiceDelivery-[A-Z][A-Z]-geoadmin/i';
-$string['access_lenovo_servicedelivery_pregmatch_siteadministrator'] = '/Lenovo-ServiceDelivery-siteadmin/i';
+$string['access_lenovo_servicedelivery_pregmatch_siteadmin'] = '/Lenovo-ServiceDelivery-siteadmin/i';
 
 // ServiceDelivery manager and administrator reporting and preg_match strings.
 // Note: If the user is a SD admin, the following string is the groupsmenu[0] in /lib/groupslib.php:groups_print_course_menu.
@@ -663,9 +645,9 @@ $string['groups_lenovo_servicedelivery_geo_type_participants'] = 'ServiceDeliver
 $string['groups_lenovo_servicedelivery_all_participants'] = 'All ServiceDelivery enrollments';
 $string['groups_lenovo_servicedelivery_all_type_participants'] = 'All ServiceDelivery {$a->type} enrollments';   // ex: All ServiceDelivery student enrollments
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery GEO student types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_us1_student'] = 'Lenovo-ServiceDelivery-us1-student';
 $string['access_lenovo_servicedelivery_ca1_student'] = 'Lenovo-ServiceDelivery-ca1-student';
 $string['access_lenovo_servicedelivery_la1_student'] = 'Lenovo-ServiceDelivery-la1-student';
@@ -696,9 +678,9 @@ $string['access_lenovo_servicedelivery_la5_student'] = 'Lenovo-ServiceDelivery-l
 $string['access_lenovo_servicedelivery_ap5_student'] = 'Lenovo-ServiceDelivery-ap5-student';
 $string['access_lenovo_servicedelivery_em5_student'] = 'Lenovo-ServiceDelivery-em5-student';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery GEO manager user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_us1_manager'] = 'Lenovo-ServiceDelivery-us1-manager';
 $string['access_lenovo_servicedelivery_ca1_manager'] = 'Lenovo-ServiceDelivery-ca1-manager';
 $string['access_lenovo_servicedelivery_la1_manager'] = 'Lenovo-ServiceDelivery-la1-manager';
@@ -729,9 +711,9 @@ $string['access_lenovo_servicedelivery_la5_manager'] = 'Lenovo-ServiceDelivery-l
 $string['access_lenovo_servicedelivery_ap5_manager'] = 'Lenovo-ServiceDelivery-ap5-manager';
 $string['access_lenovo_servicedelivery_em5_manager'] = 'Lenovo-ServiceDelivery-em5-manager';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery GEO administrator user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_us1_administrator'] = 'Lenovo-ServiceDelivery-us1-administrator';
 $string['access_lenovo_servicedelivery_ca1_administrator'] = 'Lenovo-ServiceDelivery-ca1-administrator';
 $string['access_lenovo_servicedelivery_la1_administrator'] = 'Lenovo-ServiceDelivery-la1-administrator';
@@ -762,33 +744,33 @@ $string['access_lenovo_servicedelivery_la5_administrator'] = 'Lenovo-ServiceDeli
 $string['access_lenovo_servicedelivery_ap5_administrator'] = 'Lenovo-ServiceDelivery-ap5-administrator';
 $string['access_lenovo_servicedelivery_em5_administrator'] = 'Lenovo-ServiceDelivery-em5-administrator';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery GEO administrator user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_us_geoadmin'] = 'Lenovo_ServiceDelivery-us-geoadministrator';
 $string['access_lenovo_servicedelivery_ca_geoadmin'] = 'Lenovo_ServiceDelivery-ca-geoadministrator';
 $string['access_lenovo_servicedelivery_la_geoadmin'] = 'Lenovo_ServiceDelivery-la-geoadministrator';
 $string['access_lenovo_servicedelivery_ap_geoadmin'] = 'Lenovo_ServiceDelivery-ap-geoadministrator';
 $string['access_lenovo_servicedelivery_em_geoadmin'] = 'Lenovo_ServiceDelivery-em-geoadministrator';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery GEO site administrator user types.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_us_siteadministrator'] = 'Lenovo_ServiceDelivery-us-siteadministrator';
 $string['access_lenovo_servicedelivery_ca_siteadministrator'] = 'Lenovo_ServiceDelivery-ca-siteadministrator';
 $string['access_lenovo_servicedelivery_la_siteadministrator'] = 'Lenovo_ServiceDelivery-la-siteadministrator';
 $string['access_lenovo_servicedelivery_ap_siteadministrator'] = 'Lenovo_ServiceDelivery-ap-siteadministrator';
 $string['access_lenovo_servicedelivery_em_siteadministrator'] = 'Lenovo_ServiceDelivery-em-siteadministrator';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // ServiceDelivery site administrator user type.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['access_lenovo_servicedelivery_siteadministrator'] = 'Lenovo_ServiceDelivery-siteadministrator';
 
 // ServiceDelivery cohort names...also used as course group names.
 $string['cohort_lenovo_servicedelivery_pregmatch_admins'] = '/SD-[A-Z][A-Z]+[1-9]-admins/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_mgrs'] = '/SD-[A-Z][A-Z]+[1-9]-mgrs/i';
-$string['cohort_lenovo_servicedelivery_pregmatch_students'] = '/SD-[A-Z][A-Z]+[1-9]-studs/i';
+$string['cohort_lenovo_servicedelivery_pregmatch_studs'] = '/SD-[A-Z][A-Z]+[1-9]-studs/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_geoadmins'] = '/SD-[A-Z][A-Z]-geoadmins/i';
 $string['cohort_lenovo_servicedelivery_pregmatch_siteadmins'] = '/SD-siteadmins/i';
 
@@ -888,53 +870,22 @@ $string['cohort_lenovo_servicedelivery_siteadmins'] = 'SD-siteadmins';
 
 // Self-support user types and roles (shortnames)...
 $string['access_selfsupport_student'] = 'SelfSupport-student';
+$string['access_selfsupport_pregmatch'] = '/SelfSupport/i';
 $string['role_selfsupport_student'] = 'selfsupport-student';
 
 // SiteHelp user types and roles (shortnames)...
 $string['access_sitehelp_student'] = 'SiteHelp-student';
 $string['role_sitehelp_student'] = 'sitehelp-student';
-$string['role_sitehelp_student'] = 'sitehelp-student';        // 08/14/18
+$string['role_sitehelp_student'] = 'sitehelp-student';
 
 // Customized capabilites...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['swtc:swtc_access_gtp_portfolio'] = 'Access to GTP portfolio';
-$string['swtc:swtc_access_lenovo_portfolio'] = 'Access to Lenovo portfolio';
-// $string['swtc:swtc_access_lenovoandibm_portfolio'] = 'Access to Lenovo and IBM portfolios';
-$string['swtc:swtc_access_serviceprovider_portfolio'] = 'Access to ServiceProvider portfolio';
-$string['swtc:swtc_access_lenovointernal_portfolio'] = 'Access to Lenovo Internal portfolio';
-$string['swtc:swtc_access_lenovosharedresources_portfolio'] = 'Access to Lenovo Shared Resources (Master)';
-$string['swtc:swtc_access_maintech_portfolio'] = 'Access to Maintech portfolio';
-$string['swtc:swtc_access_ibm_portfolio'] = 'Access to IBM portfolio';
-$string['swtc:swtc_access_asp_portfolio'] = 'Access to ASP portfolio';
-$string['swtc:swtc_access_premiersupport_portfolio'] = 'Access to PremierSupport portfolio';
-$string['swtc:swtc_access_servicedelivery_portfolio'] = 'Access to ServiceDelivery portfolio';
-$string['swtc:swtc_access_sitehelp_portfolio'] = 'Access to Site Help portfolio';
-$string['swtc:swtc_access_curriculums_portfolio'] = 'Access to Curriculums portfolio';
-
-// @01 - For all PS / SD users, added custom submit assignment capability.
+// For all PS / SD users, added custom submit assignment capability.
 $string['swtc:swtc_mod_assign_submit_premiersupport'] = 'Submit assignment (PremierSupport users)';
 $string['swtc:swtc_mod_assign_submit_servicedelivery'] = 'Submit assignment (ServiceDelivery users)';
 
 
 // Customized capabilites strings...
-// Important! All role strings must match the roles defined on the Lenovo EBG LMS web site.
-$string['cap_swtc_access_gtp_portfolio'] = 'local/swtc:swtc_access_gtp_portfolio';
-$string['cap_swtc_access_gtp_pregmatch'] = '/access_gtp_portfolio/i';
-
-$string['cap_swtc_access_lenovo_portfolio'] = 'local/swtc:swtc_access_lenovo_portfolio';
-// $string['cap_swtc_access_lenovoandibm_portfolio'] = 'local/swtc:swtc_access_lenovoandibm_portfolio';
-$string['cap_swtc_access_serviceprovider_portfolio'] = 'local/swtc:swtc_access_serviceprovider_portfolio';
-$string['cap_swtc_access_lenovointernal_portfolio'] = 'local/swtc:swtc_access_lenovointernal_portfolio';
-$string['cap_swtc_access_lenovosharedresources_portfolio'] = 'local/swtc:swtc_access_lenovosharedresources_portfolio';
-$string['cap_swtc_access_maintech_portfolio'] = 'local/swtc:swtc_access_maintech_portfolio';
-$string['cap_swtc_access_ibm_portfolio'] = 'local/swtc:swtc_access_ibm_portfolio';
-$string['cap_swtc_access_asp_portfolio'] = 'local/swtc:swtc_access_asp_portfolio';
-$string['cap_swtc_access_premiersupport_portfolio'] = 'local/swtc:swtc_access_premiersupport_portfolio';
-$string['cap_swtc_access_servicedelivery_portfolio'] = 'local/swtc:swtc_access_servicedelivery_portfolio';
-$string['cap_swtc_access_sitehelp_portfolio'] = 'local/swtc:swtc_access_sitehelp_portfolio';
-$string['cap_swtc_access_curriculums_portfolio'] = 'local/swtc:swtc_access_curriculums_portfolio';
-
-// @01 - For all PS / SD users, added custom submit assignment capability.
+// For all PS / SD users, added custom submit assignment capability.
 $string['cap_swtc_mod_assign_submit_premiersupport'] = 'local/swtc:swtc_mod_assign_submit_premiersupport';
 $string['cap_swtc_mod_assign_submit_servicedelivery'] = 'local/swtc:swtc_mod_assign_submit_servicedelivery';
 
@@ -948,33 +899,32 @@ $string['swtc:swtc_view_mgmt_reports'] = 'Access to view management reports';
 $string['swtc:swtc_view_student_reports'] = 'Access to view student reports';
 
 // When editing a user, if accesstype is blank, error message...
-$string['access_type_required'] = 'accesstype is blank; the EBG Server Education Access type field for each user must be set.';
+$string['access_type_required'] = 'accesstype is blank; the SWTC Access type field for each user must be set.';
 
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // For site administration menu
-// Lenovo *******************************************************************************
-$string['lenovo_services'] = 'Lenovo Services Education';
+// SWTC ********************************************************************************.
+$string['swtc_services'] = 'SWTC';
 $string['settings'] = 'Settings';
-// Lenovo *******************************************************************************
-// $string['lenovo'] = 'Lenovo';
+// SWTC ********************************************************************************.
 $string['swtc_desc'] = 'Global "SWTC" setting so that it can be checked in Moodle core files to call customized SWTC functions.';
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // Debug settings strings.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['debugsettings'] = 'Debug Settings';
 $string['swtcdebug'] = 'Debug';
 $string['swtcdebug_desc'] = 'Normally disabled on production, enable to set global debugging flag. Warning: this will turn on debugging for all users!';
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // Batch email settings strings.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['batchemailsettings'] = 'Batch Email Settings';
 $string['swtcbatchemail'] = 'Enable batch email to students';
 $string['swtcbatchemail_desc'] = 'Normally enabled. If enrolling many users in a course using a cohort sync enrollment method, temporarily disable (uncheck) to turn-off the sending of the "Welcome" email to each user. When finished, switch back to enabled (checked).
 
 Note that this setting only affects users enrolled in courses using a a cohort sync enrollment method. Users enrolled using any other method will always be sent the "Welcome" email.';
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 // Invitation settings strings.
-// Lenovo *******************************************************************************
+// SWTC ********************************************************************************.
 $string['invitationsettings'] = 'New User Account Invitation Settings';
 $string['invitationsettings_desc'] = '<strong>Create new user</strong> now sends an invitation to the user by email. These invitations can be used only once. Users clicking on the email link are directed to the original <strong>New account</strong> page.';
 $string['inviteexpiration'] = 'Invitation expiration';
@@ -1123,14 +1073,14 @@ $string['leg_all'] = 'LEG_ALL';
 $string['leg_none'] = 'LEG_NONE';
 
 // Strings for SB cron jobs.
-$string['crontaskexport'] = 'Lenovo DCG Services Education: run export to SB task';
-$string['crontaskpreexport'] = 'Lenovo DCG Services Education: preview export to SB task';
-$string['crontaskimport'] = 'Lenovo DCG Services Education: run import from SB task';
-$string['crontaskpreimport'] = 'Lenovo DCG Services Education: preview import from SB task';
+$string['crontaskexport'] = 'SWTC: run export to SB task';
+$string['crontaskpreexport'] = 'SWTC: preview export to SB task';
+$string['crontaskimport'] = 'SWTC: run import from SB task';
+$string['crontaskpreimport'] = 'SWTC: preview import from SB task';
 
 // Strings for update curriculums cron jobs.
-$string['crontaskverifycurriculums'] = 'Lenovo DCG Services Education: run verify curriculums task';
-$string['crontaskupdatecurriculums'] = 'Lenovo DCG Services Education: run update curriculums task';
+$string['crontaskverifycurriculums'] = 'SWTC: run verify curriculums task';
+$string['crontaskupdatecurriculums'] = 'SWTC: run update curriculums task';
 
 // Strings for SB email support.
 $string['swtc_sb_emailadminlog_subject'] = '{$a->sitename} ServiceBench log file for {$a->date}';

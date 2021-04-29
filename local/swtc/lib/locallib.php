@@ -49,34 +49,6 @@ require_once($CFG->dirroot.'/enrol/locallib.php');
 require_once($CFG->dirroot. '/user/lib.php');
 
 /**
- * Look for the portfolio name in the $categoryids array. When found, save the values we want and return the newly created array.
- *
- * @param The portfolio name to look for and the list of all portfolios.
- *
- * @return $tmp   The catlist array used to set $SESSION->SWTC->USER.
- * @return string   The capability.
- *
- *
- * History:
- *
- * 11/08/18 - Original version.
- *
- */
-function local_swtc_find_portfolioname($portfolioname, $cats) {
-    $tmp = array();
-
-    $cat = $cats[array_search($portfolioname, array_column($cats, 'catname'))];
-
-    $tmp['catid'] = $cat['catid'];
-    $tmp['catname'] = $cat['catname'];
-    $tmp['context'] = $cat['context'];
-    $tmp['capability'] = $cat['capability'];
-
-    return array($tmp, $cat['capability']);
-
-}
-
-/**
  * Look for the portfolio name in the $categoryids array. When found, only return the contextid (instanceid).
  *
  * @param The portfolio name to look for and the list of all portfolios.
@@ -127,9 +99,9 @@ function local_swtc_change_user_access($cat, &$user) {
         // SWTC ********************************************************************************.
         // Always output standard header information.
         // SWTC ********************************************************************************.
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_change_user_access.enter.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "swtcuser array follows :";
         $messages[] = print_r($swtcuser, true);
         $messages[] = "swtcuser array ends.";
@@ -269,9 +241,9 @@ function local_swtc_capture_click($data) {
         // SWTC ********************************************************************************.
         // Always output standard header information.
         // SWTC ********************************************************************************.
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_capture_click.enter.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "swtcuser array follows :";
         $messages[] = print_r($swtcuser, true);
         $messages[] = "swtcuser array ends.";
@@ -441,9 +413,9 @@ function local_swtc_capture_enrollment($data) {
         // SWTC ********************************************************************************.
         // Always output standard header information.
         // SWTC ********************************************************************************.
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "Entering swtc_lib_locallib.php. ===local_swtc_capture_enrollment.enter.";
-        $messages[] = "SWTC ********************************************************************************";
+        $messages[] = get_string('swtc_debug', 'local_swtc');
         $messages[] = "swtcuser array follows :";
         $messages[] = print_r($swtcuser, true);
         $messages[] = "swtcuser array ends.";

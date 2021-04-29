@@ -25,6 +25,8 @@
  * History:
  *
  * 03/20/21 - Initial writing.
+ * 04/10/21 - A value of 1 should be translated into CAP_ALLOW;
+ * a value of 0 should be translated into CAP_PREVENT (which is -1).
  *
  */
 
@@ -222,7 +224,7 @@ class portfolio_access_settings_form extends moodleform {
                     $this->data[$columnid]['catname'] = $colname;
                     $this->data[$columnid]['capabilities'][$roleid]['name'] = $rolename;
                     // Note: The following is what we're trying to figure out.
-                    // Set the initial state as no access (0).
+                    // Set the initial state as (0).
                     $this->data[$columnid]['capabilities'][$roleid]['value'] = 0;
                 }
             }
@@ -368,90 +370,94 @@ class portfolio_access_settings_form extends moodleform {
         // Need to create the newly updated settings just like we created the
         // current settings (load_current_settings).
         foreach ($this->roles as $roleid => $rolename) {
-            foreach ($this->columns as $catid => $catname) {
+            foreach ($this->columns as $catid => $htmlcell) {
                 // Remember to skip $this->columns[0] which is the column header.
                 // Examples:
                 // $chkboxname = 's_' . $roleid . '_' . $columnid;
                 // [s_19_141] => 1.
                 if (!empty($catid)) {
+                    // Remember to set catname.
+                    $catname = $htmlcell->attributes['text2'];
+
                     // If we enter the following, the checkbox was set.
                     $newvalue = (int) optional_param('s_' . $roleid . '_' . $catid, null, PARAM_INT);
                     // The value SHOULD be either 1 (accessable) or 0 (inaccessable).
-                    if (!is_null($newvalue)) {
-                        $params = array();
-                        $params['roleid'] = $roleid;
-                        $params['catid'] = $catid;
-                        // Get the current database record.
-                        if ($record = $DB->get_record($this->tablename, $params, 'id, catid, roleid, access')) {
-                            // The database record exists.
-                            // If the state of the access changes, remember to
-                            // add / update the timemodified and usermodified.
-                            // If the NEW value is different than the CURRENT value, change it.
-                            if ((int)$record->access !== $newvalue) {
-                                if (isset($debug)) {
-                                    $messages[] = print_r("Values are DIFFERENT; changing " . $rolename . "(" . $roleid .
-                                        ") access to " . $catname . "(" . $catid . ") from " . (int)$record->access .
-                                        " to $newvalue.", true);
-                                    $debug->logmessage($messages, 'detailed');
-                                    unset($messages);
-                                }
-                                $params['id'] = $record->id;
-                                $params['access'] = $newvalue;
-                                $params['timemodified'] = time();
-                                $params['usermodified'] = $this->user->get_userid();
-                                $DB->update_record($this->tablename, $params);
+                    // Translate 1 into CAP_ALLOW and 0 into CAP_PREVENT (which is -1).
+                    $newvalue = ($newvalue == 0) ? CAP_PREVENT : CAP_ALLOW;
 
-                                if (isset($portapply)) {
-                                    // Since the access has changed, we must update the permissions
-                                    // for the top-level category.
-                                    // First, prevent all roles from the category.
-                                    $context = context_coursecat::instance($catid);
-                                    $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
-                                    if (assign_capability($this->capability, $option, $roleid, $context->id, true)) {
-                                        if (isset($debug)) {
-                                            $messages[] = print_r("Assigned capability for $rolename($roleid) to
-                                                $catname($catid) successfully.", true);
-                                            $debug->logmessage($messages, 'detailed');
-                                            unset($messages);
-                                        }
-                                    } else {
-                                        if (isset($debug)) {
-                                            $messages[] = print_r("Error - Unable to assigned capability for
-                                                $rolename($roleid) to $catname($catid).", true);
-                                            $debug->logmessage($messages, 'detailed');
-                                            unset($messages);
-                                        }
+                    $params = array();
+                    $params['roleid'] = $roleid;
+                    $params['catid'] = $catid;
+                    // Get the current database record.
+                    if ($record = $DB->get_record($this->tablename, $params, 'id, catid, roleid, access')) {
+                        // The database record exists.
+                        // If the state of the access changes, remember to
+                        // add / update the timemodified and usermodified.
+                        // If the NEW value is different than the CURRENT value, change it.
+                        if ((int)$record->access !== $newvalue) {
+                            if (isset($debug)) {
+                                $messages[] = print_r("Values are DIFFERENT; changing " . $rolename . "(" . $roleid .
+                                    ") access to " . $catname . "(" . $catid . ") from " . (int)$record->access .
+                                    " to $newvalue.", true);
+                                $debug->logmessage($messages, 'detailed');
+                                unset($messages);
+                            }
+                            $params['id'] = $record->id;
+                            $params['access'] = $newvalue;
+                            $params['timemodified'] = time();
+                            $params['usermodified'] = $this->user->get_userid();
+                            $DB->update_record($this->tablename, $params);
+
+                            if (isset($portapply)) {
+                                // Since the access has changed, we must update the permissions
+                                // for the top-level category.
+                                // First, prevent all roles from the category.
+                                $context = context_coursecat::instance($catid);
+                                $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
+                                if (assign_capability($this->capability, $option, $roleid, $context->id, true)) {
+                                    if (isset($debug)) {
+                                        $messages[] = print_r("Assigned capability for $rolename($roleid) to " .
+                                            "$catname($catid) successfully.", true);
+                                        $debug->logmessage($messages, 'detailed');
+                                        unset($messages);
+                                    }
+                                } else {
+                                    if (isset($debug)) {
+                                        $messages[] = print_r("Error - Unable to assigned capability for
+                                            $rolename($roleid) to $catname($catid).", true);
+                                        $debug->logmessage($messages, 'detailed');
+                                        unset($messages);
                                     }
                                 }
                             }
-                        } else {
-                            // The database record did NOT exist...yet.
-                            // Add the created date and userid.
-                            $params = array();
-                            $params['roleid'] = $roleid;
-                            $params['catid'] = $catid;
-                            $params['access'] = $newvalue;
-                            $params['timecreated'] = time();
-                            $params['usercreated'] = $this->user->get_userid();
-                            $params['timemodified'] = '';
-                            $params['usermodified'] = '';
+                        }
+                    } else {
+                        // The database record did NOT exist...yet.
+                        // Add the created date and userid.
+                        $params = array();
+                        $params['roleid'] = $roleid;
+                        $params['catid'] = $catid;
+                        $params['access'] = $newvalue;
+                        $params['timecreated'] = time();
+                        $params['usercreated'] = $this->user->get_userid();
+                        $params['timemodified'] = '';
+                        $params['usermodified'] = '';
 
-                            if ($DB->insert_record($this->tablename, $params, false)) {
-                                // The record was successfully created.
-                                if (isset($debug)) {
-                                    $messages[] = print_r("Added new record: " . $rolename . "(" . $roleid . ") access to " .
-                                        $catname . "(" . $catid . ") added.", true);
-                                    $debug->logmessage($messages, 'detailed');
-                                    unset($messages);
-                                }
-                                if (isset($portapply)) {
-                                    // Since the access has changed, we must update the permissions
-                                    // for the top-level category.
-                                    // First, prevent all roles from the category.
-                                    $context = context_coursecat::instance($catid);
-                                    $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
-                                    assign_capability($this->capability, $option, $roleid, $context->id, true);
-                                }
+                        if ($DB->insert_record($this->tablename, $params, false)) {
+                            // The record was successfully created.
+                            if (isset($debug)) {
+                                $messages[] = print_r("Added new record: " . $rolename . "(" . $roleid . ") access to " .
+                                    $catname . "(" . $catid . ") added.", true);
+                                $debug->logmessage($messages, 'detailed');
+                                unset($messages);
+                            }
+                            if (isset($portapply)) {
+                                // Since the access has changed, we must update the permissions
+                                // for the top-level category.
+                                // First, prevent all roles from the category.
+                                $context = context_coursecat::instance($catid);
+                                $option = !empty($newvalue) ? CAP_ALLOW : CAP_PREVENT;
+                                assign_capability($this->capability, $option, $roleid, $context->id, true);
                             }
                         }
                     }

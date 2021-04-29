@@ -58,15 +58,11 @@ require_once($CFG->dirroot . '/local/swtc/lib/swtclib.php');
  *          - If experiencing "Exception - Call to undefined function" to functions in swtc plugin,
  *              use the PHP function get_included_files.
  *
- */
- /**
-  * Version details
-  *
-  * History:
-  *
-  * 10/19/20 - Initial writing.
-  *
-  **/
+ * History:
+ *
+ * 10/19/20 - Initial writing.
+ *
+ **/
 class swtc_debug {
     /**
      * General purpose field to pass / print anything that is required.
@@ -265,8 +261,9 @@ class swtc_debug {
         // chown($debugging->fqlog, 'apache');
         // }
         // SWTC ********************************************************************************.
-        $currentuser = posix_getpwuid(posix_geteuid());
-        $this->username = $currentuser['name'];
+        // 04/28/21 - Windows 10 does not support posix.
+        // $currentuser = posix_getpwuid(posix_geteuid());
+        // $this->username = $currentuser['name'];
     }
 
     public function set_fqlog() {
@@ -316,9 +313,9 @@ class swtc_debug {
             $this->fqlog = $logpath . $debugfilename;
         } else {
             // TODO: How to display error? Like purgecache?
-            $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
+            $this->logmessage(get_string('swtc_debug', 'local_swtc'), 'display');
             $this->logmessage("Error opening folder ($logpath). Exiting.", 'display');
-            $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
+            $this->logmessage(get_string('swtc_debug', 'local_swtc'), 'display');
         }
     }
 
@@ -368,9 +365,9 @@ class swtc_debug {
             $this->fqdetailed = $logpath . $detailfilename;
         } else {
             // TODO: How to display error? Like purgecache?
-            $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
+            $this->logmessage(get_string('swtc_debug', 'local_swtc'), 'display');
             $this->logmessage("Error opening folder ($logpath). Exiting.", 'display');
-            $this->logmessage(get_string('debug_string', 'local_swtc'), 'display');
+            $this->logmessage(get_string('swtc_debug', 'local_swtc'), 'display');
         }
     }
 
@@ -443,21 +440,21 @@ class swtc_debug {
 
         switch ($option) {
             case 'begin':
-                $messages[] = get_string('debug_string', 'local_swtc');
+                $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***";
-                $messages[] = get_string('debug_string', 'local_swtc');
-                $messages[] = "Starting debugging ===1.debug_start_logfile=== $da ";
+                $messages[] = get_string('swtc_debug', 'local_swtc');
+                $messages[] = "Starting debugging ===debug_start_logfile=== $da ";
                 $messages[] = "Timestamp is :" .$today->format('H:i:s.u').".==1.debug_start===.";
-                $messages[] = "Log filename is :". $debug->fqlog .".==1.debug_start===.";
-                $messages[] = "Detailed log filename is :". $debug->fqdetailed .".==1.debug_start===.";
+                $messages[] = "Log filename is :". $debug->fqlog .".==debug_start===.";
+                $messages[] = "Detailed log filename is :". $debug->fqdetailed .".==debug_start===.";
                 // Write the above header text to 'logfile'. Will create a new file (instead of appending to it).
                 $this->logmessage($messages, 'logfile', 'create');
                 unset($messages);
 
                 // Use print_r for now.
-                $messages[] = get_string('debug_string', 'local_swtc');
+                $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***Begin***";
-                $messages[] = get_string('debug_string', 'local_swtc');
+                $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "Starting debugging ===1.debug_start_detailed=== $da ";
                 $messages[] = "About to print SESSION->SWTC->DEBUG. ==1.debug_start===.";
                 $messages[] = print_r($debug, true);

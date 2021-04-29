@@ -72,13 +72,25 @@ function swtc_set_user($userid, $relateduserid = null) {
     $temp = new stdClass();
     $temp->id = $userid;
     profile_load_data($temp);
-    $SESSION->SWTC->USER->set_user_access_type($temp->profile_field_accesstype);
 
-    // Note: $this->portfolio is set in definition.
+    $SESSION->SWTC->USER->set_accesstype($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_accesstype2($temp->profile_field_accesstype2);
+
+    $SESSION->SWTC->USER->set_roleid($temp->profile_field_accesstype);
+
     $SESSION->SWTC->USER->set_timestamp();
     $SESSION->SWTC->USER->set_timezone();
-    $SESSION->SWTC->USER->set_user_access_type2($temp->profile_field_accesstype2);
 
+    $SESSION->SWTC->USER->set_relateduser();
+    $SESSION->SWTC->USER->set_cohortnames($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_groupname($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_groupnames(array());
+
+    $SESSION->SWTC->USER->set_psmanagement($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_sdmanagement($temp->profile_field_accesstype);
+
+    print_object("about to print user");
+    print_object($SESSION->SWTC->USER);
     return $SESSION->SWTC->USER;
 
 }

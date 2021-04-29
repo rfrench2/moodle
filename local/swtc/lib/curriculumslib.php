@@ -24,23 +24,28 @@
  *
  * History:
  *
- * 10/14/20 - Initial writing.
+ * 04/17/21 - Initial writing.
  *
  **/
 
 defined('MOODLE_INTERNAL') || die();
 
-// SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
-// SWTC ********************************************************************************.
-use \local_swtc\traits\lenovo_completion_criteria;
-use \local_swtc\traits\lenovo_completionlib;
+use local_swtc\swtc_completion_info;
+use local_swtc\swtc_grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');                     // Some needed functions.
+// require_once($CFG->dirroot.'/local/swtc/classes/swtc_completion_info.php');
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');
+// require_once($CFG->dirroot.'/local/swtc/lib/portfolio_access.php');
+
+// SWTC ********************************************************************************.
+// SWTC customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+// use swtc_get_title_detailed_course;
+// use swtc_get_title_detailed_activity;
 
 require_once($CFG->dirroot.'/user/profile/lib.php');
 
@@ -48,35 +53,25 @@ require_once($CFG->dirroot.'/user/profile/lib.php');
 /**
  * Returns an array of all the curriculum courses the user is enrolled in or NULL if they are not enrolled in any.
  *
- * @param $userid The userid of the user to check.
+ * @param $userid	The userid of the user to check.
  *
- * @return $array All the curriculum courses the user is enrolled in or NULL if they are not enrolled in any.
+ * @return $array  All the curriculum courses the user is enrolled in or NULL if they are not enrolled in any.
  *
+ * History:
  *
- */
- /**
-  * Version details
-  *
-  * History:
-  *
-  * 12/18/18 - Initial writing.
-  * 03/01/20 - Moved enrol_get_users_courses from curriculum_is_user_enrolled to curriculums_getall_enrollments_for_user to
-  *                  improve performance.
-  *
-  **/
+ * 12/18/18 - Initial writing.
+ *
+ **/
 function curriculums_getall_enrollments_for_user($userid) {
-    global $CFG, $DB, $USER, $SESSION;
 
-    // SWTC ********************************************************************************.
     $enrolledcurriculums = array();
     $enrolledcourses = null;
 
-    // SWTC ********************************************************************************.
     // Get ALL the curriculum courses in ALL the curriculums.
     $curriculumcourses = curriculums_getall();
 
-    // Get all the courses the user is enrolled in. We'll need this later (to check if they are
-    // enrolled in a specific curriculum course).
+    // Get all the courses the user is enrolled in. We'll need this later
+    // (to check if they are enrolled in a specific curriculum course).
     $enrolledcourses = enrol_get_users_courses($userid);
 
     // Loop through and see if user is enrolled. If so, add it to the array.
@@ -129,16 +124,12 @@ function curriculumcourses_find_course($courseid) {
  *
  * History:
  *
- * 12/14/18 - Initial writing.
- * 12/12/19 - In curriculumcourses_list, changed first returned parameter from "courseid" to "id" (to mirror parameters returned
- *                          from $DB->get_records).
+ * 04/18/21 - Initial writing.
  *
  **/
 function curriculumcourses_list($curriculum = 'all') {
-    global $CFG, $DB, $SESSION;
+    global $DB;
 
-    // SWTC ********************************************************************************.
-    // Variables begin...
     if ($curriculum === 'all') {
         $curriculum = '%';
     }
@@ -151,12 +142,7 @@ function curriculumcourses_list($curriculum = 'all') {
 				LEFT OUTER JOIN {course} AS c2 ON (c2.id IN (cfo2.value))
 				WHERE (cfo1.value = 1) AND (cfo2.value LIKE concat('%', '$curriculum', '%')) ORDER BY c1.id";
 
-    // Variables end...
-    // SWTC ********************************************************************************.
-
-    $records = $DB->get_records_sql($sql);
-
-    return $records;
+    return $DB->get_records_sql($sql);
 
 }
 
@@ -167,28 +153,20 @@ function curriculumcourses_list($curriculum = 'all') {
  *
  * @return $array   The curriculum array (courseid and the course fullname).
  *
- * Version details
- *
  * History:
  *
- * 10/23/18 - Initial writing.
+ * 04/18/21 - Initial writing.
  *
  **/
 function curriculums_getall() {
-    global $CFG, $DB, $SESSION;
+    global $DB;
 
-    // SWTC ********************************************************************************.
-    // Variables begin...
     $sql = "SELECT cfo.id, cfo.courseid, c.fullname, c.shortname
                 FROM {course_format_options} cfo
                 LEFT OUTER JOIN {course} c ON (c.id = cfo.courseid)
                 WHERE (cfo.name = 'iscurriculum') AND (cfo.value = 1) ORDER BY cfo.courseid";
 
-    // Variables end...
-    // SWTC ********************************************************************************.
-    $records = $DB->get_records_sql($sql);
-
-    return $records;
+    return $DB->get_records_sql($sql);
 
 }
 
@@ -197,8 +175,7 @@ function curriculums_getall() {
   *
   * History:
   *
-  * 10/30/18 - Initial writing.
-  * 10/28/19 - Changed get_details to lenovo_get_details_course (defined in /local/swtc/traits\lenovo_completion_criteria).
+  * 04/17/21 - Initial writing.
   *
   **/
 function curriculum_getcompletionstatus_details($id, $userid) {
@@ -348,7 +325,7 @@ function curriculum_getcompletionstatus_details($id, $userid) {
             $row['type'] = $criteria->criteriatype;
             $row['title'] = $criteria->get_title();
             $row['status'] = $completion->get_status();
-            $row['complete'] = $completion->iscomplete();
+            $row['complete'] = $completion->is_complete();
             $row['timecompleted'] = $completion->timecompleted;
             $row['details'] = $criteria->swtc_get_details_course($completion);
             $rows[] = $row;
@@ -440,8 +417,8 @@ function curriculum_getcompletionstatus_details($id, $userid) {
  * 10/24/20 - Initial writing.
  *
  **/
-function curriculum_report_completion_index($swtcuser, $courseid, $groupid = null) {
-    global $DB, $PAGE, $CFG, $SESSION, $OUTPUT, $USER;
+function curriculum_report_completion_index($swtcuser, $courseid) {
+    global $DB, $CFG, $OUTPUT, $USER, $PAGE;
 
     // SWTC ********************************************************************************.
     // SWTC swtcuser and debug variables.
@@ -449,19 +426,23 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     $debug = swtc_get_debug();
 
     // Other SWTC variables.
-    $useraccesstype = $swtcuser->useraccesstype;
-    $usergeoname = $SESSION->SWTC->USER->geoname;
-
-    $groups = null;
     $output = '';       // To contain all the output.
+    $swtcgroups = new swtc_grouplib;
 
     // Remember - PremierSupportand ServiceDelivery managers and admins have special access.
     // Remember that the capabilities for Managers and Administrators are applied in the system context; the capabilities
     // for Students are applied in the category context.
     $systemcontext = context_system::instance();
-    $swtcstudcontext = local_swtc_find_context_from_name($swtcuser->portfolio, $swtcuser->categoryids);
-    // SWTC ********************************************************************************.
 
+    // Get all the portfolios the user has access to (even though we only need one).
+    $portfolios = get_portfolios_access($swtcuser->get_roleid());
+    foreach ($portfolios as $id => $portfolio) {
+        // Get a context to the portfolio.
+        $swtcstudcontext = context_coursecat::instance($portfolio->catid);
+        break;
+    }
+
+    // SWTC ********************************************************************************.
     if (isset($debug)) {
         $messages[] = "In /local/swtc/lib/curriculums.php === curriculum_report_completion_index.enter===";
         $debug->logmessage($messages, 'both');
@@ -481,7 +462,6 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     // Get course.
     $format = '';
     $sort = '';
-    $edituser = 0;
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $context = context_course::instance($course->id);
@@ -514,7 +494,7 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
 
     // Get group mode.
     // Supposed to verify group.
-    $group = groups_get_course_group($course, true);
+    $group = $swtcgroups->groups_get_course_group($course, true);
     if ($group === 0 && $course->groupmode == SEPARATEGROUPS) {
         require_capability('moodle/site:accessallgroups', $context);
     }
@@ -524,7 +504,9 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     $modinfo = get_fast_modinfo($course);
 
     // Get criteria for course.
-    $completion = new completion_info($course);
+    // $completion = new completion_info($course);  // SWTC debugging.
+    $completion = new swtc_completion_info($course);
+    $swtcgroups = new swtc_grouplib;
 
     if (!$completion->has_criteria()) {
         print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -549,7 +531,7 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     }
 
     // Can logged in user mark users as complete?
-    // (if the logged in user has a role defined in the role criteria).
+    // If the logged in user has a role defined in the role criteria.
     $allowmarking = false;
     $allowmarkingcriteria = null;
 
@@ -591,7 +573,7 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
         $PAGE->set_heading($course->fullname);
 
         // Handle groups (if enabled).
-        groups_print_course_menu($course, $CFG->wwwroot.'/report/completion/index.php?course='.$course->id);
+        $swtcgroups->groups_print_course_menu($course, $CFG->wwwroot.'/report/completion/index.php?course='.$course->id);
     }
 
     if ($sifirst !== 'all') {
@@ -642,29 +624,16 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     }
 
     // SWTC ********************************************************************************.
-    // 11/28/18 - Any user (PremierSupport and ServiceDelivery managers and admins for now) have special access
+    // Any user (PremierSupport and ServiceDelivery managers and admins for now) have special access
     // if they have the required capability.
-    // 12/03/18 - Remember that the capabilities for Managers and Administrators are applied in the system context;
-    // the capabilities for Students are applied in the category context.
-    // 01/24/19 - Due to the updated PremierSupport and ServiceDelivery user access types, using preg_match
-    // to search for access types.
-    // 03/03/19 - Added PS/AD site administrator user access types.
-    // 03/06/19 - Added PS/SD GEO administrator user access types.
-    // 03/08/19 - Added PS/SD GEO site administrator user access types.
-    // 03/13/19 - For PS/SD users that have customized menus, the groupid value that is passed will be the "virtual" value that
-    // is saved in swtcuser->groupnames; use the value as the key into the array (to get the list of all the
-    // other groups to use).
-    // 03/19/19 - For customized PS/SD code, added exceptions for Moodle site administrators, Lenovo-admins, and Lenovo-siteadmins.
     // SWTC ********************************************************************************.
-    // 10/22/19 - IMPORTANT! Must perform the has_capability checks BEFORE calling lenovo_set_where_conditions_by_accesstype.
-    // 11/11/19 - When calling lenovo_set_where_conditions_by_accesstype, added $swtcuser as parameter to function.
-    // 12/30/19 - If $where or $whereparams was set when this function was called, preserve them.
+    // IMPORTANT! Must perform the has_capability checks BEFORE calling set_where_conditions_by_accesstype.
     // SWTC ********************************************************************************.
-    if (has_capability('local/swtc:ebg_view_mgmt_reports', $systemcontext)
-        || has_capability('local/swtc:ebg_view_stud_reports', $swtcstudcontext)) {
+    if (has_capability('local/swtc:swtc_view_mgmt_reports', $systemcontext)
+        || has_capability('local/swtc:swtc_view_student_reports', $swtcstudcontext)) {
 
         list($where, $whereparams, $grandtotal) =
-            lenovo_set_where_conditions_by_accesstype($swtcuser, $completion, $where, $whereparams, $group);
+            $completion->set_where_conditions_by_accesstype($swtcuser, $completion, $where, $whereparams, $group);
 
     }
 
@@ -683,7 +652,7 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
     // SWTC ********************************************************************************.
     // SWTC customized code for Moodle core course completion.
     // SWTC ********************************************************************************.
-    $total = $completion->swtc_get_num_tracked_users(implode(' AND ', $where), $whereparams, $group);
+    $total = $completion->get_num_tracked_users(implode(' AND ', $where), $whereparams, $group);
 
     // SWTC ********************************************************************************.
     if (isset($debug)) {
@@ -904,9 +873,10 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
             foreach ($criteria as $criterion) {
                 // Get criteria details
                 // $details = $criterion->get_title_detailed();
+                print_object($criterion);
                 // SWTC ********************************************************************************.
-                // 12/20/18 - Added hyperlinks and tooltips to the column headers.
-                // 03/20/19 - Changing tooltips hyperlink from viewing course to viewing individual course completion report.
+                // Added hyperlinks and tooltips to the column headers.
+                // Changed tooltips hyperlink from viewing course to viewing individual course completion report.
                 // All of the following must be kept in sync:
                 // report/completion/index.php, /completion/criteria/completion_criteria_course.php, and
                 // local/swtc/lib/curriculumslib.php.
@@ -1053,7 +1023,7 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
                 // Handle all other criteria.
                 // SWTC ********************************************************************************.
                 // Added hyperlinks and tooltips to the column headers.
-                // Changing tooltips hyperlink from viewing course to viewing individual course completion report.
+                // Changed tooltips hyperlink from viewing course to viewing individual course completion report.
                 // All of the following must be kept in sync:
                 // report/completion/index.php, /completion/criteria/completion_criteria_course.php, and
                 // local/swtc/lib/curriculumslib.php.
@@ -1332,7 +1302,6 @@ function curriculum_report_completion_index($swtcuser, $courseid, $groupid = nul
  *
  **/
 function curriculums_print_table($coursesprogress, $curriculumarray) {
-    global $PAGE;
 
     // To contain all the output.
     $output = '';

@@ -62,47 +62,6 @@ use completion_info;
 trait swtc_completion_criteria {
 
     /**
-     * Return a more detailed criteria title for display in reports
-     *
-     * @return string
-     *
-     * History:
-     *
-     * 04/07/21 - Initial writing.
-     *
-     */
-    public function swtc_get_title_detailed_course($group) {
-        global $DB;
-
-        $prereq = $DB->get_record('course', array('id' => $this->courseinstance));
-        $coursecontext = context_course::instance($prereq->id, MUST_EXIST);
-        $fullname = format_string($prereq->fullname, true, array('context' => $coursecontext));
-        $shortname = format_string($prereq->shortname, true, array('context' => $coursecontext));
-
-        return array($this->courseinstance, shorten_text(urldecode($shortname)), urldecode($fullname));
-    }
-
-    /**
-     * Return a more detailed criteria title for display in reports
-     *
-     * @return  string
-     *
-     * History:
-     *
-     * 04/07/21 - Initial writing.
-     *
-     */
-    public function swtc_get_title_detailed_activity() {
-        global $DB;
-
-        $module = $DB->get_record('course_modules', array('id' => $this->moduleinstance));
-        $activity = $DB->get_record($this->module, array('id' => $module->instance));
-
-        return shorten_text(format_string($activity->name, true,
-                array('context' => context_module::instance($module->id))));
-    }
-
-    /**
      * Return criteria progress details for display in reports
      *
      * @param completion_completion $completion The user's completion record

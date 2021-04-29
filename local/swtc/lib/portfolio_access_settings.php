@@ -30,11 +30,10 @@
  *
  **/
 
-use local_swtc\swtcuser;
+use local_swtc\swtc_user;
 
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');
-require_once('../forms/portfolio_access_settings_form.php');
 
 global $USER, $DB;
 
@@ -42,6 +41,7 @@ global $USER, $DB;
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+require_once('../forms/portfolio_access_settings_form.php');
 
 // SWTC ********************************************************************************.
 // SWTC swtcuser and debug variables.
@@ -87,15 +87,12 @@ $args = array(
 
 $settingsform = new portfolio_access_settings_form(null, $args);
 
-// Note: For debugging, use the following line.
 if (optional_param('submit', false, PARAM_BOOL) && data_submitted() && confirm_sesskey()) {
-    // Note: For debugging, use the following line.
     $settingsform->process_submission();
     redirect($baseurl, 'Portfolio access settings have been saved.');
 }
 
 if (optional_param('portapply', false, PARAM_BOOL) && data_submitted() && confirm_sesskey()) {
-    // Note: For debugging, use the following line.
     $settingsform->process_submission('portapply');
     redirect($baseurl, 'Portfolio access settings have been saved. Access to all top-level portfolios have been updated.');
 }

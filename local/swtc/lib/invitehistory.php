@@ -36,18 +36,18 @@ require_once($CFG->libdir . '/tablelib.php');
 
 global $USER, $SESSION;
 
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
-// Lenovo ********************************************************************************.
-require_once($CFG->dirroot . '/local/swtc/lib/swtcuserlib.php');
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot . '/local/swtc/lib/swtc_userlib.php');
 
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 // SWTC swtcuser and debug variables.
 $swtcuser = swtc_get_user([
     'userid' => $USER->id,
     'username' => $USER->username]);
 $debug = swtc_get_debug();
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 
 if (isset($debug)) {
     $messages[] = "In /local/swtc/lib/invitehistory.php ===1.enter===";
@@ -59,19 +59,19 @@ require_login();
 $inviteid = optional_param('inviteid', 0, PARAM_INT);
 $actionid = optional_param('actionid', 0, PARAM_INT);
 
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 20, PARAM_INT);
 
 // Set up page.
 $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
 // $PAGE->set_url(new moodle_url('/local/swtc/lib/invitehistory.php'));
-// Lenovo ********************************************************************************.
+// SWTC ********************************************************************************.
 $url = new moodle_url('/local/swtc/lib/invitehistory.php', array('perpage' => $perpage, 'page' => $page));
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
@@ -148,9 +148,9 @@ if (empty($invites)) {
     );
 
     $table = new flexible_table('invitehistory');
-    // Lenovo ********************************************************************************.
+    // SWTC ********************************************************************************.
     // @01 - 06/05/20 - In /local/swtc/lib/invitehistory.php, restricted list shown to 20 and added paging.
-    // Lenovo ********************************************************************************.
+    // SWTC ********************************************************************************.
     $table->pagesize($perpage, count($invites));
     $table->pageable(true);
     $table->define_columns(array_keys($columns));
@@ -160,9 +160,9 @@ if (empty($invites)) {
 
     $table->setup();
 
-    // Lenovo ********************************************************************************.
+    // SWTC ********************************************************************************.
     // Restricted list shown to 20 and added paging.
-    // Lenovo ********************************************************************************.
+    // SWTC ********************************************************************************.
     $start = $page * $perpage;
     if ($start > count($invites)) {
         $page = 0;
