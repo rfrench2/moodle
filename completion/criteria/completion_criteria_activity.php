@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -36,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
 // SWTC ********************************************************************************.
 // SWTC customized code for Moodle core completion.
 // SWTC ********************************************************************************.
-use \local_ebglms\traits\swtc_completion_criteria;
+use \local_swtc\traits\swtc_completion_criteria;
 
 /**
  * Course completion critieria - completion on activity completion
