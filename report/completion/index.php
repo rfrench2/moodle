@@ -22,10 +22,22 @@
  * @copyright  2009 Catalyst IT Ltd
  * @author     Aaron Barnes <aaronb@catalyst.net.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 04/21/21 - Initial writing.
+ *
  */
 
 require_once(__DIR__.'/../../config.php');
 require_once("{$CFG->libdir}/completionlib.php");
+
+// SWTC ********************************************************************************.
+// SWTC customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+// require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');
+
+use local_swtc\swtc_completion_info;
 
 /**
  * Configuration
@@ -88,7 +100,8 @@ if ($group === 0 && $course->groupmode == SEPARATEGROUPS) {
 $modinfo = get_fast_modinfo($course);
 
 // Get criteria for course
-$completion = new completion_info($course);
+// $completion = new completion_info($course);  // SWTC.
+$completion = new swtc_completion_info($course);    // SWTC.
 
 if (!$completion->has_criteria()) {
     print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -195,9 +208,17 @@ if ($silast !== 'all') {
 
 // Get user match count
 $total = $completion->get_num_tracked_users(implode(' AND ', $where), $where_params, $group);
+// SWTC ********************************************************************************.
+// SWTC customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+// list($where, $where_params, $grandtotal) = swtc_report_completion($completion, $where, $where_params, $group);
 
 // Total user count
 $grandtotal = $completion->get_num_tracked_users('', array(), $group);
+// SWTC ********************************************************************************.
+// SWTC customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+// $total = $completion->swtc_get_num_tracked_users(implode(' AND ', $where), $where_params, $group);
 
 // If no users in this course what-so-ever
 if (!$grandtotal) {
@@ -406,9 +427,23 @@ if (!$csv) {
 
         foreach ($criteria as $criterion) {
             // Get criteria details
-            $details = $criterion->get_title_detailed();
+            // SWTC ********************************************************************************.
+            // SWTC customized code for Moodle core completion.
+            // SWTC ********************************************************************************.
+            // $details = $criterion->get_title_detailed();
+            if ($criterion->criteriatype == 8) {
+                list($id, $shortname, $fullname) = $criterion->get_title_detailed_course($group);
+            } else if ($criterion->criteriatype == 4) {
+                list($id, $shortname, $fullname) = $criterion->get_title_detailed_activity();
+            }
+
+            $courseurl = new moodle_url("/report/completion/index.php", array('course' => $id, 'group' => $group));
+            $tooltiptext = 'Click to view course completion report for ' . $shortname. ' ' . $fullname;
+
             print '<th scope="col" class="colheader criterianame">';
-            print '<div class="rotated-text-container"><span class="rotated-text">'.$details.'</span></div>';
+            // print '<div class="rotated-text-container"><span class="rotated-text">'.$details.'</span></div>';
+            print '<div class="rotated-text-container"><span class="rotated-text"><a href="' . $courseurl->out() .
+                '" target="_blank" title=" ' . $tooltiptext . ' ">' . $shortname . '</a></span></div>';
             print '</th>';
         }
 
@@ -528,7 +563,16 @@ if (!$csv) {
         }
         else {
             // Handle all other criteria
-            $row[] = strip_tags($criterion->get_title_detailed());
+            // SWTC ********************************************************************************.
+            // SWTC customized code for Moodle core completion.
+            // SWTC ********************************************************************************.
+            if ($criterion->criteriatype === 8) {
+                list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_course($group);
+            } else if ($criterion->criteriatype === 4) {
+                list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_activity();
+            }
+            // $row[] = strip_tags($criterion->get_title_detailed());
+            $row[] = strip_tags($shortname. ' ' .$fullname);
         }
     }
 
@@ -565,6 +609,11 @@ foreach ($progress as $user) {
         }
     }
 
+    // SWTC ********************************************************************************.
+    // Changing tooltips hyperlink from viewing course to viewing individual course completion report;
+    // changing way course completion data is presented if course completion is based on other courses
+    // being complete.
+    // SWTC ********************************************************************************.
     // Progress for each course completion criteria
     foreach ($criteria as $criterion) {
 
@@ -622,6 +671,32 @@ foreach ($progress as $user) {
             }
 
             continue;
+            // SWTC ********************************************************************************.
+            // Changing way course completion data is presented if course completion is based on other courses
+            // being complete.
+            // SWTC ********************************************************************************.
+        } else if ($criterion->criteriatype == COMPLETION_CRITERIA_TYPE_COURSE) {
+            // Get criteria for the course that is part of the required list.
+
+            // SWTC ********************************************************************************.
+            // For debugging, use the userid of one user to check.
+            // SWTC ********************************************************************************.
+            if (isset($criterion->courseinstance)) {
+                $tempcourse = get_course($criterion->courseinstance);
+                $info = new completion_info($tempcourse);
+
+                // Is course complete?
+                $is_complete = $info->is_course_complete($user->id);
+
+                // Load course completion.
+                $params = array(
+                    'userid' => $user->id,
+                    'course' => $criterion->courseinstance,
+                );
+
+                $criteria_completion = new completion_completion($params);
+
+            }
         }
 
         // Handle all other criteria

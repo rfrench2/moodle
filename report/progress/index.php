@@ -21,10 +21,19 @@
  * @subpackage progress
  * @copyright  2008 Sam Marshall
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 04/18/21 - Initial writing.
  */
 
 require('../../config.php');
 require_once($CFG->libdir . '/completionlib.php');
+
+// SWTC ********************************************************************************.
+// SWTC customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+use \local_swtc\traits\swtc_completionlib;
 
 define('COMPLETION_REPORT_PAGE', 25);
 
@@ -460,4 +469,3 @@ print '<ul class="progress-actions"><li><a href="index.php?course='.$course->id.
     get_string('excelcsvdownload','completion').'</a></li></ul>';
 
 echo $OUTPUT->footer();
-
