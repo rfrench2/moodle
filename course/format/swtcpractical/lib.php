@@ -493,13 +493,13 @@ class format_swtcpractical extends format_base {
             // SWTC ********************************************************************************.
             // Always output standard header information.
             // SWTC ********************************************************************************.
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "Entering /course/format/swtcpractical/lib.php:update_course_format_options.
                 ==update_course_format_options.enter.";
             $messages[] = "About to print swtcuser.";
             $messages[] = print_r($swtcuser, true);
             $messages[] = "Finished printing swtcuser.";
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             debug_logmessage($messages, 'logfile');
             unset($messages);
         }

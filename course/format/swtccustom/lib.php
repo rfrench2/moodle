@@ -505,12 +505,12 @@ class format_swtccustom extends format_base {
             // SWTC ********************************************************************************.
             // Always output standard header information.
             // SWTC ********************************************************************************.
-            $messages[] = "Lenovo ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "Entering /course/format/swtccustom/lib.php==update_course_format_options.enter.";
             $messages[] = "About to print swtcuser.";
             $messages[] = print_r($swtcuser, true);
             $messages[] = "Finished printing swtcuser.";
-            $messages[] = "Lenovo ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'logfile');
             unset($messages);
         }
