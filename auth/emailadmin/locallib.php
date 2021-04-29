@@ -85,14 +85,14 @@ class invitation_manager {
             // SWTC ********************************************************************************
             // Always output standard header information.
             // SWTC ********************************************************************************
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "Entering /auth/emailadmin/locallib.php===send_invitation.enter.";
             $messages[] = "About to print SESSION.";
             $messages[] = print_r($SESSION, true);
             $messages[] = "Finished printing SESSION. About to print debug.";
             $messages[] = print_r($debug, true);
             $messages[] = "Finished printing debug.";
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
@@ -142,7 +142,7 @@ class invitation_manager {
             $messages[] = "Finished printing message_params. About to print invitation.";
             $messages[] = print_r($invitation, true);
             $messages[] = "Finished printing invitation.";
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'detailed');
             unset($messages);
         }
@@ -196,7 +196,7 @@ class invitation_manager {
             $messages[] = "subject is :$invitation->subject.";
             $messages[] = "About to print message.";
             $messages[] = print_r($message, true);
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'detailed');
             unset($messages);
         }

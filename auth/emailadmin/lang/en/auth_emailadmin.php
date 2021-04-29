@@ -36,13 +36,11 @@ $string['auth_emailadminsettings'] = 'Settings';
 $string['auth_emailadminuserconfirmation'] = '
 Hello {$a->firstname},
 
-Welcome to the SWTC LMS! Your account has been approved and you can now access our education courses. We are glad you have joined us and look forward to providing you with courses to better assist you to learn about and service Lenovo DCG products.
+Welcome to the SWTC LMS! Your account has been approved and you can now access our education courses. We are glad you have joined us and look forward to providing you with courses to better assist you to learn about and service SWTC products.
 
-Please visit the <a href=https://lenovoedu.lenovo.com/login/index.php>site</a> and login with the username (email address) and password that you created at registration. When accessing the site, you may need to accept a security certificate.
+Please visit the <a href=https://localhost/moodle310/login/index.php>site</a> and login with the username (email address) and password that you created at registration. When accessing the site, you may need to accept a security certificate.
 
-<a href="http://collabserv.us14.list-manage.com/track/click?u=871c753ad518bb7c904eb3460&amp;id=d73dc4fdf4&amp;e=e0570caad6">Sign me up</a> to receive SWTC announcements.
-
-For any questions, please send an email to <a href=mailto:servicesedu@lenovo.com>servicesedu@lenovo.com</a>.
+For any questions, please send an email to <a href=mailto:admin@localhost/moodle310>admin@localhost/moodle310</a>.
 
 Thank you,
 
@@ -50,8 +48,8 @@ SWTC
 
 --
 SWTC
-<a href=https://lenovoedu.lenovo.com/login/index.php>SWTC LMS</a>
-<a href=mailto:servicesedu@lenovo.com>servicesedu@lenovo.com</a>
+<a href=https://localhost/moodle310/login/index.php>SWTC LMS</a>
+<a href=mailto:admin@localhost/moodle310>admin@localhost/moodle310</a>
 
 ';
 $string['auth_emailadminconfirmation'] = '
@@ -59,7 +57,7 @@ $string['auth_emailadminconfirmation'] = '
 
 For the SWTC LMS administrator viewing this request, a new account on the SWTC LMS has been requested.
 
-If the user has a Lenovo email address, click the following link to verify the email address of the user (opens Lenovo Central):
+If the user has a SWTC email address, click the following link to verify the email address of the user (opens SWTC Central):
 
         {$a->verify_link}
 
@@ -104,7 +102,7 @@ $string['auth_emailadminconfirmation_premier'] = '
 
 For the SWTC LMS administrator viewing this request, a new account on the SWTC LMS has been requested. <strong>In addition</strong>, the user is requesting a <strong>Premier Support</strong> access type. Refer to the procedure (included below) for directions on how to change the user\'s access type.
 
-If the user has a Lenovo email address, click the following link to verify the email address of the user (opens Lenovo Central):
+If the user has a SWTC email address, click the following link to verify the email address of the user (opens SWTC Central):
 
         {$a->verify_link}
 

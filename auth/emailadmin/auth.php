@@ -131,7 +131,7 @@ class auth_plugin_emailadmin extends auth_plugin_base {
 
         // SWTC ********************************************************************************.
 		if (isset($debug)) {
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $messages[] = "Entering /auth/emailadmin/auth.php===user_signup.enter===";
             $messages[] = "About to print user:";
             $messages[] = print_r($user, true);
@@ -199,7 +199,7 @@ class auth_plugin_emailadmin extends auth_plugin_base {
         // SWTC ********************************************************************************.
         if (isset($debug)) {
             $messages[] = "Leaving /auth/emailadmin/auth.php===user_signup.exit===";
-            $messages[] = "SWTC ********************************************************************************.";
+            $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
 		}
