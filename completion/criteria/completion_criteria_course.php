@@ -22,19 +22,9 @@
  * @copyright 2009 Catalyst IT Ltd
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- * SWTC history:
- *
- * 04/13/21 - Initial writing.
- *
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-// SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
-// SWTC ********************************************************************************.
-use \local_swtc\traits\swtc_completion_criteria;
 
 /**
  * Course completion critieria - completion on course completion
@@ -49,11 +39,6 @@ use \local_swtc\traits\swtc_completion_criteria;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class completion_criteria_course extends completion_criteria {
-
-    // SWTC ********************************************************************************.
-    // SWTC customized code for Moodle core completion.
-    // SWTC ********************************************************************************.
-    use swtc_completion_criteria;
 
     /* @var int Criteria type constant */
     public $criteriatype = COMPLETION_CRITERIA_TYPE_COURSE;
