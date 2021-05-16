@@ -20,6 +20,11 @@
  * @package    core_course
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 05/13/21 - Initial writing.
+ *
  */
 
 require_once('../config.php');
@@ -158,6 +163,10 @@ if ($editform->is_cancelled()) {
 } else if ($data = $editform->get_data()) {
     // Process data if submitted.
     if (empty($course->id)) {
+        // SWTC ********************************************************************************.
+        // Copy data.shortname into data.idnumber when creating a new course.
+        $data->idnumber = $data->shortname;
+        // SWTC ********************************************************************************.
         // In creating the course.
         $course = create_course($data, $editoroptions);
 
@@ -189,6 +198,10 @@ if ($editform->is_cancelled()) {
             }
         }
     } else {
+        // SWTC ********************************************************************************.
+        // Copy data.shortname into data.idnumber when creating a new course.
+        $data->idnumber = $data->shortname;
+        // SWTC ********************************************************************************.
         // Save any changes to the files used in the editor.
         update_course($data, $editoroptions);
         // Set the URL to take them too if they choose save and display.

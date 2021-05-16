@@ -497,7 +497,7 @@ class format_swtccustom extends format_base {
             'username' => $USER->username]);
         $debug = swtc_get_debug();
 
-        // Other Lenovo variables.
+        // Other SWTC variables.
         $sectionid = 0;
         // SWTC ********************************************************************************.
 

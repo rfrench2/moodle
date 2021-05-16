@@ -67,4 +67,4 @@ $string['courseversion_help'] = 'Enter the current version of the course.';
 $string['swtc_header'] = 'SWTC';
 $string['edit_section_warning'] = 'Do not use this for adding or modifying text in the Course overview section (use Course administration > Edit settings > Course summary).';
 
-$string['privacy:metadata'] = 'The SWTC ebglmscustom course format plugin does not store any personal data.';
+$string['privacy:metadata'] = 'The SWTC swtccustom course format plugin does not store any personal data.';

@@ -33,6 +33,6 @@ defined('MOODLE_INTERNAL') || die();
 $observers = array(
     array(
         'eventname'   => '\core\event\course_updated',
-        'callback'    => 'format_swtccustom_observer::course_updated',
+        'callback'    => 'format_swtcpractical_observer::course_updated',
     )
 );
