@@ -24,18 +24,9 @@
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * SWTC history:
- *
- * 04/13/21 - Initial writing.
- *
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-// SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
-// SWTC ********************************************************************************.
-use \local_swtc\traits\swtc_completion_criteria;
 
 /**
  * Course completion critieria - completion on activity completion
@@ -47,16 +38,6 @@ use \local_swtc\traits\swtc_completion_criteria;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class completion_criteria_activity extends completion_criteria {
-
-    // SWTC ********************************************************************************.
-    // SWTC customized code for Moodle core completion.
-    // SWTC ********************************************************************************.
-    use swtc_completion_criteria;
-
-    /** Status requiring any type of completion. */
-    const STATUS_COMPLETED = 1;
-    /** Status requiring successful completion. */
-    const STATUS_COMPLETED_PASS = 2;
 
     /* @var int Criteria [COMPLETION_CRITERIA_TYPE_ACTIVITY] */
     public $criteriatype = COMPLETION_CRITERIA_TYPE_ACTIVITY;
@@ -77,11 +58,6 @@ class completion_criteria_activity extends completion_criteria {
      *
      * @param moodleform $mform  Moodle forms object
      * @param stdClass $data details of various modules
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
      */
     public function config_form_display(&$mform, $data = null) {
         $modnames = get_module_types_names();
@@ -92,8 +68,7 @@ class completion_criteria_activity extends completion_criteria {
                 array('group' => 1));
 
         if ($this->id) {
-            // $mform->setDefault('criteria_activity['.$data->id.']', 1);
-            $mform->setDefault($field, $this->modulestatus);
+            $mform->setDefault('criteria_activity['.$data->id.']', 1);
         }
     }
 
@@ -101,11 +76,6 @@ class completion_criteria_activity extends completion_criteria {
      * Update the criteria information stored in the database
      *
      * @param stdClass $data Form data
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
      */
     public function update_config(&$data) {
         global $DB;
@@ -122,7 +92,6 @@ class completion_criteria_activity extends completion_criteria {
                     $module = $DB->get_record('course_modules', array('id' => $activity));
                     $this->module = self::get_mod_name($module->module);
                     $this->moduleinstance = $activity;
-                    $this->modulestatus = $val;
                     $this->id = null;
                     $this->insert();
                 }
@@ -176,11 +145,6 @@ class completion_criteria_activity extends completion_criteria {
      * @param completion_completion $completion     The user's completion record
      * @param bool $mark Optionally set false to not save changes to database
      * @return bool
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
      */
     public function review($completion, $mark = true) {
         global $DB;
@@ -190,14 +154,6 @@ class completion_criteria_activity extends completion_criteria {
         $info = new completion_info($course);
 
         $data = $info->get_data($cm, false, $completion->userid);
-
-        if ($this->modulestatus == self::STATUS_COMPLETED) {
-            // Any status of completion is accepted.
-            $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL];
-        } else if ($this->modulestatus == self::STATUS_COMPLETED_PASS) {
-            // Successful statuses of completion are accepted.
-            $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS];
-        }
 
         // If the activity is complete
         if (in_array($data->completionstate, array(COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL))) {
@@ -245,11 +201,6 @@ class completion_criteria_activity extends completion_criteria {
 
     /**
      * Find users who have completed this criteria and mark them accordingly
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
      */
     public function cron() {
         global $DB;
@@ -286,21 +237,10 @@ class completion_criteria_activity extends completion_criteria {
             AND c.enablecompletion = 1
             AND cc.id IS NULL
             AND (
-                (cr.modulestatus = ' . self::STATUS_COMPLETED. '
-                AND (
-                        mc.completionstate = ' . COMPLETION_COMPLETE . '
-                        OR mc.completionstate = ' . COMPLETION_COMPLETE_PASS . '
-                        OR mc.completionstate = ' . COMPLETION_COMPLETE_FAIL . '
-                    )
+                mc.completionstate = '.COMPLETION_COMPLETE.'
+             OR mc.completionstate = '.COMPLETION_COMPLETE_PASS.'
+             OR mc.completionstate = '.COMPLETION_COMPLETE_FAIL.'
                 )
-                OR
-                (cr.modulestatus = ' . self::STATUS_COMPLETED_PASS . '
-                AND (
-                        mc.completionstate = ' . COMPLETION_COMPLETE .'
-                        OR mc.completionstate = ' . COMPLETION_COMPLETE_PASS  .'
-                    )
-                )
-            )
         ';
 
         // Loop through completions, and mark as complete

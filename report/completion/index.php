@@ -33,11 +33,26 @@ require_once(__DIR__.'/../../config.php');
 require_once("{$CFG->libdir}/completionlib.php");
 
 // SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
+// SWTC Customized code for Moodle core completion.
 // SWTC ********************************************************************************.
-// require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');
+use local_swtc\criteria\completion_info;
+use local_swtc\grouplib\grouplib;
 
-use local_swtc\swtc_completion_info;
+// SWTC ********************************************************************************.
+// Include SWTC LMS user and debug functions.
+// SWTC ********************************************************************************.
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+
+// SWTC ********************************************************************************.
+// SWTC LMS swtc_user and debug variables.
+$swtcuser = swtc_get_user([
+    'userid' => $USER->id,
+    'username' => $USER->username]);
+$debug = swtc_get_debug();
+
+// Other SWTC variables.
+$swtcgroups = new grouplib;
+// SWTC ********************************************************************************.
 
 /**
  * Configuration
@@ -49,17 +64,17 @@ define('COMPLETION_REPORT_COL_TITLES',  true);
  * Setup page, check permissions
  */
 
-// Get course
+// Get course.
 $courseid = required_param('course', PARAM_INT);
-$format = optional_param('format','',PARAM_ALPHA);
-$sort = optional_param('sort','',PARAM_ALPHA);
+$format = optional_param('format', '', PARAM_ALPHA);
+$sort = optional_param('sort', '', PARAM_ALPHA);
 $edituser = optional_param('edituser', 0, PARAM_INT);
 
 
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $context = context_course::instance($course->id);
 
-$url = new moodle_url('/report/completion/index.php', array('course'=>$course->id));
+$url = new moodle_url('/report/completion/index.php', array('course' => $course->id));
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
 
@@ -67,47 +82,47 @@ $firstnamesort = ($sort == 'firstname');
 $excel = ($format == 'excelcsv');
 $csv = ($format == 'csv' || $excel);
 
-// Load CSV library
+// Load CSV library.
 if ($csv) {
     require_once("{$CFG->libdir}/csvlib.class.php");
 }
 
-// Paging
+// Paging.
 $start   = optional_param('start', 0, PARAM_INT);
 $sifirst = optional_param('sifirst', 'all', PARAM_NOTAGS);
 $silast  = optional_param('silast', 'all', PARAM_NOTAGS);
 
-// Whether to show extra user identity information
+// Whether to show extra user identity information.
 $extrafields = get_extra_user_fields($context);
 $leftcols = 1 + count($extrafields);
 
-// Check permissions
+// Check permissions.
 require_login($course);
 
 require_capability('report/completion:view', $context);
 
-// Get group mode
-$group = groups_get_course_group($course, true); // Supposed to verify group
+// Get group mode.
+$group = $swtcgroups->groups_get_course_group($course, true); // Supposed to verify group.
 if ($group === 0 && $course->groupmode == SEPARATEGROUPS) {
-    require_capability('moodle/site:accessallgroups',$context);
+    require_capability('moodle/site:accessallgroups', $context);
 }
 
-/**
- * Load data
+/*
+ * Load data.
  */
 
-// Retrieve course_module data for all modules in the course
+// Retrieve course_module data for all modules in the course.
 $modinfo = get_fast_modinfo($course);
 
-// Get criteria for course
+// Get criteria for course.
 // $completion = new completion_info($course);  // SWTC.
-$completion = new swtc_completion_info($course);    // SWTC.
+$completion = new completion_info($course);    // SWTC.
 
 if (!$completion->has_criteria()) {
     print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
 }
 
-// Get criteria and put in correct order
+// Get criteria and put in correct order.
 $criteria = array();
 
 foreach ($completion->get_criteria(COMPLETION_CRITERIA_TYPE_COURSE) as $criterion) {
@@ -126,12 +141,12 @@ foreach ($completion->get_criteria() as $criterion) {
 }
 
 // Can logged in user mark users as complete?
-// (if the logged in user has a role defined in the role criteria)
-$allow_marking = false;
-$allow_marking_criteria = null;
+// (if the logged in user has a role defined in the role criteria).
+$allowmarking = false;
+$allowmarkingcriteria = null;
 
 if (!$csv) {
-    // Get role criteria
+    // Get role criteria.
     $rcriteria = $completion->get_criteria(COMPLETION_CRITERIA_TYPE_ROLE);
 
     if (!empty($rcriteria)) {
@@ -139,10 +154,10 @@ if (!$csv) {
         foreach ($rcriteria as $rcriterion) {
             $users = get_role_users($rcriterion->role, $context, true);
 
-            // If logged in user has this role, allow marking complete
+            // If logged in user has this role, allow marking complete.
             if ($users && in_array($USER->id, array_keys($users))) {
-                $allow_marking = true;
-                $allow_marking_criteria = $rcriterion->id;
+                $allowmarking = true;
+                $allowmarkingcriteria = $rcriterion->id;
                 break;
             }
         }
@@ -150,18 +165,18 @@ if (!$csv) {
 }
 
 /*
- * Setup page header
+ * Setup page header.
  */
 if ($csv) {
 
     $shortname = format_string($course->shortname, true, array('context' => $context));
-    $shortname = preg_replace('/[^a-z0-9-]/', '_',core_text::strtolower(strip_tags($shortname)));
+    $shortname = preg_replace('/[^a-z0-9-]/', '_', core_text::strtolower(strip_tags($shortname)));
 
     $export = new csv_export_writer();
     $export->set_filename('completion-'.$shortname);
 
 } else {
-    // Navigation and header
+    // Navigation and header.
     $strcompletion = get_string('coursecompletion');
 
     $PAGE->set_title($strcompletion);
@@ -169,8 +184,8 @@ if ($csv) {
 
     echo $OUTPUT->header();
 
-    // Handle groups (if enabled)
-    groups_print_course_menu($course, $CFG->wwwroot.'/report/completion/index.php?course='.$course->id);
+    // Handle groups (if enabled).
+    $swtcgroups->groups_print_course_menu($course, $CFG->wwwroot.'/report/completion/index.php?course='.$course->id);
 }
 
 if ($sifirst !== 'all') {
@@ -192,48 +207,78 @@ if (!empty($USER->preference['ilast'])) {
     $silast = 'all';
 }
 
-// Generate where clause
+// Generate where clause.
 $where = array();
-$where_params = array();
+$whereparams = array();
 
 if ($sifirst !== 'all') {
     $where[] = $DB->sql_like('u.firstname', ':sifirst', false, false);
-    $where_params['sifirst'] = $sifirst.'%';
+    $whereparams['sifirst'] = $sifirst.'%';
 }
 
 if ($silast !== 'all') {
     $where[] = $DB->sql_like('u.lastname', ':silast', false, false);
-    $where_params['silast'] = $silast.'%';
+    $whereparams['silast'] = $silast.'%';
+}
+
+// SWTC ********************************************************************************.
+// Add PremierSupport roles to whereparams.
+// Add additional WHERE condition if $USER role is PremierSupport-manager or PremierSupport-admin.
+// SWTC ********************************************************************************.
+if (isset($debug)) {
+    $messages[] = "About to print where ==report\completion\index.php===.\n";
+    $messages[] = print_r($where, true);
+    $messages[] = "Finished printing where ==report\completion\index.php===.\n";
+    $debug->logmessage($messages, 'both');
+    unset($messages);
+}
+
+// SWTC ********************************************************************************.
+// Customized code for Moodle core completion.
+// SWTC ********************************************************************************.
+list($where, $whereparams, $grandtotal) =
+            $completion->set_where_conditions_by_accesstype($swtcuser, $where, $whereparams, $group);
+
+// SWTC ********************************************************************************.
+if (isset($debug)) {
+    $messages[] = "About to print whereparams ==report\completion\index.php===.\n";
+    $messages[] = print_r($whereparams, true);
+    $messages[] = "Finished printing whereparams ==report\completion\index.php===.\n";
+    $messages[] = "About to print where (again) ==report\completion\index.php===.\n";
+    $messages[] = print_r($where, true);
+    $messages[] = "Finished printing where (again) ==report\completion\index.php===.\n";
+    $debug->logmessage($messages, 'both');
+    unset($messages);
 }
 
 // Get user match count
-$total = $completion->get_num_tracked_users(implode(' AND ', $where), $where_params, $group);
 // SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
+// Customized code for Moodle core completion.
 // SWTC ********************************************************************************.
-// list($where, $where_params, $grandtotal) = swtc_report_completion($completion, $where, $where_params, $group);
+$total = $completion->get_num_tracked_users(implode(' AND ', $where), $whereparams, $group);
 
-// Total user count
-$grandtotal = $completion->get_num_tracked_users('', array(), $group);
 // SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
+if (isset($debug)) {
+    $messages[] = "total is :$total. grandtotal is :$grandtotal  ==report\completion\index.php===.\n";
+    $debug->logmessage($messages, 'both');
+    unset($messages);
+}
 // SWTC ********************************************************************************.
-// $total = $completion->swtc_get_num_tracked_users(implode(' AND ', $where), $where_params, $group);
 
-// If no users in this course what-so-ever
+// If no users in this course what-so-ever.
 if (!$grandtotal) {
     echo $OUTPUT->container(get_string('err_nousers', 'completion'), 'errorbox errorboxcontent');
     echo $OUTPUT->footer();
     exit;
 }
 
-// Get user data
+// Get user data.
 $progress = array();
 
 if ($total) {
     $progress = $completion->get_progress_all(
         implode(' AND ', $where),
-        $where_params,
+        $whereparams,
         $group,
         $firstnamesort ? 'u.firstname ASC' : 'u.lastname ASC',
         $csv ? 0 : COMPLETION_REPORT_PAGE,
@@ -242,7 +287,7 @@ if ($total) {
     );
 }
 
-// Build link for paging
+// Build link for paging.
 $link = $CFG->wwwroot.'/report/completion/index.php?course='.$course->id;
 if (strlen($sort)) {
     $link .= '&amp;sort='.$sort;
@@ -260,26 +305,26 @@ $pagingbar .= $OUTPUT->initials_bar($silast, 'lastinitial', get_string('lastname
 // Do we need a paging bar?
 if ($total > COMPLETION_REPORT_PAGE) {
 
-    // Paging bar
+    // Paging bar.
     $pagingbar .= '<div class="paging">';
     $pagingbar .= get_string('page').': ';
 
     $sistrings = array();
     if ($sifirst != 'all') {
-        $sistrings[] =  "sifirst={$sifirst}";
+        $sistrings[] = "sifirst={$sifirst}";
     }
     if ($silast != 'all') {
-        $sistrings[] =  "silast={$silast}";
+        $sistrings[] = "silast={$silast}";
     }
     $sistring = !empty($sistrings) ? '&amp;'.implode('&amp;', $sistrings) : '';
 
-    // Display previous link
+    // Display previous link.
     if ($start > 0) {
         $pstart = max($start - COMPLETION_REPORT_PAGE, 0);
         $pagingbar .= "(<a class=\"previous\" href=\"{$link}{$pstart}{$sistring}\">".get_string('previous').'</a>)&nbsp;';
     }
 
-    // Create page links
+    // Create page links.
     $curstart = 0;
     $curpage = 0;
     while ($curstart < $total) {
@@ -287,15 +332,14 @@ if ($total > COMPLETION_REPORT_PAGE) {
 
         if ($curstart == $start) {
             $pagingbar .= '&nbsp;'.$curpage.'&nbsp;';
-        }
-        else {
+        } else {
             $pagingbar .= "&nbsp;<a href=\"{$link}{$curstart}{$sistring}\">$curpage</a>&nbsp;";
         }
 
         $curstart += COMPLETION_REPORT_PAGE;
     }
 
-    // Display next link
+    // Display next link.
     $nstart = $start + COMPLETION_REPORT_PAGE;
     if ($nstart < $total) {
         $pagingbar .= "&nbsp;(<a class=\"next\" href=\"{$link}{$nstart}{$sistring}\">".get_string('next').'</a>)';
@@ -308,12 +352,12 @@ if ($total > COMPLETION_REPORT_PAGE) {
  * Draw table header
  */
 
-// Start of table
+// Start of table.
 if (!$csv) {
-    print '<br class="clearer"/>'; // ugh
+    print '<br class="clearer"/>'; // Ugh.
 
-    $total_header = ($total == $grandtotal) ? $total : "{$total}/{$grandtotal}";
-    echo $OUTPUT->heading(get_string('allparticipants').": {$total_header}", 3);
+    $totalheader = ($total == $grandtotal) ? $total : "{$total}/{$grandtotal}";
+    echo $OUTPUT->heading(get_string('allparticipants').": {$totalheader}", 3);
 
     print $pagingbar;
 
@@ -326,70 +370,71 @@ if (!$csv) {
     print '<table id="completion-progress" class="table table-bordered generaltable flexible boxaligncenter
         completionreport" style="text-align: left" cellpadding="5" border="1">';
 
-    // Print criteria group names
+    // Print criteria group names.
     print PHP_EOL.'<thead><tr style="vertical-align: top">';
     echo '<th scope="row" class="rowheader" colspan="' . $leftcols . '">' .
             get_string('criteriagroup', 'completion') . '</th>';
 
-    $current_group = false;
-    $col_count = 0;
+    $currentgroup = false;
+    $colcount = 0;
     for ($i = 0; $i <= count($criteria); $i++) {
 
         if (isset($criteria[$i])) {
             $criterion = $criteria[$i];
 
-            if ($current_group && $criterion->criteriatype === $current_group->criteriatype) {
-                ++$col_count;
+            if ($currentgroup && $criterion->criteriatype === $currentgroup->criteriatype) {
+                ++$colcount;
                 continue;
             }
         }
 
-        // Print header cell
-        if ($col_count) {
-            print '<th scope="col" colspan="'.$col_count.'" class="colheader criteriagroup">'.$current_group->get_type_title().'</th>';
+        // Print header cell.
+        if ($colcount) {
+            print '<th scope="col" colspan="'.$colcount.'" class="colheader criteriagroup">'.
+                $currentgroup->get_type_title().'</th>';
         }
 
         if (isset($criteria[$i])) {
-            // Move to next criteria type
-            $current_group = $criterion;
-            $col_count = 1;
+            // Move to next criteria type.
+            $currentgroup = $criterion;
+            $colcount = 1;
         }
     }
 
-    // Overall course completion status
+    // Overall course completion status.
     print '<th style="text-align: center;">'.get_string('course').'</th>';
 
     print '</tr>';
 
-    // Print aggregation methods
+    // Print aggregation methods.
     print PHP_EOL.'<tr style="vertical-align: top">';
     echo '<th scope="row" class="rowheader" colspan="' . $leftcols . '">' .
             get_string('aggregationmethod', 'completion').'</th>';
 
-    $current_group = false;
-    $col_count = 0;
+    $currentgroup = false;
+    $colcount = 0;
     for ($i = 0; $i <= count($criteria); $i++) {
 
         if (isset($criteria[$i])) {
             $criterion = $criteria[$i];
 
-            if ($current_group && $criterion->criteriatype === $current_group->criteriatype) {
-                ++$col_count;
+            if ($currentgroup && $criterion->criteriatype === $currentgroup->criteriatype) {
+                ++$colcount;
                 continue;
             }
         }
 
-        // Print header cell
-        if ($col_count) {
-            $has_agg = array(
+        // Print header cell.
+        if ($colcount) {
+            $hasagg = array(
                 COMPLETION_CRITERIA_TYPE_COURSE,
                 COMPLETION_CRITERIA_TYPE_ACTIVITY,
                 COMPLETION_CRITERIA_TYPE_ROLE,
             );
 
-            if (in_array($current_group->criteriatype, $has_agg)) {
-                // Try load a aggregation method
-                $method = $completion->get_aggregation_method($current_group->criteriatype);
+            if (in_array($currentgroup->criteriatype, $hasagg)) {
+                // Try load a aggregation method.
+                $method = $completion->get_aggregation_method($currentgroup->criteriatype);
 
                 $method = $method == 1 ? get_string('all') : get_string('any');
 
@@ -397,20 +442,20 @@ if (!$csv) {
                 $method = '-';
             }
 
-            print '<th scope="col" colspan="'.$col_count.'" class="colheader aggheader">'.$method.'</th>';
+            print '<th scope="col" colspan="'.$colcount.'" class="colheader aggheader">'.$method.'</th>';
         }
 
         if (isset($criteria[$i])) {
-            // Move to next criteria type
-            $current_group = $criterion;
-            $col_count = 1;
+            // Move to next criteria type.
+            $currentgroup = $criterion;
+            $colcount = 1;
         }
     }
 
-    // Overall course aggregation method
+    // Overall course aggregation method.
     print '<th scope="col" class="colheader aggheader aggcriteriacourse">';
 
-    // Get course aggregation
+    // Get course aggregation.
     $method = $completion->get_aggregation_method();
 
     print $method == 1 ? get_string('all') : get_string('any');
@@ -418,7 +463,7 @@ if (!$csv) {
 
     print '</tr>';
 
-    // Print criteria titles
+    // Print criteria titles.
     if (COMPLETION_REPORT_COL_TITLES) {
 
         print PHP_EOL.'<tr>';
@@ -426,15 +471,14 @@ if (!$csv) {
                 get_string('criteria', 'completion') . '</th>';
 
         foreach ($criteria as $criterion) {
-            // Get criteria details
+            // Get criteria details.
             // SWTC ********************************************************************************.
             // SWTC customized code for Moodle core completion.
             // SWTC ********************************************************************************.
-            // $details = $criterion->get_title_detailed();
             if ($criterion->criteriatype == 8) {
-                list($id, $shortname, $fullname) = $criterion->get_title_detailed_course($group);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
             } else if ($criterion->criteriatype == 4) {
-                list($id, $shortname, $fullname) = $criterion->get_title_detailed_activity();
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
             }
 
             $courseurl = new moodle_url("/report/completion/index.php", array('course' => $id, 'group' => $group));
@@ -491,24 +535,24 @@ if (!$csv) {
 
             case COMPLETION_CRITERIA_TYPE_ACTIVITY:
 
-                // Display icon
+                // Display icon.
                 $iconlink = $CFG->wwwroot.'/mod/'.$criterion->module.'/view.php?id='.$criterion->moduleinstance;
                 $iconattributes['title'] = $modinfo->cms[$criterion->moduleinstance]->get_formatted_name();
                 $iconalt = get_string('modulename', $criterion->module);
                 break;
 
             case COMPLETION_CRITERIA_TYPE_COURSE:
-                // Load course
+                // Load course.
                 $crs = $DB->get_record('course', array('id' => $criterion->courseinstance));
 
-                // Display icon
+                // Display icon.
                 $iconlink = $CFG->wwwroot.'/course/view.php?id='.$criterion->courseinstance;
                 $iconattributes['title'] = format_string($crs->fullname, true, array('context' => context_course::instance($crs->id, MUST_EXIST)));
                 $iconalt = format_string($crs->shortname, true, array('context' => context_course::instance($crs->id)));
                 break;
 
             case COMPLETION_CRITERIA_TYPE_ROLE:
-                // Load role
+                // Load role.
                 $role = $DB->get_record('role', array('id' => $criterion->role));
 
                 // Display icon
@@ -516,12 +560,12 @@ if (!$csv) {
                 break;
         }
 
-        // Create icon alt if not supplied
+        // Create icon alt if not supplied.
         if (!$iconalt) {
             $iconalt = $criterion->get_title();
         }
 
-        // Print icon and cell
+        // Print icon and cell.
         print '<th class="criteriaicon">';
 
         print ($iconlink ? '<a href="'.$iconlink.'" title="'.$iconattributes['title'].'">' : '');
@@ -531,7 +575,7 @@ if (!$csv) {
         print '</th>';
     }
 
-    // Overall course completion status
+    // Overall course completion status.
     print '<th class="criteriaicon">';
     print $OUTPUT->pix_icon('i/course', get_string('coursecomplete', 'completion'));
     print '</th>';
@@ -540,7 +584,7 @@ if (!$csv) {
 
     echo '<tbody>';
 } else {
-    // The CSV headers
+    // The CSV headers.
     $row = array();
 
     $row[] = get_string('id', 'report_completion');
@@ -549,27 +593,26 @@ if (!$csv) {
        $row[] = get_user_field_name($field);
     }
 
-    // Add activity headers
+    // Add activity headers.
     foreach ($criteria as $criterion) {
 
-        // Handle activity completion differently
+        // Handle activity completion differently.
         if ($criterion->criteriatype == COMPLETION_CRITERIA_TYPE_ACTIVITY) {
 
-            // Load activity
+            // Load activity.
             $mod = $criterion->get_mod_instance();
             $row[] = $formattedname = format_string($mod->name, true,
                     array('context' => context_module::instance($criterion->moduleinstance)));
             $row[] = $formattedname . ' - ' . get_string('completiondate', 'report_completion');
-        }
-        else {
-            // Handle all other criteria
+        } else {
+            // Handle all other criteria.
             // SWTC ********************************************************************************.
             // SWTC customized code for Moodle core completion.
             // SWTC ********************************************************************************.
             if ($criterion->criteriatype === 8) {
-                list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_course($group);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
             } else if ($criterion->criteriatype === 4) {
-                list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_activity();
+                list($id, $shortname, $fullname) = $completion->swtc_get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
             }
             // $row[] = strip_tags($criterion->get_title_detailed());
             $row[] = strip_tags($shortname. ' ' .$fullname);
@@ -581,9 +624,9 @@ if (!$csv) {
     $export->add_data($row);
 }
 
-///
-/// Display a row for each user
-///
+/*
+ * Display a row for each user
+ */
 foreach ($progress as $user) {
 
     // User name
@@ -614,7 +657,7 @@ foreach ($progress as $user) {
     // changing way course completion data is presented if course completion is based on other courses
     // being complete.
     // SWTC ********************************************************************************.
-    // Progress for each course completion criteria
+    // Progress for each course completion criteria.
     foreach ($criteria as $criterion) {
 
         $criteria_completion = $completion->get_user_completion($user->id, $criterion);
@@ -623,7 +666,7 @@ foreach ($progress as $user) {
         // Handle activity completion differently
         if ($criterion->criteriatype == COMPLETION_CRITERIA_TYPE_ACTIVITY) {
 
-            // Load activity
+            // Load activity.
             $activity = $modinfo->cms[$criterion->moduleinstance];
 
             // Get progress information and state
@@ -683,7 +726,8 @@ foreach ($progress as $user) {
             // SWTC ********************************************************************************.
             if (isset($criterion->courseinstance)) {
                 $tempcourse = get_course($criterion->courseinstance);
-                $info = new completion_info($tempcourse);
+                // $info = new completion_info($tempcourse);    // SWTC.
+                $info = new completion_info($tempcourse);  // SWTC.
 
                 // Is course complete?
                 $is_complete = $info->is_course_complete($user->id);
@@ -724,7 +768,7 @@ foreach ($progress as $user) {
 
             print '<td class="completion-progresscell">';
 
-            if ($allow_marking_criteria === $criterion->id) {
+            if ($allowmarkingcriteria === $criterion->id) {
                 $describe = get_string('completion-'.$completiontype, 'completion');
 
                 $toggleurl = new moodle_url(
@@ -732,7 +776,7 @@ foreach ($progress as $user) {
                     array(
                         'user' => $user->id,
                         'course' => $course->id,
-                        'rolec' => $allow_marking_criteria,
+                        'rolec' => $allowmarkingcriteria,
                         'sesskey' => sesskey()
                     )
                 );

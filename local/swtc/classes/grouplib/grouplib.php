@@ -17,12 +17,12 @@
 /**
  * SWTC customized code for groups. Remember to add the
  * following at the top of any module that requires these functions:
- * require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');
+ * use local_swtc\grouplib\grouplib;
  *
  * Version details
  *
  * @package    local
- * @subpackage swtc_grouplib.php
+ * @subpackage /swtc/classes/grouplib/grouplib.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -32,7 +32,7 @@
  *
  **/
 
-namespace local_swtc;
+namespace local_swtc\grouplib;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -48,7 +48,7 @@ use stdClass;
  *
  *
  * @package    local
- * @subpackage swtc/classes/swtc_grouplib.php
+ * @subpackage swtc/classes/grouplib/grouplib.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -57,7 +57,7 @@ use stdClass;
  * 04/19/21 - Initial writing.
  *
  **/
-class swtc_grouplib {
+class grouplib {
 
     public function __construct() {
 
@@ -91,7 +91,6 @@ class swtc_grouplib {
     public function groups_get_all_groups($courseid, $userid=0, $groupingid=0, $fields='g.*', $withmembers=false) {
         global $DB, $USER;
 
-        // print_object("swtc_grouplib class; groups_get_all_groups");
         // SWTC ********************************************************************************.
         // SWTC swtcuser and debug variables.
         $swtcuser = swtc_get_user([
@@ -109,7 +108,7 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering /local/swtc/classes/swtc_grouplib.php.swtc_groups_get_all_groups.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -167,14 +166,7 @@ class swtc_grouplib {
             // (all the groups the user has access to). sort (set above) is used to parse the groups.
             // SWTC ********************************************************************************.
             $temp = array();
-            if ((preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            if (($swtcuser->is_psmanagement()) || ($swtcuser->is_sdmanagement())) {
                 foreach ($groups as $group) {
                     if (preg_match($swtcsort, $group->name)) {
                         // SWTC ********************************************************************************.
@@ -210,14 +202,13 @@ class swtc_grouplib {
                 // Always output standard header information.
                 // SWTC ********************************************************************************.
                 $messages[] = get_string('swtc_debug', 'local_swtc');
-                $messages[] = "Leaving /local/swtc/classes/grouplib.php.swtc_groups_get_all_groups.exit (upper1)===.";
+                $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (upper1)===.";
                 $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "sort is :$swtcsort. About to print groups.";
                 $messages[] = print_r($groups, true);
-                // print_object($groups);
-                // $messages[] = "Finished printing groups. About to print swtcuser->groupnames.";
-                // $messages[] = print_r($swtcuser->get_groupnames(), true);
-                // $messages[] = "Finished printing swtcuser->groupnames.";
+                $messages[] = "Finished printing groups. About to print swtcuser->groupnames.";
+                $messages[] = print_r($swtcuser->get_groupnames(), true);
+                $messages[] = "Finished printing swtcuser->groupnames.";
                 $debug->logmessage($messages, 'detailed');
                 unset($messages);
             }
@@ -268,7 +259,7 @@ class swtc_grouplib {
                 // Always output standard header information.
                 // SWTC ********************************************************************************.
                 $messages[] = get_string('swtc_debug', 'local_swtc');
-                $messages[] = "Leaving /local/swtc/classes/grouplib.php.swtc_groups_get_all_groups.exit (upper2)===.";
+                $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (upper2)===.";
                 $messages[] = "withmembers is empty.";
                 $messages[] = get_string('swtc_debug', 'local_swtc');
                 $debug->logmessage($messages, 'both');
@@ -277,6 +268,51 @@ class swtc_grouplib {
 
             return $results;
         }
+
+        // We also want group members. We do this in a separate query, becuse the above
+        // query will return a lot of data (e.g. g.description) for each group, and
+        // some groups may contain hundreds of members. We don't want the results
+        // to contain hundreds of copies of long descriptions.
+        $groups = [];
+        foreach ($results as $row) {
+            $groups[$row->id] = $row;
+            $groups[$row->id]->members = [];
+        }
+        $groupmembers = $DB->get_records_list('groups_members', 'groupid', array_keys($groups));
+        foreach ($groupmembers as $gm) {
+            $groups[$gm->groupid]->members[$gm->userid] = $gm->userid;
+        }
+
+        $results = $groups;
+
+        if (isset($debug)) {
+            // SWTC ********************************************************************************.
+            // Always output standard header information.
+            // SWTC ********************************************************************************.
+            $messages[] = get_string('swtc_debug', 'local_swtc');
+            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (lower)===.";
+            $messages[] = $messages[] = get_string('swtc_debug', 'local_swtc');
+            $debug->logmessage($messages, 'both');
+            unset($messages);
+
+            // SWTC ********************************************************************************.
+            // Always output standard header information.
+            // SWTC ********************************************************************************.
+            $messages[] = "groups_get_all_groups==3==.";
+            $tmp = "SELECT $fields FROM {groups} g $userfrom $groupingfrom
+                WHERE g.courseid = ? $userwhere $groupingwhere
+                ORDER BY g.name ASC";
+            $messages[] = print_r($tmp, true);
+            $messages[] = "groups_get_all_groups==4==: params follow :";
+            $messages[] = print_r($params, true);
+            $messages[] = "groups_get_all_groups==5==: results follow :";
+            $messages[] = print_r($results, true);
+            $debug->logmessage($messages, 'detailed');
+            unset($messages);
+        }
+
+        return $results;
+
     }
 
     /**
@@ -298,7 +334,6 @@ class swtc_grouplib {
     public function groups_print_course_menu($course, $urlroot, $return=false) {
         global $USER, $OUTPUT;
 
-        // print_object("swtc_grouplib class; groups_print_course_menu");
         // SWTC ********************************************************************************.
         // SWTC swtcuser and debug variables.
         $swtcuser = swtc_get_user([
@@ -317,7 +352,7 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering /local/swtc/classes/grouplib.php.swtc_groups_print_course_menu.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_print_course_menu.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -347,7 +382,6 @@ class swtc_grouplib {
 
         $groupsmenu = array();
         if (!$allowedgroups || $groupmode == VISIBLEGROUPS || $aag) {
-            // $groupsmenu[0] = get_string('allparticipants');  // SWTC.
             // SWTC ********************************************************************************.
             // IMPORTANT! The following code assumes the following:
             // For PS/SD manager access types (ex: PS-US1-manager):
@@ -356,33 +390,26 @@ class swtc_grouplib {
             // For PS/SD administrator access types (ex: PS-US1-administrator):
             // $groupsmenu[0] will be set to "All PremierSupport US enrollments".
             // SWTC ********************************************************************************.
-            if ((preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            if (($swtcuser->is_psmanagement()) || ($swtcuser->is_sdmanagement())) {
                 // SWTC ********************************************************************************.
                 // PremierSupport site administrators
                 // SWTC ********************************************************************************.
                 if (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
                     $groupsmenu[0] = get_string('groups_premiersupport_all_participants', 'local_swtc', $messageparams);
                     $groupsmenu += self::groups_sort_menu_options($allowedgroups, $usergroups, $accesstype);
-                    // SWTC ********************************************************************************.
-                    // PremierSupport GEO administrators
-                    // PremierSupport administrators
-                    // PremierSupport managers
-                    // SWTC ********************************************************************************.
-                } else if ((preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype)) 
-                    || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-                    || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
+                // SWTC ********************************************************************************.
+                // PremierSupport GEO administrators
+                // PremierSupport administrators
+                // PremierSupport managers
+                // SWTC ********************************************************************************.
+                } else if ((preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+                || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
+                || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
                     $groupsmenu[0] = get_string('groups_premiersupport_all_geo_participants', 'local_swtc', $messageparams);
                     $groupsmenu += self::groups_sort_menu_options($allowedgroups, $usergroups, $accesstype);
-                    // SWTC ********************************************************************************.
-                    // ServiceDelivery site administrators
-                    // SWTC ********************************************************************************.
+                // SWTC ********************************************************************************.
+                // ServiceDelivery site administrators
+                // SWTC ********************************************************************************.
                 } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
                     $groupsmenu[0] = get_string('groups_lenovo_servicedelivery_all_participants', 'local_swtc', $messageparams);
                     $groupsmenu += self::groups_sort_menu_options($allowedgroups, $usergroups, $accesstype);
@@ -441,7 +468,7 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving /local/swtc/classes/grouplib.php.swtc_groups_print_course_menu.exit===.";
+            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_print_course_menu.exit===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -484,9 +511,8 @@ class swtc_grouplib {
     public function groups_get_course_group($course, $update=false, $allowedgroups=null) {
         global $USER, $SESSION;
 
-        // print_object("swtc_grouplib class; groups_get_course_group");
         if (!$groupmode = $course->groupmode) {
-            // NOGROUPS used
+            // NOGROUPS used.
             return false;
         }
 
@@ -505,12 +531,12 @@ class swtc_grouplib {
 
         _group_verify_activegroup($course->id, $groupmode, $course->defaultgroupingid, $allowedgroups);
 
-        // set new active group if requested
+        // Set new active group if requested.
         $changegroup = optional_param('group', -1, PARAM_INT);
         if ($update && $changegroup != -1) {
 
             if ($changegroup == 0) {
-                // do not allow changing to all groups without accessallgroups capability
+                // Do not allow changing to all groups without accessallgroups capability.
                 if ($groupmode == VISIBLEGROUPS || $groupmode === 'aag') {
                     $SESSION->activegroup[$course->id][$groupmode][$course->defaultgroupingid] = 0;
                 }
@@ -533,7 +559,9 @@ class swtc_grouplib {
     /**
      * Takes user's allowed groups and own groups and formats for use in group selector menu
      * If user has allowed groups + own groups will add to an optgroup
-     * Own groups are removed from allowed groups
+     * Own groups are removed from allowed groups.
+     *
+     * IMPORTANT! Sets swtcuser->groupnames.
      *
      * The following is copied from Moodle v3.10 version:
      *
@@ -549,7 +577,6 @@ class swtc_grouplib {
     public function groups_sort_menu_options($allowedgroups, $usergroups) {
         global $USER;
 
-        // print_object("swtc_grouplib class; groups_sort_menu_options");
         // SWTC ********************************************************************************.
         // SWTC swtcuser and debug variables.
         $swtcuser = swtc_get_user([
@@ -562,6 +589,9 @@ class swtc_grouplib {
         $groupname = $swtcuser->get_groupname();
         $messageparams = new stdClass;
         $messageparams->groupname = $groupname;
+
+        // Hold the temporary "dummy" group id to display.
+        $uuid = null;
 
         // The following pattern will match "<whatever>-US1-<whatever> or "<whatever>-EM5-<whatever>".
         $cmpstudsstring = null;
@@ -593,7 +623,7 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering /local/swtc/classes/swtc_grouplib.php.groups_sort_menu_options.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_sort_menu_options.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -623,9 +653,9 @@ class swtc_grouplib {
         // PremierSupport access type.
         // SWTC ********************************************************************************.
         if ((preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
+        || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
             // SWTC ********************************************************************************.
             // Common strings for all PremierSupport access types.
             // SWTC ********************************************************************************.
@@ -694,9 +724,9 @@ class swtc_grouplib {
             // ServiceDelivery access type.
             // SWTC ********************************************************************************.
         } else if ((preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))) {
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))) {
             // SWTC ********************************************************************************.
             // Common strings for all ServiceDelivery access types.
             // SWTC ********************************************************************************.
@@ -764,13 +794,6 @@ class swtc_grouplib {
                 $mgrsmenuitem = get_string('groups_lenovo_servicedelivery_group_type_participants', 'local_swtc', $messageparams);
             }
         }
-
-        // print_object("about to print groups menu");
-        // print_object($groupsmenu);
-        // print_object("about to print studsmenuitem menu");
-        // print_object($studsmenuitem);
-        // print_object("about to print mgrsmenuitem menu");
-        // print_object($mgrsmenuitem);
 
         // SWTC ********************************************************************************.
         // List all the groups that would be included in the following top-level groups:
@@ -847,16 +870,12 @@ class swtc_grouplib {
         // Students menu.
         // SWTC ********************************************************************************.
         if (!empty($studsmenu)) {
-            // print_object("In studsmenu");
-            $tmp = implode(', ', $studsmenu);
             $submenuitem = 'studs_menu';
             if (empty($swtcuser->get_groupnames($submenuitem))) {
                 $uuid = rand();
                 $temp[$submenuitem][$uuid]['uuid'] = $uuid;
-                $temp[$submenuitem][$uuid]['groups'] = $tmp;
-                // $swtcuser->set_groupnames($temp[$submenuitem]);
+                $temp[$submenuitem][$uuid]['groups'] = implode(', ', $studsmenu);
                 $swtcuser->set_groupnames($temp);
-                // Get the current uuid.
             } else {
                 // Use foreach even though there will only be one key and one value.
                 foreach ($swtcuser->get_groupnames($submenuitem) as $key => $value) {
@@ -870,17 +889,12 @@ class swtc_grouplib {
         // Managers menu.
         // SWTC ********************************************************************************.
         if (!empty($mgrsmenu)) {
-            // print_object("In mgrsmenu");
-            $tmp = implode(', ', $mgrsmenu);
             $submenuitem = 'mgrs_menu';
-            // print_object($swtcuser->get_groupnames($submenuitem));
             if (empty($swtcuser->get_groupnames($submenuitem))) {
                 $uuid = rand();
                 $temp[$submenuitem][$uuid]['uuid'] = $uuid;
-                $temp[$submenuitem][$uuid]['groups'] = $tmp;
-                // $swtcuser->set_groupnames($temp[$submenuitem]);
+                $temp[$submenuitem][$uuid]['groups'] = implode(', ', $mgrsmenu);
                 $swtcuser->set_groupnames($temp);
-                // Get the current uuid.
             } else {
                 // Use foreach even though there will only be one key and one value.
                 foreach ($swtcuser->get_groupnames($submenuitem) as $key => $value) {
@@ -894,14 +908,12 @@ class swtc_grouplib {
         // Administrators menu.
         // SWTC ********************************************************************************.
         if (!empty($adminsmenu)) {
-            $tmp = implode(', ', $adminsmenu);
             $submenuitem = 'admins_menu';
             if (empty($swtcuser->get_groupnames($submenuitem))) {
                 $uuid = rand();
                 $temp[$submenuitem][$uuid]['uuid'] = $uuid;
-                $temp[$submenuitem][$uuid]['groups'] = $tmp;
+                $temp[$submenuitem][$uuid]['groups'] = implode(', ', $adminsmenu);
                 $swtcuser->set_groupnames($temp);
-                // Get the current uuid.
             } else {
                 // Use foreach even though there will only be one key and one value.
                 foreach ($swtcuser->get_groupnames($submenuitem) as $key => $value) {
@@ -915,14 +927,12 @@ class swtc_grouplib {
         // GEO Administrators menu.
         // SWTC ********************************************************************************.
         if (!empty($geoadminsmenu)) {
-            $tmp = implode(', ', $geoadminsmenu);
             $submenuitem = 'geoadmins_menu';
             if (empty($swtcuser->get_groupnames($submenuitem))) {
                 $uuid = rand();
                 $temp[$submenuitem][$uuid]['uuid'] = $uuid;
-                $temp[$submenuitem][$uuid]['groups'] = $tmp;
+                $temp[$submenuitem][$uuid]['groups'] = implode(', ', $geoadminsmenu);
                 $swtcuser->set_groupnames($temp);
-                // Get the current uuid.
             } else {
                 // Use foreach even though there will only be one key and one value.
                 foreach ($swtcuser->get_groupnames($submenuitem) as $key => $value) {
@@ -936,14 +946,12 @@ class swtc_grouplib {
         // Site Administrators menu.
         // SWTC ********************************************************************************.
         if (!empty($siteadminsmenu)) {
-            $tmp = implode(', ', $siteadminsmenu);
             $submenuitem = 'siteadmins_menu';
             if (empty($swtcuser->get_groupnames($submenuitem))) {
                 $uuid = rand();
                 $temp[$submenuitem][$uuid]['uuid'] = $uuid;
-                $temp[$submenuitem][$uuid]['groups'] = $tmp;
+                $temp[$submenuitem][$uuid]['groups'] = implode(', ', $siteadminsmenu);
                 $swtcuser->set_groupnames($temp);
-                // Get the current uuid.
             } else {
                 // Use foreach even though there will only be one key and one value.
                 foreach ($swtcuser->get_groupnames($submenuitem) as $key => $value) {
@@ -958,14 +966,8 @@ class swtc_grouplib {
             $messages[] = "About to print all groups.";
             $messages[] = print_r($groupsmenu, true);
             $messages[] = "Finished printing all groups.";
-            // print_object($user_groupname);
-            $messages[] = "About to print dynamic groups_menu";
+            $messages[] = "About to print dynamic groupsmenu";
             $messages[] = print_r(${$groupsmenu}, true);
-            // print_object("about to print groupsmenu");
-            // print_object(${$groupsmenu});
-            // print_object("about to print swtcuser->groupnames");
-            // print_object($swtcuser->get_groupnames());
-            // die;
             $debug->logmessage($messages, 'detailed');
             unset($messages);
 
@@ -973,17 +975,27 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving /local/swtc/classes/swtc_grouplib.php.groups_sort_menu_options.exit===.";
+            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_sort_menu_options.exit===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
 
-        if ($useroptions && $allowedoptions) {
-            return array(
-                1 => array(get_string('mygroups', 'group') => $useroptions),
-                2 => array(get_string('othergroups', 'group') => $allowedoptions)
+        // SWTC ********************************************************************************.
+        // TODO: I **KNOW*** there is a better way to build this menu...
+        // SWTC ********************************************************************************.
+        // Should this be $usergroups instead of $allowedgroups?
+        if ($useroptions) {
+            // SWTC ********************************************************************************.
+            // PS/SD customized menu
+            // SWTC ********************************************************************************.
+            $custommenu = array(
+                1 => array($groupsmenu => ${$groupsmenu}),
+                2 => array(get_string('mygroups', 'group') => $useroptions),
+                3 => array(get_string('othergroups', 'group') => $allowedoptions)
             );
+
+            return $custommenu;
         } else if ($useroptions) {
             return $useroptions;
         } else {
@@ -1006,7 +1018,6 @@ class swtc_grouplib {
     public function set_where_conditions_by_groupname($groupname) {
         global $USER;
 
-        // print_object("swtc_grouplib class; set_where_conditions_by_groupname");
         // SWTC ********************************************************************************.
         // SWTC swtcuser and debug variables.
         $swtcuser = swtc_get_user([
@@ -1025,7 +1036,7 @@ class swtc_grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering /local/swtc/classes/swtc_grouplib.php.set_where_conditions_by_groupname.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.set_where_conditions_by_groupname.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -1054,14 +1065,7 @@ class swtc_grouplib {
             // Remember that Moodle site administrators, Lenovo-admins, and Lenovo-siteadmins also have this capability.
             // SWTC ********************************************************************************.
             // Remember that Moodle site administrators, Lenovo-admins, and Lenovo-siteadmins also have this capability.
-            if ((preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            if (($swtcuser->is_psmanagement()) || ($swtcuser->is_sdmanagement())) {
                 // SWTC ********************************************************************************.
                 // PremierSupport site administrators
                 // SWTC ********************************************************************************.
