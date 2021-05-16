@@ -30,7 +30,6 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/tablelib.php');
 require_once($CFG->libdir . '/completionlib.php');
-require_once($CFG->libdir . '/grouplib.php');
 
 require_once("$CFG->libdir/formslib.php");
 
@@ -43,8 +42,8 @@ global $PAGE, $OUTPUT, $USER;
 
 use core_completion\progress;
 
-use local_swtc\swtc_completion_info;
-use local_swtc\swtc_grouplib;
+use local_swtc\criteria\completion_info;
+use local_swtc\grouplib\grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
@@ -63,7 +62,7 @@ $debug = swtc_get_debug();
 // Other SWTC variables.
 $accesstype = $swtcuser->get_accesstype();
 
-$swtcgroups = new swtc_grouplib;
+$swtcgroups = new grouplib;
 
 $groups = null;
 $mform = null;
@@ -146,8 +145,7 @@ foreach ($courses as $course) {
     // Only continue if it is a curriculum course.
     if (array_key_exists($courseid, $curriculumarray)) {
 
-        // $completion = new completion_info($course);  // SWTC debugging.
-        $completion = new swtc_completion_info($course);
+        $completion = new completion_info($course);
 
         // First, let's make sure completion is enabled.
         if (!$completion->is_enabled()) {
@@ -178,65 +176,14 @@ foreach ($courses as $course) {
         // SWTC ********************************************************************************.
         if (has_capability('local/swtc:swtc_view_mgmt_reports', context_system::instance())) {
             // Remember that Moodle site administrators, Lenovo-admins, and Lenovo-siteadmins also have this capability.
-            if ((preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-                || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            if (($swtcuser->is_psmanagement()) || ($swtcuser->is_sdmanagement())) {
                 // SWTC ********************************************************************************.
                 // One common group setting (either one group or a group of groups).
                 // SWTC ********************************************************************************.
                 $groups = $swtcgroups->groups_get_all_groups($course->id, $USER->id, $course->defaultgroupingid);
-
-                // SWTC ********************************************************************************.
-                // PremierSupport site administrators
-                // SWTC ********************************************************************************.
-                if (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_premiersupport_pregmatch_siteadmins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // PremierSupport GEO administrators
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_premiersupport_pregmatch_geoadmins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // PremierSupport administrators
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_premiersupport_pregmatch_admins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // PremierSupport managers
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_premiersupport_pregmatch_mgrs', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // ServiceDelivery site administrators
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_lenovo_servicedelivery_pregmatch_siteadmins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // ServiceDelivery GEO administrators
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_lenovo_servicedelivery_pregmatch_geoadmins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // ServiceDelivery administrators
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_lenovo_servicedelivery_pregmatch_admins', 'local_swtc');
-                    // SWTC ********************************************************************************.
-                    // ServiceDelivery managers
-                    // SWTC ********************************************************************************.
-                } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype)) {
-                    $sort = get_string('cohort_lenovo_servicedelivery_pregmatch_mgrs', 'local_swtc');
-                }
+                $sort = $swtcuser->get_groupsort();
 
                 // Note: Should only be one returned.
-                // print_object("sort is :$sort");
-                // print_object("about to print groups");
-                // print_object($groups);
                 foreach ($groups as $group) {
                     if (preg_match($sort, $group->name)) {
                         $groupid = $group->id;

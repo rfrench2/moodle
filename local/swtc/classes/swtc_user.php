@@ -124,6 +124,13 @@ class swtc_user {
     private $cohortnames;
 
     /**
+     * The group sort string that should be used to
+     * find all the groups the user is a member of.
+     * @var string
+     */
+    private $groupsort;
+
+    /**
      * The preg_match string that should be used to
      * find all the groups the user is a member of.
      * @var string
@@ -137,10 +144,22 @@ class swtc_user {
     private $groupnames;
 
     /**
+     * Is the user in Premier Support?
+     * @var array
+     */
+    private $psuser;
+
+    /**
      * Is the user in Premier Support management?
      * @var array
      */
     private $psmanagement;
+
+    /**
+     * Is the user in Service Delivery?
+     * @var array
+     */
+    private $sduser;
 
     /**
      * Is the user in Service Delivery management?
@@ -162,9 +181,12 @@ class swtc_user {
         $this->timezone = null;
         $this->relateduser = null;
         $this->cohortnames = null;
+        $this->groupsort = null;
         $this->groupname = null;
         $this->groupnames = array();
+        $this->psuser = null;
         $this->psmanagement = null;
+        $this->sduser = null;
         $this->sdmanagement = null;
     }
 
@@ -293,12 +315,7 @@ class swtc_user {
             // SWTC ********************************************************************************.
             // Check for PremierSupport users
             // SWTC ********************************************************************************.
-        } else if ((preg_match(get_string('access_premiersupport_pregmatch_stud', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
-
+        } else if ($this->is_psuser()) {
             if (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype)) {
                 $roleshortname = get_string('role_premiersupport_administrator', 'local_swtc');
             } else if (preg_match(get_string('access_premiersupport_pregmatch_stud', 'local_swtc'), $accesstype)) {
@@ -314,12 +331,7 @@ class swtc_user {
             // SWTC ********************************************************************************.
             // Check for ServiceDelivery users
             // SWTC ********************************************************************************.
-        } else if ((preg_match(get_string('access_lenovo_servicedelivery_pregmatch_stud', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
-
+        } else if ($this->is_sduser()) {
             if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype)) {
                 $roleshortname = get_string('role_servicedelivery_administrator', 'local_swtc');
             } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_stud', 'local_swtc'), $accesstype)) {
@@ -372,11 +384,7 @@ class swtc_user {
         // SWTC ********************************************************************************.
         // Add for all PremierSupport access types.
         // SWTC ********************************************************************************.
-        if ((preg_match(get_string('access_premiersupport_pregmatch_stud', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+        if ($this->is_psuser()) {
             // Get cohort the user is a member of.
             $cohorts = array();
             $sql = 'SELECT c.*
@@ -405,6 +413,51 @@ class swtc_user {
             foreach ($cohorts as $cohort) {
                 $this->cohortnames .= $cohort->name . ' ';
             }
+        }
+    }
+
+    public function set_groupsort($accesstype) {
+
+        // SWTC ********************************************************************************.
+        // PremierSupport site administrators
+        // SWTC ********************************************************************************.
+        if (preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_premiersupport_pregmatch_siteadmins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // PremierSupport GEO administrators
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_premiersupport_pregmatch_geoadmins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // PremierSupport administrators
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_premiersupport_pregmatch_admins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // PremierSupport managers
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_premiersupport_pregmatch_mgrs', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // ServiceDelivery site administrators
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_lenovo_servicedelivery_pregmatch_siteadmins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // ServiceDelivery GEO administrators
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_lenovo_servicedelivery_pregmatch_geoadmins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // ServiceDelivery administrators
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_lenovo_servicedelivery_pregmatch_admins', 'local_swtc');
+            // SWTC ********************************************************************************.
+            // ServiceDelivery managers
+            // SWTC ********************************************************************************.
+        } else if (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype)) {
+            $this->groupsort = get_string('cohort_lenovo_servicedelivery_pregmatch_mgrs', 'local_swtc');
         }
     }
 
@@ -484,8 +537,20 @@ class swtc_user {
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
-
         return $this->groupnames;
+    }
+
+    public function set_psuser($accesstype) {
+        // SWTC ********************************************************************************.
+        // Set for all Premier Support access types.
+        // SWTC ********************************************************************************.
+        if ((preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_stud', 'local_swtc'), $accesstype))) {
+            $this->psuser = true;
+        }
     }
 
     public function set_psmanagement($accesstype) {
@@ -493,10 +558,23 @@ class swtc_user {
         // Set for all Premier Support management access types.
         // SWTC ********************************************************************************.
         if ((preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
+        || (preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))) {
             $this->psmanagement = true;
+        }
+    }
+
+    public function set_sduser($accesstype) {
+        // SWTC ********************************************************************************.
+        // Set for all Service Delivery access types.
+        // SWTC ********************************************************************************.
+        if ((preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_stud', 'local_swtc'), $accesstype))) {
+            $this->sduser = true;
         }
     }
 
@@ -505,9 +583,9 @@ class swtc_user {
         // Set for all Service Delivery management access types.
         // SWTC ********************************************************************************.
         if ((preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
-            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))) {
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))
+        || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))) {
             $this->sdmanagement = true;
         }
     }
@@ -980,6 +1058,10 @@ class swtc_user {
         return $this->cohortnames;
     }
 
+    public function get_groupsort() {
+        return $this->groupsort;
+    }
+
     public function get_groupname() {
         return $this->groupname;
     }
@@ -1036,82 +1118,31 @@ class swtc_user {
         return $returnvalue;
     }
 
-    public function get_psmanagement() {
-        return $this->psmanagement;
-    }
-
-    public function get_sdmanagement() {
-        return $this->sdmanagement;
-    }
-
-    // Function to recursively search for a given value.
-    // For example, if this is the multi-dimensional array:
-    // Array
-    // (
-    // [studs_menu] => Array
-    // (
-    // [1478973742] => Array
-    // (
-    // [uuid] => 1478973742
-    // [groups] => 18421, 18422, 18423, 18424, 18425
-    // )
-    //
-    // )
-    //
-    // [mgrs_menu] => Array
-    // (
-    // [168690638] => Array
-    // (
-    // [uuid] => 168690638
-    // [groups] => 18426, 18427, 18428, 18429, 18430
-    // )
-    //
-    // )
-    //
-    // [admins_menu] => Array
-    // (
-    // [630459861] => Array
-    // (
-    // [uuid] => 630459861
-    // [groups] => 18431, 18432, 18433, 18434, 18435
-    // )
-    //
-    // )
-    //
-    // )
-    //
-    // If you are searching for "168690638", the following will be returned:
-    // Array
-    // (
-    // [0] => mgrs_menu
-    // [1] => 168690638
-    // [2] => uuid
-    // ).
     /**
-     * Version details
+     * All Is methods for all properties.
+     *
+     * Is methods:
+     * @param N/A
+     * @return value
      *
      * History:
      *
-     * 02/24/21 - Initial writing.
+     * 05/12/21 - Initial writing.
      *
      **/
-    public function array_find_deep($array, $key, $value, array &$results = []) {
-        if (!is_array($array)) {
-            return;
-        }
+    public function is_psuser() {
+        return $this->psuser;
+    }
 
-        $key = str_replace('/', '\\/', $key);
+    public function is_psmanagement() {
+        return $this->psmanagement;
+    }
 
-        foreach ($array as $arraykey => $arrayvalue) {
-            if ((preg_match("/$key/i", (string)$arraykey)) && (preg_match("/$value/i", (string)$arrayvalue))) {
-                // Add array if we have a match.
-                $results[] = $array;
-            }
+    public function is_sduser() {
+        return $this->sduser;
+    }
 
-            if (is_array($arrayvalue)) {
-                // Only do recursion on arrays.
-                $this->array_find_deep($arrayvalue, $key, $value, $results);
-            }
-        }
+    public function is_sdmanagement() {
+        return $this->sdmanagement;
     }
 }

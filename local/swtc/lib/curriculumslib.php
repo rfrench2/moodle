@@ -30,22 +30,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use local_swtc\swtc_completion_info;
-use local_swtc\swtc_grouplib;
+use local_swtc\criteria\completion_info;
+// use local_swtc\swtc_completion_criteria_completion;
+use local_swtc\grouplib\grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-// require_once($CFG->dirroot.'/local/swtc/classes/swtc_completion_info.php');
-require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/portfolio_access.php');
-
-// SWTC ********************************************************************************.
-// SWTC customized code for Moodle core completion.
-// SWTC ********************************************************************************.
-// use swtc_get_title_detailed_course;
-// use swtc_get_title_detailed_activity;
+// require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php'); SWTC - 05/11/21
 
 require_once($CFG->dirroot.'/user/profile/lib.php');
 
@@ -195,7 +188,8 @@ function curriculum_getcompletionstatus_details($id, $userid) {
     }
 
     // Load completion data.
-    $info = new completion_info($course);
+    // $info = new completion_info($course);    // SWTC.
+    $info = new completion_info($course);  // SWTC.
 
     $returnurl = new moodle_url('/course/view.php', array('id' => $id));
 
@@ -317,17 +311,24 @@ function curriculum_getcompletionstatus_details($id, $userid) {
         // Save row data.
         $rows = array();
 
+        // print_object("about to print completions");
+        // print_object($completions);
         // Loop through course criteria.
         foreach ($completions as $completion) {
             $criteria = $completion->get_criteria();
 
+            print_object("about to print criteria");
+            print_object($criteria);
+            print_object("about to print completion");
+            print_object($completion);
             $row = array();
             $row['type'] = $criteria->criteriatype;
             $row['title'] = $criteria->get_title();
             $row['status'] = $completion->get_status();
             $row['complete'] = $completion->is_complete();
             $row['timecompleted'] = $completion->timecompleted;
-            $row['details'] = $criteria->swtc_get_details_course($completion);
+            // $row['details'] = $criteria->swtc_get_details_course($completion);
+            $row['details'] = $criteria->get_details_course($criterion->courseinstance);
             $rows[] = $row;
         }
 
@@ -427,7 +428,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Other SWTC variables.
     $output = '';       // To contain all the output.
-    $swtcgroups = new swtc_grouplib;
+    $swtcgroups = new grouplib;
 
     // Remember - PremierSupportand ServiceDelivery managers and admins have special access.
     // Remember that the capabilities for Managers and Administrators are applied in the system context; the capabilities
@@ -504,9 +505,8 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
     $modinfo = get_fast_modinfo($course);
 
     // Get criteria for course.
-    // $completion = new completion_info($course);  // SWTC debugging.
-    $completion = new swtc_completion_info($course);
-    $swtcgroups = new swtc_grouplib;
+    // $completion = new completion_info($course);  // SWTC.
+    $completion = new completion_info($course);    // SWTC.
 
     if (!$completion->has_criteria()) {
         print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -514,6 +514,8 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Get criteria and put in correct order.
     $criteria = array();
+    // 05/09/21 - SWTC debugging.
+    // $criteria = new swtc_completion_criteria();
 
     foreach ($completion->get_criteria(COMPLETION_CRITERIA_TYPE_COURSE) as $criterion) {
         $criteria[] = $criterion;
@@ -529,6 +531,9 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
             $criteria[] = $criterion;
         }
     }
+
+    // print_object("in curriclumslib - about to print criteria");
+    // print_object($criteria);
 
     // Can logged in user mark users as complete?
     // If the logged in user has a role defined in the role criteria.
@@ -630,10 +635,10 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
     // IMPORTANT! Must perform the has_capability checks BEFORE calling set_where_conditions_by_accesstype.
     // SWTC ********************************************************************************.
     if (has_capability('local/swtc:swtc_view_mgmt_reports', $systemcontext)
-        || has_capability('local/swtc:swtc_view_student_reports', $swtcstudcontext)) {
+    || has_capability('local/swtc:swtc_view_student_reports', $swtcstudcontext)) {
 
         list($where, $whereparams, $grandtotal) =
-            $completion->set_where_conditions_by_accesstype($swtcuser, $completion, $where, $whereparams, $group);
+            $completion->set_where_conditions_by_accesstype($swtcuser, $where, $whereparams, $group);
 
     }
 
@@ -871,9 +876,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
                     get_string('criteria', 'completion') . '</th>';
 
             foreach ($criteria as $criterion) {
-                // Get criteria details
-                // $details = $criterion->get_title_detailed();
-                print_object($criterion);
+                // Get criteria details.
                 // SWTC ********************************************************************************.
                 // Added hyperlinks and tooltips to the column headers.
                 // Changed tooltips hyperlink from viewing course to viewing individual course completion report.
@@ -882,12 +885,12 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
                 // local/swtc/lib/curriculumslib.php.
                 // SWTC ********************************************************************************.
                 if ($criterion->criteriatype == 8) {
-                    list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_course($group);
+                    list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
                 } else if ($criterion->criteriatype == 4) {
-                    list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_activity();
+                    list($id, $shortname, $fullname) = $completion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
                 }
 
-                $tgroups = groups_get_user_groups($id, $swtcuser->userid);
+                $tgroups = groups_get_user_groups($id, $swtcuser->get_userid());
 
                 // Note: Should only be one returned (if user is not a Lenovo-admin or Lenovo-siteadmin).
                 if (!empty($tgroups[0][0])) {
@@ -1029,9 +1032,9 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
                 // local/swtc/lib/curriculumslib.php.
                 // SWTC ********************************************************************************.
                 if ($criterion->criteriatype == 8) {
-                    list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_course($group);
+                    list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
                 } else if ($criterion->criteriatype == 4) {
-                    list($id, $shortname, $fullname) = $criterion->swtc_get_title_detailed_activity();
+                    list($id, $shortname, $fullname) = $criterion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
                 }
                 $row[] = strip_tags($shortname. ' ' .$fullname);
             }
@@ -1077,7 +1080,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
         foreach ($criteria as $criterion) {
 
             $criteriacompletion = $completion->get_user_completion($user->id, $criterion);
-            $iscomplete = $criteriacompletion->iscomplete();
+            $iscomplete = $criteriacompletion->is_complete();
 
             // Handle activity completion differently.
             if ($criterion->criteriatype == COMPLETION_CRITERIA_TYPE_ACTIVITY) {
@@ -1152,7 +1155,8 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
                     // 03/21/19  Ok, maybe not.
                 if (isset($criterion->courseinstance)) {
                     $tempcourse = get_course($criterion->courseinstance);
-                    $info = new completion_info($tempcourse);
+                    // $info = new completion_info($tempcourse);    // SWTC.
+                    $info = new completion_info($tempcourse);  // SWTC.
 
                     // Is course complete?
                     $iscomplete = $info->is_course_complete($user->id);
@@ -1228,13 +1232,13 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
         );
 
         $ccompletion = new completion_completion($params);
-        $completiontype = $ccompletion->iscomplete() ? 'y' : 'n';
+        $completiontype = $ccompletion->is_complete() ? 'y' : 'n';
 
         $describe = get_string('completion-'.$completiontype, 'completion');
 
         $a = new StdClass;
 
-        if ($ccompletion->iscomplete()) {
+        if ($ccompletion->is_complete()) {
             $a->date = userdate($ccompletion->timecompleted, get_string('strftimedatetimeshort', 'langconfig'));
         } else {
             $a->date = '';

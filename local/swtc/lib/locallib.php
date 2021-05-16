@@ -633,3 +633,78 @@ function local_swtc_cohortrole_exists($cohortid, $roleid = null) {
 
     return $DB->record_exists('local_cohortrole', $params);
 }
+
+/**
+ * Function to recursively search for a given value.
+ *
+ * For example, if this is the multi-dimensional array:
+ * Array
+ * (
+ * [studs_menu] => Array
+ * (
+ * [1478973742] => Array
+ * (
+ * [uuid] => 1478973742
+ * [groups] => 18421, 18422, 18423, 18424, 18425
+ * )
+ * )
+ * [mgrs_menu] => Array
+ * (
+ * [168690638] => Array
+ * (
+ * [uuid] => 168690638
+ * [groups] => 18426, 18427, 18428, 18429, 18430
+ * )
+ * )
+ * [admins_menu] => Array
+ * (
+ * [630459861] => Array
+ * (
+ * [uuid] => 630459861
+ * [groups] => 18431, 18432, 18433, 18434, 18435
+ * )
+ * )
+ * )
+ * If you are searching for "168690638", the following will be returned:
+ * Array
+ * (
+ * [0] => mgrs_menu
+ * [1] => 168690638
+ * [2] => uuid
+ * ).
+ *
+ * History:
+ *
+ * 02/24/21 - Initial writing.
+ * 05/12/21 - Changed to match previous version.
+ *
+ **/
+function local_swtc_array_find_deep($array, $search) {
+
+    // SWTC ********************************************************************************.
+    // SWTC swtcuser and debug variables.
+    $debug = swtc_get_debug();
+    // SWTC ********************************************************************************.
+
+    // SWTC ********************************************************************************.
+    if (isset($debug)) {
+        $messages[] = "Entering /lib/locallib.php ===local_swtc_array_find_deep.enter===";
+        $messages[] = "array follows :";
+        $messages[] = print_r($array, true);
+        $messages[] = "search follows :";
+        $messages[] = print_r($search, true);
+        $debug->logmessage($messages, 'detailed');
+        unset($messages);
+    }
+    // SWTC ********************************************************************************.
+
+    foreach ($array as $keynum => $keyarr) {
+        foreach ($keyarr as $key => $index) {
+            if (array_search($search, $index) !== false) {
+                return $index;
+            }
+        }
+    }
+
+    return array();
+}

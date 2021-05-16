@@ -76,6 +76,14 @@ function swtc_set_user($userid, $relateduserid = null) {
     $SESSION->SWTC->USER->set_accesstype($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_accesstype2($temp->profile_field_accesstype2);
 
+    // SWTC ********************************************************************************.
+    // IMPORTANT! The following four methods must be called before set_roleid.
+    // SWTC ********************************************************************************.
+    $SESSION->SWTC->USER->set_psuser($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_psmanagement($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_sduser($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_sdmanagement($temp->profile_field_accesstype);
+
     $SESSION->SWTC->USER->set_roleid($temp->profile_field_accesstype);
 
     $SESSION->SWTC->USER->set_timestamp();
@@ -83,14 +91,14 @@ function swtc_set_user($userid, $relateduserid = null) {
 
     $SESSION->SWTC->USER->set_relateduser();
     $SESSION->SWTC->USER->set_cohortnames($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_groupsort($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupname($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupnames(array());
 
-    $SESSION->SWTC->USER->set_psmanagement($temp->profile_field_accesstype);
-    $SESSION->SWTC->USER->set_sdmanagement($temp->profile_field_accesstype);
 
-    print_object("about to print user");
-    print_object($SESSION->SWTC->USER);
+
+    // print_object("about to print user");
+    // print_object($SESSION->SWTC->USER);
     return $SESSION->SWTC->USER;
 
 }
