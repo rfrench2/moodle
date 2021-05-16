@@ -108,11 +108,11 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:buttonlogincolor]]' => '#ef5350',
         '[[setting:buttonloginhovercolor]]' => '#e53935',
         '[[setting:buttonlogintextcolor]]' => '#0084c2',
-        '[[setting:buttonloginpadding]]' => '0px',
+        '[[setting:buttonloginpadding]]' => '0',
         '[[setting:buttonloginheight]]' => '24px',
         '[[setting:buttonloginmargintop]]' => '2px',
         '[[setting:buttonradius]]' => '5px',
-        '[[setting:buttondropshadow]]' => '0px',
+        '[[setting:buttondropshadow]]' => '0',
         '[[setting:dividingline]]' => '#ffffff',
         '[[setting:dividingline2]]' => '#ffffff',
         '[[setting:breadcrumb]]' => '#b4bbbf',
@@ -140,19 +140,19 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:marketblockbordercolor]]' => '#e8eaeb',
         '[[setting:marketblocksbackgroundcolor]]' => 'transparent',
         '[[setting:blockheaderbordertop]]' => '1px',
-        '[[setting:blockheaderborderleft]]' => '0px',
-        '[[setting:blockheaderborderright]]' => '0px',
-        '[[setting:blockheaderborderbottom]]' => '0px',
-        '[[setting:blockmainbordertop]]' => '0px',
-        '[[setting:blockmainborderleft]]' => '0px',
-        '[[setting:blockmainborderright]]' => '0px',
-        '[[setting:blockmainborderbottom]]' => '0px',
+        '[[setting:blockheaderborderleft]]' => '0',
+        '[[setting:blockheaderborderright]]' => '0',
+        '[[setting:blockheaderborderbottom]]' => '0',
+        '[[setting:blockmainbordertop]]' => '0',
+        '[[setting:blockmainborderleft]]' => '0',
+        '[[setting:blockmainborderright]]' => '0',
+        '[[setting:blockmainborderbottom]]' => '0',
         '[[setting:blockheaderbordertopstyle]]' => 'dashed',
         '[[setting:blockmainbordertopstyle]]' => 'solid',
-        '[[setting:blockheadertopradius]]' => '0px',
-        '[[setting:blockheaderbottomradius]]' => '0px',
-        '[[setting:blockmaintopradius]]' => '0px',
-        '[[setting:blockmainbottomradius]]' => '0px',
+        '[[setting:blockheadertopradius]]' => '0',
+        '[[setting:blockheaderbottomradius]]' => '0',
+        '[[setting:blockmaintopradius]]' => '0',
+        '[[setting:blockmainbottomradius]]' => '0',
         '[[setting:coursesectionbgcolor]]' => '#FFFFFF',
         '[[setting:coursesectionheaderbg]]' => '#FFFFFF',
         '[[setting:coursesectionheaderbordercolor]]' => '#F3F3F3',
@@ -193,7 +193,7 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:mobilemenubkcolor]]' => '#F9F9F9',
         '[[setting:mobileslidebartabbkcolor]]' => '#F9F9F9',
         '[[setting:mobileslidebartabiconcolor]]' => '#000000',
-        '[[setting:navbardropdownborderradius]]' => '0px',
+        '[[setting:navbardropdownborderradius]]' => '0',
         '[[setting:navbardropdownhovercolor]]' => '#EEE',
         '[[setting:navbardropdowntextcolor]]' => '#007',
         '[[setting:navbardropdowntexthovercolor]]' => '#000',
@@ -202,8 +202,7 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:covfontcolor]]' => '#ffffff',
         '[[setting:editonbk]]' => '#4caf50',
         '[[setting:editoffbk]]' => '#f44336',
-        '[[setting:editverticalpadding]]' => '',
-        '[[setting:edithorizontalpadding]]' => '',
+        '[[setting:edithorizontalpadding]]' => '4px',
         '[[setting:edittopmargin]]' => '',
         '[[setting:editfont]]' => '#ffffff',
         '[[setting:sliderh3color]]' => '#ffffff',
@@ -236,15 +235,12 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:customfontname]]' => '',
         '[[setting:customfontheadername]]' => '',
         '[[setting:customfonttitlename]]' => '',
-        '[[setting:sitetitlepadding]]' => '0px 0px 15px 0px',
-        '[[setting:searchboxpadding]]' => '0px 0px 10px 0px',
+        '[[setting:searchboxpadding]]' => '0 0 10px 0',
         '[[setting:enablesavecanceloverlay]]' => true,
         '[[setting:pageheaderheight]]' => '72px',
         '[[setting:emoticonsize]]' => '16px',
         '[[setting:fullscreenwidth]]' => '98%',
         '[[setting:coursetitlemaxwidth]]' => '20',
-        '[[setting:sitetitlemaxwidth]]' => '50%',
-        '[[setting:responsivealerts]]' => 'd-none d-lg-block',
         '[[setting:responsiveheader]]' => 'd-none d-lg-block',
         '[[setting:responsivesocial]]' => 'd-none d-lg-block',
         '[[setting:responsivesocialsize]]' => '34px',
@@ -295,12 +291,16 @@ function theme_adaptable_process_css($css, $theme) {
         '[[setting:infoiconcolor]]' => '#5bc0de',
         '[[setting:dangericoncolor]]' => '#d9534f',
         '[[setting:loginheader]]' => 1,
-        '[[setting:loginfooter]]' => 1
+        '[[setting:loginfooter]]' => 1,
+        '[[setting:printpageorientation]]' => 'landscape',
+        '[[setting:printbodyfontsize]]' => '11pt',
+        '[[setting:printmargin]]' => '2cm 1cm 2cm 2cm',
+        '[[setting:printlineheight]]' => '1.2'
     );
 
     // Get all the defined settings for the theme and replace defaults.
     foreach ($theme->settings as $key => $val) {
-        if (array_key_exists('[[setting:'.$key.']]', $defaults) && !empty($val)) {
+        if (array_key_exists('[[setting:'.$key.']]', $defaults)) {
             $defaults['[[setting:'.$key.']]'] = $val;
         }
     }
@@ -333,7 +333,7 @@ function theme_adaptable_process_css($css, $theme) {
     if (!empty($theme->settings->loginbgopacity)) {
             $loginbgopacity = '#page-login-index header {'.PHP_EOL;
             $loginbgopacity .= 'background-color: '.\theme_adaptable\toolbox::hex2rgba($theme->settings->headerbkcolor2,
-                               $theme->settings->loginbgopacity).') !important;'.PHP_EOL;
+                               $theme->settings->loginbgopacity).' !important;'.PHP_EOL;
             $loginbgopacity .= '}'.PHP_EOL;
             $loginbgopacity .= '#page-login-index #page-navbar,'.PHP_EOL.
             '#page-login-index .card {';
@@ -524,34 +524,6 @@ function theme_adaptable_get_alertkey($alertindex) {
 }
 
 /**
- * Get HTML for settings
- * @param renderer_base $output
- * @param moodle_page $page
- */
-function theme_adaptable_get_html_for_settings(renderer_base $output, moodle_page $page) {
-    global $CFG;
-    $return = new stdClass;
-
-    $return->navbarclass = '';
-    if (!empty($page->theme->settings->invert)) {
-        $return->navbarclass .= ' navbar-inverse';
-    }
-
-    if (!empty($page->theme->settings->logo)) {
-        $return->heading = html_writer::link($CFG->wwwroot, '', array('title' => get_string('home'), 'class' => 'logo'));
-    } else {
-        $return->heading = $output->page_heading();
-    }
-
-    $return->footnote = '';
-    if (!empty($page->theme->settings->footnote)) {
-        $return->footnote = '<div class="footnote">'.$page->theme->settings->footnote.'</div>';
-    }
-
-    return $return;
-}
-
-/**
  * Get theme setting
  * @param string $setting
  * @param string $format = false
@@ -613,24 +585,10 @@ function theme_adaptable_pluginfile($course, $cm, $context, $filearea, $args, $f
             return $theme->setting_file_serve('loginbgimage', $args, $forcedownload, $options);
         } else if (preg_match("/^p[1-9][0-9]?$/", $filearea)) {
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        } else if ((substr($filearea, 0, 9) === 'marketing') && (substr($filearea, 10, 5) === 'image')) {
-            return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
         } else if (preg_match("/^categoryheaderbgimage[1-9][0-9]*$/", $filearea)) { // Link: http://regexpal.com/ useful.
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
         } else if (preg_match("/^categoryheaderlogo[1-9][0-9]*$/", $filearea)) { // Link: http://regexpal.com/ useful.
             return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
-        } else if ($filearea === 'iphoneicon') {
-            return $theme->setting_file_serve('iphoneicon', $args, $forcedownload, $options);
-        } else if ($filearea === 'iphoneretinaicon') {
-            return $theme->setting_file_serve('iphoneretinaicon', $args, $forcedownload, $options);
-        } else if ($filearea === 'ipadicon') {
-            return $theme->setting_file_serve('ipadicon', $args, $forcedownload, $options);
-        } else if ($filearea === 'ipadretinaicon') {
-            return $theme->setting_file_serve('ipadretinaicon', $args, $forcedownload, $options);
-        } else if ($filearea === 'fontfilettfheading') {
-            return $theme->setting_file_serve('fontfilettfheading', $args, $forcedownload, $options);
-        } else if ($filearea === 'fontfilettfbody') {
-            return $theme->setting_file_serve('fontfilettfbody', $args, $forcedownload, $options);
         } else if ($filearea === 'adaptablemarkettingimages') {
             return $theme->setting_file_serve('adaptablemarkettingimages', $args, $forcedownload, $options);
         } else {
@@ -675,16 +633,6 @@ function theme_adaptable_get_course_activities() {
     core_collator::asort($modfullnames);
 
     return $modfullnames;
-}
-
-/**
- * Get formatted performance info showing only page load time
- * @param string $param
- */
-function theme_adaptable_performance_output($param) {
-    $html = html_writer::tag('span', get_string('loadtime', 'theme_adaptable').' '. round($param['realtime'], 2) . ' ' .
-            get_string('seconds'), array('id' => 'load'));
-    return $html;
 }
 
 /**
@@ -737,7 +685,7 @@ function theme_adaptable_grid($left, $hassidepost) {
         if ($left) {
             $regions['direction'] = ' flex-row-reverse';
         } else {
-            $regions['direction'] = '';
+            $regions['direction'] = ' flex-row';
         }
     } else {
         $regions = array('content' => 'col-12');
@@ -806,25 +754,48 @@ function theme_adaptable_extend_navigation_course($coursenode, $course, $coursec
 
     if (($PAGE->theme->name == 'adaptable') && ($PAGE->user_allowed_editing())) {
         // Add the turn on/off settings.
-        if ($PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
-            // We are on the course page, retain the current page params e.g. section.
-            $baseurl = clone($PAGE->url);
-            $baseurl->param('sesskey', sesskey());
-        } else {
-            // Edit on the main course page.
-            $baseurl = new moodle_url(
-                '/course/view.php',
-                array('id' => $course->id, 'return' => $PAGE->url->out_as_local_url(false), 'sesskey' => sesskey())
-            );
-        }
+        if ($PAGE->pagetype == 'grade-report-grader-index') {
+            $editurl = clone($PAGE->url);
+            $editurl->param('plugin', 'grader');
 
-        $editurl = clone($baseurl);
-        if ($PAGE->user_is_editing()) {
-            $editurl->param('edit', 'off');
-            $editstring = get_string('turneditingoff');
+            // From /grade/report/grader/index.php.
+            if (has_capability('moodle/grade:edit', $coursecontext)) {
+                global $USER;
+                $editing = $USER->gradeediting[$course->id];
+            } else {
+                $editing = 0;
+            }
+            /* Note: The 'single_button' will still use the Moodle core strings because of the
+               way /grade/report/grader/index.php is written. */
+            if ($editing) {
+                $editstring = get_string('turngradereditingoff', 'theme_adaptable');
+            } else {
+                $editstring = get_string('turngradereditingon', 'theme_adaptable');
+            }
         } else {
-            $editurl->param('edit', 'on');
-            $editstring = get_string('turneditingon');
+            if ($PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+                // We are on the course page, retain the current page params e.g. section.
+                $editurl = clone($PAGE->url);
+            } else {
+                // Edit on the main course page.
+                $editurl = new moodle_url(
+                    '/course/view.php',
+                    array('id' => $course->id, 'return' => $PAGE->url->out_as_local_url(false))
+                );
+            }
+            $editing = $PAGE->user_is_editing();
+            if ($editing) {
+                $editstring = get_string('turneditingoff');
+            } else {
+                $editstring = get_string('turneditingon');
+            }
+        }
+        $editurl->param('sesskey', sesskey());
+
+        if ($editing) {
+            $editurl->param('edit', '0');
+        } else {
+            $editurl->param('edit', '1');
         }
 
         $childnode = navigation_node::create(

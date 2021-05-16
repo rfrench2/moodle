@@ -42,6 +42,7 @@ require_once($CFG->dirroot.'/mod/assign/locallib.php');
  * @package   theme_adaptable
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @copyright Copyright (c) 2017 Manoj Solanki (Coventry University)
+ * @copyright Copyright (c) 2020 G J Barnard
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class activity {
@@ -60,6 +61,11 @@ class activity {
         } else {
             $meta = new activity_meta(); // Return empty activity meta.
         }
+
+        if ((!empty($meta->timeclose)) && ($meta->timeclose < time())) {
+            $meta->expired = true;
+        }
+
         return $meta;
     }
 
@@ -105,17 +111,10 @@ class activity {
         $meta->set_default('submitstrkey', $submitstrkey);
         $meta->set_default('submittedstr', get_string($submitstrkey, 'theme_adaptable'));
         $meta->set_default('notsubmittedstr', get_string('not'.$submitstrkey, 'theme_adaptable'));
-        if (get_string_manager()->string_exists($mod->modname.'draft', 'theme_adaptable')) {
-            $meta->set_default('draftstr', get_string($mod->modname.'draft', 'theme_adaptable'));
-        } else {
-            $meta->set_default('draftstr', get_string('draft', 'theme_adaptable'));
-        }
-
-        if (get_string_manager()->string_exists($mod->modname.'reopened', 'theme_adaptable')) {
-            $meta->set_default('reopenedstr', get_string($mod->modname.'reopened', 'theme_adaptable'));
-        } else {
-            $meta->set_default('reopenedstr', get_string('reopened', 'theme_adaptable'));
-        }
+        $meta->set_default('draftstr', get_string('draft', 'theme_adaptable'));
+        $meta->set_default('reopenedstr', get_string('reopened', 'theme_adaptable'));
+        $meta->set_default('expiredstr', get_string('expired', 'theme_adaptable'));
+        $meta->set_default('notopenstr', get_string('notopen', 'theme_adaptable'));
 
         $activitydates = self::instance_activity_dates($courseid, $mod, $timeopenfld, $timeclosefld);
         $meta->timeopen = $activitydates->timeopen;
@@ -190,8 +189,10 @@ class activity {
                         }
                     }
                 } else if ($mod->modname === 'assign') {
-                    return null;
+                    $meta->notattempted = true;
                 }
+            } else {
+                $meta->notopen = true;
             }
 
             $graderow = false;
@@ -201,10 +202,10 @@ class activity {
 
             if ($graderow) {
                 $gradeitem = \grade_item::fetch(array(
-                        'itemtype' => 'mod',
-                        'itemmodule' => $mod->modname,
-                        'iteminstance' => $mod->instance,
-                        'outcomeid' => null
+                    'itemtype' => 'mod',
+                    'itemmodule' => $mod->modname,
+                    'iteminstance' => $mod->instance,
+                    'outcomeid' => null
                 ));
 
                 $grade = new \grade_grade(array('itemid' => $gradeitem->id, 'userid' => $USER->id));
@@ -236,24 +237,25 @@ class activity {
      * @return activity_meta
      */
     protected static function assign_meta(cm_info $modinst) {
-        global $DB;
+        global $DB, $USER;
         static $submissionsenabled;
 
         $courseid = $modinst->course;
 
-        // Get count of enabled submission plugins grouped by assignment id.
-        // Note, under normal circumstances we only run this once but with PHP unit tests, assignments are being
-        // created one after the other and so this needs to be run each time during a PHP unit test.
+        /* Get count of enabled submission plugins grouped by assignment id.
+           Note, under normal circumstances we only run this once but with PHP unit tests, assignments are being
+           created one after the other and so this needs to be run each time during a PHP unit test. */
         if (empty($submissionsenabled) || PHPUNIT_TEST) {
-            $sql = "SELECT a.id, count(1) AS submissionsenabled
-                      FROM {assign} a
-                      JOIN {assign_plugin_config} ac ON ac.assignment = a.id
-                     WHERE a.course = ?
-                       AND ac.name='enabled'
-                       AND ac.value = '1'
-                       AND ac.subtype='assignsubmission'
-                       AND plugin!='comments'
-                  GROUP BY a.id;";
+            $sql = "
+                SELECT a.id, count(1) AS submissionsenabled
+                    FROM {assign} a
+                    JOIN {assign_plugin_config} ac ON ac.assignment = a.id
+                    WHERE a.course = ?
+                    AND ac.name='enabled'
+                    AND ac.value = '1'
+                    AND ac.subtype='assignsubmission'
+                    AND plugin!='comments'
+                    GROUP BY a.id;";
             $submissionsenabled = $DB->get_records_sql($sql, array($courseid));
         }
 
@@ -267,7 +269,18 @@ class activity {
         }
 
         $meta = self::std_meta($modinst, 'allowsubmissionsfromdate', 'duedate', 'assignment', 'submission',
-                'timemodified', 'submitted', true, $submitselect, $submissionnotrequired);
+            'timemodified', 'submitted', true, $submitselect, $submissionnotrequired);
+
+        if (!empty($meta)) {
+            // Check assignment due date in user and group overrides.
+            $context = \context_module::instance($modinst->id);
+            $assign = new \assign($context, $modinst, $courseid);
+            $assign->update_effective_access($USER->id);
+            $submissionstatus = $assign->get_assign_submission_status_renderable($USER, false);
+            if (!empty($submissionstatus->duedate) && $submissionstatus->duedate != $meta->timeclose) {
+                $meta->timeclose = $submissionstatus->duedate;
+            }
+        }
 
         return ($meta);
     }
@@ -322,7 +335,7 @@ class activity {
      */
     protected static function quiz_meta(cm_info $modinst) {
         return self::std_meta($modinst, 'timeopen', 'timeclose', 'quiz',
-                'attempts', 'timemodified', 'attempted', true, 'AND st.state=\'finished\'');
+            'attempts', 'timemodified', 'attempted', true, 'AND st.state=\'finished\'');
     }
 
     // The lesson_ungraded function has been removed as it was very tricky to implement.
@@ -360,14 +373,14 @@ class activity {
 
             // Get the number of submissions for all $maintable activities in this course.
             $sql = "-- Snap sql
-            SELECT m.id, COUNT(DISTINCT sb.userid) as totalsubmitted
-              FROM {".$maintable."} m
-              JOIN {".$submittable."} sb ON m.id = sb.$mainkey
-              WHERE m.course = :courseid
-              AND sb.userid NOT IN ($graderids)
-              $extraselect
-              GROUP BY m.id";
-              $modtotalsbyid[$maintable][$courseid] = $DB->get_records_sql($sql, $params);
+                SELECT m.id, COUNT(DISTINCT sb.userid) as totalsubmitted
+                    FROM {".$maintable."} m
+                    JOIN {".$submittable."} sb ON m.id = sb.$mainkey
+                    WHERE m.course = :courseid
+                    AND sb.userid NOT IN ($graderids)
+                    $extraselect
+                    GROUP BY m.id";
+            $modtotalsbyid[$maintable][$courseid] = $DB->get_records_sql($sql, $params);
         }
         $totalsbyid = $modtotalsbyid[$maintable][$courseid];
 
@@ -427,8 +440,8 @@ class activity {
 
             // Get the number of contributions for this data activity.
             $sql = '
-             SELECT d.id, count(dataid) as total FROM {data_records} r, {data} d
-                WHERE r.dataid = d.id AND r.dataid = :dataid GROUP BY d.id';
+                SELECT d.id, count(dataid) as total FROM {data_records} r, {data} d
+                    WHERE r.dataid = d.id AND r.dataid = :dataid GROUP BY d.id';
 
             $modtotalsbyid['data'][$modid] = $DB->get_records_sql($sql, $params);
         }
@@ -506,20 +519,18 @@ class activity {
         if (!isset($totalsbyquizid)) {
             // Results are not cached.
             $sql = "-- Snap sql
-            SELECT q.id, count(DISTINCT qa.userid) as total
-            FROM {quiz} q
+                SELECT q.id, count(DISTINCT qa.userid) as total
+                    FROM {quiz} q
 
-            -- Get ALL ungraded attempts for this quiz
+                    -- Get ALL ungraded attempts for this quiz
+                    JOIN {quiz_attempts} qa ON qa.quiz = q.id
+                    AND qa.sumgrades IS NULL
 
-            JOIN {quiz_attempts} qa ON qa.quiz = q.id
-            AND qa.sumgrades IS NULL
-
-            -- Exclude those people who can grade quizzes
-
-            WHERE qa.userid NOT IN ($graderids)
-            AND qa.state = 'finished'
-            AND q.course = :courseid
-            GROUP BY q.id";
+                    -- Exclude those people who can grade quizzes
+                    WHERE qa.userid NOT IN ($graderids)
+                    AND qa.state = 'finished'
+                    AND q.course = :courseid
+                    GROUP BY q.id";
             $totalsbyquizid = $DB->get_records_sql($sql, $params);
         }
 
@@ -617,12 +628,24 @@ class activity {
         }
 
         if ($mod->modname === 'assign') {
-            /* Assignment submissions can either be against the user's id or a group they are in.
-               Make a simple list of the groups the user is in. */
-            $usergroups = array();
-            foreach ($USER->groupmember as $grouparray) {
-                foreach ($grouparray as $group) {
-                    $usergroups[] = $group;
+            // Assignment submissions can either be against the user's id or a group they are in.
+            if (empty($USER->groupmember)) {
+                if (!isguestuser($USER)) {
+                    // Adapted from get_complete_user_data() in moodlelib.php.
+                    $sql = "
+                        SELECT g.id, g.courseid
+                            FROM {groups} g, {groups_members} gm
+                            WHERE gm.groupid=g.id AND gm.userid=? AND g.courseid=?";
+
+                    $USER->groupmember = array();
+                    if ($groups = $DB->get_records_sql($sql, array($USER->id, $courseid))) {
+                        $USER->groupmember[$courseid] = array();
+                        foreach ($groups as $group) {
+                            $USER->groupmember[$group->courseid][$group->id] = $group->id;
+                        }
+                    }
+                } else {
+                    $USER->groupmember = array($courseid => array());
                 }
             }
 
@@ -633,7 +656,7 @@ class activity {
                         $theresults[$r->assignment] = $r;
                     }
                 } else if (!empty($r->groupid)) {
-                    if (in_array($r->groupid, $usergroups)) { // This record is in one of our groups.
+                    if (in_array($r->groupid, $USER->groupmember[$courseid])) { // This record is in one of our groups.
                         $theresults[$r->assignment] = $r;
                     }
                 }
@@ -669,10 +692,10 @@ class activity {
             $timeopenfld = $mod->modname === 'quiz' ? 'timeopen' : ($mod->modname === 'lesson' ? 'available' : $timeopenfld);
             $timeclosefld = $mod->modname === 'quiz' ? 'timeclose' : ($mod->modname === 'lesson' ? 'deadline' : $timeclosefld);
             $sql = "-- Snap sql
-            SELECT
-            module.id,
-            module.$timeopenfld AS timeopen,
-            module.$timeclosefld AS timeclose";
+                SELECT
+                    module.id,
+                    module.$timeopenfld AS timeopen,
+                    module.$timeclosefld AS timeclose";
             if ($mod->modname === 'assign') {
                 $sql .= ",
                     auf.extensionduedate AS extension
@@ -744,8 +767,8 @@ class activity {
                 if ($mod->modname === 'assign') {
                     $params[] = $USER->id;
                     $sql .= "
-                      LEFT JOIN {assign_user_flags} auf
-                             ON module.id = auf.assignment
+                        LEFT JOIN {assign_user_flags} auf
+                            ON module.id = auf.assignment
                             AND auf.userid = ?
                      ";
                 }
@@ -786,33 +809,32 @@ class activity {
         }
 
         $sql = "-- Snap sql
-        SELECT m.id AS instanceid, gg.*
+            SELECT m.id AS instanceid, gg.*
+                FROM {".$mod->modname."} m
 
-            FROM {".$mod->modname."} m
+                JOIN {grade_items} gi
+                ON m.id = gi.iteminstance
+                AND gi.itemtype = 'mod'
+                AND gi.itemmodule = :modname
+                AND gi.courseid = :courseid1
+                AND gi.outcomeid IS NULL
 
-            JOIN {grade_items} gi
-              ON m.id = gi.iteminstance
-             AND gi.itemtype = 'mod'
-             AND gi.itemmodule = :modname
-             AND gi.courseid = :courseid1
-             AND gi.outcomeid IS NULL
+                JOIN {grade_grades} gg
+                ON gi.id = gg.itemid
 
-            JOIN {grade_grades} gg
-              ON gi.id = gg.itemid
-
-           WHERE m.course = :courseid2
-             AND gg.userid = :userid
-             AND (
-                 gg.rawgrade IS NOT NULL
-                 OR gg.finalgrade IS NOT NULL
-                 OR gg.feedback IS NOT NULL
-             )
-             ";
+                WHERE m.course = :courseid2
+                AND gg.userid = :userid
+                AND (
+                    gg.rawgrade IS NOT NULL
+                    OR gg.finalgrade IS NOT NULL
+                    OR gg.feedback IS NOT NULL
+                )
+            ";
         $params = array(
-                'modname' => $mod->modname,
-                'courseid1' => $courseid,
-                'courseid2' => $courseid,
-                'userid' => $USER->id
+            'modname' => $mod->modname,
+            'courseid1' => $courseid,
+            'courseid2' => $courseid,
+            'userid' => $USER->id
         );
         $grades[$courseid.'_'.$mod->modname] = $DB->get_records_sql($sql, $params);
 
@@ -844,10 +866,18 @@ class activity {
 
         if (!isset($modulecount[$courseid])) {
             $modulecount[$courseid] = array();
+
+            // Initialise to zero in case of no enrolled students on the course.
+            $modinfo = get_fast_modinfo($courseid, -1);
+            $cms = $modinfo->get_cms(); // Array of cm_info objects.
+            foreach ($cms as $themod) {
+                $modulecount[$courseid][$themod->id] = 0;
+            }
+
             $context = \context_course::instance($courseid);
             $users = get_enrolled_users($context, '', 0, 'u.id', null, 0, 0, true);
             $users = array_keys($users);
-            $alluserroles = get_users_roles($context, $users);
+            $alluserroles = get_users_roles($context, $users, false);
 
             foreach ($users as $userid) {
                 $usershortnames = array();
@@ -870,9 +900,6 @@ class activity {
                 $modinfo = get_fast_modinfo($courseid, $userid);
                 $cms = $modinfo->get_cms(); // Array of cm_info objects for the user on the course.
                 foreach ($cms as $usermod) {
-                    if (!isset($modulecount[$courseid][$usermod->id])) {
-                        $modulecount[$courseid][$usermod->id] = 0;
-                    }
                     // From course_section_cm() in M3.8 - is_visible_on_course_page for M3.9+.
                     if (((method_exists($usermod, 'is_visible_on_course_page')) && ($usermod->is_visible_on_course_page()))
                         || ((!empty($usermod->availableinfo)) && ($usermod->url))) {

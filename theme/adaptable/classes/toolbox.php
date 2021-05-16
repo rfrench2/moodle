@@ -72,6 +72,23 @@ class toolbox {
     }
 
     /**
+     * Finds the given setting in the theme using the get_config core function for when the
+     * theme_config object has not been created.
+     *
+     * @param string $setting Setting name.
+     * @param themename $themename null(default of 'adaptable' used)|theme name.
+     *
+     * @return any false|value of setting.
+     */
+    static public function get_config_setting($setting, $themename = null) {
+        if (empty($themename)) {
+            $themename = 'adaptable';
+        }
+        return \get_config('theme_'.$themename, $setting);
+    }
+
+
+    /**
      * Get top level categories.
      *
      * @return array category ids
@@ -235,12 +252,19 @@ class toolbox {
 
         // Pre-process files - using 'theme_adaptable_pluginfile' in lib.php as a reference.
         $filestoreport = '';
-        $preprocessfilesettings = array('logo', 'homebk', 'pagebackground', 'iphoneicon', 'iphoneretinaicon',
-            'ipadicon', 'ipadretinaicon', 'fontfilettfheading', 'fontfilettfbody', 'adaptablemarkettingimages');
+        $preprocessfilesettings = array('logo', 'favicon', 'homebk', 'pagebackground', 'frontpagerendererdefaultimage',
+            'headerbgimage', 'loginbgimage', 'adaptablemarkettingimages');
 
         // Slide show.
         for ($propslide = 1; $propslide <= $props['slidercount']; $propslide++) {
             $preprocessfilesettings[] = 'p'.$propslide;
+        }
+
+        // Category.
+        $customheaderids = explode(',', get_config('theme_adaptable', 'categoryhavecustomheader'));
+        foreach ($customheaderids as $customheaderid) {
+            $preprocessfilesettings[] = 'categoryheaderbgimage'.$customheaderid;
+            $preprocessfilesettings[] = 'categoryheaderlogo'.$customheaderid;
         }
 
         // Process the file properties.

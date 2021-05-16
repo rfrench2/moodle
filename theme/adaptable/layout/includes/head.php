@@ -80,9 +80,10 @@ if ((!empty($fontname)) || (!empty($fontheadername)) || (!empty($fonttitlename))
 }
 
 // HTML head.
-echo $OUTPUT->standard_head_html() ?>
+echo $OUTPUT->standard_head_html();
+$siteurl = new moodle_url('');
+?>
     <!-- CSS print media -->
-    <link rel="stylesheet" type="text/css" href="<?php echo $wwwroot; ?>/theme/adaptable/style/print.css" media="print">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Twitter Card data -->
@@ -93,7 +94,7 @@ echo $OUTPUT->standard_head_html() ?>
     <!-- Open Graph data -->
     <meta property="og:title" content="<?php echo $OUTPUT->page_title(); ?>" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="<?php echo $wwwroot; ?>" />
+    <meta property="og:url" content="<?php echo $siteurl->out(); ?>" />
     <meta name="og:site_name" value="<?php echo $SITE->fullname; ?>" />
 
     <!-- Chrome, Firefox OS and Opera on Android topbar color -->
@@ -108,32 +109,22 @@ echo $OUTPUT->standard_head_html() ?>
     <?php
     // Load fonts.
     if ((!empty($fontname)) && ($fontname != 'default')) {
-        ?>
-    <!-- Load Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=<?php echo $fontname.$fontweight.$fontssubset; ?>'
-    rel='stylesheet'
-    type='text/css'>
-    <?php
+        echo '<!-- Load Google Fonts -->';
+        echo '<link href="https://fonts.googleapis.com/css?family=';
+        echo $fontname.$fontweight.$fontssubset;
+        echo '" rel="stylesheet" type="text/css">';
     }
-    ?>
 
-    <?php
     if ((!empty($fontheadername)) && ($fontheadername != 'default')) {
-    ?>
-        <link href='https://fonts.googleapis.com/css?family=<?php echo $fontheadername.$fontheaderweight.$fontssubset; ?>'
-        rel='stylesheet'
-        type='text/css'>
-    <?php
+        echo '<link href="https://fonts.googleapis.com/css?family=';
+        echo $fontheadername.$fontheaderweight.$fontssubset;
+        echo '" rel="stylesheet" type="text/css">';
     }
-    ?>
 
-    <?php
     if ((!empty($fonttitlename)) && ($fonttitlename != 'default')) {
-    ?>
-        <link href='https://fonts.googleapis.com/css?family=<?php echo $fonttitlename.$fonttitleweight.$fontssubset; ?>'
-        rel='stylesheet'
-        type='text/css'>
-    <?php
+        echo '<link href="https://fonts.googleapis.com/css?family=';
+        echo $fonttitlename.$fonttitleweight.$fontssubset;
+        echo '" rel="stylesheet" type="text/css">';
     }
     ?>
 </head>

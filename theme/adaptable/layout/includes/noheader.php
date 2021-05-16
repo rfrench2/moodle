@@ -32,11 +32,6 @@ if (empty($CFG->loginhttps)) {
     $wwwroot = str_replace("http://", "https://", $CFG->wwwroot);
 }
 
-// JS call. Fix for #85 where alerts could not be dismissed.
-$PAGE->requires->js_call_amd('theme_adaptable/bsoptions', 'init', array());
-
-$responsivealerts = $PAGE->theme->settings->responsivealerts;
-
 $standardscreenwidthclass = 'standard';
 if (!empty($PAGE->theme->settings->standardscreenwidth)) {
     $standardscreenwidthclass = $PAGE->theme->settings->standardscreenwidth;
@@ -68,8 +63,9 @@ echo $OUTPUT->standard_top_of_body_html();
 // echo $OUTPUT->get_dev_alert();.
 ?>
 
-<div id="page" class="container-fluid <?php echo "$setfull $standardscreenwidthclass"; ?>">
+<div id="page-wrapper">
+    <div id="page" class="container-fluid <?php echo "$setfull $standardscreenwidthclass"; ?>">
 
-<?php
+    <?php
     // Display alerts.
     echo $OUTPUT->get_alert_messages();

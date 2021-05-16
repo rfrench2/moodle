@@ -26,9 +26,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Category headers heading.
-$temp = new admin_settingpage('theme_adaptable_categoryheaders', get_string('categoryheaderssettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_categoryheaders',
+    $page = new admin_settingpage('theme_adaptable_categoryheaders', get_string('categoryheaderssettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_categoryheaders',
         get_string('categoryheaderssettingsheading', 'theme_adaptable'),
         format_text(get_string('categoryheaderssettingsdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -39,7 +40,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('categoryhavecustomheaderdesc', 'theme_adaptable');
     $default = array();
     $setting = new admin_setting_configmultiselect($name, $title, $description, $default, $coursecatsoptions);
-    $temp->add($setting);
+    $page->add($setting);
 
     $tohavecustomheader = get_config('theme_adaptable', 'categoryhavecustomheader');
     if (!empty($tohavecustomheader)) {
@@ -64,7 +65,7 @@ if ($ADMIN->fulltree) {
                 $headdesc = get_string('categoryheaderheaderdescchildren', 'theme_adaptable',
                             array('id' => $customheaderid, 'name' => $catinfo['name'], 'children' => $childrentext));
             }
-            $temp->add(new admin_setting_heading('theme_adaptable_categoryheader'.$customheaderid,
+            $page->add(new admin_setting_heading('theme_adaptable_categoryheader'.$customheaderid,
                 get_string('categoryheaderheader', 'theme_adaptable',
                 array('id' => $customheaderid, 'name' => $catinfo['name'])), format_text($headdesc, FORMAT_MARKDOWN)));
 
@@ -80,7 +81,7 @@ if ($ADMIN->fulltree) {
                     array('id' => $customheaderid, 'name' => $catinfo['name'], 'children' => $childrentext));
             }
             $setting = new admin_setting_configstoredfile($name, $title, $description, 'categoryheaderbgimage'.$customheaderid);
-            $temp->add($setting);
+            $page->add($setting);
 
             // Logo.
             $name = 'theme_adaptable/categoryheaderlogo'.$customheaderid;
@@ -94,7 +95,7 @@ if ($ADMIN->fulltree) {
                     'name' => $catinfo['name'], 'children' => $childrentext));
             }
             $setting = new admin_setting_configstoredfile($name, $title, $description, 'categoryheaderlogo'.$customheaderid);
-            $temp->add($setting);
+            $page->add($setting);
 
             // Custom title.
             $name = 'theme_adaptable/categoryheadercustomtitle'.$customheaderid;
@@ -110,7 +111,7 @@ if ($ADMIN->fulltree) {
             }
             $default = '';
             $setting = new admin_setting_configtext($name, $title, $description, $default);
-            $temp->add($setting);
+            $page->add($setting);
 
             // Custom CSS.
             $name = 'theme_adaptable/categoryheadercustomcss'.$customheaderid;
@@ -126,8 +127,9 @@ if ($ADMIN->fulltree) {
             $default = '';
             $setting = new admin_setting_configtextarea($name, $title, $description, $default);
             $setting->set_updatedcallback('theme_reset_all_caches');
-            $temp->add($setting);
+            $page->add($setting);
         }
     }
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

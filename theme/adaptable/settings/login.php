@@ -28,9 +28,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Login page heading.
-$temp = new admin_settingpage('theme_adaptable_login', get_string('loginsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_login', get_string('loginsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_login', get_string('loginsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_login', get_string('loginsettingsheading', 'theme_adaptable'),
         format_text(get_string('logindesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Login page background image.
@@ -39,7 +40,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('loginbgimagedesc', 'theme_adaptable');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'loginbgimage');
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Login page background style.
     $name = 'theme_adaptable/loginbgstyle';
@@ -53,7 +54,7 @@ if ($ADMIN->fulltree) {
         )
     );
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Login page background opacity.
     $opactitychoices = array(
@@ -76,7 +77,7 @@ if ($ADMIN->fulltree) {
     $default = '0.8';
     $setting = new admin_setting_configselect($name, $title, $description, $default, $opactitychoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Login page header.
     $name = 'theme_adaptable/loginheader';
@@ -87,7 +88,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable'),
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Login page footer.
     $name = 'theme_adaptable/loginfooter';
@@ -98,7 +99,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable'),
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Top text.
     $name = 'theme_adaptable/logintextboxtop';
@@ -106,7 +107,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('logintextboxtopdesc', 'theme_adaptable');
     $default = '';
     $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Bottom text.
     $name = 'theme_adaptable/logintextboxbottom';
@@ -114,6 +115,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('logintextboxbottomdesc', 'theme_adaptable');
     $default = '';
     $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

@@ -29,15 +29,14 @@
 .btn,
 .btn a {
     background-image: none;
-    border: 1px solid #ccc;
     border-color: #e6e6e6 #e6e6e6 #bfbfbf;
     border-bottom-color: #b3b3b3;
     border-radius: [[setting:buttonradius]];
+    border-style: solid;
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
     cursor: pointer;
     font-family: [[setting:fontname]];
     font-size: 14px;
-    line-height: 20px;
     margin-bottom: 0;
     padding: 6px 12px 6px;
     text-align: center;
@@ -76,17 +75,16 @@ a#adaptable-message-user-button,
 #availability_addrestriction_profile.btn.btn-secondary,
 #availability_addrestriction_list_.btn.btn-secondary,
 #availability_addrestriction_completion.btn.btn-secondary {
-    font-family: [[setting:fontname]];
     background-image: none;
     background-color: [[setting:buttoncolor]];
     background-size: 100% 200%;
-    text-shadow: none;
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
-    border: 0;
-    border-radius: [[setting:buttonradius]];
+    border: none;
     color: [[setting:buttontextcolor]] !important;
     cursor: pointer;
+    font-family: [[setting:fontname]];
     padding: .4rem 1rem;
+    text-shadow: none;
     -ie-transition: background .2s ease-out;
     -o-transition: background .2s ease-out;
     transition: background .2s ease-out;
@@ -102,7 +100,6 @@ a#adaptable-message-user-button,
 .btn-secondary {
     background-color: [[setting:buttoncolorscnd]];
     color: [[setting:buttontextcolorscnd]];
-    min-height: 32px;
     text-decoration: none !important;
 }
 
@@ -173,29 +170,29 @@ button.close {
     box-shadow: none !important;
 }
 
-#edittingbutton .btn {
-    color: [[setting:editfont]] !important;
-}
-
-#edittingbutton {
+#editingbutton {
     padding-right: 10px;
     line-height: 22px;
 }
 
-.navbar #edittingbutton .singlebutton {
+.navbar #editingbutton .singlebutton {
     line-height: inherit;
 }
 
-.navbar #edittingbutton .singlebutton:first-child {
+.navbar #editingbutton .singlebutton:first-child {
     margin-right: 6px;
 }
 
-#edittingbutton #coursesearchnavbar .form-group .btn {
-    margin: 0 5px 0px 5px;
+#editingbutton .simplesearchform {
+    display: inline-block;
+}
+
+#editingbutton #coursesearchnavbar .form-group .btn {
+    margin: 0 5px 0 5px;
     padding: 4px 12px;
 }
 
-#edittingbutton .helptooltip a {
+#editingbutton .helptooltip a {
     background-color: transparent !important;
     box-shadow: none !important;
     border: none !important;
@@ -239,33 +236,32 @@ td.submit input[disabled] {
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
 }
 
-#edittingbutton .btn,
-#edittingbutton input[type="submit"] {
+#editingbutton .btn,
+#editingbutton input[type="submit"] {
     background-image: none;
     background-color: [[setting:editonbk]];
-    border-radius: [[setting:buttonradius]];
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
-    color: [[setting:editfont]] !important;
-    height: 24px;
-    line-height: 14px;
-    padding: [[setting:editverticalpadding]] [[setting:edithorizontalpadding]];
+    color: [[setting:editfont]];
+    height: 32px;
+    line-height: 28px;
+    padding: 0 [[setting:edithorizontalpadding]];
 }
 
-#adaptable-page-header-wrapper #main-navbar #edittingbutton a {
-    color: [[setting:editfont]] !important;
-}
-
-.editing #edittingbutton .btn,
-.editing #edittingbutton input[type="submit"],
-.editing #edittingbutton a:hover,
+.editing #editingbutton .btn,
+.editing #editingbutton input[type="submit"],
+.editing #editingbutton a:hover,
 .purgecaches a,
 .tool_dataprivacy a {
-    color: [[setting:editfont]];
     background-image: none;
     background-color: [[setting:editoffbk]];
-    padding: [[setting:editverticalpadding]] [[setting:edithorizontalpadding]];
-    text-decoration: none !important;
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
+    color: [[setting:editfont]];
+    padding: 0 [[setting:edithorizontalpadding]];
+    text-decoration: none !important;
+}
+
+.purgecaches a,
+.tool_dataprivacy a {
     border-radius: [[setting:buttonradius]];
 }
 
@@ -326,16 +322,15 @@ button[name="resetbutton"]:hover,
     background-image: none;
     background-color: [[setting:buttonlogincolor]];
     border: none;
-    border-radius: [[setting:buttonradius]];
     box-shadow: 0 [[setting:buttondropshadow]] 0 0 rgba(0, 0, 0, 0.5) inset;
     color: [[setting:buttonlogintextcolor]];
     cursor: pointer;
+    height: [[setting:buttonloginheight]];
+    margin-right: 2px;
+    margin-top: [[setting:buttonloginmargintop]];
     padding: [[setting:buttonloginpadding]] 15px;
     text-shadow: none;
     transition: background 0.2s ease-out 0s;
-    margin-top: [[setting:buttonloginmargintop]];
-    margin-right:2px;
-    height:[[setting:buttonloginheight]];
 }
 
 .btn-login:hover {
@@ -453,6 +448,7 @@ div.discussionsubscription {
 }
 
 /* Message button margin (applies to all the elements) */
-#page-user-profile .node_category li, .path-user .node_category li {
+#page-user-profile .node_category li,
+.path-user .node_category li {
     margin-top: 15px;
 }

@@ -27,24 +27,25 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Frontpage Block Regions Section.
-$temp = new admin_settingpage('theme_adaptable_frontpage_block_regions',
-    get_string('frontpageblockregionsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_marketing', get_string('blocklayoutbuilder', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_frontpage_block_regions',
+        get_string('frontpageblockregionsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_marketing', get_string('blocklayoutbuilder', 'theme_adaptable'),
         format_text(get_string('blocklayoutbuilderdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $name = 'theme_adaptable/frontpageblocksenabled';
     $title = get_string('frontpageblocksenabled', 'theme_adaptable');
     $description = get_string('frontpageblocksenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Block region builder.
     $noregions = 20; // Number of block regions defined in config.php.
     list('imgblder' => $imgblder, 'totalblocks' => $totalblocks) = \theme_adaptable\toolbox::admin_settings_layout_builder(
-        $temp, 'blocklayoutlayoutrow', $bootstrap12defaults, $bootstrap12);
+        $page, 'blocklayoutlayoutrow', $bootstrap12defaults, $bootstrap12);
 
-    $temp->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
+    $page->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
         format_text(get_string('layoutcheckdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $checkcountcolor = '#00695C';
@@ -55,8 +56,9 @@ if ($ADMIN->fulltree) {
     $mktcountmsg .= get_string('layoutcount1', 'theme_adaptable') . '<strong>' . $noregions . '</strong>';
     $mktcountmsg .= get_string('layoutcount2', 'theme_adaptable') . '<strong>' . $totalblocks . '/' . $noregions . '</strong>.';
 
-    $temp->add(new admin_setting_heading('theme_adaptable_layoutblockscount', '', $mktcountmsg));
+    $page->add(new admin_setting_heading('theme_adaptable_layoutblockscount', '', $mktcountmsg));
 
-    $temp->add(new admin_setting_heading('theme_adaptable_layoutbuilder', '', $imgblder));
+    $page->add(new admin_setting_heading('theme_adaptable_layoutbuilder', '', $imgblder));
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

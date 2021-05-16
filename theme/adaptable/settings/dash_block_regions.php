@@ -28,32 +28,33 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Frontpage Block Regions Section.
-$temp = new admin_settingpage('theme_adaptable_dash_block_regions',
-        get_string('dashboardblockregionsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_heading', get_string('dashblocklayoutbuilder', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_dash_block_regions',
+        get_string('dashboardblockregionsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_heading', get_string('dashblocklayoutbuilder', 'theme_adaptable'),
         format_text(get_string('dashblocklayoutbuilderdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $name = 'theme_adaptable/dashblocksenabled';
     $title = get_string('dashblocksenabled', 'theme_adaptable');
     $description = get_string('dashblocksenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/dashblocksposition';
     $title = get_string('dashblocksposition', 'theme_adaptable');
     $description = get_string('dashblockspositiondesc', 'theme_adaptable');
-    $default = $dashboardblockregionposition['abovecontent'];
+    $default = 'abovecontent';
     $choices = $dashboardblockregionposition;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dashboard block region builder.
     $noregions = 20; // Number of block regions defined in config.php.
     list('imgblder' => $imgblder, 'totalblocks' => $totalblocks) = \theme_adaptable\toolbox::admin_settings_layout_builder(
-        $temp, 'dashblocklayoutlayoutrow', $bootstrap12defaults, $bootstrap12);
+        $page, 'dashblocklayoutlayoutrow', $bootstrap12defaults, $bootstrap12);
 
-    $temp->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
+    $page->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
         format_text(get_string('layoutcheckdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $checkcountcolor = '#00695C';
@@ -64,8 +65,9 @@ if ($ADMIN->fulltree) {
     $mktcountmsg .= get_string('layoutcount1', 'theme_adaptable') . '<strong>' . $noregions . '</strong>';
     $mktcountmsg .= get_string('layoutcount2', 'theme_adaptable') . '<strong>' . $totalblocks . '/' . $noregions . '</strong>.';
 
-    $temp->add(new admin_setting_heading('theme_adaptable_dashlayoutblockscount', '', $mktcountmsg));
+    $page->add(new admin_setting_heading('theme_adaptable_dashlayoutblockscount', '', $mktcountmsg));
 
-    $temp->add(new admin_setting_heading('theme_adaptable_dashlayoutbuilder', '', $imgblder));
+    $page->add(new admin_setting_heading('theme_adaptable_dashlayoutbuilder', '', $imgblder));
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

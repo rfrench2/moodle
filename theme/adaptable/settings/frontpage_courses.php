@@ -25,13 +25,13 @@
  *
  */
 
-
 defined('MOODLE_INTERNAL') || die;
 
 // Frontpage courses section.
-$temp = new admin_settingpage('theme_adaptable_frontpage_courses', get_string('frontpagecoursesettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_frontpage_courses',
+    $page = new admin_settingpage('theme_adaptable_frontpage_courses', get_string('frontpagecoursesettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_frontpage_courses',
         get_string('frontpagesettingsheading', 'theme_adaptable'),
         format_text(get_string('frontpagedesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -45,7 +45,7 @@ if ($ADMIN->fulltree) {
         4 => get_string('frontpagerendereroption4', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 2, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Number of tiles per row.
     // Number of tiles per row: 12=1 tile / 6=2 tiles / 4 (default)=3 tiles / 3=4 tiles / 2=6 tiles.
@@ -60,39 +60,40 @@ if ($ADMIN->fulltree) {
         2  => get_string('frontpagetiles6', 'theme_adaptable'),
     );
     $setting = new admin_setting_configselect($name, $title, $description, 4, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
-    // TODO - Not served by theme_adaptable_pluginfile ?
+    // Default image for 'Tiles with overlay' on 'frontpagerenderer' setting.
     $name = 'theme_adaptable/frontpagerendererdefaultimage';
     $title = get_string('frontpagerendererdefaultimage', 'theme_adaptable');
     $description = get_string('frontpagerendererdefaultimagedesc', 'theme_adaptable');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'frontpagerendererdefaultimage');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show course contacts.
     $name = 'theme_adaptable/tilesshowcontacts';
     $title = get_string('tilesshowcontacts', 'theme_adaptable');
     $description = get_string('tilesshowcontactsdesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/tilesshowallcontacts';
     $title = get_string('tilesshowallcontacts', 'theme_adaptable');
     $description = get_string('tilesshowallcontactsdesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $temp->add($setting);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
 
     $name = 'theme_adaptable/tilescontactstitle';
     $title = get_string('tilescontactstitle', 'theme_adaptable');
     $description = get_string('tilescontactstitledesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/covhidebutton';
     $title = get_string('covhidebutton', 'theme_adaptable');
     $description = get_string('covhidebuttondesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show 'Available Courses' label.
     $name = 'theme_adaptable/enableavailablecourses';
@@ -104,6 +105,7 @@ if ($ADMIN->fulltree) {
             'none' => get_string('hide')
         ));
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

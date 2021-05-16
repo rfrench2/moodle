@@ -48,5 +48,9 @@ require_once(dirname(__FILE__) . '/includes/header.php');
 </div>
 
 <?php
-// Include footer.
-require_once(dirname(__FILE__) . '/includes/footer.php');
+if (empty($PAGE->layout_options['nofooter'])) {
+    // Include footer.
+    require_once(dirname(__FILE__) . '/includes/footer.php');
+} else {
+    require_once(dirname(__FILE__) . '/includes/nofooter.php');
+}

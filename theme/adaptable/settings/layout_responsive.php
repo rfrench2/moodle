@@ -25,19 +25,11 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-$temp = new admin_settingpage('theme_adaptable_mobile', get_string('responsivesettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_mobile', get_string('responsivesettingsheading', 'theme_adaptable'),
-        format_text(get_string('responsivesettingsdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
+    $page = new admin_settingpage('theme_adaptable_mobile', get_string('responsivesettings', 'theme_adaptable'));
 
-    // Hide Alerts.
-    $name = 'theme_adaptable/responsivealerts';
-    $title = get_string('responsivealerts', 'theme_adaptable');
-    $description = get_string('responsivealertsdesc', 'theme_adaptable');
-    $default = 'd-none d-lg-block';
-    $choices = $screensizeblock;
-    $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add(new admin_setting_heading('theme_adaptable_mobile', get_string('responsivesettingsheading', 'theme_adaptable'),
+        format_text(get_string('responsivesettingsdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Hide Full Header.
     $name = 'theme_adaptable/responsiveheader';
@@ -46,7 +38,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide Social icons.
     $name = 'theme_adaptable/responsivesocial';
@@ -56,14 +48,14 @@ if ($ADMIN->fulltree) {
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/responsivesocialsize';
     $title = get_string('responsivesocialsize', 'theme_adaptable');
     $description = get_string('responsivesocialsizedesc', 'theme_adaptable');
     $setting = new admin_setting_configselect($name, $title, $description, '34px', $from14to46px);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide Logo.
     $name = 'theme_adaptable/responsivelogo';
@@ -72,7 +64,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide course title.
     $name = 'theme_adaptable/responsivecoursetitle';
@@ -81,7 +73,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide activity / section navigation.
     $name = 'theme_adaptable/responsivesectionnav';
@@ -93,7 +85,7 @@ if ($ADMIN->fulltree) {
     );
     $default = 1;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $radchoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show search icon on small screens.
     $name = 'theme_adaptable/responsivesearchicon';
@@ -101,7 +93,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('responsivesearchicondesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide Ticker.
     $name = 'theme_adaptable/responsiveticker';
@@ -110,7 +102,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide breadcrumbs on small screens.
     $name = 'theme_adaptable/responsivebreadcrumb';
@@ -119,7 +111,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-md-flex';
     $choices = $screensizeflex;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide Slider.
     $name = 'theme_adaptable/responsiveslider';
@@ -128,7 +120,7 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Hide Footer.
     $name = 'theme_adaptable/responsivepagefooter';
@@ -137,13 +129,13 @@ if ($ADMIN->fulltree) {
     $default = 'd-none d-lg-block';
     $choices = $screensizeblock;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Mobile colors heading.
     $name = 'theme_adaptable/settingsmobilecolors';
     $heading = get_string('settingsmobilecolors', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Mobile menu background color.
     $name = 'theme_adaptable/mobilemenubkcolor';
@@ -152,7 +144,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#F9F9F9', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Mobile sidebar tab background colour.
     $name = 'theme_adaptable/mobileslidebartabbkcolor';
@@ -161,7 +153,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#F9F9F9', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Mobile sidebar tab icon colour.
     $name = 'theme_adaptable/mobileslidebartabiconcolor';
@@ -170,6 +162,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#000000', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

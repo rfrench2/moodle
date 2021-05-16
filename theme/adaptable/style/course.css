@@ -40,6 +40,11 @@
     text-align: center;
 }
 
+#coursetitle,
+#sitetitle #coursetitle {
+    color: [[setting:fonttitlecolorcourse]];
+}
+
 /* ************************ */
 /* Course Tiles             */
 /* ************************ */
@@ -96,14 +101,6 @@
 .coursebox .boxfooter {
     clear: both;
     margin-bottom: 30px;
-}
-
-.coursebox .coursebtn {
-    bottom: 10px;
-    left: 0;
-    margin: 0 auto;
-    position: absolute;
-    right: 0;
 }
 
 /* 1 tile. */
@@ -364,9 +361,9 @@
 
 .course-content .current {
     background-color: transparent;
-    border-left: 0px solid #ccc;
-    border-right: 0px dashed #ccc;
-    margin-top: 0px !important;
+    border-left: 0 solid #ccc;
+    border-right: 0 dashed #ccc;
+    margin-top: 0 !important;
 }
 
 .panel-body {
@@ -455,10 +452,17 @@
 }
 
 /* Current Section */
-#page .course-content ul li.section.main.current,
+#page .course-content ul li.section.main.current{
+    background-color: [[setting:currentcolor]];
+}
+
+.format-onetopic .onetopic .nav-tabs .nav-link .tab_content .sectionname {
+    background-color: inherit;
+}
+
 .format-onetopic .onetopic .nav-tabs .nav-link.active .tab_content,
 .format-onetopic .onetopic .nav-tabs .nav-link.active .tab_content .sectionname {
-    background-color: [[setting:currentcolor]];
+    background-color: [[setting:currentcolor]] !important;
 }
 
 .course-content ul li.section.hidden .sectionname,
@@ -783,7 +787,7 @@ div.fdescription.required {
 /* Activity styling */
 .block_site_main_menu .mod-indent .activity,
 .block_site_main_menu .main-menu-content .activity {
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0 5px 0;
 }
 
 .section-modchooser {
@@ -836,12 +840,12 @@ div.fdescription.required {
 
 
 /* Activity further information styling */
-.activity-meta-container {
+.ad-activity-meta-container {
     padding: 5px 0 0 0;
-    margin: 0px 10px 0 30px;
+    margin: 0 10px 0 30px;
 }
 
-span.activity-due-date {
+.ad-activity-due-date {
     background-color: #555555;
     color: #ffffff;
     padding: 7px;
@@ -853,39 +857,66 @@ span.activity-due-date {
     white-space: nowrap;
 }
 
-span.activity-due-date a {
-    color: #ffffff !important;
- }
+.ad-activity-due-date a {
+    color: #fff;
+}
 
-span.activity-mod-feedback {
+.ad-activity-mod-feedback {
     padding: 5px 0;
 }
 
-span.activity-mod-feedback i {
+.ad-activity-mod-feedback i {
     font-size: 1.1em;
 }
 
-span.activity-date-overdue {
-    background-color: #ee0000;
+.ad-activity-action {
+    margin: 0 7px;
 }
 
-span.activity-date-submitted {
-    background-color: #00cc00;
+.ad-activity-action i {
+    margin-right: 0.35rem;
 }
 
-span.activity-date-nearly-due {
-    background-color: #f79100;
+.ad-activity-date-overdue {
+    background-color: #f8d7da;
 }
 
-span.activity-mod-feedback i, .activity-mod-engagement i, span.activity-due-date i {
+.ad-activity-date-overdue a {
+    color: #721c24;
+}
+
+.ad-activity-date-overdue .text-warning {
+    color: #721C24 !important;
+}
+
+.ad-activity-date-submitted {
+    background-color: #d4edda;
+}
+
+.ad-activity-date-submitted a {
+    color: #155724;
+}
+
+.ad-activity-date-nearly-due {
+    background-color: #fff3cd;
+}
+
+.ad-activity-date-nearly-due a {
+    color: #856404;
+}
+
+.ad-activity-mod-feedback i,
+.ad-activity-mod-engagement i,
+.ad-activity-due-date i {
     font-size: 1.1em;
 }
 
 li.activity div.actions-right {
-    float: right; padding: 5px;
+    float: right;
+    padding: 5px;
 }
 
-div.activity-wrapper {
+.ad-activity-wrapper {
     margin: [[setting:coursesectionactivitymargintop]] 0 [[setting:coursesectionactivitymarginbottom]] 0;
     padding: 5px 10px 5px 0;
 }
@@ -896,6 +927,10 @@ div.activity-wrapper {
 
 .section .label .mod-indent-outer {
     padding-left: 0;
+}
+
+.section .activity.modtype_label.label {
+    padding: 0;
 }
 
 .topics .section .activity .mod-indent-outer {
@@ -926,6 +961,7 @@ div.activity-wrapper {
 }
 
 .section li.activity {
+    clear: both;
     padding: 0;
     margin-bottom: 5px;
 }
@@ -937,14 +973,18 @@ div.activity-wrapper {
 /* region-main-settings-menu is used on pages other than course pages, but included here to keep the settings together. */
 .context-header-settings-menu,
 .region-main-settings-menu {
-    height: 2em;
-    margin: 4px 0 0;
+    height: 42px;
+    margin-top: 0;
+}
+.context-header-settings-menu .dropdown-toggle>.icon,
+#region-main-settings-menu .dropdown-toggle>.icon {
+    vertical-align: sub;
 }
 
 #region-main-settings-menu > div {
-  position: static;
-  right: auto;
-  margin: 0;
+    position: static;
+    margin: 0;
+    right: auto;
 }
 
 .section .activity .contentwithoutlink > a,

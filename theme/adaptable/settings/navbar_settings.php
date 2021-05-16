@@ -27,9 +27,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Header Navbar.
-$temp = new admin_settingpage('theme_adaptable_navbar_settings', get_string('navbarsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_navbar_settings', get_string('navbarsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_navbar_settings', get_string('navbarsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_navbar_settings', get_string('navbarsettingsheading', 'theme_adaptable'),
         format_text(get_string('navbardesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Sticky Navbar at the top. See issue #278.
@@ -38,7 +39,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('stickynavbardesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable/Disable menu items.
     $name = 'theme_adaptable/enablehome';
@@ -46,56 +47,56 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablehomedesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablehomeredirect';
     $title = get_string('enablehomeredirect', 'theme_adaptable');
     $description = get_string('enablehomeredirectdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablemyhome';
     $title = get_string('myhome');
     $description = get_string('enablemyhomedesc', 'theme_adaptable', get_string('myhome'));
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enableevents';
     $title = get_string('events', 'theme_adaptable');
     $description = get_string('enableeventsdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablethiscourse';
     $title = get_string('thiscourse', 'theme_adaptable');
     $description = get_string('enablethiscoursedesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablecoursesections';
     $title = get_string('coursesections', 'theme_adaptable');
     $description = get_string('enablecoursesectionsdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablecompetencieslink';
     $title = get_string('enablecompetencieslink', 'theme_adaptable');
     $description = get_string('enablecompetencieslinkdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablezoom';
     $title = get_string('enablezoom', 'theme_adaptable');
     $description = get_string('enablezoomdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/defaultzoom';
     $title = get_string('defaultzoom', 'theme_adaptable');
@@ -105,7 +106,7 @@ if ($ADMIN->fulltree) {
         'wide' => get_string('wide', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'wide', $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show / hide text for the Full screen button.
     $name = 'theme_adaptable/enablezoomshowtext';
@@ -113,14 +114,14 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablezoomshowtextdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enableshowhideblocks';
     $title = get_string('enableshowhideblocks', 'theme_adaptable');
     $description = get_string('enableshowhideblocksdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show / hide text for the show / hide blocks button.
     $name = 'theme_adaptable/enableshowhideblockstext';
@@ -128,14 +129,14 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableshowhideblockstextdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/enablenavbarwhenloggedout';
     $title = get_string('enablenavbarwhenloggedout', 'theme_adaptable');
     $description = get_string('enablenavbarwhenloggedoutdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Settings icon and Edit button.
     $name = 'theme_adaptable/editsettingsbutton';
@@ -147,17 +148,25 @@ if ($ADMIN->fulltree) {
         'cogandbutton' => get_string('editsettingsbuttonshowcogandbutton', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'cog', $choices );
-    $temp->add($setting);
+    $page->add($setting);
+
+    // Show the cog to non-editing teachers.
+    $name = 'theme_adaptable/editcognocourseupdate';
+    $title = get_string('editcognocourseupdate', 'theme_adaptable');
+    $description = get_string('editcognocourseupdatedesc', 'theme_adaptable');
+    $default = true;
+    $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+    $page->add($setting);
 
     $name = 'theme_adaptable/displayeditingbuttontext';
     $title = get_string('displayeditingbuttontext', 'theme_adaptable');
     $description = get_string('displayeditingbuttontextdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // My courses section.
-    $temp->add(new admin_setting_heading('theme_adaptable_mycourses_heading',
+    $page->add(new admin_setting_heading('theme_adaptable_mycourses_heading',
         get_string('headernavbarmycoursesheading', 'theme_adaptable'),
         format_text(get_string('headernavbarmycoursesheadingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -170,26 +179,26 @@ if ($ADMIN->fulltree) {
         'disabled' => get_string('mysitesdisabled', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'excludehidden', $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Custom profile field value for restricting access to my courses menu.
     $name = 'theme_adaptable/enablemysitesrestriction';
     $title = get_string('enablemysitesrestriction', 'theme_adaptable');
     $description = get_string('enablemysitesrestrictiondesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/mycoursesmenulimit';
     $title = get_string('mycoursesmenulimit', 'theme_adaptable');
     $description = get_string('mycoursesmenulimitdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '20', PARAM_INT);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/mysitesmaxlength';
     $title = get_string('mysitesmaxlength', 'theme_adaptable');
     $description = get_string('mysitesmaxlengthdesc', 'theme_adaptable');
     $setting = new admin_setting_configselect($name, $title, $description, '30', $from20to40);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/mysitessortoverride';
     $title = get_string('mysitessortoverride', 'theme_adaptable');
@@ -203,14 +212,14 @@ if ($ADMIN->fulltree) {
         'last' => get_string('mysitessortoverridelast', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'myoverview', $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/mysitessortoverridefield';
     $title = get_string('mysitessortoverridefield', 'theme_adaptable');
     $description = get_string('mysitessortoverridefielddesc', 'theme_adaptable');
     $default = '';
     $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_RAW);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/mysitesmenudisplay';
     $title = get_string('mysitesmenudisplay', 'theme_adaptable');
@@ -222,38 +231,38 @@ if ($ADMIN->fulltree) {
         'fullnamehover' => get_string('mysitesmenudisplayfullnamefullnameonhover', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'shortcodehover', $displaychoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/chiddenicon';
     $title = get_string('chiddenicon', 'theme_adaptable');
     $description = get_string('chiddenicondesc', 'theme_adaptable');
     $default = 'eye-slash';
     $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/cfrozenicon';
     $title = get_string('cfrozenicon', 'theme_adaptable');
     $description = get_string('cfrozenicondesc', 'theme_adaptable');
     $default = 'snowflake-o';
     $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/cneveraccessedicon';
     $title = get_string('cneveraccessedicon', 'theme_adaptable');
     $description = get_string('cneveraccessedicondesc', 'theme_adaptable');
     $default = 'exclamation-circle';
     $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/cdefaulticon';
     $title = get_string('cdefaulticon', 'theme_adaptable');
     $description = get_string('cdefaulticondesc', 'theme_adaptable');
     $default = 'graduation-cap';
     $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
-    $temp->add($setting);
+    $page->add($setting);
 
     // This course section.
-    $temp->add(new admin_setting_heading('theme_adaptable_thiscourse_heading',
+    $page->add(new admin_setting_heading('theme_adaptable_thiscourse_heading',
         get_string('headernavbarthiscourseheading', 'theme_adaptable'),
         format_text(get_string('headernavbarthiscourseheadingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -266,7 +275,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Display Grades.
     $name = 'theme_adaptable/displaygrades';
@@ -277,8 +286,7 @@ if ($ADMIN->fulltree) {
         1 => get_string('show', 'theme_adaptable')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 1, $radchoices);
-    $temp->add($setting);
-}
+    $page->add($setting);
 
-// Create page.
-$ADMIN->add('theme_adaptable', $temp);
+    $asettings->add($page);
+}

@@ -23,6 +23,10 @@
  * @copyright  2017-2019 Manoj Solanki (Coventry University)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
+ * SWTC history:
+ *
+ * 05/13/21 - Initial writing.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -39,6 +43,9 @@ global $PAGE;
 
 // The plugin internal name.
 $THEME->name = 'adaptable';
+
+// Print sheet.
+$THEME->sheets = array('print');
 
 // The frontpage regions.
 $frontlayoutregions = array('side-post',
@@ -81,6 +88,8 @@ $courselayoutregions = array('side-post',
         'course-top-c',
         'course-top-d',
         'news-slider-a',
+        'related-slider-a', // SWTC
+        'suggest-slider-a', // SWTC
         'course-tab-one-a',
         'course-tab-two-a',
         'my-tab-one-a',
@@ -137,6 +146,7 @@ $THEME->sheets = array(
         'user',
         'print',
         'categorycustom',
+        'browser',
         'custom'
 );
 
@@ -186,8 +196,10 @@ $THEME->layouts = array(
     ),
     // Part of course, typical for modules - default page layout if $cm specified in require_login().
     'incourse' => array(
-        'file' => 'columns2.php',
-        'regions' => array('side-post', 'course-section-a'),
+        // 'file' => 'columns2.php',    // SWTC
+        'file' => 'course.php',     // SWTC
+        // 'regions' => array('side-post', 'course-section-a'), // SWTC
+        'regions' => array('side-post', 'related-slider-a'), // SWTC
         'defaultregion' => 'side-post',
     ),
     // The site home page.

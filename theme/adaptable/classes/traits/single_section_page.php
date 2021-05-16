@@ -160,7 +160,11 @@ trait single_section_page {
         echo $this->start_section_list();
 
         if (!$showsectionzero) {
-            echo $this->section_header_onsectionpage_topic0notattop($thissection, $course);
+            if (method_exists($this, 'section_header_onsectionpage_topic0notattop')) {
+                echo $this->section_header_onsectionpage_topic0notattop($thissection, $course);
+            } else {
+                echo $this->section_header_onsectionpage($thissection, $course);
+            }
         } else {
             echo $this->section_header($thissection, $course, true, $displaysection);
         }

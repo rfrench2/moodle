@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$adaptablesettingsprops = new admin_settingpage('theme_adaptable_importexport', get_string('properties', 'theme_adaptable'));
+$page = new admin_settingpage('theme_adaptable_importexport', get_string('properties', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
     if (file_exists("{$CFG->dirroot}/theme/adaptable/settings/adaptable_admin_setting_getprops.php")) {
         require_once($CFG->dirroot . '/theme/adaptable/settings/adaptable_admin_setting_getprops.php');
@@ -35,13 +35,13 @@ if ($ADMIN->fulltree) {
         require_once($CFG->themedir . '/adaptable/settings/adaptable_admin_setting_putprops.php');
     }
 
-    $adaptablesettingsprops->add(new admin_setting_heading('theme_adaptable_importexport',
+    $page->add(new admin_setting_heading('theme_adaptable_importexport',
         get_string('propertiessub', 'theme_adaptable'),
         format_text(get_string('propertiesdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $adaptableexportprops = optional_param('theme_adaptable_getprops_saveprops', 0, PARAM_INT);
     $adaptableprops = \theme_adaptable\toolbox::compile_properties('adaptable');
-    $adaptablesettingsprops->add(new adaptable_admin_setting_getprops('theme_adaptable_getprops',
+    $page->add(new adaptable_admin_setting_getprops('theme_adaptable_getprops',
         get_string('propertiesproperty', 'theme_adaptable'),
         get_string('propertiesvalue', 'theme_adaptable'),
         $adaptableprops,
@@ -55,7 +55,7 @@ if ($ADMIN->fulltree) {
     $name = 'theme_adaptable/theme_adaptable_putprops_import_heading';
     $heading = get_string('putpropertiesheading', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $adaptablesettingsprops->add($setting);
+    $page->add($setting);
 
     $setting = new adaptable_admin_setting_putprops('theme_adaptable_putprops',
         get_string('putpropertiesname', 'theme_adaptable'),
@@ -64,6 +64,6 @@ if ($ADMIN->fulltree) {
         '\theme_adaptable\toolbox::put_properties'
     );
     $setting->set_updatedcallback('purge_all_caches');
-    $adaptablesettingsprops->add($setting);
+    $page->add($setting);
 }
-$ADMIN->add('theme_adaptable', $adaptablesettingsprops);
+$ADMIN->add('theme_adaptable', $page);

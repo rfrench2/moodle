@@ -47,11 +47,10 @@ G J Barnard MSc. BSc(Hons)(Sndw). MBCS. CEng. CITP. PGCE.  Moodle profile | http
 
 Required version of Moodle
 ==========================
-This version works with Moodle 3.9 version 2020061500.00 (Build: 20200615) and above within the 3.9 branch until the
-next release.
+This version works with Moodle 3.10 version 2020110900.00 (Build: 20201109) and above within the 3.10 branch until the next release.
 
 Please ensure that your hardware and software complies with 'Requirements' in 'Installing Moodle' on
-'docs.moodle.org/39/en/Installing_Moodle'.
+'docs.moodle.org/310/en/Installing_Moodle'.
 
 
 Versioning
@@ -59,7 +58,7 @@ Versioning
 Adaptable is maintained under the Semantic Versioning guidelines as much as possible. Releases will be numbered with the
 following format:
 
-major.minor.patch
+moodleversion.major.minor.(patch)
 
 and following these guidelines:
 - Breaking backward compatibility bumps the major (and resets the minor and patch)
@@ -113,18 +112,12 @@ Apache 2 license - https://www.apache.org/licenses/LICENSE-2.0
 The Ubuntu fonts use the Ubuntu Font License v1.0 - http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt
 
 The Font Awesome font (by Dave Gandy) http://fontawesome.io) is licensed under:
-SIL Open Font License v1.1 - http://scripts.sil.org/OFL
-
-Font Awesome CSS, LESS, and SASS files are licensed under:
+Fonts: SIL Open Font License v1.1 - http://scripts.sil.org/OFL
+Documentation: CC BY 3.0
+CSS, LESS, and SASS files are licensed under:
 MIT License - https://opensource.org/licenses/mit-license.html
 
 Emoji icons provided free by EmojiOne (http://emojione.com) released under:
 Creative Commons Attribution 4.0 International - https://creativecommons.org/licenses/by/4.0/
-
-
-Follow Us
-=========
-Twitter - https://twitter.com/adaptable_theme
-Facebook - https://www.facebook.com/adaptable.theme
 
 Modify it! - Improve it! - Share it!

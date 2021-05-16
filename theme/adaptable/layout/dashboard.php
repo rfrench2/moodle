@@ -34,8 +34,7 @@ $left = $PAGE->theme->settings->blockside;
 $hassidepost = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
 $regions = theme_adaptable_grid($left, $hassidepost);
 
-$hasfootnote = (!empty($PAGE->theme->settings->footnote));
-$dashblocksposition = $PAGE->theme->settings->dashblocksposition;
+$dashblocksposition = (!empty($PAGE->theme->settings->dashblocksposition)) ? $PAGE->theme->settings->dashblocksposition : 'abovecontent';
 
 $dashblocklayoutlayoutrow = '';
 if (!empty($PAGE->theme->settings->dashblocksenabled)) {
@@ -157,10 +156,10 @@ if (!empty($PAGE->theme->settings->dashblocksenabled)) {
             ?>
         </section>
 
-        <?php
-        if ($hassidepost) {
-            echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');
-        }
+            <?php
+            if ($hassidepost) {
+                echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');
+            }
         }
     ?>
 

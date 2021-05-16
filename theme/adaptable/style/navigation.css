@@ -23,6 +23,16 @@
  *
  */
 
+.navbar {
+    min-height: 40px;
+}
+
+header .nav-item {
+    margin-bottom: auto;
+    margin-top: auto;
+    vertical-align: middle;
+}
+
 @media (max-width: 767px) {
     .nomobilenavigation .activity-navigation .text,
     .nomobilenavigation .section_footer .text {

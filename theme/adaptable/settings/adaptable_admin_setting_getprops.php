@@ -133,7 +133,7 @@ class adaptable_admin_setting_getprops extends admin_setting {
             $table->data  = array();
 
             foreach ($this->props as $propname => $propvalue) {
-                $table->data[] = array($propname, $propvalue);
+                $table->data[] = array($propname, '<pre>'.htmlentities($propvalue).'</pre>');
             }
             $return .= $propsexportbutton;
             $return .= html_writer::table($table);

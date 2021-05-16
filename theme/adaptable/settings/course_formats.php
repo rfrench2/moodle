@@ -26,31 +26,22 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Course Formats.
-$temp = new admin_settingpage('theme_adaptable_course', get_string('coursesettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_course', get_string('coursesettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_course', get_string('coursesettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_course', get_string('coursesettingsheading', 'theme_adaptable'),
         format_text(get_string('coursesettingsdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Course page, wide layout by moving sidebar to bottom.
-    $temp->add(new admin_setting_heading('coursepagesidebarinfooterenabledsection',
+    $page->add(new admin_setting_heading('coursepagesidebarinfooterenabledsection',
         get_string('coursepagesidebarinfooterenabledsection', 'theme_adaptable'),
         format_text(get_string('coursepagesidebarinfooterenabledsectiondesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
-
-    // Commonly used activities and resources.
-    require_once($CFG->dirroot . '/course/lib.php');
-    $name = 'theme_adaptable/commonlyusedar';
-    $title = get_string('commonlyusedar', 'theme_adaptable');
-    $description = get_string('commonlyusedardesc', 'theme_adaptable',
-        '\''.implode(', ', array_keys(get_module_types_names())).'\'');
-    $default = '';
-    $setting = new admin_setting_configtextarea($name, $title, $description, $default);
-    $temp->add($setting);
 
     $name = 'theme_adaptable/coursepagesidebarinfooterenabled';
     $title = get_string('coursepagesidebarinfooterenabled', 'theme_adaptable');
     $description = get_string('coursepagesidebarinfooterenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show Your progress string in the top of the course.
     $name = 'theme_adaptable/showyourprogress';
@@ -62,10 +53,10 @@ if ($ADMIN->fulltree) {
     );
     $setting = new admin_setting_configselect($name, $title, $description, '', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course page top slider block region enabled.
-    $temp->add(new admin_setting_heading('theme_adaptable_newsslider_heading',
+    $page->add(new admin_setting_heading('theme_adaptable_newsslider_heading',
         get_string('coursepagenewssliderblockregionheading', 'theme_adaptable'),
         format_text(get_string('coursepagenewssliderblockregionheadingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -73,10 +64,10 @@ if ($ADMIN->fulltree) {
     $title = get_string('coursepageblocksliderenabled', 'theme_adaptable');
     $description = get_string('coursepageblocksliderenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Activity end block region.
-    $temp->add(new admin_setting_heading('theme_adaptable_activity_bottom_heading',
+    $page->add(new admin_setting_heading('theme_adaptable_activity_bottom_heading',
         get_string('coursepageactivitybottomblockregionheading', 'theme_adaptable'),
         format_text(get_string('coursepageactivitybottomblockregionheadingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -84,11 +75,11 @@ if ($ADMIN->fulltree) {
     $title = get_string('coursepageblockactivitybottomenabled', 'theme_adaptable');
     $description = get_string('coursepageblockactivitybottomenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course block layout settings.
     get_string('coursepageblockregionsettings', 'theme_adaptable');
-    $temp->add(new admin_setting_heading('theme_adaptable_heading', get_string('coursepageblocklayoutbuilder', 'theme_adaptable'),
+    $page->add(new admin_setting_heading('theme_adaptable_heading', get_string('coursepageblocklayoutbuilder', 'theme_adaptable'),
                     format_text(get_string('coursepageblocklayoutbuilderdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Course page top / bottom block regions enabled.
@@ -96,10 +87,10 @@ if ($ADMIN->fulltree) {
     $title = get_string('coursepageblocksenabled', 'theme_adaptable');
     $description = get_string('coursepageblocksenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Heading for adding space between settings.
-    $temp->add(new admin_setting_heading('temp1', '', "<br>"));
+    $page->add(new admin_setting_heading('temp1', '', "<br>"));
 
     // Course page top block region builder.
     $noregions = 4; // Number of block regions defined in config.php.
@@ -110,28 +101,29 @@ if ($ADMIN->fulltree) {
     $name = 'theme_adaptable/coursepageblocklayoutlayouttoprow1';
     $title = get_string('coursepageblocklayoutlayouttoprow', 'theme_adaptable');
     $description = get_string('coursepageblocklayoutlayouttoprowdesc', 'theme_adaptable');
-    $default = $bootstrap12defaults[0];
+    $default = 0;
     $choices = $bootstrap12;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     $settingname = 'coursepageblocklayoutlayouttoprow1';
 
-    if (!isset($PAGE->theme->settings->$settingname)) {
-        $PAGE->theme->settings->$settingname = '0-0-0-0';
+    $courseformatsetting = get_config('theme_adaptable', $settingname);
+    if (!isset($courseformatsetting)) {
+        $courseformatsetting = '0-0-0-0';
     }
 
-    if ($PAGE->theme->settings->$settingname != '0-0-0-0') {
-        $imgblder .= '<img src="' . $imgpath . $PAGE->theme->settings->$settingname . '.png' . '" style="padding-top: 5px">';
+    if ($courseformatsetting != '0-0-0-0') {
+        $imgblder .= '<img src="'.$imgpath.$courseformatsetting.'.png" style="padding-top: 5px">';
     }
 
-    $vals = explode('-', $PAGE->theme->settings->$settingname);
+    $vals = explode('-', $courseformatsetting);
     foreach ($vals as $val) {
         if ($val > 0) {
             $totalblocks++;
         }
     }
-    $temp->add(new admin_setting_heading('layout_heading1', '', "<h4>" . get_string('layoutcheck', 'theme_adaptable') . "</h4>"));
+    $page->add(new admin_setting_heading('layout_heading1', '', "<h4>" . get_string('layoutcheck', 'theme_adaptable') . "</h4>"));
 
     $checkcountcolor = '#00695C';
     if ($totalblocks > $noregions) {
@@ -141,9 +133,9 @@ if ($ADMIN->fulltree) {
     $mktcountmsg .= get_string('layoutcount1', 'theme_adaptable').'<strong>'.$noregions.'</strong>';
     $mktcountmsg .= get_string('layoutcount2', 'theme_adaptable').'<strong>'.$totalblocks.'/'.$noregions.'</strong></span>.';
 
-    $temp->add(new admin_setting_heading('theme_adaptable_courselayouttopblockscount', '', $mktcountmsg));
+    $page->add(new admin_setting_heading('theme_adaptable_courselayouttopblockscount', '', $mktcountmsg));
 
-    $temp->add(new admin_setting_heading('theme_adaptable_courselayouttopbuilder', '', $imgblder . "<br><br><br><br>"));
+    $page->add(new admin_setting_heading('theme_adaptable_courselayouttopbuilder', '', $imgblder . "<br><br><br><br>"));
 
     // Course page bottom  block region builder.
     $noregions = 4; // Number of block regions defined in config.php.
@@ -154,29 +146,30 @@ if ($ADMIN->fulltree) {
     $name = 'theme_adaptable/coursepageblocklayoutlayoutbottomrow2';
     $title = get_string('coursepageblocklayoutlayoutbottomrow', 'theme_adaptable');
     $description = get_string('coursepageblocklayoutlayoutbottomrowdesc', 'theme_adaptable');
-    $default = $bootstrap12defaults[0];
+    $default = 0;
     $choices = $bootstrap12;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     $settingname = 'coursepageblocklayoutlayoutbottomrow2';
 
-    if (!isset($PAGE->theme->settings->$settingname)) {
-        $PAGE->theme->settings->$settingname = '0-0-0-0';
+    $courseformatsetting = get_config('theme_adaptable', $settingname);
+    if (!isset($courseformatsetting)) {
+        $courseformatsetting = '0-0-0-0';
     }
 
-    if ($PAGE->theme->settings->$settingname != '0-0-0-0') {
-        $imgblder .= '<img src="' . $imgpath . $PAGE->theme->settings->$settingname . '.png' . '" style="padding-top: 5px">';
+    if ($courseformatsetting != '0-0-0-0') {
+        $imgblder .= '<img src="'.$imgpath.$courseformatsetting.'.png" style="padding-top: 5px">';
     }
 
-    $vals = explode('-', $PAGE->theme->settings->$settingname);
+    $vals = explode('-', $courseformatsetting);
     foreach ($vals as $val) {
         if ($val > 0) {
             $totalblocks++;
         }
     }
 
-    $temp->add(new admin_setting_heading('layout_heading2', '', "<h4>" . get_string('layoutcheck', 'theme_adaptable') . "</h4>"));
+    $page->add(new admin_setting_heading('layout_heading2', '', "<h4>" . get_string('layoutcheck', 'theme_adaptable') . "</h4>"));
 
     $checkcountcolor = '#00695C';
     if ($totalblocks > $noregions) {
@@ -186,9 +179,9 @@ if ($ADMIN->fulltree) {
     $mktcountmsg .= get_string('layoutcount1', 'theme_adaptable').'<strong>'.$noregions.'</strong>';
     $mktcountmsg .= get_string('layoutcount2', 'theme_adaptable').'<strong>'.$totalblocks.'/'.$noregions.'</strong></span>.';
 
-    $temp->add(new admin_setting_heading('theme_adaptable_courselayoutbottomblockscount', '', $mktcountmsg));
+    $page->add(new admin_setting_heading('theme_adaptable_courselayoutbottomblockscount', '', $mktcountmsg));
 
-    $temp->add(new admin_setting_heading('theme_adaptable_courselayoutbottombuilder', '', $imgblder . "<br><br>"));
+    $page->add(new admin_setting_heading('theme_adaptable_courselayoutbottombuilder', '', $imgblder . "<br><br>"));
 
     // Current course section background color.
     $name = 'theme_adaptable/coursesectionbgcolor';
@@ -197,13 +190,13 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Courses course format heading.
     $name = 'theme_adaptable/settingscourses';
     $heading = get_string('settingscourses', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section heading background color.
     $name = 'theme_adaptable/coursesectionheaderbg';
@@ -212,7 +205,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section heading text color.
     $name = 'theme_adaptable/sectionheadingcolor';
@@ -221,7 +214,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#3A454b', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Current course section header background color.
     $name = 'theme_adaptable/currentcolor';
@@ -230,7 +223,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#d2f2ef', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Collapsed topics colour settings enabled.
     $name = 'theme_adaptable/collapsedtopicscoloursenabled';
@@ -238,13 +231,13 @@ if ($ADMIN->fulltree) {
     $description = get_string('collapsedtopicscoloursenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, false);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Topics / Weeks course format heading.
     $name = 'theme_adaptable/settingstopicsweeks';
     $heading = get_string('settingstopicsweeks', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section header border bottom style.
     $name = 'theme_adaptable/coursesectionheaderborderstyle';
@@ -253,7 +246,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $borderstyles;
     $setting = new admin_setting_configselect($name, $title, $description, 'none', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section header border bottom color.
     $name = 'theme_adaptable/coursesectionheaderbordercolor';
@@ -262,35 +255,34 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#F3F3F3', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section header border bottom width.
     $name = 'theme_adaptable/coursesectionheaderborderwidth';
     $title = get_string('coursesectionheaderborderwidth', 'theme_adaptable');
     $description = get_string('coursesectionheaderborderwidthdesc', 'theme_adaptable');
     $radchoices = $from0to6px;
-    ;
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border radius.
     $name = 'theme_adaptable/coursesectionheaderborderradiustop';
     $title = get_string('coursesectionheaderborderradiustop', 'theme_adaptable');
     $description = get_string('coursesectionheaderborderradiustopdesc', 'theme_adaptable');
     $radchoices = $from0to50px;
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border radius.
     $name = 'theme_adaptable/coursesectionheaderborderradiusbottom';
     $title = get_string('coursesectionheaderborderradiusbottom', 'theme_adaptable');
     $description = get_string('coursesectionheaderborderradiusbottomdesc', 'theme_adaptable');
     $radchoices = $from0to50px;
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border style.
     $name = 'theme_adaptable/coursesectionborderstyle';
@@ -299,17 +291,16 @@ if ($ADMIN->fulltree) {
     $radchoices = $borderstyles;
     $setting = new admin_setting_configselect($name, $title, $description, 'solid', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border width.
     $name = 'theme_adaptable/coursesectionborderwidth';
     $title = get_string('coursesectionborderwidth', 'theme_adaptable');
     $description = get_string('coursesectionborderwidthdesc', 'theme_adaptable');
     $radchoices = $from0to6px;
-    ;
     $setting = new admin_setting_configselect($name, $title, $description, '1px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border color.
     $name = 'theme_adaptable/coursesectionbordercolor';
@@ -318,23 +309,23 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#e8eaeb', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course section border radius.
     $name = 'theme_adaptable/coursesectionborderradius';
     $title = get_string('coursesectionborderradius', 'theme_adaptable');
     $description = get_string('coursesectionborderradiusdesc', 'theme_adaptable');
     $radchoices = $from0to50px;
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Activity display colours.
     // Course Activity section heading.
     $name = 'theme_adaptable/coursesectionactivitycolors';
     $heading = get_string('coursesectionactivitycolors', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Use Adaptable icons.
     $name = 'theme_adaptable/coursesectionactivityuseadaptableicons';
@@ -343,7 +334,7 @@ if ($ADMIN->fulltree) {
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Default icon size.
     $name = 'theme_adaptable/coursesectionactivityiconsize';
@@ -351,7 +342,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('coursesectionactivityiconsizedesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '24px');
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity heading colour.
     $name = 'theme_adaptable/coursesectionactivityheadingcolour';
@@ -360,7 +351,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#0066cc', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity section bottom border width.
     // This border was originally used all around an activity but changed to just the bottom.
@@ -370,7 +361,7 @@ if ($ADMIN->fulltree) {
     $widthchoices = $from0to6px;
     $setting = new admin_setting_configselect($name, $title, $description, '2px', $widthchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity section bottom border style.
     $name = 'theme_adaptable/coursesectionactivityborderstyle';
@@ -379,7 +370,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $borderstyles;
     $setting = new admin_setting_configselect($name, $title, $description, 'dashed', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity section bottom border colour.
     $name = 'theme_adaptable/coursesectionactivitybordercolor';
@@ -388,7 +379,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#eeeeee', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity section left border width.  Controls width of all left borders.
     $name = 'theme_adaptable/coursesectionactivityleftborderwidth';
@@ -397,7 +388,7 @@ if ($ADMIN->fulltree) {
     $widthchoices = $from0to6px;
     $setting = new admin_setting_configselect($name, $title, $description, '3px', $widthchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Assign Activity display colours.
     $name = 'theme_adaptable/coursesectionactivityassignleftbordercolor';
@@ -406,7 +397,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#0066cc', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Assign Activity background colour.
     $name = 'theme_adaptable/coursesectionactivityassignbgcolor';
@@ -415,7 +406,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Forum Activity display colours.
     $name = 'theme_adaptable/coursesectionactivityforumleftbordercolor';
@@ -424,7 +415,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#990099', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Forum Activity background colour.
     $name = 'theme_adaptable/coursesectionactivityforumbgcolor';
@@ -433,7 +424,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Quiz Activity display colours.
     $name = 'theme_adaptable/coursesectionactivityquizleftbordercolor';
@@ -441,7 +432,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('coursesectionactivityquizleftbordercolordesc', 'theme_adaptable');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FF3333', $previewconfig);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Quiz Activity background colour.
     $name = 'theme_adaptable/coursesectionactivityquizbgcolor';
@@ -449,7 +440,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('coursesectionactivityquizbgcolordesc', 'theme_adaptable');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Top and bottom margin spacing between activities.
     $name = 'theme_adaptable/coursesectionactivitymargintop';
@@ -458,7 +449,7 @@ if ($ADMIN->fulltree) {
     $widthchoices = $from0to12px;
     $setting = new admin_setting_configselect($name, $title, $description, '2px', $widthchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivitymarginbottom';
     $title = get_string('coursesectionactivitymarginbottom', 'theme_adaptable');
@@ -466,13 +457,13 @@ if ($ADMIN->fulltree) {
     $widthchoices = $from0to12px;
     $setting = new admin_setting_configselect($name, $title, $description, '2px', $widthchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // SocialWall course format heading.
     $name = 'theme_adaptable/socialwall';
     $heading = get_string('socialwall', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Socialwall background color.
     $name = 'theme_adaptable/socialwallbackgroundcolor';
@@ -481,7 +472,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall section border color.
     $name = 'theme_adaptable/socialwallbordercolor';
@@ -490,7 +481,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#B9B9B9', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall section border style.
     $name = 'theme_adaptable/socialwallbordertopstyle';
@@ -499,7 +490,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $borderstyles;
     $setting = new admin_setting_configselect($name, $title, $description, 'solid', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall section border width.
     $name = 'theme_adaptable/socialwallborderwidth';
@@ -508,7 +499,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $from0to12px;
     $setting = new admin_setting_configselect($name, $title, $description, '2px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall section border radius.
     $name = 'theme_adaptable/socialwallsectionradius';
@@ -517,7 +508,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $from0to12px;
     $setting = new admin_setting_configselect($name, $title, $description, '6px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall action link color.
     $name = 'theme_adaptable/socialwallactionlinkcolor';
@@ -526,7 +517,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#51666C', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Social Wall hover link color.
     $name = 'theme_adaptable/socialwallactionlinkhovercolor';
@@ -535,54 +526,55 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#009688', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course Activity Further Information section heading.
     $name = 'theme_adaptable/coursesectionactivityfurtherinformation';
     $heading = get_string('coursesectionactivityfurtherinformation', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationassign';
     $title = get_string('coursesectionactivityfurtherinformationassign', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationassigndesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationquiz';
     $title = get_string('coursesectionactivityfurtherinformationquiz', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationquizdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationchoice';
     $title = get_string('coursesectionactivityfurtherinformationchoice', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationchoicedesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationfeedback';
     $title = get_string('coursesectionactivityfurtherinformationfeedback', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationfeedbackdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationlesson';
     $title = get_string('coursesectionactivityfurtherinformationlesson', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationlessondesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/coursesectionactivityfurtherinformationdata';
     $title = get_string('coursesectionactivityfurtherinformationdata', 'theme_adaptable');
     $description = get_string('coursesectionactivityfurtherinformationdatadesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

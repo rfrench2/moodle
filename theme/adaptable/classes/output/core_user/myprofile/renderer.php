@@ -136,9 +136,11 @@ class renderer extends \core_user\output\myprofile\renderer {
     protected function transform_contact_category($oldcontactcategory) {
         $contactcategory = new category('contact', '');
 
-        $node = new node('contact', 'userimage', '', null, null,
-            $this->userimage());
-        $contactcategory->add_node($node);
+        $userimage = $this->userimage();
+        if (!empty($userimage)) {
+            $node = new node('contact', 'userimage adaptableuserpicture', '', null, null, $userimage);
+            $contactcategory->add_node($node);
+        }
 
         if ((empty($this->user->userdetails['firstname'])) || (empty($this->user->userdetails['lastname']))) {
             $node = new node('contact', 'fullname', '', null, null,
@@ -167,8 +169,19 @@ class renderer extends \core_user\output\myprofile\renderer {
         }
 
         if (!empty($this->user->userdetails['email'])) {
-            $node = new node('contact', 'email', '', null, null,
+            $node = new node('contact', 'email', get_string('email'), null, null,
                 $this->user->userdetails['email']);
+            $contactcategory->add_node($node);
+        }
+
+        if (!empty($this->user->userdetails['city'])) {
+            $node = new node('contact', 'city', get_string('city'), null, null,
+                $this->user->userdetails['city']);
+            $contactcategory->add_node($node);
+        }
+        if (!empty($this->user->userdetails['country'])) {
+            $node = new node('contact', 'country', get_string('country'), null, null,
+                $this->user->userdetails['country']);
             $contactcategory->add_node($node);
         }
 
@@ -371,9 +384,7 @@ class renderer extends \core_user\output\myprofile\renderer {
         $output = '';
 
         if (!empty($this->user)) {
-            $output .= html_writer::start_tag('li', array('class' => 'adaptableuserpicture'));
             $output .= $this->output->user_picture($this->user, array('size' => '1'));
-            $output .= html_writer::end_tag('li');
         }
 
         return $output;
@@ -400,19 +411,16 @@ class renderer extends \core_user\output\myprofile\renderer {
     /**
      * About me.
      *
-     * @return array
+     * @return category Obj
      */
     protected function create_aboutme() {
         $aboutme = new category('aboutme', get_string('aboutme', 'theme_adaptable'));
-        $descriptionempty = false;
-        $interestsempty = false;
 
         // Description.
         if (!empty($this->user->userdetails['description'])) {
             $description = $this->user->userdetails['description'];
         } else {
             $description = get_string('usernodescription', 'theme_adaptable');
-            $descriptionempty = true;
         }
         $node = new node('aboutme', 'description', get_string('description'), null, null,
             $description);
@@ -424,19 +432,92 @@ class renderer extends \core_user\output\myprofile\renderer {
             $interests = $this->output->tag_list(\core_tag_tag::get_item_tags('core', 'user', $this->user->id), '');
         } else {
             $interests = get_string('usernointerests', 'theme_adaptable');
-            $interestsempty = true;
         }
         $node = new node('aboutme', 'interests', get_string('interests'), null, null,
             $interests);
         $aboutme->add_node($node);
 
-        return array('category' => $aboutme, 'diempty' => (($descriptionempty) && ($interestsempty)));
+        // Optional.
+        $this->optional_fields($aboutme, 'aboutme');
+
+        return $aboutme;
+    }
+
+    /**
+     * Add the optional fields to the stated category if they are populated.
+     *
+     * @param category $category Category object to add to.
+     * @param string $categoryname Category name to add to.
+     */
+    protected function optional_fields(category $category, $categoryname) {
+        if (!empty($this->user->userdetails['url'])) {
+            $node = new node($categoryname, 'url', get_string('url'), null, null,
+                $this->user->userdetails['url'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['icq'])) {
+            $node = new node($categoryname, 'icq', get_string('icqnumber'), null, null,
+                $this->user->userdetails['icq'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['skype'])) {
+            $node = new node($categoryname, 'skype', get_string('skypeid'), null, null,
+                $this->user->userdetails['skype'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['yahoo'])) {
+            $node = new node($categoryname, 'yahoo', get_string('yahooid'), null, null,
+                $this->user->userdetails['yahoo'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['aim'])) {
+            $node = new node($categoryname, 'aim', get_string('aimid'), null, null,
+                $this->user->userdetails['aim'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['msn'])) {
+            $node = new node($categoryname, 'msn', get_string('msnid'), null, null,
+                $this->user->userdetails['msn'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['address'])) {
+            $node = new node($categoryname, 'address', get_string('address'), null, null,
+                $this->user->userdetails['address'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['phone1'])) {
+            $node = new node($categoryname, 'phone1', get_string('phone1'), null, null,
+                $this->user->userdetails['phone1'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['phone2'])) {
+            $node = new node($categoryname, 'phone2', get_string('phone2'), null, null,
+                $this->user->userdetails['phone2'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['idnumber'])) {
+            $node = new node($categoryname, 'idnumber', get_string('idnumber'), null, null,
+                $this->user->userdetails['idnumber'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['institution'])) {
+            $node = new node($categoryname, 'institution', get_string('institution'), null, null,
+                $this->user->userdetails['institution'], null, 'aduseropt');
+            $category->add_node($node);
+        }
+        if (!empty($this->user->userdetails['department'])) {
+            $node = new node($categoryname, 'department', get_string('department'), null, null,
+                $this->user->userdetails['department'], null, 'aduseropt');
+            $category->add_node($node);
+        }
     }
 
     /**
      * Custom user profile.
      *
-     * @return Obj
+     * TODO: May need to change, somehow, to use display_data(), see: userprofilefields().
+     *
+     * @return category Obj or null if not created.
      */
     protected function customuserprofile() {
         $category = null;
@@ -493,25 +574,29 @@ class renderer extends \core_user\output\myprofile\renderer {
             $customcoursetitleprofilefield = get_config('theme_adaptable', 'customcoursetitle');
             $customcoursesubtitleprofilefield = get_config('theme_adaptable', 'customcoursesubtitle');
 
-            $customfieldscat = new category('customfields', get_string('customfields', 'theme_adaptable'));
-
+            $customfieldscat = new category('customfields', '');
             $hasnodes = false;
-            foreach ($this->user->userdetails['customfields'] as $cfield) {
-                if ((!empty($customcoursetitleprofilefield)) && ($cfield['shortname'] == $customcoursetitleprofilefield)) {
-                    continue;
+
+            $categories = profile_get_user_fields_with_data_by_category($this->user->id);
+            foreach ($categories as $categoryid => $fields) {
+                foreach ($fields as $formfield) {
+                    if ((!empty($customcoursetitleprofilefield)) && ($formfield->field->shortname == $customcoursetitleprofilefield)) {
+                        continue;
+                    }
+                    if ((!empty($customcoursesubtitleprofilefield)) && ($formfield->field->shortname == $customcoursesubtitleprofilefield)) {
+                        continue;
+                    }
+                    if ($formfield->is_visible() and !$formfield->is_empty()) {
+                        $node = new node('customfields', 'custom_field_' . $formfield->field->shortname,
+                            format_string($formfield->field->name), null, null, $formfield->display_data());
+                        $customfieldscat->add_node($node);
+                        $hasnodes = true;
+                    }
                 }
-                if ((!empty($customcoursesubtitleprofilefield)) && ($cfield['shortname'] == $customcoursesubtitleprofilefield)) {
-                    continue;
-                }
-                $node = new node('customfields', $cfield['shortname'], $cfield['name'], null, null, $cfield['value']);
-                $customfieldscat->add_node($node);
-                $hasnodes = true;
             }
 
             if ($hasnodes) {
-                $output .= html_writer::start_tag('div', array('class' => 'col-12 '.$customfieldscat->name));
                 $output .= $this->render($customfieldscat);
-                $output .= html_writer::end_tag('div');
             }
         }
 
@@ -553,8 +638,7 @@ class renderer extends \core_user\output\myprofile\renderer {
         $tabdata->tabs = array();
 
         // Aboutme tab.
-        $aboutme = $this->create_aboutme();
-        $category = $aboutme['category'];
+        $category = $this->create_aboutme();
         $aboutmetab = new \stdClass;
         $aboutmetab->name = $category->name;
         $aboutmetab->displayname = $category->title;
@@ -566,6 +650,8 @@ class renderer extends \core_user\output\myprofile\renderer {
             $category->notitle = true;
         }
         $aboutmetab->content .= $this->render($category);
+        // Custom fields on About me tab.
+        $aboutmetab->content .= $this->userprofilefields();
         $tabdata->tabs[] = $aboutmetab;
 
         foreach ($tabcategories as $categoryname) {
@@ -597,7 +683,6 @@ class renderer extends \core_user\output\myprofile\renderer {
             $misccontent .= $this->render($category);
             $misccontent .= html_writer::end_tag('div');
         }
-        $misccontent .= $this->userprofilefields();
         $misccontent .= html_writer::end_tag('div');
         $tab = new \stdClass;
         $tab->name = 'more';
@@ -616,15 +701,8 @@ class renderer extends \core_user\output\myprofile\renderer {
             $category->notitle = true;
             $editprofiletab->content = $this->render($category);
             $tabdata->tabs[] = $editprofiletab;
-
-            if ($aboutme['diempty']) {
-                $editprofiletab->selected = true;
-            } else {
-                $aboutmetab->selected = true;
-            }
-        } else {
-            $aboutmetab->selected = true;
         }
+        $aboutmetab->selected = true;
 
         return $this->render_from_template('theme_adaptable/tabs', $tabdata);
     }

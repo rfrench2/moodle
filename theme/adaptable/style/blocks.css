@@ -46,10 +46,10 @@
 /* Reset border values */
 [class^="block-side-"] .card-body,
 .block {
-    background: [[setting:blockbackgroundcolor]] !important;
+    background-color: [[setting:blockbackgroundcolor]];
     border: none !important;
-    box-shadow: none !important;
     border-radius: 0 !important;
+    box-shadow: none !important;
     margin-bottom: 2px;
 }
 
@@ -123,28 +123,9 @@
     padding: 10px 5px;
 }
 
-.block .content a,
-.block .content li a,
-.block .content td a {
-    color: [[setting:linkcolor]];
-}
-
-.block .content a:hover,
-.block .content li a:hover,
-.block .content td a:hover {
-    color: [[setting:linkhover]];
-    text-decoration: none !important;
-}
-
 .block .block-hider-show,
 .block .block-hider-hide {
     width: 18px;
-}
-
-/* Added for 3.7 to make dropdowns in blocks be like Boost default as Adaptable styling above for .block .content a makes it appear dark and not unreadable. */
-.block .content a.dropdown-item:active {
-    background-color: [[setting:navbardropdownhovercolor]];
-    color: [[setting:navbardropdowntexthovercolor]];
 }
 
 /** Some specific block styles for calendar block, login block, my profile block, etc. **/
@@ -425,10 +406,6 @@
     opacity: 1;
 }
 
-.block .block-hider-show, .block .block-hider-hide {
-    width: 12px;
-}
-
 body.has_dock div#dock {
     z-index: 3;
 }
@@ -441,165 +418,165 @@ body.has_dock div#dock {
 
 /* Add or hide block icons */
 .showblockicons .block .header .title h2:before {
+    content: "\f0c9";
+    display: inline-block;
     font-family: "FontAwesome" !important;
-    font-weight: 900 !important;
     font-size: [[setting:blockiconsheadersize]];
     font-style: normal;
     font-variant: normal;
-    text-rendering: auto;
-    content: "\f0c9";
+    font-weight: 900 !important;
     padding-right: 8px;
-    display: inline-block;
+    text-rendering: auto;
 }
 
 /* Block Icons */
-.showblockicons .block_news_items h2:before {
+.showblockicons .block_news_items.block .header .title h2:before {
     content: "\f0a1";
 }
 
-.showblockicons .block_navigation h2:before {
+.showblockicons .block_navigation.block .header .title h2:before {
     content: "\f0e8";
 }
 
-.showblockicons .block_calendar_upcoming h2:before,
-.showblockicons .block_calendar_month h2:before {
+.showblockicons .block_calendar_upcoming.block .header .title h2:before,
+.showblockicons .block_calendar_month.block .header .title h2:before {
     content: "\f133";
 }
 
-.showblockicons .block_course_list h2:before {
+.showblockicons .block_course_list.block .header .title h2:before {
     content: "\f108";
 }
 
-.showblockicons .block_completionstatus h2:before,
-.showblockicons .block_selfcompletion h2:before {
+.showblockicons .block_completionstatus.block .header .title h2:before,
+.showblockicons .block_selfcompletion.block .header .title h2:before {
     content: "\f0e4";
 }
 
-.showblockicons .block_blog_menu h2:before {
+.showblockicons .block_blog_menu.block .header .title h2:before {
     content: "\f02d";
 }
 
-.showblockicons .block_quiz_results h2:before {
+.showblockicons .block_quiz_results.block .header .title h2:before {
     content: "\f080";
 }
 
-.showblockicons .block_quiz_navblock h2:before {
+.showblockicons .block_quiz_navblock.block .header .title h2:before {
     content: "\f126";
 }
 
-.showblockicons .block_glossary_random h2:before {
+.showblockicons .block_glossary_random.block .header .title h2:before {
     content: "\f0eb";
 }
 
-.showblockicons .block_book_toc h2:before {
+.showblockicons .block_book_toc.block .header .title h2:before {
     content: "\f02d";
 }
 
-.showblockicons .block_participants h2:before,
-.showblockicons .block_online_users h2:before {
+.showblockicons .block_participants.block .header .title h2:before,
+.showblockicons .block_online_users.block .header .title h2:before {
     content: "\f0c0";
 }
 
-.showblockicons .block_html h2:before {
+.showblockicons .block_html.block .header .title h2:before {
     content: "\f022";
 }
 
-.showblockicons .block_section_links h2:before {
+.showblockicons .block_section_links.block .header .title h2:before {
     content: "\f02e";
 }
 
-.showblockicons .block_activity_modules h2:before {
+.showblockicons .block_activity_modules.block .header .title h2:before {
     content: "\f12e";
 }
 
-.showblockicons .block_comments h2:before {
+.showblockicons .block_comments.block .header .title h2:before {
     content: "\f075";
 }
 
-.showblockicons .block_settings h2:before {
+.showblockicons .block_settings.block .header .title h2:before {
     content: "\f085";
 }
 
-.showblockicons .block_admin_bookmarks h2:before {
+.showblockicons .block_admin_bookmarks.block .header .title h2:before {
     content: "\f02e";
 }
 
-.showblockicons .block_blog_tags h2:before,
-.showblockicons .block_tags h2:before {
+.showblockicons .block_blog_tags.block .header .title h2:before,
+.showblockicons .block_tags.block .header .title h2:before {
     content: "\f02c";
 }
 
-.showblockicons .block_private_files h2:before {
+.showblockicons .block_private_files.block .header .title h2:before {
     content: "\f07b";
 }
 
-.showblockicons .block_block_mentees h2:before {
+.showblockicons .block_block_mentees.block .header .title h2:before {
     content: "\f0c0";
 }
 
-.showblockicons .block_messages h2:before {
+.showblockicons .block_messages.block .header .title h2:before {
     content: "\f0e0";
 }
 
-.showblockicons .block_community h2:before {
+.showblockicons .block_community.block .header .title h2:before {
     content: "\f0ac";
 }
 
-.showblockicons .block_recent_activity h2:before {
+.showblockicons .block_recent_activity.block .header .title h2:before {
     content: "\f017";
 }
 
-.showblockicons .block_rss_client h2:before {
+.showblockicons .block_rss_client.block .header .title h2:before {
     content: "\f09e";
 }
 
-.showblockicons .block_search_forums h2:before,
-.showblockicons .block_globalsearch h2:before {
+.showblockicons .block_search_forums.block .header .title h2:before,
+.showblockicons .block_globalsearch.block .header .title h2:before {
     content: "\f002";
 }
 
-.showblockicons .block_myprofile h2:before {
+.showblockicons .block_myprofile.block .header .title h2:before {
     content: "\f007";
 }
 
-.showblockicons .block_adminblock h2:before {
+.showblockicons .block_adminblock.block .header .title h2:before {
     content: "\f009";
 }
 
-.showblockicons .block_feedback h2:before {
+.showblockicons .block_feedback.block .header .title h2:before {
     content: "\f087";
 }
 
-.showblockicons .block_flickr h2:before {
+.showblockicons .block_flickr.block .header .title h2:before {
     content: "\f03e";
 }
 
-.showblockicons .block_youtube h2:before {
+.showblockicons .block_youtube.block .header .title h2:before {
     content: "\f145";
 }
 
-.showblockicons .block_course_badges h2:before,
-.showblockicons .block_badges h2:before {
+.showblockicons .block_course_badges.block .header .title h2:before,
+.showblockicons .block_badges.block .header .title h2:before {
     content: "\f0a3";
 }
 
-.showblockicons .block_twitter_search h2:before {
+.showblockicons .block_twitter_search.block .header .title h2:before {
     content: "\f099";
 }
 
-.showblockicons .block_overview h2:before {
+.showblockicons .block_overview.block .header .title h2:before {
     content: "\f03a";
 }
 
-.showblockicons .block_timeline h2:before {
+.showblockicons .block_timeline.block .header .title h2:before {
     content: "\f062";
 }
 
-.showblockicons .block_starredcourses h2:before {
+.showblockicons .block_starredcourses.block .header .title h2:before {
     content: "\f005";
 }
 
-.showblockicons .block_lp h2:before {
+.showblockicons .block_lp.block .header .title h2:before {
     content: "\f277";
 }
 

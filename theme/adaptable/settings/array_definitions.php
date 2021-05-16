@@ -1031,18 +1031,18 @@ if ($ADMIN->fulltree) {
     );
 
     // Pixels.
-    $from0to6px = array();
-    for ($i = 0; $i < 7; $i++) {
+    $from0to6px = array('0' => '0');
+    for ($i = 1; $i < 7; $i++) {
         $from0to6px[$i . 'px'] = $i . 'px';
     }
 
-    $from0to8px = array();
-    for ($i = 0; $i < 9; $i++) {
+    $from0to8px = array('0' => '0');
+    for ($i = 1; $i < 9; $i++) {
         $from0to8px[$i . 'px'] = $i . 'px';
     }
 
-    $from0to12px = array();
-    for ($i = 0; $i < 13; $i++) {
+    $from0to12px = array('0' => '0');
+    for ($i = 1; $i < 13; $i++) {
         $from0to12px[$i . 'px'] = $i . 'px';
     }
 
@@ -1051,8 +1051,8 @@ if ($ADMIN->fulltree) {
         $from10to16px[$i . 'px'] = $i . 'px';
     }
 
-    $from0to20px = array();
-    for ($i = 0; $i < 21; $i++) {
+    $from0to20px = array('0' => '0');
+    for ($i = 1; $i < 21; $i++) {
         $from0to20px[$i . 'px'] = $i . 'px';
     }
 
@@ -1071,18 +1071,18 @@ if ($ADMIN->fulltree) {
         $from10to30pxnovalueunit[$i] = $i . 'px';
     }
 
-    $from0to30px = array();
-    for ($i = 0; $i < 31; $i++) {
+    $from0to30px = array('0' => '0');
+    for ($i = 1; $i < 31; $i++) {
         $from0to30px[$i . 'px'] = $i . 'px';
     }
 
-    $from0to50px = array();
-    for ($i = 0; $i < 51; $i++) {
+    $from0to50px = array('0' => '0');
+    for ($i = 1; $i < 51; $i++) {
         $from0to50px[$i . 'px'] = $i . 'px';
     }
 
-    $from0to100px = array();
-    for ($i = 0; $i < 101; $i++) {
+    $from0to100px = array('0' => '0');
+    for ($i = 1; $i < 101; $i++) {
         $from0to100px[$i . 'px'] = $i . 'px';
     }
 

@@ -27,9 +27,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Custom CSS and JS section.
-$temp = new admin_settingpage('theme_adaptable_generic', get_string('customcssjssettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_generic', get_string('genericsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_generic', get_string('customcssjssettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_generic', get_string('genericsettingsheading', 'theme_adaptable'),
         format_text(get_string('genericsettingsdescription', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Custom CSS file.
@@ -39,7 +40,7 @@ if ($ADMIN->fulltree) {
     $default = '';
     $setting = new admin_setting_configtextarea($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Section for javascript to be added e.g. Google Analytics.
     $name = 'theme_adaptable/jssection';
@@ -47,7 +48,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('jssectiondesc', 'theme_adaptable');
     $default = '';
     $setting = new admin_setting_configtextarea($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Section for custom javascript, restricted by profile field.
     $name = 'theme_adaptable/jssectionrestricted';
@@ -55,19 +56,20 @@ if ($ADMIN->fulltree) {
     $description = get_string('jssectionrestricteddesc', 'theme_adaptable');
     $default = '';
     $setting = new admin_setting_configtextarea($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/jssectionrestrictedprofilefield';
     $title = get_string('jssectionrestrictedprofilefield', 'theme_adaptable');
     $description = get_string('jssectionrestrictedprofilefielddesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/jssectionrestricteddashboardonly';
     $title = get_string('jssectionrestricteddashboardonly', 'theme_adaptable');
     $description = get_string('jssectionrestricteddashboardonlydesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

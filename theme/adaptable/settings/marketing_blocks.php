@@ -26,9 +26,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Marketing blocks section.
-$temp = new admin_settingpage('theme_adaptable_frontpage_blocks', get_string('frontpageblocksettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_marketing', get_string('marketingsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_frontpage_blocks', get_string('frontpageblocksettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_marketing', get_string('marketingsettingsheading', 'theme_adaptable'),
         format_text(get_string('marketingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $name = 'theme_adaptable/infobox';
@@ -36,53 +37,53 @@ if ($ADMIN->fulltree) {
     $description = get_string('infoboxdesc', 'theme_adaptable');
     $default = '';
     $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/infobox2';
     $title = get_string('infobox2', 'theme_adaptable');
     $description = get_string('infobox2desc', 'theme_adaptable');
     $default = '';
     $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/infoboxfullscreen';
     $title = get_string('infoboxfullscreen', 'theme_adaptable');
     $description = get_string('infoboxfullscreendesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/frontpagemarketenabled';
     $title = get_string('frontpagemarketenabled', 'theme_adaptable');
     $description = get_string('frontpagemarketenableddesc', 'theme_adaptable');
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/frontpagemarketoption';
     $title = get_string('frontpagemarketoption', 'theme_adaptable');
     $description = get_string('frontpagemarketoptiondesc', 'theme_adaptable');
     $choices = $marketblockstyles;
     $setting = new admin_setting_configselect($name, $title, $description, 'covtiles', $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
-    $temp->add(new admin_setting_heading('theme_adaptable_marketingbuilder',
+    $page->add(new admin_setting_heading('theme_adaptable_marketingbuilder',
         get_string('marketingbuilderheading', 'theme_adaptable'),
         format_text(get_string('marketingbuilderdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Marketing block region builder.
     list('imgblder' => $imgblder, 'totalblocks' => $totalblocks) = \theme_adaptable\toolbox::admin_settings_layout_builder(
-        $temp, 'marketlayoutrow', $marketingfooterbuilderdefaults, $bootstrap12);
+        $page, 'marketlayoutrow', $marketingfooterbuilderdefaults, $bootstrap12);
 
-    $temp->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
+    $page->add(new admin_setting_heading('theme_adaptable_blocklayoutcheck', get_string('layoutcheck', 'theme_adaptable'),
         format_text(get_string('layoutcheckdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
-    $temp->add(new admin_setting_heading('theme_adaptable_layoutbuilder', '', $imgblder));
+    $page->add(new admin_setting_heading('theme_adaptable_layoutbuilder', '', $imgblder));
 
     $blkcontmsg = get_string('layoutaddcontentdesc1', 'theme_adaptable');
     $blkcontmsg .= $totalblocks;
     $blkcontmsg .= get_string('layoutaddcontentdesc2', 'theme_adaptable');
 
-    $temp->add(new admin_setting_heading('theme_adaptable_blocklayoutaddcontent', get_string('layoutaddcontent', 'theme_adaptable'),
+    $page->add(new admin_setting_heading('theme_adaptable_blocklayoutaddcontent', get_string('layoutaddcontent', 'theme_adaptable'),
         format_text($blkcontmsg, FORMAT_MARKDOWN)));
 
 
@@ -92,7 +93,8 @@ if ($ADMIN->fulltree) {
         $description = get_string('marketdesc', 'theme_adaptable');
         $default = '';
         $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-        $temp->add($setting);
+        $page->add($setting);
     }
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

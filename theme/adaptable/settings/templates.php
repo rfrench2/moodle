@@ -25,8 +25,9 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Templates.
-$page = new admin_settingpage('theme_adaptable_templates', get_string('templatessettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
+    $page = new admin_settingpage('theme_adaptable_templates', get_string('templatessettings', 'theme_adaptable'));
+
     $page->add(new admin_setting_heading('theme_adaptable_templates_heading', get_string('templatesheading', 'theme_adaptable'),
     format_text(get_string('templatesheadingdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
@@ -45,26 +46,24 @@ if ($ADMIN->fulltree) {
     $default = array();
     $setting = new admin_setting_configmultiselect($name, $title, $description, $default, $templates);
     $page->add($setting);
-}
-$ADMIN->add('theme_adaptable', $page);
 
-$overridetemplates = get_config('theme_adaptable', 'templatessel');
-if ($overridetemplates) {
-    if ($ADMIN->fulltree) {
+    $asettings->add($page);
+
+    $overridetemplates = get_config('theme_adaptable', 'templatessel');
+    if ($overridetemplates) {
         if (file_exists("{$CFG->dirroot}/theme/adaptable/settings/adaptable_admin_setting_configtemplate.php")) {
             require_once($CFG->dirroot.'/theme/adaptable/settings/adaptable_admin_setting_configtemplate.php');
         } else if (!empty($CFG->themedir) &&
             file_exists("{$CFG->themedir}/adaptable/settings/adaptable_admin_setting_configtemplate.php")) {
             require_once($CFG->themedir.'/adaptable/settings/adaptable_admin_setting_configtemplate.php');
         }
-    }
 
-    $overridetemplates = explode(',', $overridetemplates);
-    foreach ($overridetemplates as $overridetemplate) {
-        $overridetemplatesetting = str_replace('/', '_', $overridetemplate);
-        $temppage = new admin_settingpage('theme_adaptable_templates_'.$overridetemplatesetting,
-            get_string('overridetemplate', 'theme_adaptable', $overridetemplate));
-        if ($ADMIN->fulltree) {
+        $overridetemplates = explode(',', $overridetemplates);
+        foreach ($overridetemplates as $overridetemplate) {
+            $overridetemplatesetting = str_replace('/', '_', $overridetemplate);
+            $temppage = new admin_settingpage('theme_adaptable_templates_'.$overridetemplatesetting,
+                get_string('overridetemplate', 'theme_adaptable', $overridetemplate));
+
             $name = 'theme_adaptable/activatetemplateoverride_'.$overridetemplatesetting;
             $title = get_string('activatetemplateoverride', 'theme_adaptable', $overridetemplate);
             $description = get_string('activatetemplateoverridedesc', 'theme_adaptable',
@@ -78,7 +77,8 @@ if ($overridetemplates) {
             $default = '';
             $setting = new adaptable_admin_setting_configtemplate($name, $title, $description, $default, $overridetemplate);
             $temppage->add($setting);
+
+            $asettings->add($temppage);
         }
-        $ADMIN->add('theme_adaptable', $temppage);
     }
 }

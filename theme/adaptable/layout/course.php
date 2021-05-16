@@ -29,7 +29,6 @@
  * 08/01/19 - Added this header; added additional regions for customized blocks.
  * 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
  *
- *
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -71,15 +70,13 @@ if ($movesidebartofooter) {
     ?>
     <div id="page-content" class="row<?php echo $regions['direction'];?>">
         <?php
-
         // If course page, display course top block region.
-        if (!empty($PAGE->theme->settings->coursepageblocksenabled)) { ?>
-            <div id="frontblockregion" class="container">
-            <div class="row">
-            <?php echo $OUTPUT->get_block_regions('coursepageblocklayoutlayouttoprow', 'course-top-'); ?>
-            </div>
-            </div>
-        <?php
+        if (!empty($PAGE->theme->settings->coursepageblocksenabled)) {
+            echo '<div id="frontblockregion" class="container">';
+            echo '<div class="row">';
+            echo $OUTPUT->get_block_regions('coursepageblocklayoutlayouttoprow', 'course-top-');
+            echo '</div>';
+            echo '</div>';
         }
         ?>
 
@@ -214,13 +211,12 @@ if ($movesidebartofooter == false) {
 }
 
 // If course page, display course bottom block region.
-if (!empty($PAGE->theme->settings->coursepageblocksenabled)) { ?>
-    <div id="frontblockregion" class="container">
-        <div class="row">
-    <?php echo $OUTPUT->get_block_regions('coursepageblocklayoutlayoutbottomrow', 'course-bottom-'); ?>
-        </div>
-    </div>
-<?php
+if (!empty($PAGE->theme->settings->coursepageblocksenabled)) {
+    echo '<div id="frontblockregion" class="container">';
+    echo '<div class="row">';
+    echo $OUTPUT->get_block_regions('coursepageblocklayoutlayoutbottomrow', 'course-bottom-');
+    echo '</div>';
+    echo '</div>';
 }
 
 if ($movesidebartofooter) {

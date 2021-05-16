@@ -39,18 +39,6 @@ order for prescidence.
     .zoomdesc {
         display: none;
     }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar-nav > li > a {
-        padding: 2px 4px;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:first-child a {
-        margin-left: -4px;
-    }
-
-    #adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:last-child a {
-        margin-right: -4px;
-    }
 }
 
 /*=====================================================
@@ -161,8 +149,8 @@ order for prescidence.
         display: none;
     }
 
-    #edittingbutton a,
-    #edittingbutton .btn {
+    #editingbutton a,
+    #editingbutton .btn {
         margin-left: 10px !important;
     }
 
@@ -170,7 +158,8 @@ order for prescidence.
         padding-bottom: 5px;
     }
 
-    .search-box, .searchbox {
+    .search-box,
+    .searchbox {
         margin: 0;
         width: 100%;
     }
@@ -209,7 +198,7 @@ order for prescidence.
         padding-bottom: 4px;
     }
 
-    #edittingbutton {
+    #editingbutton {
         margin-left: 10px;
     }
 
@@ -351,10 +340,6 @@ order for prescidence.
     }
 
     #page-site-index a.submit {
-        display: block;
-        margin: 5px auto;
-        text-align: center;
-        white-space: normal;
         width: auto;
     }
 
@@ -398,8 +383,8 @@ order for prescidence.
         margin: 50px 0;
     }
 
-    #edittingbutton a,
-    #edittingbutton .btn {
+    #editingbutton a,
+    #editingbutton .btn {
         margin-left: -10px !important;
     }
 
@@ -665,8 +650,8 @@ Other.
 
     .chooserdialogue .moodle-dialogue-wrap .moodle-dialogue-bd {
         padding: 0;
-        border-bottom-right-radius: 0px;
-        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
     /* End Activity chooser styling. */
@@ -675,7 +660,7 @@ Other.
 
 @media (min-width: 768px) {
     #above-header .linksmenu {
-        margin-left: 0px;
+        margin-left: 0;
     }
 
     .adaptable-drawer {

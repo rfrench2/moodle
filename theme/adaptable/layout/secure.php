@@ -63,4 +63,5 @@ $regions = theme_adaptable_grid($left, $hassidepost);
     <?php echo $PAGE->theme->settings->jssection;?>
 </script>
 
-<?php echo $OUTPUT->standard_end_of_body_html();
+<?php
+require_once(dirname(__FILE__) . '/includes/nofooter.php');

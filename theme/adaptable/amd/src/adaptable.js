@@ -61,7 +61,7 @@ define(['jquery', 'core/log'], function($ , log) {
 
                 // Edit button keep position.  Needs session storage!
                 try {
-                    $('.context-header-settings-menu .dropdown-menu .dropdown-item a[href*="edit"], #edittingbutton a').click(function(event) {
+                    $('.context-header-settings-menu .dropdown-menu .dropdown-item a[href*="edit"], #editingbutton a').click(function(event) {
                         event.preventDefault();
 
                         var to = $(window).scrollTop();

@@ -26,9 +26,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$temp = new admin_settingpage('theme_adaptable_usernav', get_string('usernav', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_usernav', get_string('usernavheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_usernav', get_string('usernav', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_usernav', get_string('usernavheading', 'theme_adaptable'),
            format_text(get_string('usernavdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Position of the username.
@@ -40,14 +41,14 @@ if ($ADMIN->fulltree) {
         'right' => get_string('right', 'editor')
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'left', $poschoices);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/hideinforum';
     $title = get_string('hideinforum', 'theme_adaptable');
     $description = get_string('hideinforumdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable My.
     $name = 'theme_adaptable/enablemy';
@@ -55,7 +56,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablemydesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable View Profile.
     $name = 'theme_adaptable/enableprofile';
@@ -63,7 +64,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableprofiledesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Edit Profile.
     $name = 'theme_adaptable/enableeditprofile';
@@ -71,7 +72,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableeditprofiledesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Calendar.
     $name = 'theme_adaptable/enablecalendar';
@@ -79,7 +80,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablecalendardesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Private Files.
     $name = 'theme_adaptable/enableprivatefiles';
@@ -87,7 +88,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableprivatefilesdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Grades.
     $name = 'theme_adaptable/enablegrades';
@@ -95,7 +96,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablegradesdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Badges.
     $name = 'theme_adaptable/enablebadges';
@@ -103,7 +104,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablebadgesdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Preferences.
     $name = 'theme_adaptable/enablepref';
@@ -111,7 +112,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableprefdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Notes.
     $name = 'theme_adaptable/enablenote';
@@ -119,7 +120,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablenotedesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Blog.
     $name = 'theme_adaptable/enableblog';
@@ -127,7 +128,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableblogdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Forum posts.
     $name = 'theme_adaptable/enableposts';
@@ -135,7 +136,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablepostsdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable My Feedback.
     $name = 'theme_adaptable/enablefeed';
@@ -143,7 +144,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablefeeddesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Accessibility Tool.
     $name = 'theme_adaptable/enableaccesstool';
@@ -151,6 +152,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableaccesstooldesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

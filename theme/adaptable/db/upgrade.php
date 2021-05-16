@@ -27,32 +27,29 @@
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Automatically purge caches during upgrades.
+ * Upgrade.
  *
  * @param int   $oldversion Is this an old version
- * @return bool Return true
+ * @return bool Success.
  */
 function xmldb_theme_adaptable_upgrade($oldversion = 0) {
-    global $CFG;
 
-    if ($CFG->branch == 39) {
-        if ($oldversion < 2020073101) {
-            if (get_config('theme_adaptable', 'fontname') == 'default') {
-                set_config('fontname', 'sans-serif', 'theme_adaptable');
-            }
-            if (get_config('theme_adaptable', 'fontheadername') == 'default') {
-                set_config('fontheadername', 'sans-serif', 'theme_adaptable');
-            }
-            if (get_config('theme_adaptable', 'fonttitlename') == 'default') {
-                set_config('fonttitlename', 'sans-serif', 'theme_adaptable');
-            }
+    if ($oldversion < 2020073101) {
+        if (get_config('theme_adaptable', 'fontname') == 'default') {
+            set_config('fontname', 'sans-serif', 'theme_adaptable');
         }
+        if (get_config('theme_adaptable', 'fontheadername') == 'default') {
+            set_config('fontheadername', 'sans-serif', 'theme_adaptable');
+        }
+        if (get_config('theme_adaptable', 'fonttitlename') == 'default') {
+            set_config('fonttitlename', 'sans-serif', 'theme_adaptable');
+        }
+
+        upgrade_plugin_savepoint(true, 2020073101, 'theme', 'adaptable');
     }
 
     // Automatic 'Purge all caches'....
-    if ($oldversion < 2119100900) {
-        purge_all_caches();
-    }
+    purge_all_caches();
 
     return true;
 }

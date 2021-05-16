@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class theme_adaptable_toolbox_testcase extends advanced_testcase {
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
 
         set_config('theme', 'adaptable');

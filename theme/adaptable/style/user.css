@@ -33,16 +33,20 @@
     margin-bottom: 5px;
 }
 
+#page-user-profile .node_category li.aduseropt {
+    margin: 0;
+}
+
+#page-user-profile .node_category li.aduseropt dl {
+    margin-bottom: 0;
+}
+
 #adaptable_profile_tree .ucol1 .node_category.contact {
     margin-top: 3.5em; /* Magic number to line up with tabs. */
 }
 
-#adaptable_profile_tree .ucol1 .node_category.contact .firstname,
-#adaptable_profile_tree .ucol1 .node_category.contact .fullname {
-    padding-top: 30px;
-}
-
 #adaptable_profile_tree .ucol1 .adaptableuserpicture {
+    padding-bottom: 30px;
     position: relative;
 }
 
@@ -50,7 +54,7 @@
     left: 0;
     position: absolute;
     right: 0;
-    top: -80px;
+    top: -60px;
 }
 
 #adaptable_profile_tree .ucol1 .adaptableuserpicture a img.userpicture {

@@ -57,15 +57,15 @@
 
 /* CSS for the one topic format tabs. */
 .onetopic .nav-tabs .nav-link {
-    margin: 2px; /* Magic number so tabs can have border. */
     border: 1px solid #eee;
     border-bottom-color: transparent;
+    margin: 2px; /* Magic number so tabs can have border. */
 }
 
 /* Give active tabs brand colour background. */
 .onetopic .nav-tabs .nav-link.active,
 .onetopic .nav-tabs .nav-item.show .nav-link {
     background-color: [[setting:headerbkcolor]];
-    color: [[setting:headertextcolor]];
     border-color: transparent;
+    color: [[setting:headertextcolor]];
 }

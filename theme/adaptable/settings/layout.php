@@ -26,9 +26,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$temp = new admin_settingpage('theme_adaptable_layout', get_string('layoutsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_layout', get_string('layoutsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_layout', get_string('layoutsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_layout', get_string('layoutsettingsheading', 'theme_adaptable'),
         format_text(get_string('layoutdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Background Image.
@@ -37,7 +38,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('homebkdesc', 'theme_adaptable');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'homebk');
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Display block in the Left/Right side.
     $name = 'theme_adaptable/blockside';
@@ -48,7 +49,7 @@ if ($ADMIN->fulltree) {
             0 => get_string('rightblocks', 'theme_adaptable'),
             1 => get_string('leftblocks', 'theme_adaptable'),
         ));
-    $temp->add($setting);
+    $page->add($setting);
 
     // Fullscreen width.
     $name = 'theme_adaptable/fullscreenwidth';
@@ -56,18 +57,18 @@ if ($ADMIN->fulltree) {
     $description = get_string('fullscreenwidthdesc', 'theme_adaptable');
     $setting = new admin_setting_configselect($name, $title, $description, '98%', $from95to100percent);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Standard screen width.
     $name = 'theme_adaptable/standardscreenwidth';
     $title = get_string('standardscreenwidth', 'theme_adaptable');
     $description = get_string('standardscreenwidthdesc', 'theme_adaptable');
     $choices = array(
-        'standard' => get_string('standard', 'theme_adaptable'),
-        'narrow' => get_string('narrow', 'theme_adaptable')
+        'standard' => '1170px',
+        'narrow' => '1000px'
     );
     $setting = new admin_setting_configselect($name, $title, $description, 'standard', $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Show sidebar when not logged.
     $name = 'theme_adaptable/sidebarnotlogged';
@@ -76,7 +77,7 @@ if ($ADMIN->fulltree) {
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Emoticons size.
     $name = 'theme_adaptable/emoticonsize';
@@ -86,7 +87,7 @@ if ($ADMIN->fulltree) {
     $choices = $standardfontsize;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Info icon colour.
     $name = 'theme_adaptable/infoiconcolor';
@@ -95,7 +96,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#5bc0de', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Danger icon colour.
     $name = 'theme_adaptable/dangericoncolor';
@@ -104,22 +105,22 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#d9534f', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Adaptable Tabbed layout changes.
     $name = 'theme_adaptable/tabbedlayoutheading';
     $heading = get_string('tabbedlayoutheading', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course page tabbed layout.
     $name = 'theme_adaptable/tabbedlayoutcoursepage';
     $title = get_string('tabbedlayoutcoursepage', 'theme_adaptable');
     $description = get_string('tabbedlayoutcoursepagedesc', 'theme_adaptable');
-    $default = $tabbedlayoutdefaultscourse[0];
+    $default = 0;
     $choices = $tabbedlayoutdefaultscourse;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Have a link back to the course page in the course tabs.
     $name = 'theme_adaptable/tabbedlayoutcoursepagelink';
@@ -127,7 +128,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('tabbedlayoutcoursepagelinkdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course page tab colour selected.
     $name = 'theme_adaptable/tabbedlayoutcoursepagetabcolorselected';
@@ -136,7 +137,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#06c', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course page tab colour unselected.
     $name = 'theme_adaptable/tabbedlayoutcoursepagetabcolorunselected';
@@ -145,23 +146,23 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#eee', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Course home page tab persistence time.
     $name = 'theme_adaptable/tabbedlayoutcoursepagetabpersistencetime';
     $title = get_string('tabbedlayoutcoursepagetabpersistencetime', 'theme_adaptable');
     $description = get_string('tabbedlayoutcoursepagetabpersistencetimedesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '30', PARAM_INT);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dashboard page tabbed layout.
     $name = 'theme_adaptable/tabbedlayoutdashboard';
     $title = get_string('tabbedlayoutdashboard', 'theme_adaptable');
     $description = get_string('tabbedlayoutdashboarddesc', 'theme_adaptable');
-    $default = $tabbedlayoutdefaultsdashboard[0];
+    $default = 0;
     $choices = $tabbedlayoutdefaultsdashboard;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dashboard page tab colour selected.
     $name = 'theme_adaptable/tabbedlayoutdashboardcolorselected';
@@ -170,7 +171,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#06c', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dashboard page tab colour unselected.
     $name = 'theme_adaptable/tabbedlayoutdashboardcolorunselected';
@@ -179,18 +180,19 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#eee', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/tabbedlayoutdashboardtab1condition';
     $title = get_string('tabbedlayoutdashboardtab1condition', 'theme_adaptable');
     $description = get_string('tabbedlayoutdashboardtab1conditiondesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/tabbedlayoutdashboardtab2condition';
     $title = get_string('tabbedlayoutdashboardtab2condition', 'theme_adaptable');
     $description = get_string('tabbedlayoutdashboardtab2conditiondesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW, '');
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

@@ -21,6 +21,12 @@
  * @copyright  2015-2016 Jeremy Hopkins (Coventry University)
  * @copyright  2015-2016 Fernando Acedo (3-bits.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 08/01/19 - Added this header; added additional regions for customized blocks.
+ * 09/19/19 - Changed location of loading of related-slider- and suggest-slider-.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -51,6 +57,12 @@ $regions = theme_adaptable_grid($left, $hassidepost);
             echo $OUTPUT->get_course_alerts();
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
+
+            // SWTC ********************************************************************************.
+            // Changed location of loading of related-slider- and suggest-slider-.
+            // SWTC ********************************************************************************.
+            // echo $OUTPUT->get_block_regions('customrowsetting', 'related-slider-', '12-0-0-0');
+            // echo $OUTPUT->get_block_regions('customrowsetting', 'suggest-slider-', '12-0-0-0');
 
             if ($PAGE->has_set_url()) {
                 $currenturl = $PAGE->url;

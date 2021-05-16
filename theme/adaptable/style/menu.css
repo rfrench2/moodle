@@ -32,11 +32,11 @@
     z-index: 100;
 }
 
-#adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:first-child a.dropdown-toggle {
+#adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:first-child > a.dropdown-toggle {
     margin-left: -[[setting:menufontpadding]];
 }
 
-#adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:last-child a.dropdown-toggle {
+#adaptable-page-header-wrapper #main-navbar .navbar .navbar-nav > li:last-child > a.dropdown-toggle {
     margin-right: -[[setting:menufontpadding]];
 }
 
@@ -90,7 +90,7 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 }
 
 /* New main navbar styling */
-#adaptable-page-header-wrapper #main-navbar .navbar-nav > li > a,
+#adaptable-page-header-wrapper #main-navbar .navbar-nav > li > a.nav-link,
 #adaptable-page-header-wrapper #main-navbar .navbar-nav > li > div.nav-link,
 #adaptable-page-header-wrapper #main-navbar .navbar-nav .context-header-settings-menu .action-menu-trigger a.dropdown-toggle,
 #adaptable-page-header-wrapper #main-navbar .navbar-nav .context-header-settings-menu .action-menu-trigger a.dropdown-toggle:hover,
@@ -100,8 +100,8 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
     color: [[setting:menufontcolor]];
     font-size: [[setting:menufontsize]];
     font-weight: 400;
-    line-height: 40px;
-    padding: 2px [[setting:menufontpadding]] 2px [[setting:menufontpadding]];
+    line-height: 42px;
+    padding: 0 [[setting:menufontpadding]];
     text-decoration: none;
     text-shadow: none;
     text-transform: none;
@@ -117,9 +117,14 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
     margin: 0;
 }
 
+#adaptable-page-header-wrapper #dropdownlangmenu0.dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
 #adaptable-page-header-wrapper #main-navbar ul.navbar-nav > li > a.nav-link:hover,
 #adaptable-page-header-wrapper #main-navbar li div.nav-link:hover,
-#adaptable-page-header-wrapper #main-navbar li #edittingbutton input[type="submit"]:hover {
+#adaptable-page-header-wrapper #main-navbar li #editingbutton input[type="submit"]:hover {
     background-color: [[setting:menuhovercolor]];
     text-decoration: none;
 }
@@ -134,21 +139,6 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
     align-items: center
 }
 
-#adaptable-page-header-wrapper #main-navbar li ul li a,
-#adaptable-page-header-wrapper #main-navbar li .action-menu-trigger .dropdown-item {
-    color: [[setting:navbardropdowntextcolor]];
-}
-
-#adaptable-page-header-wrapper #main-navbar li ul li a:hover,
-#adaptable-page-header-wrapper #main-navbar li .action-menu-trigger .dropdown-item:hover {
-    background-color: [[setting:navbardropdownhovercolor]];
-    color: [[setting:navbardropdowntexthovercolor]];
-}
-
-#adaptable-page-header-wrapper #main-navbar li .action-menu-trigger .dropdown-item:hover a {
-    color: [[setting:navbardropdowntexthovercolor]];
-}
-
 #adaptable-page-header-wrapper #main-navbar .navbar-nav>.nav-item .dropdown-menu .dropdown-toggle:hover:after {
     border-left-color: [[setting:navbardropdowntexthovercolor]];
 }
@@ -158,31 +148,9 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 }
 
 #adaptable-page-header-wrapper #above-header .navbar button {
-    margin: 3px 1px 1px 0px;
+    margin: 3px 1px 1px 0;
     padding: 2px 2px;
     font-size: 16px;
-}
-
-#adaptable-page-header-wrapper #above-header li a.dropdown-item,
-#adaptable-page-header-wrapper #above-header li ul li a {
-    color: [[setting:navbardropdowntextcolor]];
-}
-
-#adaptable-page-header-wrapper #above-header li a.dropdown-item:hover,
-#adaptable-page-header-wrapper #above-header li ul li a:hover {
-    background-color: [[setting:navbardropdownhovercolor]];
-    color: [[setting:navbardropdowntexthovercolor]];
-}
-
-.block a.dropdown-item.active,
-.dropdown-item.active {
-    background-color: [[setting:navbardropdownhovercolor]];
-}
-
-.dropdown-item:active {
-    background-color: [[setting:navbardropdownhovercolor]];
-    color: [[setting:navbardropdowntexthovercolor]];
-    text-decoration: none;
 }
 
 .navbar .nav > li:last-child > a {
@@ -195,10 +163,8 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 /* New top header menu styling (includes #aboveheader css previously in adaptable.css). */
 
 #above-header {
-    border-bottom: 1px solid [[setting:dividingline]];
-    /* height: 35px;
-    padding-bottom: 5px; */
     background-color: [[setting:headerbkcolor]];
+    border-bottom: 1px solid [[setting:dividingline]];
 }
 
 #adaptable-page-header-wrapper #above-header .dropdown-item {
@@ -242,9 +208,9 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 #adaptable-page-header-wrapper #header2 .dropdown-menu a,
 #adaptable-page-header-wrapper #header2 .dropdown-toggle a,
 #adaptable-page-header-wrapper #above-header .dropdown-menu a {
+    color: [[setting:linkcolor]];
     font-family: [[setting:fontname]], sans-serif;
     font-size: [[setting:topmenufontsize]];
-    color: [[setting:linkcolor]];
 }
 
 #adaptable-page-header-wrapper #above-header .dropdown-toggle a i,
@@ -279,10 +245,6 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 #adaptable-page-header-wrapper #header2 a i {
     padding-right: 4px;
 }
-
-/* #adaptable-page-header-wrapper#above-header .dropdown-toggle::after {
-    display: none;
-} */
 
 #adaptable-page-header-wrapper #above-header a.dropdown-toggle {
     margin-top: 2px;
@@ -420,7 +382,7 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 #adaptable-page-header-wrapper .topmenuleft {
     float: left;
     margin: 0;
-    padding: 10px 0px 0 0;
+    padding: 10px 0 0 0;
 }
 
 /* New dropdown-related classes.  These are mainly for settings. */
@@ -456,14 +418,14 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
     font-size: [[setting:menufontsize]];
 }
 
-#adaptable-page-header-wrapper .navbar .dropdown-menu /* , .headermenu .dropdown-menu, .langmenu .dropdown-menu */ {
+#adaptable-page-header-wrapper .navbar .dropdown-menu {
     font-size: [[setting:menufontsize]];
     border-radius: [[setting:navbardropdownborderradius]];
     -webkit-transition: all [[setting:navbardropdowntransitiontime]];
     -moz-transition: all [[setting:navbardropdowntransitiontime]];
     -ms-transition: all [[setting:navbardropdowntransitiontime]];
     -o-transition: all [[setting:navbardropdowntransitiontime]];
-    transition: all [[setting:navbardropdowntransitiontime]];    
+    transition: all [[setting:navbardropdowntransitiontime]];
 }
 
 #region-main-settings-menu .dropdown-menu {
@@ -476,14 +438,14 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 }
 
 .dropdown-menu.fade {
-   display: block;
-   opacity: 0;
-   pointer-events: none;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .show > .dropdown-menu.fade {
-   pointer-events: auto;
-   opacity: 1;
+    pointer-events: auto;
+    opacity: 1;
 }
 
 /* Bootstrap hides/shows dropdowns onclick via the class .show */
@@ -492,35 +454,41 @@ a.dropdown-item.i.fa.fa-users.fa-lg {
 }
 
 #adaptable-page-header-wrapper .nav .dropdown-menu li a {
-    color: [[setting:linkcolor]] /* !important */;
+    color: [[setting:linkcolor]];
     background-color: none;
 }
 
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:focus-within,
+.dropdown-item:active,
+.dropdown-item.active,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a,
+.block a.dropdown-item.active {
+    background-color: [[setting:navbardropdownhovercolor]];
+    color: [[setting:navbardropdowntexthovercolor]];
+}
 
-a.dropdown-item > a,
-a.dropdown-menu > .active,
-a.dropdown-menu > .active > a,
+.dropdown-item:focus-within a {
+    color: [[setting:navbardropdowntexthovercolor]];
+}
+
+.dropdown-menu a,
+.dropdown-menu > .active,
+.dropdown-menu > .active > a,
+.dropdown-submenu > a
 #adaptable-page-header-wrapper .dropdown-menu li a {
     color: [[setting:navbardropdowntextcolor]];
 }
 
-a.dropdown-item:hover > a,
-a.dropdown-item:focus > a,
-a.dropdown-menu > .active > a:hover,
-a.dropdown-menu > .active > a:focus,
+.dropdown-item:hover > a,
+.dropdown-item:focus > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
 #adaptable-page-header-wrapper .dropdown-menu li a:hover {
     background-color: [[setting:navbardropdownhovercolor]];
     background-image: none !important;
-    color: [[setting:navbardropdowntexthovercolor]];
-}
-
-.dropdown-submenu > a {
-    color: [[setting:navbardropdowntextcolor]];
-}
-
-.dropdown-submenu:hover > a,
-.dropdown-submenu:focus > a {
-    background-color: [[setting:navbardropdownhovercolor]];
     color: [[setting:navbardropdowntexthovercolor]];
 }
 
@@ -528,7 +496,7 @@ a.dropdown-menu > .active > a:focus,
     border-radius: [[setting:navbardropdownborderradius]];
 }
 
-#adaptable-page-header-wrapper #main-navbar .navbar-nav > .nav-item .dropdown-menu .dropdown-toggle:after  {
+#adaptable-page-header-wrapper #main-navbar .navbar-nav > .nav-item .dropdown-menu .dropdown-toggle:after {
     display: block;
     content: " ";
     float: right;
@@ -559,7 +527,7 @@ a.dropdown-menu > .active > a:focus,
 }
 
 #adaptable-page-header-wrapper .navbar .popover-region {
-    margin: 0px 0 0 4px;
+    margin: 0 0 0 4px;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -575,7 +543,6 @@ a.dropdown-menu > .active > a:focus,
     background: none;
     margin: 0;
     padding: 0;
-    min-height: 30px
 }
 
 #adaptable-page-header-wrapper #main-navbar .action-menu .dropdown-toggle::after {
@@ -608,56 +575,38 @@ a.dropdown-menu > .active > a:focus,
         position:relative;
     }
 
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul li:hover > ul {
-        display:block
+    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul li:hover > ul,
+    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu li:hover > ul {
+        display: block;
     }
 
     #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu {
-        position: absolute;
-        margin-top: 0 !important;
-        min-width: 180px;
         display: none;
+        margin-top: 0;
+        min-width: 180px;
+        padding: 0;
+        position: absolute;
     }
 
-     #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul {
-        position: absolute;
-        top: 0;
+    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul {
+        display: none;
         left: 100%;
         min-width: 180px;
-        display: none;
+        position: absolute;
+        top: 0;
+    }
+
+    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul ul {
+        left: -100%;
+        z-index: 1;
     }
 
     #adaptable-page-header-wrapper #above-header .btco-hover-menu .collapse ul ul.dropdown-menu {
         min-width: 60px;
     }
 
-    #adaptable-page-header-wrapper #above-header .btco-hover-menu .collapse ul [id^='langmenu']  {
+    #adaptable-page-header-wrapper #above-header .btco-hover-menu .collapse ul [id^='langmenu'] {
         min-width: 135px;
-    }
-
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu li {
-        position: relative;
-    }
-
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu li:hover > ul {
-        display: block;
-    }
-
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul li {
-        position: relative;
-    }
-
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul li:hover ul {
-        display:block;
-    }
-
-    #adaptable-page-header-wrapper .btco-hover-menu .collapse ul ul.dropdown-menu ul ul {
-        position: absolute;
-        top: 0;
-        left: -100%;
-        min-width: 180px;
-        display: none;
-        z-index: 1
     }
 }
 

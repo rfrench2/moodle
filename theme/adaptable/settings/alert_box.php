@@ -27,16 +27,17 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Alert Section.
-$temp = new admin_settingpage('theme_adaptable_frontpage_alert', get_string('frontpagealertsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_alert', get_string('alertsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_frontpage_alert', get_string('frontpagealertsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_alert', get_string('alertsettingsheading', 'theme_adaptable'),
         format_text(get_string('alertdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Alert General Settings Heading.
     $name = 'theme_adaptable/settingsalertgeneral';
     $heading = get_string('alertsettingsgeneral', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable or disable alerts.
     $name = 'theme_adaptable/enablealerts';
@@ -44,15 +45,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablealertsdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
-
-    // Disable alert in course pages.  TODO -> Used anymore??
-    $name = 'theme_adaptable/enablealertcoursepages';
-    $title = get_string('enablealertcoursepages', 'theme_adaptable');
-    $description = get_string('enablealertcoursepagesdesc', 'theme_adaptable');
-    $default = false;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Alert hidden course.
     $name = 'theme_adaptable/alerthiddencourse';
@@ -65,7 +58,7 @@ if ($ADMIN->fulltree) {
         'warning' => get_string('alertwarning', 'theme_adaptable'),
         'success' => get_string('alertannounce', 'theme_adaptable'));
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Strip Tags.
     $name = 'theme_adaptable/enablealertstriptags';
@@ -73,7 +66,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enablealertstriptagsdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Number of Alerts.
     $name = 'theme_adaptable/alertcount';
@@ -81,7 +74,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('alertcountdesc', 'theme_adaptable');
     $default = THEME_ADAPTABLE_DEFAULT_ALERTCOUNT;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices0to12);
-    $temp->add($setting);
+    $page->add($setting);
 
     $alertcount = get_config('theme_adaptable', 'alertcount');
     // If we don't have an an alertcount yet, default to the preset.
@@ -94,7 +87,7 @@ if ($ADMIN->fulltree) {
         $name = 'theme_adaptable/settingsalertbox'.$alertindex;
         $heading = get_string('alertsettings', 'theme_adaptable', $alertindex);
         $setting = new admin_setting_heading($name, $heading, '');
-        $temp->add($setting);
+        $page->add($setting);
 
         // Enable Alert.
         $name = 'theme_adaptable/enablealert'.$alertindex;
@@ -102,14 +95,14 @@ if ($ADMIN->fulltree) {
         $description = get_string('enablealertdesc', 'theme_adaptable', $alertindex);
         $default = false;
         $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-        $temp->add($setting);
+        $page->add($setting);
 
         // Alert Key.
         $name = 'theme_adaptable/alertkey'.$alertindex;
         $title = get_string('alertkeyvalue', 'theme_adaptable');
         $description = get_string('alertkeyvalue_details', 'theme_adaptable');
         $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW);
-        $temp->add($setting);
+        $page->add($setting);
 
         // Alert Text.
         $name = 'theme_adaptable/alerttext'.$alertindex;
@@ -117,7 +110,7 @@ if ($ADMIN->fulltree) {
         $description = get_string('alerttextdesc', 'theme_adaptable');
         $default = '';
         $setting = new adaptable_setting_confightmleditor($name, $title, $description, $default);
-        $temp->add($setting);
+        $page->add($setting);
 
         // Alert Type.
         $name = 'theme_adaptable/alerttype'.$alertindex;
@@ -127,9 +120,10 @@ if ($ADMIN->fulltree) {
         $choices = array(
             'info' => get_string('alertinfo', 'theme_adaptable'),
             'warning' => get_string('alertwarning', 'theme_adaptable'),
-            'success' => get_string('alertannounce', 'theme_adaptable'));
-            $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-        $temp->add($setting);
+            'success' => get_string('alertannounce', 'theme_adaptable')
+        );
+        $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+        $page->add($setting);
 
         // Alert Access.
         $name = 'theme_adaptable/alertaccess' . $alertindex;
@@ -142,13 +136,13 @@ if ($ADMIN->fulltree) {
             'admin' => get_string('alertaccessadmins', 'theme_adaptable'),
             'profile' => get_string('alertaccessprofile', 'theme_adaptable'));
         $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
-        $temp->add($setting);
+        $page->add($setting);
 
         $name = 'theme_adaptable/alertprofilefield' . $alertindex;
         $title = get_string('alertprofilefield', 'theme_adaptable');
         $description = get_string('alertprofilefielddesc', 'theme_adaptable');
         $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW);
-        $temp->add($setting);
+        $page->add($setting);
     }
 
     // Colours.
@@ -156,7 +150,7 @@ if ($ADMIN->fulltree) {
     $name = 'theme_adaptable/settingsalertcolors';
     $heading = get_string('settingscolors', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Alert info colours.
     $name = 'theme_adaptable/alertcolorinfo';
@@ -165,7 +159,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#3a87ad', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbackgroundcolorinfo';
     $title = get_string('alertbackgroundcolorinfo', 'theme_adaptable');
@@ -173,7 +167,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#d9edf7', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbordercolorinfo';
     $title = get_string('alertbordercolorinfo', 'theme_adaptable');
@@ -181,13 +175,13 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#bce8f1', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alerticoninfo';
     $title = get_string('alerticoninfo', 'theme_adaptable');
     $description = get_string('alerticoninfodesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, 'info-circle');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Alert success colours.
     $name = 'theme_adaptable/alertcolorsuccess';
@@ -196,7 +190,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#468847', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbackgroundcolorsuccess';
     $title = get_string('alertbackgroundcolorsuccess', 'theme_adaptable');
@@ -204,7 +198,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#dff0d8', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbordercolorsuccess';
     $title = get_string('alertbordercolorsuccess', 'theme_adaptable');
@@ -212,13 +206,13 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#d6e9c6', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alerticonsuccess';
     $title = get_string('alerticonsuccess', 'theme_adaptable');
     $description = get_string('alerticonsuccessdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, 'bullhorn');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Alert warning colours.
     $name = 'theme_adaptable/alertcolorwarning';
@@ -227,7 +221,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#8a6d3b', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbackgroundcolorwarning';
     $title = get_string('alertbackgroundcolorwarning', 'theme_adaptable');
@@ -235,7 +229,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#fcf8e3', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alertbordercolorwarning';
     $title = get_string('alertbordercolorwarning', 'theme_adaptable');
@@ -243,12 +237,13 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#fbeed5', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/alerticonwarning';
     $title = get_string('alerticonwarning', 'theme_adaptable');
     $description = get_string('alerticonwarningdesc', 'theme_adaptable');
     $setting = new admin_setting_configtext($name, $title, $description, 'exclamation-triangle');
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

@@ -23,6 +23,12 @@
  *
  */
 
+/* Calendar links on the page. */
+a.skip-block,
+a.skip {
+    left: -1000em;
+}
+
 .modchoosercontainer .btn {
     border: none;
     box-shadow: none;

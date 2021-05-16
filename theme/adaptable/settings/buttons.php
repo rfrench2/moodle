@@ -27,9 +27,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Buttons Section.
-$temp = new admin_settingpage('theme_adaptable_buttons', get_string('buttonsettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_header', get_string('buttonsettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_buttons', get_string('buttonsettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_header', get_string('buttonsettingsheading', 'theme_adaptable'),
     format_text(get_string('buttondesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     $name = 'theme_adaptable/buttonradius';
@@ -38,7 +39,7 @@ if ($ADMIN->fulltree) {
     $radchoices = $from0to6px;
     $setting = new admin_setting_configselect($name, $title, $description, '5px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Buttons background color.
     $name = 'theme_adaptable/buttoncolor';
@@ -47,7 +48,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#51666C', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Buttons background hover color.
     $name = 'theme_adaptable/buttonhovercolor';
@@ -56,7 +57,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#009688', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Buttons text color.
     $name = 'theme_adaptable/buttontextcolor';
@@ -65,7 +66,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Secondary Buttons background color.
     $name = 'theme_adaptable/buttoncolorscnd';
@@ -74,7 +75,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#51666C', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Secondary Buttons background hover color.
     $name = 'theme_adaptable/buttonhovercolorscnd';
@@ -83,7 +84,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#009688', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Secondary Buttons text color.
     $name = 'theme_adaptable/buttontextcolorscnd';
@@ -92,7 +93,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Cancel Buttons background color.
     $name = 'theme_adaptable/buttoncolorcancel';
@@ -101,7 +102,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ef5350', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Cancel Buttons background hover color.
     $name = 'theme_adaptable/buttonhovercolorcancel';
@@ -110,7 +111,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#e53935', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Cancel Buttons text color.
     $name = 'theme_adaptable/buttontextcolorcancel';
@@ -119,7 +120,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/editonbk';
     $title = get_string('editonbk', 'theme_adaptable');
@@ -127,7 +128,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#4caf50', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/editoffbk';
     $title = get_string('editoffbk', 'theme_adaptable');
@@ -135,7 +136,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#f44336', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/editfont';
     $title = get_string('editfont', 'theme_adaptable');
@@ -143,23 +144,15 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
-
-    $name = 'theme_adaptable/editverticalpadding';
-    $title = get_string('editverticalpadding', 'theme_adaptable');
-    $description = get_string('editverticalpadding', 'theme_adaptable');
-    $radchoices = $from0to6px;
-    $setting = new admin_setting_configselect($name, $title, $description, '4px', $radchoices);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/edithorizontalpadding';
     $title = get_string('edithorizontalpadding', 'theme_adaptable');
     $description = get_string('edithorizontalpadding', 'theme_adaptable');
     $radchoices = $from0to6px;
-    $setting = new admin_setting_configselect($name, $title, $description, '6px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '4px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonlogincolor';
     $title = get_string('buttonlogincolor', 'theme_adaptable');
@@ -167,7 +160,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ef5350', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonloginhovercolor';
     $title = get_string('buttonloginhovercolor', 'theme_adaptable');
@@ -175,7 +168,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#e53935', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonlogintextcolor';
     $title = get_string('buttonlogintextcolor', 'theme_adaptable');
@@ -183,15 +176,15 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFFFFF', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonloginpadding';
     $title = get_string('buttonloginpadding', 'theme_adaptable');
     $description = get_string('buttonloginpaddingdesc', 'theme_adaptable');
     $radchoices = $from0to8px;
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $radchoices);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonloginheight';
     $title = get_string('buttonloginheight', 'theme_adaptable');
@@ -210,7 +203,7 @@ if ($ADMIN->fulltree) {
     );
     $setting = new admin_setting_configselect($name, $title, $description, '24px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/buttonloginmargintop';
     $title = get_string('buttonloginmargintop', 'theme_adaptable');
@@ -218,15 +211,20 @@ if ($ADMIN->fulltree) {
     $radchoices = $from0to12px;
     $setting = new admin_setting_configselect($name, $title, $description, '2px', $radchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable drop shadow on bottom of button.
     $name = 'theme_adaptable/buttondropshadow';
     $title = get_string('buttondropshadow', 'theme_adaptable');
     $description = get_string('buttondropshadowdesc', 'theme_adaptable');
-    $shadowchoices = array ('0px' => 'None', '-1px' => 'Slight', '-2px' => 'Standard');
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $shadowchoices);
+    $shadowchoices = array (
+        '0' => get_string('none', 'theme_adaptable'),
+        '-1px' => get_string('slight', 'theme_adaptable'),
+        '-2px' => get_string('standard', 'theme_adaptable')
+    );
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $shadowchoices);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

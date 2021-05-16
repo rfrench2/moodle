@@ -27,9 +27,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Header Navbar.
-$temp = new admin_settingpage('theme_adaptable_navbar_styles', get_string('navbarstyles', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_navbar_styles', get_string('navbarstylesheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_navbar_styles', get_string('navbarstyles', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_navbar_styles', get_string('navbarstylesheading', 'theme_adaptable'),
         format_text(get_string('navbarstylesdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Main menu background color.
@@ -39,7 +40,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Main menu text color.
     $name = 'theme_adaptable/menufontcolor';
@@ -48,7 +49,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#222222', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Main menu hover color.
     $name = 'theme_adaptable/menuhovercolor';
@@ -57,7 +58,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#00B3A1', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Main menu bottom border color.
     $name = 'theme_adaptable/menubordercolor';
@@ -66,29 +67,29 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#00B3A1', $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/navbardisplayicons';
     $title = get_string('navbardisplayicons', 'theme_adaptable');
     $description = get_string('navbardisplayiconsdesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     $name = 'theme_adaptable/navbardisplaysubmenuarrow';
     $title = get_string('navbardisplaysubmenuarrow', 'theme_adaptable');
     $description = get_string('navbardisplaysubmenuarrowdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dropdown border radius.
     $name = 'theme_adaptable/navbardropdownborderradius';
     $title = get_string('navbardropdownborderradius', 'theme_adaptable');
     $description = get_string('navbardropdownborderradiusdesc', 'theme_adaptable');
-    $setting = new admin_setting_configselect($name, $title, $description, '0px', $from0to20px);
+    $setting = new admin_setting_configselect($name, $title, $description, '0', $from0to20px);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dropdown Menu Item Link background hover colour.
     $name = 'theme_adaptable/navbardropdownhovercolor';
@@ -98,7 +99,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default, $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dropdown Menu Item Link text colour.
     $name = 'theme_adaptable/navbardropdowntextcolor';
@@ -108,7 +109,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default, $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dropdown Menu Item Link text hover colour.
     $name = 'theme_adaptable/navbardropdowntexthovercolor';
@@ -118,7 +119,7 @@ if ($ADMIN->fulltree) {
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default, $previewconfig);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Dropdown transition time.
     $name = 'theme_adaptable/navbardropdowntransitiontime';
@@ -126,8 +127,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('navbardropdowntransitiontimedesc', 'theme_adaptable');
     $setting = new admin_setting_configselect($name, $title, $description, '0.2s', $from0to1second);
     $setting->set_updatedcallback('theme_reset_all_caches');
-    $temp->add($setting);
-}
+    $page->add($setting);
 
-// Create page.
-$ADMIN->add('theme_adaptable', $temp);
+    $asettings->add($page);
+}

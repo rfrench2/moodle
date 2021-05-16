@@ -5,7 +5,7 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.npm
 
-matrix:
+jobs:
  allow_failures:
  fast_finish: true
  include:
@@ -16,7 +16,7 @@ matrix:
    env: DB=pgsql
    services: postgresql
    addons:
-      postgresql: 9.5
+      postgresql: 9.6
  - php: 7.4
    env: DB=mysqli
    services: mysql
@@ -24,11 +24,11 @@ matrix:
    env: DB=pgsql
    services: postgresql
    addons:
-      postgresql: 9.5
+      postgresql: 9.6
 env:
  global:
-  - MOODLE_BRANCH=MOODLE_39_STABLE
-  - IGNORE_NAMES=*.txt,fallback.css,activity_navigation.mustache,message_drawer.mustache,overlaymenu.mustache,overlaymenuitem.mustache,savediscard.mustache,tabs.mustache,tourstep.mustache
+  - MOODLE_BRANCH=MOODLE_310_STABLE
+  - IGNORE_NAMES=*.txt,behat_*.php,fallback.css,activity_navigation.mustache,message_drawer.mustache,overlaymenu.mustache,overlaymenuitem.mustache,savediscard.mustache,tabs.mustache,tourstep.mustache,admin_settingspage_tabs.php
 
 before_install:
 # This disables XDebug which should speed up the build.  One reason to remove this

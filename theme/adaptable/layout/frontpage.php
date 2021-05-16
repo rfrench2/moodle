@@ -35,9 +35,6 @@ $left = $PAGE->theme->settings->blockside;
 $hassidepost = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
 $regions = theme_adaptable_grid($left, $hassidepost);
 
-// We need to load some settings.
-$hasfootnote = (!empty($PAGE->theme->settings->footnote));
-
 // Let's include the images slider if enabled.
 if (!empty($PAGE->theme->settings->sliderenabled)) {
     echo $OUTPUT->get_frontpage_slider();
@@ -50,12 +47,10 @@ if (!empty($PAGE->theme->settings->infobox)) {
     } else {
         echo '<div id="theinfo" class="container">';
     }
-?>
-            <div class="row">
-<?php echo $OUTPUT->get_setting('infobox', 'format_html'); ?>
-            </div>
-        </div>
-<?php
+    echo '<div class="row">';
+    echo $OUTPUT->get_setting('infobox', 'format_html');
+    echo '</div>';
+    echo '</div>';
 }
 
 // If Marketing Blocks are enabled then let's show them.
@@ -69,7 +64,7 @@ if (!empty($PAGE->theme->settings->frontpageblocksenabled)) { ?>
             <?php echo $OUTPUT->get_block_regions(); ?>
         </div>
     </div>
-<?php
+    <?php
 }
 
 // And finally let's show the Infobox 2 if enabled.
@@ -79,12 +74,10 @@ if (!empty($PAGE->theme->settings->infobox2)) {
     } else {
         echo '<div id="theinfo2" class="container">';
     }
-?>
-        <div class="row">
-<?php echo $OUTPUT->get_setting('infobox2', 'format_html'); ?>
-        </div>
-</div>
-<?php
+    echo '<div class="row">';
+    echo $OUTPUT->get_setting('infobox2', 'format_html');
+    echo '</div>';
+    echo '</div>';
 }
 
 // The main content goes here.

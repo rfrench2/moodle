@@ -30,16 +30,17 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Analytics section.
-$temp = new admin_settingpage('theme_adaptable_analytics', get_string('analyticssettings', 'theme_adaptable'));
 if ($ADMIN->fulltree) {
-    $temp->add(new admin_setting_heading('theme_adaptable_analytics', get_string('analyticssettingsheading', 'theme_adaptable'),
+    $page = new admin_settingpage('theme_adaptable_analytics', get_string('analyticssettings', 'theme_adaptable'));
+
+    $page->add(new admin_setting_heading('theme_adaptable_analytics', get_string('analyticssettingsheading', 'theme_adaptable'),
         format_text(get_string('analyticssettingsdesc', 'theme_adaptable'), FORMAT_MARKDOWN)));
 
     // Google Analytics Section.
     $name = 'theme_adaptable/googleanalyticssettings';
     $heading = get_string('googleanalyticssettings', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Google analytics.
     $name = 'theme_adaptable/enableanalytics';
@@ -47,7 +48,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('enableanalyticsdesc', 'theme_adaptable');
     $default = false;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Anonymize Google analytics.
     $name = 'theme_adaptable/anonymizega';
@@ -55,7 +56,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('anonymizegadesc', 'theme_adaptable');
     $default = true;
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $temp->add($setting);
+    $page->add($setting);
 
     // Number of Analytics entries.
     $name = 'theme_adaptable/analyticscount';
@@ -63,7 +64,7 @@ if ($ADMIN->fulltree) {
     $description = get_string('analyticscountdesc', 'theme_adaptable');
     $default = THEME_ADAPTABLE_DEFAULT_ANALYTICSCOUNT;
     $setting = new admin_setting_configselect($name, $title, $description, $default, $choices0to12);
-    $temp->add($setting);
+    $page->add($setting);
 
     // If we don't have an analyticscount yet, default to the preset.
     $analyticscount = get_config('theme_adaptable', 'analyticscount');
@@ -77,54 +78,55 @@ if ($ADMIN->fulltree) {
         $description = get_string('analyticstextdesc', 'theme_adaptable');
         $default = '';
         $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_RAW);
-        $temp->add($setting);
+        $page->add($setting);
 
         $name = 'theme_adaptable/analyticsprofilefield' . $analyticsindex;
         $title = get_string('analyticsprofilefield', 'theme_adaptable');
         $description = get_string('analyticsprofilefielddesc', 'theme_adaptable');
         $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_RAW);
-        $temp->add($setting);
+        $page->add($setting);
     }
 
     // Piwik Analytics Section.
     $name = 'theme_adaptable/piwiksettings';
     $heading = get_string('piwiksettings', 'theme_adaptable');
     $setting = new admin_setting_heading($name, $heading, '');
-    $temp->add($setting);
+    $page->add($setting);
 
     // Enable Piwik analytics.
     $name = 'theme_adaptable/piwikenabled';
     $title = get_string('piwikenabled', 'theme_adaptable');
     $description = get_string('piwikenableddesc', 'theme_adaptable');
     $default = false;
-    $temp->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
+    $page->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
 
     // Piwik site ID.
     $name = 'theme_adaptable/piwiksiteid';
     $title = get_string('piwiksiteid', 'theme_adaptable');
     $description = get_string('piwiksiteiddesc', 'theme_adaptable');
     $default = '1';
-    $temp->add(new admin_setting_configtext($name, $title, $description, $default));
+    $page->add(new admin_setting_configtext($name, $title, $description, $default));
 
     // Piwik image track.
     $name = 'theme_adaptable/piwikimagetrack';
     $title = get_string('piwikimagetrack', 'theme_adaptable');
     $description = get_string('piwikimagetrackdesc', 'theme_adaptable');
     $default = true;
-    $temp->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
+    $page->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
 
     // Piwik site URL.
     $name = 'theme_adaptable/piwiksiteurl';
     $title = get_string('piwiksiteurl', 'theme_adaptable');
     $description = get_string('piwiksiteurldesc', 'theme_adaptable');
     $default = '';
-    $temp->add(new admin_setting_configtext($name, $title, $description, $default));
+    $page->add(new admin_setting_configtext($name, $title, $description, $default));
 
     // Enable Piwik admins tracking.
     $name = 'theme_adaptable/piwiktrackadmin';
     $title = get_string('piwiktrackadmin', 'theme_adaptable');
     $description = get_string('piwiktrackadmindesc', 'theme_adaptable');
     $default = false;
-    $temp->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
+    $page->add(new admin_setting_configcheckbox($name, $title, $description, $default, true, false));
+
+    $asettings->add($page);
 }
-$ADMIN->add('theme_adaptable', $temp);

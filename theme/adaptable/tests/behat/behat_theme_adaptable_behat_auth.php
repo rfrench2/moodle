@@ -15,27 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
- *
- * @package    theme_adaptable
- * @copyright  2015-2019 Jeremy Hopkins (Coventry University)
- * @copyright  2015-2019 Fernando Acedo (3-bits.com)
- * @copyright  2017-2019 Manoj Solanki (Coventry University)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- */
-
-namespace theme_adaptable\output;
-
-defined('MOODLE_INTERNAL') || die;
-
-/**
- * Renderers to align Moodle's HTML with that expected by Bootstrap
- *
- * Note: This class is required to avoid inheriting Boost's core_renderer
- *
- * @copyright Copyright (c) 2017 Manoj Solanki (Coventry University)
+ * Overrides for behat authentication.
+ * @author    Marcus Green
+ * @copyright Titus Learning
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class core_renderer extends \core_renderer {
+
+// NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
+
+require_once(__DIR__ . '/../../../../auth/tests/behat/behat_auth.php');
+
+/**
+ * Overrides for behat authentication.
+ * @author    Marcus Green
+ * @copyright Titus Learning
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class behat_theme_adaptable_behat_auth extends behat_auth {
+    public function i_log_out() {
+        $this->getSession()->visit($this->locate_path('login/logout.php'));
+        $this->execute('behat_forms::press_button', get_string('continue'));
+    }
 }
+
