@@ -421,7 +421,7 @@ class completion_info {
                 'course'    => $this->course->id
             );
 
-            // Load criteria from database.
+            // Load criteria from database
             $records = (array)$DB->get_records('course_completion_criteria', $params);
 
             // Order records so activities are in the same order as they appear on the course view page.
@@ -927,7 +927,7 @@ class completion_info {
      * Obtains completion data for a particular activity and user (from the
      * completion cache if available, or by SQL query)
      *
-     * @param stdClass|cm_info $cm Activity; only required field is ->id
+     * @param stcClass|cm_info $cm Activity; only required field is ->id
      * @param bool $wholecourse If true (default false) then, when necessary to
      *   fill the cache, retrieves information from the entire course not just for
      *   this one activity
@@ -965,9 +965,7 @@ class completion_info {
             }
         }
 
-        // If cached completion data is not found, fetch via SQL.
-        // Fetch completion data for all of the activities in the course ONLY if we're caching the fetched completion data.
-        // If we're not caching the completion data, then just fetch the completion data for the user in this course module.
+        // Not there, get via SQL
         if ($usecache && $wholecourse) {
             // Get whole course data for cache
             $alldatabycmc = $DB->get_records_sql("
@@ -1157,9 +1155,8 @@ class completion_info {
     public function get_num_tracked_users($where = '', $whereparams = array(), $groupid = 0) {
         global $DB;
 
-        // print_object("get_num_tracked_users in /lib/completionlib.php");
         list($enrolledsql, $enrolledparams) = get_enrolled_sql(
-            context_course::instance($this->course->id), 'moodle/course:isincompletionreports', $groupid, true);
+                context_course::instance($this->course->id), 'moodle/course:isincompletionreports', $groupid, true);
         $sql  = 'SELECT COUNT(eu.id) FROM (' . $enrolledsql . ') eu JOIN {user} u ON u.id = eu.id';
         if ($where) {
             $sql .= " WHERE $where";
