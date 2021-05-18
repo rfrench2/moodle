@@ -42,8 +42,7 @@ global $PAGE, $OUTPUT, $USER;
 
 use core_completion\progress;
 
-use local_swtc\criteria\completion_info;
-use local_swtc\grouplib\grouplib;
+use local_swtc\grouplib\swtc_grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
@@ -51,6 +50,7 @@ use local_swtc\grouplib\grouplib;
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 require_once($CFG->dirroot.'/local/swtc/forms/curriculums_form.php');
+require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_info.php');
 
 // SWTC ********************************************************************************.
 // SWTC swtcuser and debug variables.
@@ -62,7 +62,7 @@ $debug = swtc_get_debug();
 // Other SWTC variables.
 $accesstype = $swtcuser->get_accesstype();
 
-$swtcgroups = new grouplib;
+$swtcgroups = new swtc_grouplib;
 
 $groups = null;
 $mform = null;
@@ -145,7 +145,7 @@ foreach ($courses as $course) {
     // Only continue if it is a curriculum course.
     if (array_key_exists($courseid, $curriculumarray)) {
 
-        $completion = new completion_info($course);
+        $completion = new swtc_completion_info($course);
 
         // First, let's make sure completion is enabled.
         if (!$completion->is_enabled()) {

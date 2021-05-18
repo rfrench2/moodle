@@ -29,19 +29,15 @@
  **/
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/user/profile/lib.php');
 
-use local_swtc\criteria\completion_info;
-// use local_swtc\swtc_completion_criteria_completion;
-use local_swtc\grouplib\grouplib;
+use local_swtc\grouplib\swtc_grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-// require_once($CFG->dirroot.'/local/swtc/lib/swtc_completion_functions.php'); SWTC - 05/11/21
-
-require_once($CFG->dirroot.'/user/profile/lib.php');
-
+require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_info.php');
 
 /**
  * Returns an array of all the curriculum courses the user is enrolled in or NULL if they are not enrolled in any.
@@ -189,7 +185,7 @@ function curriculum_getcompletionstatus_details($id, $userid) {
 
     // Load completion data.
     // $info = new completion_info($course);    // SWTC.
-    $info = new completion_info($course);  // SWTC.
+    $info = new swtc_completion_info($course);  // SWTC.
 
     $returnurl = new moodle_url('/course/view.php', array('id' => $id));
 
@@ -311,8 +307,6 @@ function curriculum_getcompletionstatus_details($id, $userid) {
         // Save row data.
         $rows = array();
 
-        // print_object("about to print completions");
-        // print_object($completions);
         // Loop through course criteria.
         foreach ($completions as $completion) {
             $criteria = $completion->get_criteria();
@@ -428,7 +422,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Other SWTC variables.
     $output = '';       // To contain all the output.
-    $swtcgroups = new grouplib;
+    $swtcgroups = new swtc_grouplib;
 
     // Remember - PremierSupportand ServiceDelivery managers and admins have special access.
     // Remember that the capabilities for Managers and Administrators are applied in the system context; the capabilities
@@ -506,7 +500,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Get criteria for course.
     // $completion = new completion_info($course);  // SWTC.
-    $completion = new completion_info($course);    // SWTC.
+    $completion = new swtc_completion_info($course);    // SWTC.
 
     if (!$completion->has_criteria()) {
         print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -1156,7 +1150,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
                 if (isset($criterion->courseinstance)) {
                     $tempcourse = get_course($criterion->courseinstance);
                     // $info = new completion_info($tempcourse);    // SWTC.
-                    $info = new completion_info($tempcourse);  // SWTC.
+                    $info = new swtc_completion_info($tempcourse);  // SWTC.
 
                     // Is course complete?
                     $iscomplete = $info->is_course_complete($user->id);
