@@ -22,6 +22,12 @@
  * @copyright   &copy; 2008 The Open University
  * @author      Sam Marshall
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 05/17/21 - Added code to fix Assignment activity complete with passing grade
+ * (Moodle tracker MDL-56453).
+ *
  */
 
 $string['achievinggrade'] = 'Achieving grade';
@@ -30,6 +36,8 @@ $string['activitieslabel'] = 'Activities / resources';
 $string['activityaggregation'] = 'Condition requires';
 $string['activityaggregation_all'] = 'ALL selected activities to be completed';
 $string['activityaggregation_any'] = 'ANY selected activities to be completed';
+$string['activityiscompleted'] = 'Is completed';    // SWTC.
+$string['activityissuccessfullycompleted'] = 'Is successfully completed';   // SWTC.
 $string['activitiescompleted'] = 'Activity completion';
 $string['activitiescompletednote'] = 'Note: Activity completion must be set for an activity to appear in the above list.';
 $string['activitycompletion'] = 'Activity completion';
@@ -197,6 +205,7 @@ $string['privacy:metadata:timecompleted'] = 'The time that the course was comple
 $string['privacy:metadata:timeenrolled'] = 'The time that the user was enrolled in the course';
 $string['privacy:metadata:timemodified'] = 'The time that the activity completion was modified';
 $string['privacy:metadata:timestarted'] = 'The time the course was started.';
+$string['togglebetweenstates'] = 'Toggle between states';       // SWTC.
 $string['privacy:metadata:viewed'] = 'If the activity was viewed';
 $string['privacy:metadata:userid'] = 'The user ID of the person with course and activity completion data';
 $string['privacy:metadata:unenroled'] = 'If the user has been unenrolled from the course';

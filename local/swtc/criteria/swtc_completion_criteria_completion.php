@@ -23,7 +23,6 @@
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_swtc\criteria;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/completion/data_object.php');
@@ -37,7 +36,7 @@ require_once($CFG->dirroot.'/completion/data_object.php');
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_criteria_completion extends \completion_criteria_completion {
+class swtc_completion_criteria_completion extends \completion_criteria_completion {
 
     /**
      * Constructs with course details.
@@ -49,11 +48,9 @@ class completion_criteria_completion extends \completion_criteria_completion {
      *
      * @param stdClass $course Moodle course object.
      */
-    public function __construct($course) {
-        parent::__construct($course);
-        print_object("in local_swtc_criteria_completion_criteria_completion __construct");
-        print_object($this);
-    }
+    // public function __construct($course) {
+    //    parent::__construct($course);
+    // }
 
 
     /**
@@ -73,7 +70,7 @@ class completion_criteria_completion extends \completion_criteria_completion {
 
             $record = $DB->get_record('course_completion_criteria', $params);
 
-            $this->attach_criteria(completion_criteria::factory((array) $record));
+            $this->attach_criteria(swtc_completion_criteria::factory((array) $record));
         }
 
         return $this->_criteria;

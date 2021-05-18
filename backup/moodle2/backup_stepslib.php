@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,6 +22,11 @@
  * @category    backup
  * @copyright   2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 05/17/21 - Initial writing.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -2671,6 +2675,12 @@ class backup_course_completion_structure_step extends backup_structure_step {
      * The structure of the course completion backup
      *
      * @return backup_nested_element
+     *
+     * SWTC history:
+     *
+     * 05/17/21 - Initial writing; added code to fix Assignment activity
+     * complete with passing grade (Moodle tracker MDL-56453).
+     *
      */
     protected function define_structure() {
 
@@ -2680,7 +2690,8 @@ class backup_course_completion_structure_step extends backup_structure_step {
         $cc = new backup_nested_element('course_completion');
 
         $criteria = new backup_nested_element('course_completion_criteria', array('id'), array(
-            'course', 'criteriatype', 'module', 'moduleinstance', 'courseinstanceshortname', 'enrolperiod',
+            // 'course', 'criteriatype', 'module', 'moduleinstance', 'courseinstanceshortname', 'enrolperiod',  // SWTC.
+            'course', 'criteriatype', 'module', 'moduleinstance', 'modulestatus', 'courseinstanceshortname', 'enrolperiod', // SWTC.
             'timeend', 'gradepass', 'role', 'roleshortname'
         ));
 

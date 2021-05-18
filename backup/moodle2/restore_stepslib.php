@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,6 +22,11 @@
  * @category    backup
  * @copyright   2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * SWTC history:
+ *
+ * 05/17/21 - Initial writing.
+ *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -3028,6 +3032,11 @@ class restore_course_completion_structure_step extends restore_structure_step {
      *
      * @global moodle_database $DB
      * @param stdClass $data
+     *
+     * SWTC history:
+     *
+     * 05/17/21 - Initial writing.
+     *
      */
     public function process_course_completion_criteria($data) {
         global $DB;
@@ -3103,6 +3112,7 @@ class restore_course_completion_structure_step extends restore_structure_step {
             'courseinstance' => $data->courseinstance,
             'module'         => $data->module,
             'moduleinstance' => $data->moduleinstance,
+            'modulestatus'   => $data->modulestatus,    // SWTC.
             'timeend'        => $data->timeend,
             'gradepass'      => $data->gradepass,
             'role'           => $data->role

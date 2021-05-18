@@ -35,8 +35,7 @@ require_once("{$CFG->libdir}/completionlib.php");
 // SWTC ********************************************************************************.
 // SWTC Customized code for Moodle core completion.
 // SWTC ********************************************************************************.
-use local_swtc\criteria\completion_info;
-use local_swtc\grouplib\grouplib;
+use local_swtc\grouplib\swtc_grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
@@ -51,7 +50,7 @@ $swtcuser = swtc_get_user([
 $debug = swtc_get_debug();
 
 // Other SWTC variables.
-$swtcgroups = new grouplib;
+$swtcgroups = new swtc_grouplib;
 // SWTC ********************************************************************************.
 
 /**
@@ -116,7 +115,7 @@ $modinfo = get_fast_modinfo($course);
 
 // Get criteria for course.
 // $completion = new completion_info($course);  // SWTC.
-$completion = new completion_info($course);    // SWTC.
+$completion = new swtc_completion_info($course);    // SWTC.
 
 if (!$completion->has_criteria()) {
     print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -612,7 +611,7 @@ if (!$csv) {
             if ($criterion->criteriatype === 8) {
                 list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
             } else if ($criterion->criteriatype === 4) {
-                list($id, $shortname, $fullname) = $completion->swtc_get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
             }
             // $row[] = strip_tags($criterion->get_title_detailed());
             $row[] = strip_tags($shortname. ' ' .$fullname);
@@ -728,7 +727,7 @@ foreach ($progress as $user) {
             if (isset($criterion->courseinstance)) {
                 $tempcourse = get_course($criterion->courseinstance);
                 // $info = new completion_info($tempcourse);    // SWTC.
-                $info = new completion_info($tempcourse);  // SWTC.
+                $info = new swtc_completion_info($tempcourse);  // SWTC.
 
                 // Is course complete?
                 $is_complete = $info->is_course_complete($user->id);

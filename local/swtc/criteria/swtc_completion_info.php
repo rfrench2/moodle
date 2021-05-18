@@ -31,24 +31,15 @@
  *
  */
 
-namespace local_swtc\criteria;
-
 defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->libdir . '/completionlib.php');
-
-use local_swtc\criteria\completion_criteria;
-use context_course;
-use context_system;
-use context_module;
-use context;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
-
+require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria.php');
 
 /**
  * Class and overriding methods copied from Moodle 3.10 code base.
@@ -66,7 +57,7 @@ require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
  * @copyright  2021 SWTC
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_info extends \completion_info {
+class swtc_completion_info extends \completion_info {
 
     /**
      * Course object passed during construction.
@@ -753,6 +744,17 @@ class completion_info extends \completion_info {
     }
 
     /**
+     * Check if course has completion criteria set
+     *
+     * @return bool Returns true if there are criteria
+     */
+    public function has_criteria() {
+        $criteria = $this->get_criteria();
+
+        return (bool) count($criteria);
+    }
+
+    /**
      * Get course completion criteria
      *
      * @param int $criteriatype Specific criteria type to return (optional)
@@ -788,7 +790,7 @@ class completion_info extends \completion_info {
             // Build array of criteria objects.
             $this->criteria = array();
             foreach ($records as $record) {
-                $this->criteria[$record->id] = completion_criteria::factory((array)$record);
+                $this->criteria[$record->id] = swtc_completion_criteria::factory((array)$record);
             }
         }
 
@@ -837,5 +839,25 @@ class completion_info extends \completion_info {
         }
 
         return $completions;
+    }
+
+    /**
+     * Obtains a list of activities for which completion is enabled on the
+     * course. The list is ordered by the section order of those activities.
+     *
+     * @return cm_info[] Array from $cmid => $cm of all activities with completion enabled,
+     *   empty array if none
+     */
+    public function get_activities() {
+        // print_object("in swtc_completion_info.php; about to print this");
+        // print_object($this);
+        $modinfo = get_fast_modinfo($this->course);
+        $result = array();
+        foreach ($modinfo->get_cms() as $cm) {
+            if ($cm->completion != COMPLETION_TRACKING_NONE && !$cm->deletioninprogress) {
+                $result[$cm->id] = $cm;
+            }
+        }
+        return $result;
     }
 }

@@ -20,7 +20,7 @@
  * SWTC customized code for Moodle course criteria type.
  *
  * @package    local
- * @subpackage completion_criteria_course.php
+ * @subpackage swtc_get_usercompletion_criteria_course.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -30,19 +30,8 @@
  *
  */
 
-namespace local_swtc\criteria;
-
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/completion/criteria/completion_criteria_course.php');
-
-
-// use stdClass;
-// use context_course;
-// use context_module;
-// use moodle_url;
-// use completion_info;
-// use completion_criteria_course;
-
 
 /**
  * Course completion critieria - completion on course completion
@@ -56,7 +45,7 @@ require_once($CFG->dirroot.'/completion/criteria/completion_criteria_course.php'
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_criteria_course extends \completion_criteria_course {
+class swtc_completion_criteria_course extends \completion_criteria_course {
 
     /**
      * Add appropriate form elements to the critieria form
@@ -70,19 +59,13 @@ class completion_criteria_course extends \completion_criteria_course {
      *
      */
     public function config_form_display(&$mform, $data = null) {
-        $modnames = get_module_types_names();
-        $field = 'criteria_activity[' . $data->id . ']';
-        $label = $modnames[self::get_mod_name($data->module)] . ' - ' . format_string($data->name);
+        global $CFG;
 
-        $choices = [];
-        $choices[0] = '--';
-        $choices[self::STATUS_COMPLETED] = get_string('activityiscompleted', 'core_completion');
-        $choices[self::STATUS_COMPLETED_PASS] = get_string('activityissuccessfullycompleted', 'core_completion');
-
-        $mform->addElement('select', $field, $label, $choices, ['group' => 1]);
+        $link = "<a href=\"{$CFG->wwwroot}/course/view.php?id={$data->id}\">".s($data->fullname).'</a>';
+        $mform->addElement('checkbox', 'criteria_course['.$data->id.']', $link);
 
         if ($this->id) {
-            $mform->setDefault($field, $this->modulestatus);
+            $mform->setDefault('criteria_course['.$data->id.']', 1);
         }
     }
 
@@ -146,10 +129,10 @@ class completion_criteria_course extends \completion_criteria_course {
             )
         ';
 
-        // Loop through completions, and mark as complete
+        // Loop through completions, and mark as complete.
         $rs = $DB->get_recordset_sql($sql);
         foreach ($rs as $record) {
-            $completion = new completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
+            $completion = new swtc_completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
             $completion->mark_complete($record->timecompleted);
         }
         $rs->close();
@@ -168,22 +151,15 @@ class completion_criteria_course extends \completion_criteria_course {
     public function update_config(&$data) {
         global $DB;
 
-        if (!empty($data->criteria_activity) && is_array($data->criteria_activity)) {
+        if (!empty($data->criteria_course) && is_array($data->criteria_course)) {
 
             $this->course = $data->id;
 
-            // Data comes from advcheckbox, so contains keys for all activities.
-            // A value of 0 is 'not checked' whereas 1 is 'checked'.
-            foreach ($data->criteria_activity as $activity => $val) {
-                // Only update those which are checked.
-                if (!empty($val)) {
-                    $module = $DB->get_record('course_modules', array('id' => $activity));
-                    $this->module = self::get_mod_name($module->module);
-                    $this->moduleinstance = $activity;
-                    $this->modulestatus = $val;
-                    $this->id = null;
-                    $this->insert();
-                }
+            foreach ($data->criteria_course as $course) {
+
+                $this->courseinstance = $course;
+                $this->id = NULL;
+                $this->insert();
             }
         }
     }
@@ -191,7 +167,7 @@ class completion_criteria_course extends \completion_criteria_course {
     /**
      * Review this criteria and decide if the user has completed
      *
-     * @param completion_completion $completion     The user's completion record
+     * @param swtc_completion_completion $completion     The user's completion record
      * @param bool $mark Optionally set false to not save changes to database
      * @return bool
      *
@@ -203,22 +179,12 @@ class completion_criteria_course extends \completion_criteria_course {
     public function review($completion, $mark = true) {
         global $DB;
 
-        $course = $DB->get_record('course', array('id' => $completion->course));
-        $cm = $DB->get_record('course_modules', array('id' => $this->moduleinstance));
-        $info = new completion_info($course);
+        $course = $DB->get_record('course', array('id' => $this->courseinstance));
+        $info = new swtc_completion_info($course);
 
-        $data = $info->get_data($cm, false, $completion->userid);
+        // If the course is complete.
+        if ($info->is_course_complete($completion->userid)) {
 
-        if ($this->modulestatus == self::STATUS_COMPLETED) {
-            // Any status of completion is accepted.
-            $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL];
-        } else if ($this->modulestatus == self::STATUS_COMPLETED_PASS) {
-            // Successful statuses of completion are accepted.
-            $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS];
-        }
-
-        // If the activity is complete
-        if (in_array($data->completionstate, array(COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL))) {
             if ($mark) {
                 $completion->mark_complete();
             }
@@ -232,7 +198,7 @@ class completion_criteria_course extends \completion_criteria_course {
     /**
      * Return criteria progress details for display in reports
      *
-     * @param completion_completion $completion The user's completion record
+     * @param swtc_completion_completion $completion The user's completion record
      * @return array An array with the following keys:
      *     type, criteria, requirement, status
      *
@@ -241,7 +207,7 @@ class completion_criteria_course extends \completion_criteria_course {
      * 04/07/21 - Initial writing.
      *
      */
-    public function get_details_course($completion) {
+    public function get_details($completion) {
         global $CFG, $DB;
 
         // Get completion info.

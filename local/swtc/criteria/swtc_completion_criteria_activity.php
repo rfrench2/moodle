@@ -26,21 +26,13 @@
  *
  * History:
  *
- * 05/14/21 - Initial writing.
+ * 05/14/21 - Initial writing; added code to fix assignment activity complete
+ * with passing grade (Moodle tracker MDL-56453).
  *
  **/
 
-namespace local_swtc\criteria;
-
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/completion/criteria/completion_criteria_activity.php');
-
-
-// use stdClass;
-// use context_course;
-// use context_module;
-// use moodle_url;
-// use completion_info;
 
 /**
  * Course completion critieria - completion on activity completion
@@ -51,12 +43,12 @@ require_once($CFG->dirroot.'/completion/criteria/completion_criteria_activity.ph
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class completion_criteria_activity extends \completion_criteria_activity {
+class swtc_completion_criteria_activity extends \completion_criteria_activity {
 
-    /** Status requiring any type of completion. */
-    const STATUS_COMPLETED = 1;
-    /** Status requiring successful completion. */
-    const STATUS_COMPLETED_PASS = 2;
+    /** Status requiring any type of completion. */     // SWTC.
+    const STATUS_COMPLETED = 1;                         // SWTC.
+    /** Status requiring successful completion. */      // SWTC.
+    const STATUS_COMPLETED_PASS = 2;                    // SWTC.
 
     /**
      * Add appropriate form elements to the critieria form
@@ -66,7 +58,8 @@ class completion_criteria_activity extends \completion_criteria_activity {
      *
      * SWTC history:
      *
-     * 05/14/21 - Initial writing.
+     * 05/14/21 - Initial writing; added code to fix assignment activity
+     * complete with passing grade (Moodle tracker MDL-56453).
      *
      */
     public function config_form_display(&$mform, $data = null) {
@@ -91,13 +84,14 @@ class completion_criteria_activity extends \completion_criteria_activity {
      *
      * History:
      *
-     * 05/14/21 - Initial writing.
+     * 05/14/21 - Initial writing; added code to fix assignment activity
+     * complete with passing grade (Moodle tracker MDL-56453).
      *
      */
     public function cron() {
         global $DB;
 
-        // Get all users who meet this criteria.
+        // Get all users who meet this criteria.        // SWTC.
         $sql = '
             SELECT DISTINCT
                 c.id AS course,
@@ -146,10 +140,10 @@ class completion_criteria_activity extends \completion_criteria_activity {
             )
         ';
 
-        // Loop through completions, and mark as complete
+        // Loop through completions, and mark as complete.
         $rs = $DB->get_recordset_sql($sql);
         foreach ($rs as $record) {
-            $completion = new completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
+            $completion = new swtc_completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
             $completion->mark_complete($record->timecompleted);
         }
         $rs->close();
@@ -162,7 +156,8 @@ class completion_criteria_activity extends \completion_criteria_activity {
      *
      * SWTC history:
      *
-     * 05/14/21 - Initial writing.
+     * 05/14/21 - Initial writing; added code to fix assignment activity
+     * complete with passing grade (Moodle tracker MDL-56453)
      *
      */
     public function update_config(&$data) {
@@ -180,7 +175,7 @@ class completion_criteria_activity extends \completion_criteria_activity {
                     $module = $DB->get_record('course_modules', array('id' => $activity));
                     $this->module = self::get_mod_name($module->module);
                     $this->moduleinstance = $activity;
-                    $this->modulestatus = $val;
+                    $this->modulestatus = $val;         // SWTC.
                     $this->id = null;
                     $this->insert();
                 }
@@ -191,13 +186,14 @@ class completion_criteria_activity extends \completion_criteria_activity {
     /**
      * Review this criteria and decide if the user has completed
      *
-     * @param completion_completion $completion     The user's completion record
+     * @param swtc_completion_completion $completion     The user's completion record
      * @param bool $mark Optionally set false to not save changes to database
      * @return bool
      *
      * SWTC history:
      *
-     * 04/13/21 - Initial writing.
+     * 04/13/21 - Initial writing; added code to fix assignment activity
+     * complete with passing grade (Moodle tracker MDL-56453).
      *
      */
     public function review($completion, $mark = true) {
@@ -209,7 +205,7 @@ class completion_criteria_activity extends \completion_criteria_activity {
 
         $data = $info->get_data($cm, false, $completion->userid);
 
-        if ($this->modulestatus == self::STATUS_COMPLETED) {
+        if ($this->modulestatus == self::STATUS_COMPLETED) {        // SWTC.
             // Any status of completion is accepted.
             $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL];
         } else if ($this->modulestatus == self::STATUS_COMPLETED_PASS) {
@@ -217,8 +213,8 @@ class completion_criteria_activity extends \completion_criteria_activity {
             $statesaccepted = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS];
         }
 
-        // If the activity is complete
-        if (in_array($data->completionstate, array(COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS, COMPLETION_COMPLETE_FAIL))) {
+        // If the activity is complete.
+        if (in_array($data->completionstate, $statesaccepted)) {
             if ($mark) {
                 $completion->mark_complete();
             }
