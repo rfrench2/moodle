@@ -117,6 +117,7 @@ class swtc_completion_info extends \completion_info {
 
         $useraccesstype = $swtcuser->get_accesstype();
         $usergroupname = $swtcuser->get_groupname();
+        $usergeoname = $swtcuser->get_geoname();
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
@@ -555,7 +556,8 @@ class swtc_completion_info extends \completion_info {
                     if (isset($debug)) {
                         $messages[] = "About to print groups ==local_swtc_criteria_completion_info.php ===get_tracked_users===.\n";
                         $messages[] = print_r($groups, true);
-                        $messages[] = "Finished printing groups ==local_swtc_criteria_completion_info.php ===get_tracked_users===.\n";
+                        $messages[] = "Finished printing groups ==local_swtc_criteria_completion_info.php
+                            ===get_tracked_users===.\n";
                         $debug->logmessage($messages, 'both');
                         unset($messages);
                     }
@@ -749,9 +751,9 @@ class swtc_completion_info extends \completion_info {
      * @return bool Returns true if there are criteria
      */
     public function has_criteria() {
-        $criteria = $this->get_criteria();
+        $criteriax = $this->get_criteria();
 
-        return (bool) count($criteria);
+        return (bool) count($criteriax);
     }
 
     /**
@@ -800,27 +802,27 @@ class swtc_completion_info extends \completion_info {
         }
 
         // If we are only after a specific criteria type.
-        $criteria = array();
+        $criteriax = array();
         foreach ($this->criteria as $criterion) {
 
             if ($criterion->criteriatype != $criteriatype) {
                 continue;
             }
 
-            $criteria[$criterion->id] = $criterion;
+            $criteriax[$criterion->id] = $criterion;
         }
 
-        return $criteria;
+        return $criteriax;
     }
 
     /**
      * Get all course criteria's completion objects for a user
      *
-     * @param int $user_id User id
+     * @param int $userid User id
      * @param int $criteriatype Specific criteria type to return (optional)
      * @return array
      */
-    public function get_completions($user_id, $criteriatype = null) {
+    public function get_completions($userid, $criteriatype = null) {
         $criteria = $this->get_criteria($criteriatype);
 
         $completions = array();
@@ -828,7 +830,7 @@ class swtc_completion_info extends \completion_info {
         foreach ($criteria as $criterion) {
             $params = array(
                 'course'        => $this->course_id,
-                'userid'        => $user_id,
+                'userid'        => $userid,
                 'criteriaid'    => $criterion->id
             );
 
@@ -849,8 +851,6 @@ class swtc_completion_info extends \completion_info {
      *   empty array if none
      */
     public function get_activities() {
-        // print_object("in swtc_completion_info.php; about to print this");
-        // print_object($this);
         $modinfo = get_fast_modinfo($this->course);
         $result = array();
         foreach ($modinfo->get_cms() as $cm) {

@@ -92,6 +92,7 @@ function swtc_set_user($userid, $relateduserid = null) {
     $SESSION->SWTC->USER->set_relateduser();
     $SESSION->SWTC->USER->set_cohortnames($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupsort($temp->profile_field_accesstype);
+    $SESSION->SWTC->USER->set_geoname($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupname($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupnames(array());
 

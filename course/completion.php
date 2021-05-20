@@ -77,13 +77,29 @@ $PAGE->set_heading($course->fullname);
 $PAGE->set_pagelayout('admin');
 
 // Create the settings form instance.
-$form = new course_completion_form('completion.php?id='.$id, array('course' => $course));
+// SWTC ********************************************************************************.
+// Check SWTC flag for customized code in Moodle core files.
+// SWTC ********************************************************************************.
+if (get_config('local_swtc', 'swtc')) {
+    require_once($CFG->dirroot.'/local/swtc/forms/swtc_completion_form.php');
+    $form = new swtc_course_completion_form('completion.php?id='.$id, array('course' => $course));
+} else {
+    // Create the settings form instance.
+    $form = new course_completion_form('completion.php?id='.$id, array('course' => $course));
+}
 
 if ($form->is_cancelled()){
     redirect($CFG->wwwroot.'/course/view.php?id='.$course->id);
 
 } else if ($data = $form->get_data()) {
-    $completion = new completion_info($course);
+    // SWTC ********************************************************************************.
+    // Check SWTC flag for customized code in Moodle core files.
+    // SWTC ********************************************************************************.
+    if (get_config('local_swtc', 'swtc')) {
+        $completion = new swtc_completion_info($course);
+    } else {
+        $completion = new completion_info($course);
+    }
 
     // Process criteria unlocking if requested.
     if (!empty($data->settingsunlock)) {
@@ -99,7 +115,18 @@ if ($form->is_cancelled()){
     // Loop through each criteria type and run its update_config() method.
     global $COMPLETION_CRITERIA_TYPES;
     foreach ($COMPLETION_CRITERIA_TYPES as $type) {
-        $class = 'completion_criteria_'.$type;
+        // SWTC ********************************************************************************.
+        // Check SWTC flag for customized code in Moodle core files.
+        // SWTC ********************************************************************************.
+        if (($type == 'course') || ($type == 'activity')) {
+            if (get_config('local_swtc', 'swtc')) {
+                $class = 'swtc_completion_criteria_'.$type;
+            } else {
+                $class = 'completion_criteria_'.$type;
+            }
+        } else {
+            $class = 'completion_criteria_'.$type;
+        }
         $criterion = new $class();
         $criterion->update_config($data);
     }

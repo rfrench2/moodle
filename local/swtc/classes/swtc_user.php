@@ -131,6 +131,12 @@ class swtc_user {
     private $groupsort;
 
     /**
+     * The GEO the user is a member of.
+     * @var string
+     */
+    private $geoname;
+
+    /**
      * The preg_match string that should be used to
      * find all the groups the user is a member of.
      * @var string
@@ -182,6 +188,7 @@ class swtc_user {
         $this->relateduser = null;
         $this->cohortnames = null;
         $this->groupsort = null;
+        $this->geoname = null;
         $this->groupname = null;
         $this->groupnames = array();
         $this->psuser = null;
@@ -461,6 +468,41 @@ class swtc_user {
         }
     }
 
+    public function set_geoname($accesstype) {
+
+        // The following pattern will match "<whatever>-US1-<whatever> or "<whatever>-EM5-<whatever>".
+        $cmpgeoadmins = '/-([A-Z][A-Z])-/';
+        $cmpallotherroles = '/-([A-Z][A-Z]+[1-9])-/';
+
+        // SWTC ********************************************************************************.
+        // Add for PS / SD management access types.
+        // SWTC ********************************************************************************.
+        if ((preg_match(get_string('access_premiersupport_pregmatch_siteadmin', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            $this->geoname = '%';
+        } else if ((preg_match(get_string('access_premiersupport_pregmatch_geoadmin', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_geoadmin', 'local_swtc'), $accesstype))) {
+            $this->geoname = '%';
+        } else if ((preg_match(get_string('access_premiersupport_pregmatch_stud', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_premiersupport_pregmatch_mgr', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_premiersupport_pregmatch_admin', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_stud', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_mgr', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_servicedelivery_pregmatch_admin', 'local_swtc'), $accesstype))) {
+            // SWTC ********************************************************************************.
+            // Add for all other PS / SD access types.
+            // SWTC ********************************************************************************.
+            preg_match($cmpallotherroles, $accesstype, $match);
+            $this->geoname = !empty($match) ? $match[1] : null;
+        } else if ((preg_match(get_string('access_lenovo_pregmatch_admin', 'local_swtc'), $accesstype))
+            || (preg_match(get_string('access_lenovo_pregmatch_siteadmin', 'local_swtc'), $accesstype))) {
+            // SWTC ********************************************************************************.
+            // Add for all Lenovo administrator access types.
+            // SWTC ********************************************************************************.
+            $this->geoname = '%';
+        }
+    }
+
     public function set_groupname($accesstype) {
 
         // The following pattern will match "<whatever>-US1-<whatever> or "<whatever>-EM5-<whatever>".
@@ -499,44 +541,9 @@ class swtc_user {
     }
 
     public function set_groupnames($groupnames) {
-        // SWTC ********************************************************************************.
-        // SWTC swtcuser and debug variables.
-        // SWTC ********************************************************************************.
-        $debug = swtc_get_debug();
-
-        if (isset($debug)) {
-            // SWTC ********************************************************************************.
-            // Always output standard header information.
-            // SWTC ********************************************************************************.
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering /local/swtc/classes/swtc_user.php.===set_groupnames.enter.";
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "The groupnames that are being looked for follow :";
-            $messages[] = print_r($groupnames, true);
-            $messages[] = "Groupnames ends; the existing this->groupnames follow :";
-            $messages[] = print_r($this->groupnames, true);
-            $messages[] = "Existing this->groupnames ends.";
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $debug->logmessage($messages, 'both');
-            unset($messages);
-        }
 
         $this->groupnames = array_merge($this->groupnames, $groupnames);
 
-        if (isset($debug)) {
-            // SWTC ********************************************************************************.
-            // Always output standard header information.
-            // SWTC ********************************************************************************.
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving /local/swtc/classes/swtc_user.php.===set_groupnames.exit.";
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "The NEW this->groupnames follow :";
-            $messages[] = print_r($this->groupnames, true);
-            $messages[] = "Existing groupnames ends.";
-            $messages[] = get_string('swtc_debug', 'local_swtc');
-            $debug->logmessage($messages, 'both');
-            unset($messages);
-        }
         return $this->groupnames;
     }
 
@@ -1060,6 +1067,10 @@ class swtc_user {
 
     public function get_groupsort() {
         return $this->groupsort;
+    }
+
+    public function get_geoname() {
+        $this->geoname = null;
     }
 
     public function get_groupname() {

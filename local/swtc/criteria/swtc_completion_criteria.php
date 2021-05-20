@@ -203,8 +203,8 @@ abstract class swtc_completion_criteria extends \data_object {
     public function get_icon($alt, array $attributes = null) {
         global $COMPLETION_CRITERIA_TYPES;
 
-        $criteriatype = $COMPLETION_CRITERIA_TYPES[$this->criteriatype];
-        return new pix_icon('i/'.$criteriatype, $alt, 'moodle', $attributes);
+        $criteriatypex = $COMPLETION_CRITERIA_TYPES[$this->criteriatype];
+        return new pix_icon('i/'.$criteriatypex, $alt, 'moodle', $attributes);
     }
 
     /**

@@ -17,12 +17,12 @@
 /**
  * SWTC customized code for groups. Remember to add the
  * following at the top of any module that requires these functions:
- * use local_swtc\grouplib\grouplib;
+ * use local_swtc\grouplib\swtc_grouplib;
  *
  * Version details
  *
  * @package    local
- * @subpackage /swtc/classes/grouplib/grouplib.php
+ * @subpackage /swtc/classes/grouplib/swtc_grouplib.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -57,7 +57,7 @@ use stdClass;
  * 04/19/21 - Initial writing.
  *
  **/
-class grouplib {
+class swtc_grouplib {
 
     public function __construct() {
 
@@ -108,7 +108,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_swtc_grouplib.php.groups_get_all_groups.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -202,7 +202,7 @@ class grouplib {
                 // Always output standard header information.
                 // SWTC ********************************************************************************.
                 $messages[] = get_string('swtc_debug', 'local_swtc');
-                $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (upper1)===.";
+                $messages[] = "Leaving local_swtc_classes_grouplib_swtc_grouplib.php.groups_get_all_groups.exit (upper1)===.";
                 $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "sort is :$swtcsort. About to print groups.";
                 $messages[] = print_r($groups, true);
@@ -259,7 +259,7 @@ class grouplib {
                 // Always output standard header information.
                 // SWTC ********************************************************************************.
                 $messages[] = get_string('swtc_debug', 'local_swtc');
-                $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (upper2)===.";
+                $messages[] = "Leaving local_swtc_classes_grouplib_swtc_grouplib.php.groups_get_all_groups.exit (upper2)===.";
                 $messages[] = "withmembers is empty.";
                 $messages[] = get_string('swtc_debug', 'local_swtc');
                 $debug->logmessage($messages, 'both');
@@ -290,7 +290,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_get_all_groups.exit (lower)===.";
+            $messages[] = "Leaving local_swtc_classes_grouplib_swtc_grouplib.php.groups_get_all_groups.exit (lower)===.";
             $messages[] = $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -352,7 +352,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_print_course_menu.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_swtc_grouplib.php.groups_print_course_menu.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -468,7 +468,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_print_course_menu.exit===.";
+            $messages[] = "Leaving local_swtc_classes_grouplib_swtc_grouplib.php.groups_print_course_menu.exit===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -623,7 +623,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.groups_sort_menu_options.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_swtc_grouplib.php.groups_sort_menu_options.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -975,7 +975,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Leaving local_swtc_classes_grouplib_grouplib.php.groups_sort_menu_options.exit===.";
+            $messages[] = "Leaving local_swtc_classes_grouplib_swtc_grouplib.php.groups_sort_menu_options.exit===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);
@@ -1036,7 +1036,7 @@ class grouplib {
             // Always output standard header information.
             // SWTC ********************************************************************************.
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            $messages[] = "Entering local_swtc_classes_grouplib_grouplib.php.set_where_conditions_by_groupname.enter===.";
+            $messages[] = "Entering local_swtc_classes_grouplib_swtc_grouplib.php.set_where_conditions_by_groupname.enter===.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
             $debug->logmessage($messages, 'both');
             unset($messages);

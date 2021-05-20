@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Completion data for a specific user, course and critieria
+ * Completion data for a specific user, course and critieria.
+ *
+ * SWTC customized code for Moodle completion criteria type.
  *
  * @package core_completion
  * @category completion
@@ -38,6 +40,10 @@ require_once($CFG->dirroot.'/completion/data_object.php');
  */
 class swtc_completion_criteria_completion extends \completion_criteria_completion {
 
+    /* @var completion_criterria Associated criteria object */
+    private $_criteria;
+
+
     /**
      * Constructs with course details.
      *
@@ -48,10 +54,15 @@ class swtc_completion_criteria_completion extends \completion_criteria_completio
      *
      * @param stdClass $course Moodle course object.
      */
-    // public function __construct($course) {
-    //    parent::__construct($course);
-    // }
 
+    /**
+     * Attach a preloaded criteria object to this object
+     *
+     * @param   $criteria   object  completion_criteria
+     */
+    public function attach_criteria(completion_criteria $criteria) {
+        $this->_criteria = $criteria;
+    }
 
     /**
      * Return the associated criteria with this completion
@@ -74,5 +85,14 @@ class swtc_completion_criteria_completion extends \completion_criteria_completio
         }
 
         return $this->_criteria;
+    }
+
+    /**
+     * Return criteria status text for display in reports {@link completion_criteria::get_status()}
+     *
+     * @return string
+     */
+    public function get_status() {
+        return $this->_criteria->get_status($this);
     }
 }
