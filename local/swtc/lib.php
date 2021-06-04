@@ -32,8 +32,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use local_swtc\swtc_user;
-use local_swtc\swtc_debug;
+use \local_swtc\swtc_user;
+use \local_swtc\swtc_debug;
 
 require_once($CFG->libdir. '/navigationlib.php');
 require_once($CFG->libdir . '/adminlib.php');
