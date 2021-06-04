@@ -37,6 +37,8 @@ require_once($CFG->dirroot.'/course/format/renderer.php');
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 
+use \format_swtcpractical\output\htmlpage;
+
 /**
  * Basic renderer for topics format.
  *
@@ -280,7 +282,9 @@ class format_swtcpractical_renderer extends format_section_renderer_base {
 
         // SWTC ********************************************************************************.
         // SWTC swtcuser and debug variables.
-        $swtcuser = swtc_get_user($USER);
+        $swtcuser = swtc_get_user([
+            'userid' => $USER->id,
+            'username' => $USER->username]);
         $debug = swtc_get_debug();
 
         // Other SWTC variables.
@@ -460,5 +464,15 @@ class format_swtcpractical_renderer extends format_section_renderer_base {
         }
         // SWTC ********************************************************************************.
         return $text;
+    }
+
+    /**
+     * Defer to template..
+     *
+     * @param grading_app $app - All the data to render the grading app.
+     */
+    public function render_htmlpage(htmlpage $app) {
+        $context = $app->export_for_template($this);
+        return $this->render_from_template('format_swtcpractical/htmlpage', $context);
     }
 }

@@ -33,6 +33,8 @@
  *
  */
 
+use \local_swtc\curriculums\curriculums;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot. '/course/format/lib.php');
@@ -42,6 +44,7 @@ require_once($CFG->dirroot. '/course/lib.php');
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
+require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
 
 /**
  * Main class for the Topics course format
@@ -250,6 +253,8 @@ class format_swtcpractical extends format_base {
     public function course_format_options($foreditform = false) {
         global $DB;
 
+        $curriculums = new curriculums;
+
         static $courseformatoptions = false;
         $curriculumarray = array();
         $relatedcourses = array();
@@ -293,7 +298,7 @@ class format_swtcpractical extends format_base {
         // Get all the curriculum courses and fill the "curriculums" select element.
         // Adding course shortname to curriculums listbox; sorting listbox by course shortname.
         // SWTC ********************************************************************************.
-        $records = curriculums_getall();
+        $records = $curriculums->get_all_curriculums();
 
         foreach ($records as $record) {
             $curriculumarray[$record->courseid] = $record->shortname .' '. $record->fullname;
@@ -500,7 +505,7 @@ class format_swtcpractical extends format_base {
             $messages[] = print_r($swtcuser, true);
             $messages[] = "Finished printing swtcuser.";
             $messages[] = get_string('swtc_debug', 'local_swtc');
-            debug_logmessage($messages, 'logfile');
+            $debug->logmessage($messages, 'logfile');
             unset($messages);
         }
 
@@ -516,7 +521,7 @@ class format_swtcpractical extends format_base {
                     not actual data).";
                 $messages[] = print_r($data, true);
                 $messages[] = "Finished printing data (includes changes just made to course).";
-                debug_logmessage($messages, 'detailed');
+                $debug->logmessage($messages, 'detailed');
                 unset($messages);
             }
 
@@ -525,7 +530,7 @@ class format_swtcpractical extends format_base {
             foreach ($options as $key => $unused) {
                 if (isset($debug)) {
                     $messages[] = "key (course format option) is :$key.";
-                    debug_logmessage($messages, 'detailed');
+                    $debug->logmessage($messages, 'detailed');
                     unset($messages);
                 }
 
