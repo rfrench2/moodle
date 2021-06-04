@@ -31,8 +31,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use local_swtc\swtc_user;
-use local_swtc\swtc_debug;
+use \local_swtc\swtc_user;
+use \local_swtc\swtc_debug;
 
 /**
  * Set a reference to SESSION->SWTC->USER.
@@ -96,10 +96,6 @@ function swtc_set_user($userid, $relateduserid = null) {
     $SESSION->SWTC->USER->set_groupname($temp->profile_field_accesstype);
     $SESSION->SWTC->USER->set_groupnames(array());
 
-
-
-    // print_object("about to print user");
-    // print_object($SESSION->SWTC->USER);
     return $SESSION->SWTC->USER;
 
 }
@@ -158,7 +154,7 @@ function swtc_get_user($args=array()) {
  *
  */
 function swtc_set_debug() {
-    global $SESSION;
+    global $SESSION, $USER;
 
     // SWTC ********************************************************************************.
     // At this point, $DEBUG may or may not be set. We will use a simple local variable based on the setting 'swtcdebug'
@@ -175,8 +171,8 @@ function swtc_set_debug() {
     // SWTC ********************************************************************************.
     // Set the fully qualified log file names.
     // SWTC ********************************************************************************.
-    $SESSION->SWTC->DEBUG->set_fqlog();
-    $SESSION->SWTC->DEBUG->set_fqdetailed();
+    $SESSION->SWTC->DEBUG->set_fqlog($USER->id);
+    $SESSION->SWTC->DEBUG->set_fqdetailed($USER->id);
 
     $SESSION->SWTC->DEBUG->set_username();
 

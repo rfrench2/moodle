@@ -30,7 +30,7 @@
  *
  **/
 
-use local_swtc\swtc_user;
+use \local_swtc\swtc_user;
 
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/user/editlib.php');

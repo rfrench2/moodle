@@ -40,9 +40,9 @@ require_once($CFG->libdir.'/completionlib.php');
 // SWTC ********************************************************************************.
 // SWTC customized code for Moodle completion form.
 // SWTC ********************************************************************************.
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_info.php');
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria_course.php');
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria_activity.php');
+require_once($CFG->dirroot.'/local/swtc/criteria/completion_info_swtc.php');
+require_once($CFG->dirroot.'/local/swtc/criteria/completion_criteria_course_swtc.php');
+require_once($CFG->dirroot.'/local/swtc/criteria/completion_criteria_activity_swtc.php');
 
 /**
  * Defines the course completion settings form.
@@ -63,7 +63,7 @@ class swtc_course_completion_form extends course_completion_form {
         $mform = $this->_form;
         $course = $this->_customdata['course'];
 
-        $completion = new swtc_completion_info($course);
+        $completion = new completion_info_swtc($course);
 
         $params = array(
             'course'  => $course->id
@@ -117,14 +117,14 @@ class swtc_course_completion_form extends course_completion_form {
                 $mform->addElement('static', null, null, html_writer::link('#',     // SWTC.
                     get_string('togglebetweenstates', 'core_completion'), ['id' => $togglerid]));   // SWTC.
                 $PAGE->requires->js_call_amd('core_completion/value_toggler', 'init', ['#' . $togglerid, 'select[group=1]', [
-                    swtc_completion_criteria_activity::STATUS_COMPLETED,        // SWTC.
-                    swtc_completion_criteria_activity::STATUS_COMPLETED_PASS,   // SWTC.
+                    completion_criteria_activity_swtc::STATUS_COMPLETED,        // SWTC.
+                    completion_criteria_activity_swtc::STATUS_COMPLETED_PASS,   // SWTC.
                     0                                                           // SWTC.
                 ]]);                                                                // SWTC.
             }
             foreach ($activities as $activity) {
                 $paramsa = array('moduleinstance' => $activity->id);
-                $criteria = new swtc_completion_criteria_activity(array_merge($params, $paramsa));  // SWTC.
+                $criteria = new completion_criteria_activity_swtc(array_merge($params, $paramsa));  // SWTC.
                 $criteria->config_form_display($mform, $activity);
             }
             $mform->addElement('static', 'criteria_role_note', '', get_string('activitiescompletednote', 'core_completion'));

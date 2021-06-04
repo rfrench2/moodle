@@ -33,8 +33,6 @@
 
 namespace local_swtc;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 use cache;
 use core_course_category;
@@ -43,8 +41,10 @@ use core_date;
 use DateTime;
 use core_user;
 
-use local_swtc\swtc_debug;
-use local_swtc\swtc_counter;
+use \local_swtc\swtc_debug;
+use \local_swtc\swtc_counter;
+
+defined('MOODLE_INTERNAL') || die();
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.

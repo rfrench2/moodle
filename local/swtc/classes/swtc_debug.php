@@ -27,14 +27,13 @@
  * 10/14/210 - Initial writing.
  *
  **/
-
 namespace local_swtc;
-
-defined('MOODLE_INTERNAL') || die();
 
 use stdClass;
 use DateTime;
 use core_date;
+
+defined('MOODLE_INTERNAL') || die();
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS functions.
@@ -266,7 +265,7 @@ class swtc_debug {
         // $this->username = $currentuser['name'];
     }
 
-    public function set_fqlog() {
+    public function set_fqlog($userid) {
         global $CFG;
 
         // SWTC ********************************************************************************.
@@ -304,7 +303,7 @@ class swtc_debug {
         // $logpath =  "swtc" . $dsep . "sb" . $dsep . "logs".
         $logpath = $paths['debug_log_folder'];
         // Regular debug log file is named "debug_yyyymmdd.log".
-        $debugfilename = "debug_" . date("Ymd") .'.html';
+        $debugfilename = "debug_" . date("Ymd") . "_" . $userid . '.html';
 
         // SWTC ********************************************************************************.
         // Check that $logpath was correctly created.
@@ -319,7 +318,7 @@ class swtc_debug {
         }
     }
 
-    public function set_fqdetailed() {
+    public function set_fqdetailed($userid) {
         global $CFG;
 
         // SWTC ********************************************************************************.
@@ -356,7 +355,7 @@ class swtc_debug {
         // Example call (from csvlib_class.php): $filename = make_temp_directory('csvimport/'.$type.'/'.$USER->id).
         $logpath = $paths['debug_log_folder'];
         // Detailed debug log file is named "debug_yyyymmdd.details.log".
-        $detailfilename = "debug_" . date("Ymd") . '.detailed.html';
+        $detailfilename = "debug_" . date("Ymd") . "_" . $userid . '.detailed.html';
 
         // SWTC ********************************************************************************.***.
         // Check that $logpath was correctly created.
@@ -384,10 +383,11 @@ class swtc_debug {
      *
      **/
     public function get_debug() {
-        $debug = new swtc_debug();
-        $debug->set_fqlog();
-        $debug->set_fqdetailed();
-        return $debug;
+        if (isset($this)) {
+            return $this;
+        } else {
+            return set_debug();
+        }
     }
 
     public function get_counter() {
@@ -445,8 +445,8 @@ class swtc_debug {
                 $messages[] = get_string('swtc_debug', 'local_swtc');
                 $messages[] = "Starting debugging ===debug_start_logfile=== $da ";
                 $messages[] = "Timestamp is :" .$today->format('H:i:s.u').".==1.debug_start===.";
-                $messages[] = "Log filename is :". $debug->fqlog .".==debug_start===.";
-                $messages[] = "Detailed log filename is :". $debug->fqdetailed .".==debug_start===.";
+                $messages[] = "Log filename is :". $debug->get_fqlog() .".==debug_start===.";
+                $messages[] = "Detailed log filename is :". $debug->get_fqdetailed() .".==debug_start===.";
                 // Write the above header text to 'logfile'. Will create a new file (instead of appending to it).
                 $this->logmessage($messages, 'logfile', 'create');
                 unset($messages);
@@ -523,8 +523,8 @@ class swtc_debug {
                 $eol = PHP_EOL;
             }
 
-            $fqlog = $debug->fqlog;
-            $fqdetailed = $debug->fqdetailed;
+            $fqlog = $debug->get_fqlog();
+            $fqdetailed = $debug->get_fqdetailed();
 
             // Set flags. If flags is already set, it can only be 'create'.
             if (!isset($flags)) {

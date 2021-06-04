@@ -28,8 +28,9 @@
  * 11/09/20 - Initial writing.
  *
  */
-
 namespace theme_adaptable\output;
+
+use \local_swtc\curriculums\curriculums;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -37,9 +38,8 @@ defined('MOODLE_INTERNAL') || die;
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
-use context_system;
 
+use context_system;
 use block_contents;
 use context_course;
 use custom_menu;
@@ -1629,6 +1629,7 @@ EOT;
             'username' => $USER->username]);
         $debug = swtc_get_debug();
         $mycurriculums = get_string('mycurriculums', 'local_swtc');
+        $curriculums = new curriculums;
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
@@ -1935,7 +1936,7 @@ EOT;
                         // Adding two menu items under "My Courses": "My Courses" and "My Curriculums".
                         // SWTC ********************************************************************************.
                         if ((has_capability('local/swtc:swtc_view_curriculums', context_system::instance()))
-                            || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+                            || (!empty($curriculums->getall_enrollments_for_user($USER->id)))) {
                             // Use the "mysites" string in theme_adaptable since it is in the correct case ("My Courses").
                             $branch->add(get_string('mysites', 'theme_adaptable'),
                                 new moodle_url('/my/index.php'), '', null, 'mycourses');
