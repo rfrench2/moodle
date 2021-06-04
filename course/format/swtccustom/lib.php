@@ -28,15 +28,17 @@
  *
  */
 
+use \local_swtc\curriculums\curriculums;
+
 defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot. '/course/format/lib.php');
-require_once($CFG->dirroot. '/course/lib.php');     // 06/20/19
+require_once($CFG->dirroot. '/course/lib.php');
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_constants.php');
 
 /**
@@ -259,6 +261,8 @@ class format_swtccustom extends format_base {
     public function course_format_options($foreditform = false) {
         global $DB;
 
+        $curriculums = new curriculums;
+
         static $courseformatoptions = false;
         $curriculumarray = array();
         $trunclength = 100;
@@ -301,7 +305,7 @@ class format_swtccustom extends format_base {
         // 10/22/18 - Get all the curriculum courses and fill the "curriculums" select element.
         // 12/20/18 - Adding course shortname to curriculums listbox; sorting listbox by course shortname.
         // SWTC ********************************************************************************.
-        $records = curriculums_getall();
+        $records = $curriculums->get_all_curriculums();
 
         foreach ($records as $record) {
             $curriculumarray[$record->courseid] = $record->shortname .' '. $record->fullname;
