@@ -31,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/user/profile/lib.php');
 
-use local_swtc\grouplib\swtc_grouplib;
+use \local_swtc\grouplib\grouplib;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
@@ -416,7 +416,7 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Other SWTC variables.
     $output = '';       // To contain all the output.
-    $swtcgroups = new swtc_grouplib;
+    $swtcgroups = new grouplib;
 
     // Remember - PremierSupportand ServiceDelivery managers and admins have special access.
     // Remember that the capabilities for Managers and Administrators are applied in the system context; the capabilities
@@ -519,7 +519,6 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
     // Can logged in user mark users as complete?
     // If the logged in user has a role defined in the role criteria.
-    $allowmarking = false;
     $allowmarkingcriteria = null;
 
     if (!$csv) {
@@ -533,7 +532,6 @@ function curriculum_report_completion_index($swtcuser, $courseid) {
 
                 // If logged in user has this role, allow marking complete.
                 if ($users && in_array($USER->id, array_keys($users))) {
-                    $allowmarking = true;
                     $allowmarkingcriteria = $rcriterion->id;
                     break;
                 }

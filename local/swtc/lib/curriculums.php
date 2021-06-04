@@ -26,6 +26,11 @@
  * 04/17/21 - Initial writing.
  *
  */
+use core_completion\progress;
+
+use \local_swtc\curriculums\curriculums;
+use \local_swtc\grouplib\grouplib;
+use \local_swtc\criteria\completion_info;
 
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/tablelib.php');
@@ -40,17 +45,11 @@ require_once("$CFG->libdir/formslib.php");
 
 global $PAGE, $OUTPUT, $USER;
 
-use core_completion\progress;
-
-use local_swtc\grouplib\swtc_grouplib;
-
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
-require_once($CFG->dirroot.'/local/swtc/lib/curriculumslib.php');
 require_once($CFG->dirroot.'/local/swtc/forms/curriculums_form.php');
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_info.php');
 
 // SWTC ********************************************************************************.
 // SWTC swtcuser and debug variables.
@@ -62,7 +61,8 @@ $debug = swtc_get_debug();
 // Other SWTC variables.
 $accesstype = $swtcuser->get_accesstype();
 
-$swtcgroups = new swtc_grouplib;
+$swtcgroups = new grouplib;
+$curriculums = new curriculums;
 
 $groups = null;
 $mform = null;
@@ -88,7 +88,7 @@ if (!empty($courseid)) {
 }
 
 // Look for key in catlist array.
-$enrolledcurriculums = curriculums_getall_enrollments_for_user($USER->id);
+$enrolledcurriculums = $curriculums->getall_enrollments_for_user($USER->id);
 
 if (has_capability('local/swtc:swtc_view_curriculums', context_system::instance())) {
     $context = context_system::instance();
@@ -115,7 +115,7 @@ $tabs[] = new tabobject('allcurriculums', new moodle_url('/local/swtc/lib/curric
     get_string('allcurriculums', 'local_swtc'));
 
 // Get all the courses marked as "curriculum courses".
-$records = curriculums_getall();
+$records = $curriculums->get_all_curriculums();
 
 foreach ($records as $record) {
     $curriculumarray[$record->courseid]['fullname'] = $record->fullname;
@@ -144,8 +144,7 @@ foreach ($courses as $course) {
 
     // Only continue if it is a curriculum course.
     if (array_key_exists($courseid, $curriculumarray)) {
-
-        $completion = new swtc_completion_info($course);
+        $completion = new completion_info($course);
 
         // First, let's make sure completion is enabled.
         if (!$completion->is_enabled()) {
@@ -275,17 +274,17 @@ if (empty($coursesprogress)) {
         if (has_capability('local/swtc:swtc_view_mgmt_reports', context_system::instance())) {
             // If true, then user is NOT a student; so show them the course completion report.
             // To view the course completion report (if manager).
-            $data = curriculum_report_completion_index($swtcuser, $curriculumid);
+            $data = $curriculums->report_completion_index($swtcuser, $curriculumid);
         } else if (has_capability('local/swtc:swtc_view_student_reports', $context)) {
             // If false, then user is a student; so show them the course completionstatus report.
             // To view the completionstatus report.
-            $data = curriculum_getcompletionstatus_details($curriculumid, $USER->id);
+            $data = $curriculums->getcompletionstatus_details($curriculumid, $USER->id);
         }
     } else {
         // For tabs.
         echo $OUTPUT->tabtree($tabs, 'allcurriculums');
 
-        $data = curriculums_print_table($coursesprogress, $curriculumarray);
+        $data = $curriculums->print_table($coursesprogress, $curriculumarray);
     }
 
     // Create the form and send all the data to it.
