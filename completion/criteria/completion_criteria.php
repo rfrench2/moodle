@@ -22,11 +22,6 @@
  * @copyright 2009 Catalyst IT Ltd
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- * SWTC history:
- *
- * 04/13/21 - Initial writing.
- *
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -107,11 +102,6 @@ $COMPLETION_CRITERIA_TYPES = array(
  * @copyright 2009 Catalyst IT Ltd
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- * SWTC history:
- *
- * 04/13/21 - Initial writing.
- *
  */
 abstract class completion_criteria extends data_object {
 
@@ -123,13 +113,8 @@ abstract class completion_criteria extends data_object {
      * Defaults to id, course, criteriatype, module, moduleinstane, courseinstance,
      * enrolperiod, timeend, gradepass, role
      * @var array
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
      */
-    public $required_fields = array('id', 'course', 'criteriatype', 'module', 'moduleinstance', 'modulestatus',
+    public $required_fields = array('id', 'course', 'criteriatype', 'module', 'moduleinstance',
         'courseinstance', 'enrolperiod', 'timeend', 'gradepass', 'role');
 
     /* @var int Course id  */
@@ -147,9 +132,6 @@ abstract class completion_criteria extends data_object {
 
     /* @var int Course module instance id this criteria relates to (for activity criteria) */
     public $moduleinstance;
-
-    /* @var int SWTC - Course module status constant (for activity criteria). */
-    public $modulestatus;
 
     /**
      * Period after enrolment completion will be triggered (for period criteria)
