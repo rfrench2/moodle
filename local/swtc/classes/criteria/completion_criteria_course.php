@@ -20,7 +20,7 @@
  * SWTC customized code for Moodle course criteria type.
  *
  * @package    local
- * @subpackage swtc_get_usercompletion_criteria_course.php
+ * @subpackage get_usercompletion_criteria_course.php
  * @copyright  2021 SWTC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -29,9 +29,15 @@
  * 05/14/21 - Initial writing.
  *
  */
+namespace local_swtc\criteria;
+
+use stdClass;
+use context_course;
+use core_text;
+
+use \local_swtc\criteria\completion_criteria;
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/completion/criteria/completion_criteria_course.php');
 
 /**
  * Course completion critieria - completion on course completion
@@ -45,8 +51,22 @@ require_once($CFG->dirroot.'/completion/criteria/completion_criteria_course.php'
  * @author Aaron Barnes <aaronb@catalyst.net.nz>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class swtc_completion_criteria_course extends \completion_criteria_course {
-
+class completion_criteria_course extends \local_swtc\criteria\completion_criteria {
+    
+    /* @var int Criteria type constant */
+    public $criteriatype = COMPLETION_CRITERIA_TYPE_COURSE;
+    
+    /**
+     * Finds and returns a data_object instance based on params.
+     *
+     * @param array $params associative arrays varname=>value
+     * @return data_object instance of data_object or false if none found.
+     */
+    public static function fetch($params) {
+        $params['criteriatype'] = COMPLETION_CRITERIA_TYPE_COURSE;
+        return self::fetch_helper('course_completion_criteria', __CLASS__, $params);
+    }
+    
     /**
      * Add appropriate form elements to the critieria form
      *
@@ -67,6 +87,95 @@ class swtc_completion_criteria_course extends \completion_criteria_course {
         if ($this->id) {
             $mform->setDefault('criteria_course['.$data->id.']', 1);
         }
+    }
+    
+    /**
+     * Update the criteria information stored in the database
+     *
+     * @param stdClass $data Form data
+     *
+     * SWTC history:
+     *
+     * 05/14/21 - Initial writing.
+     *
+     */
+    public function update_config(&$data) {
+        global $DB;
+
+        if (!empty($data->criteria_course) && is_array($data->criteria_course)) {
+
+            $this->course = $data->id;
+
+            foreach ($data->criteria_course as $course) {
+
+                $this->courseinstance = $course;
+                $this->id = NULL;
+                $this->insert();
+            }
+        }
+    }
+
+    /**
+     * Review this criteria and decide if the user has completed
+     *
+     * @param completion_completion $completion     The user's completion record
+     * @param bool $mark Optionally set false to not save changes to database
+     * @return bool
+     *
+     * SWTC history:
+     *
+     * 04/13/21 - Initial writing.
+     *
+     */
+    public function review($completion, $mark = true) {
+        global $DB;
+
+        $course = $DB->get_record('course', array('id' => $this->courseinstance));
+        $info = new completion_info_swtc($course);
+
+        // If the course is complete.
+        if ($info->is_course_complete($completion->userid)) {
+
+            if ($mark) {
+                $completion->mark_complete();
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Return criteria title for display in reports
+     *
+     * @return string
+     */
+    public function get_title() {
+        return get_string('dependenciescompleted', 'completion');
+    }
+
+    /**
+     * Return a more detailed criteria title for display in reports
+     *
+     * @return string
+     */
+    public function get_title_detailed() {
+        global $DB;
+
+        $prereq = $DB->get_record('course', array('id' => $this->courseinstance));
+        $coursecontext = context_course::instance($prereq->id, MUST_EXIST);
+        $fullname = format_string($prereq->fullname, true, array('context' => $coursecontext));
+        return shorten_text(urldecode($fullname));
+    }
+    
+    /**
+     * Return criteria type title for display in reports
+     *
+     * @return string
+     */
+    public function get_type_title() {
+        return get_string('dependencies', 'completion');
     }
 
     /**
@@ -132,73 +241,16 @@ class swtc_completion_criteria_course extends \completion_criteria_course {
         // Loop through completions, and mark as complete.
         $rs = $DB->get_recordset_sql($sql);
         foreach ($rs as $record) {
-            $completion = new swtc_completion_criteria_completion((array) $record, DATA_OBJECT_FETCH_BY_KEY);
+            $completion = new completion_criteria_completion_swtc((array) $record, DATA_OBJECT_FETCH_BY_KEY);
             $completion->mark_complete($record->timecompleted);
         }
         $rs->close();
     }
 
     /**
-     * Update the criteria information stored in the database
-     *
-     * @param stdClass $data Form data
-     *
-     * SWTC history:
-     *
-     * 05/14/21 - Initial writing.
-     *
-     */
-    public function update_config(&$data) {
-        global $DB;
-
-        if (!empty($data->criteria_course) && is_array($data->criteria_course)) {
-
-            $this->course = $data->id;
-
-            foreach ($data->criteria_course as $course) {
-
-                $this->courseinstance = $course;
-                $this->id = NULL;
-                $this->insert();
-            }
-        }
-    }
-
-    /**
-     * Review this criteria and decide if the user has completed
-     *
-     * @param swtc_completion_completion $completion     The user's completion record
-     * @param bool $mark Optionally set false to not save changes to database
-     * @return bool
-     *
-     * SWTC history:
-     *
-     * 04/13/21 - Initial writing.
-     *
-     */
-    public function review($completion, $mark = true) {
-        global $DB;
-
-        $course = $DB->get_record('course', array('id' => $this->courseinstance));
-        $info = new swtc_completion_info($course);
-
-        // If the course is complete.
-        if ($info->is_course_complete($completion->userid)) {
-
-            if ($mark) {
-                $completion->mark_complete();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Return criteria progress details for display in reports
      *
-     * @param swtc_completion_completion $completion The user's completion record
+     * @param completion_completion $completion The user's completion record
      * @return array An array with the following keys:
      *     type, criteria, requirement, status
      *
@@ -229,5 +281,4 @@ class swtc_completion_criteria_course extends \completion_criteria_course {
 
         return $details;
     }
-
 }

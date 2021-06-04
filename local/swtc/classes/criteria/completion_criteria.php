@@ -32,11 +32,16 @@
  * with passing grade (Moodle tracker MDL-56453).
  *
  */
+namespace local_swtc\criteria;
+
+use \local_swtc\criteria\completion_criteria_completion;
+use \local_swtc\criteria\completion_criteria_course;
+use \local_swtc\criteria\completion_criteria_activity;
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/completion/data_object.php');
 
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria_completion.php');
+require_once($CFG->dirroot.'/local/swtc/classes/criteria/completion_criteria_course.php');
+require_once($CFG->dirroot.'/local/swtc/classes/criteria/completion_criteria_activity.php');
 
 /**
  * Completion criteria abstract definition
@@ -53,7 +58,8 @@ require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria_comple
  * with passing grade (Moodle tracker MDL-56453).
  *
  */
-abstract class swtc_completion_criteria extends \data_object {
+abstract class completion_criteria extends \data_object {
+// abstract class completion_criteria extends \completion_criteria {
 
     /* @var string Database table name that stores completion criteria information  */
     public $table = 'course_completion_criteria';
@@ -127,14 +133,12 @@ abstract class swtc_completion_criteria extends \data_object {
      */
     public static function factory($params) {
         global $CFG, $COMPLETION_CRITERIA_TYPES;
-
+        
         if (!isset($params['criteriatype']) || !isset($COMPLETION_CRITERIA_TYPES[$params['criteriatype']])) {
             print_error('invalidcriteriatype', 'completion');
         }
 
-        $class = 'swtc_completion_criteria_'.$COMPLETION_CRITERIA_TYPES[$params['criteriatype']];
-        require_once($CFG->dirroot.'/local/swtc/criteria/'.$class.'.php');
-
+        $class = 'local_swtc\criteria\completion_criteria_'.$COMPLETION_CRITERIA_TYPES[$params['criteriatype']];
         return new $class($params, false);
     }
 
@@ -188,7 +192,7 @@ abstract class swtc_completion_criteria extends \data_object {
     /**
      * Return criteria progress details for display in reports
      *
-     * @param swtc_completion_completion $completion The user's completion record
+     * @param completion_completion $completion The user's completion record
      * @return array
      */
     abstract public function get_details($completion);
@@ -210,7 +214,7 @@ abstract class swtc_completion_criteria extends \data_object {
     /**
      * Return criteria status text for display in reports
      *
-     * @param swtc_completion_completion $completion The user's completion record
+     * @param completion_completion $completion The user's completion record
      * @return string
      */
     public function get_status($completion) {
@@ -221,7 +225,7 @@ abstract class swtc_completion_criteria extends \data_object {
      * Return true if the criteria's current status is different to what is sorted
      * in the database, e.g. pending an update
      *
-     * @param swtc_completion_completion $completion The user's criteria completion record
+     * @param completion_completion $completion The user's criteria completion record
      * @return bool
      */
     public function is_pending($completion) {

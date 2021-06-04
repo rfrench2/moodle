@@ -30,16 +30,24 @@
  * 04/18/21 - Initial writing.
  *
  */
+namespace local_swtc\criteria;
+
+use context;
+use context_system;
+use context_course;
+use context_module;
+
+use \local_swtc\curriculums\curriculums;
+use \local_swtc\criteria\completion_criteria;
+use \local_swtc\criteria\completion_criteria_completion;
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/completionlib.php');
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
 // SWTC ********************************************************************************.
 require_once($CFG->dirroot.'/local/swtc/lib/swtc_userlib.php');
 require_once($CFG->dirroot.'/local/swtc/lib/locallib.php');
-require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria.php');
 
 /**
  * Class and overriding methods copied from Moodle 3.10 code base.
@@ -57,7 +65,7 @@ require_once($CFG->dirroot.'/local/swtc/criteria/swtc_completion_criteria.php');
  * @copyright  2021 SWTC
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class swtc_completion_info extends \completion_info {
+class completion_info extends \completion_info {
 
     /**
      * Course object passed during construction.
@@ -93,7 +101,7 @@ class swtc_completion_info extends \completion_info {
      * /report/completion/index.php
      *
      *  To call:
-     *  $completion = new swtc_completion_info;
+     *  $completion = new completion_info;
      *  $completion->this_method_name;
      *
      * @param stdClass $swtcuser The SWTC user object.
@@ -319,6 +327,9 @@ class swtc_completion_info extends \completion_info {
             'userid' => $USER->id,
             'username' => $USER->username]);
         $debug = swtc_get_debug();
+
+        // Other SWTC variables.
+        $curriculums = new curriculums;
         // SWTC ********************************************************************************.
 
         if (isset($debug)) {
@@ -339,7 +350,7 @@ class swtc_completion_info extends \completion_info {
         // Added capability to get_enrolled_sql call if user is PremierSupport or ServiceDelivery managers and admins.
         // SWTC ********************************************************************************.
         if ((has_capability('local/swtc:swtc_view_mgmt_reports', context_system::instance()))
-        || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+        || (!empty($curriculums->getall_enrollments_for_user($USER->id)))) {
             list($enrolledsql, $enrolledparams) = self::get_enrolled_users_by_accesstype($swtcuser, $whereparams, $groupid);
 
         } else {
@@ -506,6 +517,7 @@ class swtc_completion_info extends \completion_info {
         $debug = swtc_get_debug();
 
         // Other SWTC variables.
+        $curriculums = new curriculums;
         $usergroupnames = $swtcuser->get_groupnames();
         // SWTC ********************************************************************************.
 
@@ -527,7 +539,7 @@ class swtc_completion_info extends \completion_info {
         // context; the capabilities for Students are applied in the category context.
         // SWTC ********************************************************************************.
         if ((has_capability('local/swtc:swtc_view_mgmt_reports', context_system::instance()))
-        || (!empty(curriculums_getall_enrollments_for_user($USER->id)))) {
+        || (!empty($curriculums->getall_enrollments_for_user($USER->id)))) {
             // Loop through $user_groupnames looking for the "virtual" group (if set).
             if (!empty($usergroupnames)) {
                 // Remember that an array will be located that looks like the following:
@@ -666,7 +678,7 @@ class swtc_completion_info extends \completion_info {
             // SWTC ********************************************************************************.
             // Always output standard header information.
             // SWTC ********************************************************************************.
-            $messages[] = "Entering swtc_completion_info.php ===get_enrolled_users_by_accesstype.enter===";
+            $messages[] = "Entering completion_info.php ===get_enrolled_users_by_accesstype.enter===";
             $debug->logmessage($messages, 'both');
             unset($messages);
         }
@@ -762,6 +774,7 @@ class swtc_completion_info extends \completion_info {
      * @param int $criteriatype Specific criteria type to return (optional)
      */
     public function get_criteria($criteriatype = null) {
+        global $CFG;
 
         // Fill cache if empty.
         if (!is_array($this->criteria)) {
@@ -792,7 +805,8 @@ class swtc_completion_info extends \completion_info {
             // Build array of criteria objects.
             $this->criteria = array();
             foreach ($records as $record) {
-                $this->criteria[$record->id] = swtc_completion_criteria::factory((array)$record);
+                require_once($CFG->dirroot.'/local/swtc/classes/criteria/completion_criteria.php');
+                $this->criteria[$record->id] = completion_criteria::factory((array)$record);
             }
         }
 
@@ -834,7 +848,7 @@ class swtc_completion_info extends \completion_info {
                 'criteriaid'    => $criterion->id
             );
 
-            $completion = new swtc_completion_criteria_completion($params);
+            $completion = new completion_criteria_completion($params);
             $completion->attach_criteria($criterion);
 
             $completions[] = $completion;

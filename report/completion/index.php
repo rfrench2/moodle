@@ -35,7 +35,9 @@ require_once("{$CFG->libdir}/completionlib.php");
 // SWTC ********************************************************************************.
 // SWTC Customized code for Moodle core completion.
 // SWTC ********************************************************************************.
-use local_swtc\grouplib\swtc_grouplib;
+use \local_swtc\grouplib\grouplib;
+use \local_swtc\criteria\completion_info;
+use \local_swtc\criteria\completion_criteria_activity;
 
 // SWTC ********************************************************************************.
 // Include SWTC LMS user and debug functions.
@@ -50,7 +52,7 @@ $swtcuser = swtc_get_user([
 $debug = swtc_get_debug();
 
 // Other SWTC variables.
-$swtcgroups = new swtc_grouplib;
+$swtcgroups = new grouplib;
 // SWTC ********************************************************************************.
 
 /**
@@ -115,7 +117,7 @@ $modinfo = get_fast_modinfo($course);
 
 // Get criteria for course.
 // $completion = new completion_info($course);  // SWTC.
-$completion = new swtc_completion_info($course);    // SWTC.
+$completion = new completion_info($course);    // SWTC.
 
 if (!$completion->has_criteria()) {
     print_error('nocriteriaset', 'completion', $CFG->wwwroot.'/course/report.php?id='.$course->id);
@@ -475,31 +477,33 @@ if (!$csv) {
             // SWTC customized code for Moodle core completion.
             // SWTC ********************************************************************************.
             if ($criterion->criteriatype == 8) {
-                list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_course(
+                    $criterion->courseinstance);
             } else if ($criterion->criteriatype == 4) {
-                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity(
+                    $criterion->moduleinstance, $criterion->module);
             }
 
             $courseurl = new moodle_url("/report/completion/index.php", array('course' => $id, 'group' => $group));
             $tooltiptext = 'Click to view course completion report for ' . $shortname. ' ' . $fullname;
 
             print '<th scope="col" class="colheader criterianame">';
-            // print '<div class="rotated-text-container"><span class="rotated-text">'.$details.'</span></div>';
             print '<div class="rotated-text-container"><span class="rotated-text"><a href="' . $courseurl->out() .
                 '" target="_blank" title=" ' . $tooltiptext . ' ">' . $shortname . '</a></span></div>';
             print '</th>';
         }
 
-        // Overall course completion status
+        // Overall course completion status.
         print '<th scope="col" class="colheader criterianame">';
-        print '<div class="rotated-text-container"><span class="rotated-text">'.get_string('coursecomplete', 'completion').'</span></div>';
+        print '<div class="rotated-text-container"><span class="rotated-text">'.
+            get_string('coursecomplete', 'completion').'</span></div>';
         print '</th></tr>';
     }
 
-    // Print user heading and icons
+    // Print user heading and icons.
     print '<tr>';
 
-    // User heading / sort option
+    // User heading / sort option.
     print '<th scope="col" class="completion-sortchoice" style="clear: both;">';
 
     $sistring = "&amp;silast={$silast}&amp;sifirst={$sifirst}";
@@ -515,20 +519,20 @@ if (!$csv) {
     }
     print '</th>';
 
-    // Print user identity columns
+    // Print user identity columns.
     foreach ($extrafields as $field) {
         echo '<th scope="col" class="completion-identifyfield">' .
                 get_user_field_name($field) . '</th>';
     }
 
-    ///
-    /// Print criteria icons
-    ///
+    /*
+     * Print criteria icons
+     */
     foreach ($criteria as $criterion) {
 
-        // Generate icon details
+        // Generate icon details.
         $iconlink = '';
-        $iconalt = ''; // Required
+        $iconalt = ''; // Required.
         $iconattributes = array('class' => 'icon');
         switch ($criterion->criteriatype) {
 
@@ -546,7 +550,8 @@ if (!$csv) {
 
                 // Display icon.
                 $iconlink = $CFG->wwwroot.'/course/view.php?id='.$criterion->courseinstance;
-                $iconattributes['title'] = format_string($crs->fullname, true, array('context' => context_course::instance($crs->id, MUST_EXIST)));
+                $iconattributes['title'] = format_string($crs->fullname, true,
+                    array('context' => context_course::instance($crs->id, MUST_EXIST)));
                 $iconalt = format_string($crs->shortname, true, array('context' => context_course::instance($crs->id)));
                 break;
 
@@ -554,7 +559,7 @@ if (!$csv) {
                 // Load role.
                 $role = $DB->get_record('role', array('id' => $criterion->role));
 
-                // Display icon
+                // Display icon.
                 $iconalt = $role->name;
                 break;
         }
@@ -589,7 +594,7 @@ if (!$csv) {
     $row[] = get_string('id', 'report_completion');
     $row[] = get_string('name', 'report_completion');
     foreach ($extrafields as $field) {
-       $row[] = get_user_field_name($field);
+        $row[] = get_user_field_name($field);
     }
 
     // Add activity headers.
@@ -609,11 +614,12 @@ if (!$csv) {
             // SWTC customized code for Moodle core completion.
             // SWTC ********************************************************************************.
             if ($criterion->criteriatype === 8) {
-                list($id, $shortname, $fullname) = $completion->get_title_detailed_course($criterion->courseinstance);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_course(
+                    $criterion->courseinstance);
             } else if ($criterion->criteriatype === 4) {
-                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity($criterion->moduleinstance, $criterion->module);
+                list($id, $shortname, $fullname) = $completion->get_title_detailed_activity(
+                    $criterion->moduleinstance, $criterion->module);
             }
-            // $row[] = strip_tags($criterion->get_title_detailed());
             $row[] = strip_tags($shortname. ' ' .$fullname);
         }
     }
@@ -624,11 +630,11 @@ if (!$csv) {
 }
 
 /*
- * Display a row for each user
+ * Display a row for each user.
  */
 foreach ($progress as $user) {
 
-    // User name
+    // User name.
     if ($csv) {
         $row = array();
         $row[] = $user->id;
@@ -663,13 +669,13 @@ foreach ($progress as $user) {
         $criteria_completion = $completion->get_user_completion($user->id, $criterion);
         $is_complete = $criteria_completion->is_complete();
 
-        // Handle activity completion differently
+        // Handle activity completion differently.
         if ($criterion->criteriatype == COMPLETION_CRITERIA_TYPE_ACTIVITY) {
 
             // Load activity.
             $activity = $modinfo->cms[$criterion->moduleinstance];
 
-            // Get progress information and state
+            // Get progress information and state.
             if (array_key_exists($activity->id, $user->progress)) {
                 $state = $user->progress[$activity->id]->completionstate;
             } else if ($is_complete) {
@@ -683,7 +689,7 @@ foreach ($progress as $user) {
                 $date = '';
             }
 
-            // Work out how it corresponds to an icon
+            // Work out how it corresponds to an icon.
             switch($state) {
                 case COMPLETION_INCOMPLETE    : $completiontype = 'n';    break;
                 case COMPLETION_COMPLETE      : $completiontype = 'y';    break;
@@ -726,8 +732,7 @@ foreach ($progress as $user) {
             // SWTC ********************************************************************************.
             if (isset($criterion->courseinstance)) {
                 $tempcourse = get_course($criterion->courseinstance);
-                // $info = new completion_info($tempcourse);    // SWTC.
-                $info = new swtc_completion_info($tempcourse);  // SWTC.
+                $info = new completion_info($tempcourse);
 
                 // Is course complete?
                 $is_complete = $info->is_course_complete($user->id);
@@ -743,7 +748,7 @@ foreach ($progress as $user) {
             }
         }
 
-        // Handle all other criteria
+        // Handle all other criteria.
         $completiontype = $is_complete ? 'y' : 'n';
         $completionicon = 'completion-auto-'.$completiontype;
 
@@ -791,16 +796,16 @@ foreach ($progress as $user) {
         }
     }
 
-    // Handle overall course completion
+    // Handle overall course completion.
 
-    // Load course completion
+    // Load course completion.
     $params = array(
         'userid'    => $user->id,
         'course'    => $course->id
     );
 
     $ccompletion = new completion_completion($params);
-    $completiontype =  $ccompletion->is_complete() ? 'y' : 'n';
+    $completiontype = $ccompletion->is_complete() ? 'y' : 'n';
 
     $describe = get_string('completion-'.$completiontype, 'completion');
 
@@ -823,7 +828,7 @@ foreach ($progress as $user) {
 
         print '<td class="completion-progresscell">';
 
-        // Display course completion status icon
+        // Display course completion status icon.
         print $OUTPUT->pix_icon('i/completion-auto-' . $completiontype, $fulldescribe);
 
         print '</td>';
@@ -848,8 +853,8 @@ $csvurl = new moodle_url('/report/completion/index.php', array('course' => $cour
 $excelurl = new moodle_url('/report/completion/index.php', array('course' => $course->id, 'format' => 'excelcsv'));
 
 print '<ul class="export-actions">';
-print '<li><a href="'.$csvurl->out().'">'.get_string('csvdownload','completion').'</a></li>';
-print '<li><a href="'.$excelurl->out().'">'.get_string('excelcsvdownload','completion').'</a></li>';
+print '<li><a href="'.$csvurl->out().'">'.get_string('csvdownload', 'completion').'</a></li>';
+print '<li><a href="'.$excelurl->out().'">'.get_string('excelcsvdownload', 'completion').'</a></li>';
 print '</ul>';
 
 echo $OUTPUT->footer($course);
